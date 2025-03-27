@@ -189,17 +189,10 @@ This is the main team working on Open Ticket. Don't forget to check their profil
 |🇮🇳 Hindi              |an_developer              |🟢 Up To Date                |
 |🇱🇹 Lithuanian         |tsgindrius                |🟢 Up To Date                |
 |🇵🇱 Polish             |danoglez                  |🟢 Up To Date                |
-|🇪🇪 Estonian           |iamnotmega                |🔵 Up To Date (ChatGPT)      |
-|🇫🇮 Finnish            |iamnotmega                |🔵 Up To Date (ChatGPT)      |
 |🇷🇺 Russian            |/                         |🔴 Missing                   |
 |🇳🇴 Norwegian          |/                         |🔴 Missing                   |
 |🇱🇻 Latvian            |/                         |🔴 Missing                   |
-|🇯🇵 Japanese           |/                         |🔴 Missing                   |
-|🇰🇷 Korean             |/                         |🔴 Missing                   |
-|🇨🇳 Simplified Chinese |/                         |🔴 Missing                   |
-|🇨🇳 Traditional Chinese|/                         |🔴 Missing                   |
 |🇸🇪 Swedish            |/                         |🔴 Missing                   |
-|🇻🇳 Vietnamese         |/                         |🔴 Missing                   |
 |🇸🇮 Slovenian          |/                         |🔴 Missing                   |
 |🇬🇷 Greek              |/                         |🔴 Missing                   |
 |❓ Kurdish            |/                         |🔴 Missing                   |
