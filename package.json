@@ -42,7 +42,7 @@
         "#opendiscord": "./dist/src/index.js",
         "#opendiscord-types": "./dist/src/core/api/api.js"
     },
-    "funding":{
+    "funding": {
         "type": "individual",
         "url": "https://github.com/sponsors/DJj123dj"
     }
