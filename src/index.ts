@@ -115,6 +115,17 @@ const main = async () => {
         opendiscord.debug.visible = (debugFlag) ? debugFlag.value : false
     }
 
+    //load silent mode
+    if (opendiscord.defaults.getDefault("silentLoading")){
+        const silentFlag = opendiscord.flags.get("opendiscord:silent")
+        opendiscord.console.silent = (silentFlag) ? silentFlag.value : false
+        if (opendiscord.console.silent){
+            opendiscord.console.silent = false
+            opendiscord.log("Silent mode is active! Logs won't be shown in the console.","warning")
+            opendiscord.console.silent = true
+        }
+    }
+
     //load progress bar renderers
     opendiscord.log("Loading progress bars...","system")
     if (opendiscord.defaults.getDefault("progressBarRendererLoading")){
@@ -822,6 +833,11 @@ const main = async () => {
             opendiscord.log("You are currently using a language which has been translated by Google Translate!","warning")
             opendiscord.log("Please help us improve the translation by contributing to our project!","warning")
             console.log("===================")
+        }
+        if (opendiscord.console.silent){
+            opendiscord.console.silent = false
+            opendiscord.log("Silent mode is active! Logs won't be shown in the console.","warning")
+            opendiscord.console.silent = true
         }
 
         await opendiscord.events.get("afterStartScreensRendered").emit([opendiscord.startscreen])
