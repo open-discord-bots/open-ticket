@@ -1,7 +1,6 @@
 ///////////////////////////////////////
 //DEFAULT SESSION MODULE
 ///////////////////////////////////////
-import { Guild, TextBasedChannel, User } from "discord.js"
 import { ODValidId } from "../modules/base"
 import { ODStatScope, ODStatGlobalScope, ODStatsManager, ODStat, ODBasicStat, ODDynamicStat, ODValidStatValue, ODStatScopeSetMode } from "../modules/stat"
 

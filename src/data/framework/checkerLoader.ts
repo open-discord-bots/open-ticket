@@ -3,11 +3,11 @@ import {opendiscord, api, utilities} from "../../index"
 const generalConfig = opendiscord.configs.get("opendiscord:general")
 
 export const loadAllConfigCheckers = async () => {
-    opendiscord.checkers.add(new api.ODChecker("opendiscord:general",opendiscord.checkers.storage,0,opendiscord.configs.get("opendiscord:general"),defaultGeneralStructure))
-        opendiscord.checkers.add(new api.ODChecker("opendiscord:options",opendiscord.checkers.storage,1,opendiscord.configs.get("opendiscord:options"),defaultOptionsStructure))
-        opendiscord.checkers.add(new api.ODChecker("opendiscord:panels",opendiscord.checkers.storage,0,opendiscord.configs.get("opendiscord:panels"),defaultPanelsStructure))
-        opendiscord.checkers.add(new api.ODChecker("opendiscord:questions",opendiscord.checkers.storage,2,opendiscord.configs.get("opendiscord:questions"),defaultQuestionsStructure))
-        opendiscord.checkers.add(new api.ODChecker("opendiscord:transcripts",opendiscord.checkers.storage,0,opendiscord.configs.get("opendiscord:transcripts"),defaultTranscriptsStructure))
+    opendiscord.checkers.add(new api.ODChecker("opendiscord:general",opendiscord.checkers.storage,0,opendiscord.configs.get("opendiscord:general"),defaultGeneralStructure,{cliDisplayName:"General Config",cliDisplayDescription:"Configure the bot token, status, colors, permissions & more."}))
+    opendiscord.checkers.add(new api.ODChecker("opendiscord:questions",opendiscord.checkers.storage,2,opendiscord.configs.get("opendiscord:questions"),defaultQuestionsStructure,{cliDisplayName:"Questions Config",cliDisplayDescription:"Create, modify & delete questions which are used in options."}))
+    opendiscord.checkers.add(new api.ODChecker("opendiscord:options",opendiscord.checkers.storage,1,opendiscord.configs.get("opendiscord:options"),defaultOptionsStructure,{cliDisplayName:"Options Config",cliDisplayDescription:"Create, modify & delete options which are used in panels."}))
+    opendiscord.checkers.add(new api.ODChecker("opendiscord:panels",opendiscord.checkers.storage,0,opendiscord.configs.get("opendiscord:panels"),defaultPanelsStructure,{cliDisplayName:"Panels Config",cliDisplayDescription:"Create, modify & delete panels which can be spawned in discord."}))
+    opendiscord.checkers.add(new api.ODChecker("opendiscord:transcripts",opendiscord.checkers.storage,0,opendiscord.configs.get("opendiscord:transcripts"),defaultTranscriptsStructure,{cliDisplayName:"Transcript Config",cliDisplayDescription:"Configure everything related to transcripts."}))
 }
 
 export const loadAllConfigCheckerFunctions = async () => {
@@ -116,7 +116,7 @@ export const registerDefaultCheckerCustomTranslations = (tm:api.ODCheckerTransla
     tm.quickTranslate(lm,"checker.messages.dropdownOption","message","opendiscord:dropdown-option") // A panel with dropdown enabled can only contain options of the 'ticket' type!
     
     //TODO TRANSLATION!!!
-    //tm.quickTranslate(lm,"checker.messages.TODO","message","opendiscord:invalid-version") // The version specified in your config is invalid! Make sure you have updated it to the latest version!
+    //tm.quickTranslate(lm,"checker.messages.TODO","message","opendiscord:invalid-version") // The version specified in your config does not match! Make sure you have updated the config to the latest version!
 }
 
 //UTILITY FUNCTIONS
@@ -134,7 +134,7 @@ const createTicketEmbedStructure = (id:api.ODValidId) => {
         
         {key:"image",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_UrlString("opendiscord:ticket-embed-image",true,{allowHttp:false,allowedExtensions:[".png",".jpg",".jpeg",".webp",".gif"]})},
         {key:"thumbnail",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_UrlString("opendiscord:ticket-embed-thumbnail",true,{allowHttp:false,allowedExtensions:[".png",".jpg",".jpeg",".webp",".gif"]})},
-        {key:"fields",optional:false,priority:0,checker:new api.ODCheckerArrayStructure("opendiscord:ticket-embed-fields",{allowedTypes:["object"],propertyChecker:new api.ODCheckerObjectStructure("opendiscord:ticket-embed-fields",{children:[
+        {key:"fields",optional:false,priority:0,checker:new api.ODCheckerArrayStructure("opendiscord:ticket-embed-fields",{allowedTypes:["object"],cliDisplayPropertyName:"embed field",propertyChecker:new api.ODCheckerObjectStructure("opendiscord:ticket-embed-fields",{children:[
             {key:"name",optional:false,priority:0,checker:new api.ODCheckerStringStructure("opendiscord:ticket-embed-field-name",{minLength:1,maxLength:256})},
             {key:"value",optional:false,priority:0,checker:new api.ODCheckerStringStructure("opendiscord:ticket-embed-field-value",{minLength:1,maxLength:1024})},
             {key:"inline",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:ticket-embed-field-inline",{})}
@@ -146,7 +146,7 @@ const createTicketPingStructure = (id:api.ODValidId) => {
     return new api.ODCheckerObjectStructure(id,{children:[
         {key:"@here",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:ticket-ping-here",{})},
         {key:"@everyone",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:ticket-ping-everyone",{})},
-        {key:"custom",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_DiscordIdArray("opendiscord:ticket-ping-custom","role",[],{allowDoubles:false})},
+        {key:"custom",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_DiscordIdArray("opendiscord:ticket-ping-custom","role",[],{allowDoubles:false,cliDisplayPropertyName:"custom role id"})},
     ]})
 }
 const createPanelEmbedStructure = (id:api.ODValidId) => {
@@ -160,7 +160,7 @@ const createPanelEmbedStructure = (id:api.ODValidId) => {
         {key:"thumbnail",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_UrlString("opendiscord:panel-embed-thumbnail",true,{allowHttp:false,allowedExtensions:[".png",".jpg",".jpeg",".webp",".gif"]})},
         
         {key:"footer",optional:false,priority:0,checker:new api.ODCheckerStringStructure("opendiscord:panel-embed-footer",{maxLength:2048})},
-        {key:"fields",optional:false,priority:0,checker:new api.ODCheckerArrayStructure("opendiscord:panel-embed-fields",{allowedTypes:["object"],propertyChecker:new api.ODCheckerObjectStructure("opendiscord:panel-embed-fields",{children:[
+        {key:"fields",optional:false,priority:0,checker:new api.ODCheckerArrayStructure("opendiscord:panel-embed-fields",{allowedTypes:["object"],cliDisplayPropertyName:"embed field",propertyChecker:new api.ODCheckerObjectStructure("opendiscord:panel-embed-fields",{children:[
             {key:"name",optional:false,priority:0,checker:new api.ODCheckerStringStructure("opendiscord:panel-embed-field-name",{minLength:1,maxLength:256})},
             {key:"value",optional:false,priority:0,checker:new api.ODCheckerStringStructure("opendiscord:panel-embed-field-value",{minLength:1,maxLength:1024})},
             {key:"inline",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:panel-embed-field-inline",{})}
@@ -178,7 +178,7 @@ function loadFromEnv(){
 //STRUCTURES
 export const defaultGeneralStructure = new api.ODCheckerObjectStructure("opendiscord:general",{children:[
     //STATUS
-    {key:"_INFO",optional:false,priority:0,checker:new api.ODCheckerObjectStructure("opendiscord:info",{children:[
+    {key:"_INFO",optional:false,priority:0,cliHideInEditMode:true,checker:new api.ODCheckerObjectStructure("opendiscord:info",{children:[
         {key:"support",optional:false,priority:0,checker:new api.ODCheckerStringStructure("opendiscord:info-support",{choices:["https://otdocs.dj-dj.be"]})},
         {key:"discord",optional:false,priority:0,checker:new api.ODCheckerStringStructure("opendiscord:info-discord",{choices:["https://discord.dj-dj.be"]})},
         {key:"version",optional:false,priority:0,checker:new api.ODCheckerStringStructure("opendiscord:info-version",{custom(checker,value,locationTrace,locationId,locationDocs) {
@@ -186,14 +186,14 @@ export const defaultGeneralStructure = new api.ODCheckerObjectStructure("opendis
             
             if (typeof value != "string") return false
             else if (value != "open-ticket-"+opendiscord.versions.get("opendiscord:version").toString()){
-                checker.createMessage("opendiscord:invalid-version","warning","The version specified in your config is invalid! Make sure you have updated it to the latest version!",lt,null,[],locationId,locationDocs)
+                checker.createMessage("opendiscord:invalid-version","warning","The version specified in your config does not match! Make sure you have updated the config to the latest version!",lt,null,[],locationId,locationDocs)
                 return false
             }else return true
         },})},
     ]})},
 
     //BASIC
-    {key:"token",optional:false,priority:0,checker:(loadFromEnv()) ? new api.ODCheckerStringStructure("opendiscord:token-disabled",{}) : new api.ODCheckerCustomStructure_DiscordToken("opendiscord:token")},
+    {key:"token",optional:false,priority:0,checker:(loadFromEnv()) ? new api.ODCheckerStringStructure("opendiscord:token-disabled",{cliDisplayName:"Token",cliDisplayDescription:"The token of your discord bot."}) : new api.ODCheckerCustomStructure_DiscordToken("opendiscord:token",{cliDisplayName:"Token",cliDisplayDescription:"The token of your discord bot."})},
     {key:"tokenFromENV",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:token-env",{})},
     {key:"mainColor",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_HexColor("opendiscord:main-color",true,false)},
     {key:"language",optional:false,priority:0,checker:new api.ODCheckerStringStructure("opendiscord:language",{
@@ -206,10 +206,11 @@ export const defaultGeneralStructure = new api.ODCheckerObjectStructure("opendis
                 return false
             }else return true
         },
+        cliAutocompleteList:opendiscord.defaults.getDefault("languageList")
     })},
     {key:"prefix",optional:false,priority:0,checker:new api.ODCheckerStringStructure("opendiscord:prefix",{minLength:1})},
     {key:"serverId",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_DiscordId("opendiscord:server-id","server",false,[])},
-    {key:"globalAdmins",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_DiscordIdArray("opendiscord:global-admins","role",[],{allowDoubles:false})},
+    {key:"globalAdmins",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_DiscordIdArray("opendiscord:global-admins","role",[],{allowDoubles:false,cliDisplayPropertyName:"global admin role"})},
     {key:"slashCommands",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:slash-commands",{})},
     {key:"textCommands",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:text-commands",{})},
 
@@ -244,13 +245,9 @@ export const defaultGeneralStructure = new api.ODCheckerObjectStructure("opendis
         {key:"enableTicketActionWithReason",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:enable-ticket-action-with-reason",{})},
         {key:"enableDeleteWithoutTranscript",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:enable-delete-without-transcript",{})},
 
-        {key:"logs",optional:false,priority:0,checker:new api.ODCheckerEnabledObjectStructure("opendiscord:system-logs",{
-            property:"enabled",
-            enabledValue:true,
-            checker:new api.ODCheckerObjectStructure("opendiscord:system-logs",{children:[
-                {key:"channel",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_DiscordId("opendiscord:log-channel","channel",false,[])},
-            ]})
-        })},
+        {key:"logs",optional:false,priority:0,checker:new api.ODCheckerEnabledObjectStructure("opendiscord:system-logs",{property:"enabled",enabledValue:true,checker:new api.ODCheckerObjectStructure("opendiscord:system-logs",{children:[
+            {key:"channel",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_DiscordId("opendiscord:log-channel","channel",false,[])},
+        ]})})},
 
         {key:"limits",optional:false,priority:0,checker:new api.ODCheckerEnabledObjectStructure("opendiscord:limits",{property:"enabled",enabledValue:true,checker:new api.ODCheckerObjectStructure("opendiscord:limits",{children:[
             {key:"globalMaximum",optional:false,priority:0,checker:new api.ODCheckerNumberStructure("opendiscord:limits-global",{zeroAllowed:false,negativeAllowed:false,floatAllowed:false,min:1})},
@@ -297,9 +294,9 @@ export const defaultGeneralStructure = new api.ODCheckerObjectStructure("opendis
     ]})}
 ]})
 
-export const defaultOptionsStructure = new api.ODCheckerArrayStructure("opendiscord:options",{allowedTypes:["object"],propertyChecker:new api.ODCheckerObjectSwitchStructure("opendiscord:options",{objects:[
+export const defaultOptionsStructure = new api.ODCheckerArrayStructure("opendiscord:options",{allowedTypes:["object"],cliDisplayPropertyName:"option",propertyChecker:new api.ODCheckerObjectSwitchStructure("opendiscord:options",{objects:[
     //TICKET
-    {name:"ticket",priority:0,properties:[{key:"type",value:"ticket"}],checker:new api.ODCheckerObjectStructure("opendiscord:ticket",{children:[
+    {name:"ticket",priority:0,properties:[{key:"type",value:"ticket"}],checker:new api.ODCheckerObjectStructure("opendiscord:ticket",{cliDisplayKeyInParentArray:"name",cliDisplayAdditionalKeysInParentArray:["id","type"],children:[
         {key:"id",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_UniqueId("opendiscord:ticket-id","openticket","option-ids",{regex:/^[A-Za-z0-9-éèçàêâôûî]+$/,minLength:3,maxLength:40})},
         {key:"name",optional:false,priority:0,checker:new api.ODCheckerStringStructure("opendiscord:ticket-name",{minLength:2,maxLength:50})},
         {key:"description",optional:false,priority:0,checker:new api.ODCheckerStringStructure("opendiscord:ticket-description",{maxLength:256})},
@@ -321,10 +318,10 @@ export const defaultOptionsStructure = new api.ODCheckerArrayStructure("opendisc
         }})},
 
         //TICKET ADMINS
-        {key:"ticketAdmins",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_DiscordIdArray("opendiscord:ticket-ticket-admins","role",[],{allowDoubles:false})},
-        {key:"readonlyAdmins",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_DiscordIdArray("opendiscord:ticket-readonly-admins","role",[],{allowDoubles:false})},
+        {key:"ticketAdmins",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_DiscordIdArray("opendiscord:ticket-ticket-admins","role",[],{allowDoubles:false,cliDisplayPropertyName:"ticket admin role"})},
+        {key:"readonlyAdmins",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_DiscordIdArray("opendiscord:ticket-readonly-admins","role",[],{allowDoubles:false,cliDisplayPropertyName:"read-only ticket admin role"})},
         {key:"allowCreationByBlacklistedUsers",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:ticket-allow-blacklisted-users",{})},
-        {key:"questions",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_UniqueIdArray("opendiscord:option-questions","openticket","question-ids","question-ids-used",{allowDoubles:false,maxLength:5})},
+        {key:"questions",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_UniqueIdArray("opendiscord:option-questions","openticket","question-ids","question-ids-used",{allowDoubles:false,maxLength:5,cliDisplayPropertyName:"question"})},
 
         //TICKET CHANNEL
         {key:"channel",optional:false,priority:0,checker:new api.ODCheckerObjectStructure("opendiscord:ticket-channel",{children:[
@@ -334,7 +331,7 @@ export const defaultOptionsStructure = new api.ODCheckerArrayStructure("opendisc
             {key:"category",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_DiscordId("opendiscord:ticket-channel-category","category",true,[])},
             {key:"closedCategory",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_DiscordId("opendiscord:ticket-channel-closed-category","category",true,[])},
             {key:"backupCategory",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_DiscordId("opendiscord:ticket-channel-backup-category","category",true,[])},
-            {key:"claimedCategory",optional:false,priority:0,checker:new api.ODCheckerArrayStructure("opendiscord:ticket-channel-claimed-category",{allowDoubles:false,allowedTypes:["object"],propertyChecker:new api.ODCheckerObjectStructure("opendiscord:ticket-channel-claimed-category",{children:[
+            {key:"claimedCategory",optional:false,priority:0,checker:new api.ODCheckerArrayStructure("opendiscord:ticket-channel-claimed-category",{allowDoubles:false,allowedTypes:["object"],cliDisplayPropertyName:"claim category",propertyChecker:new api.ODCheckerObjectStructure("opendiscord:ticket-channel-claimed-category",{children:[
                 {key:"user",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_DiscordId("opendiscord:ticket-channel-claimed-user","user",false,[])},
                 {key:"category",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_DiscordId("opendiscord:ticket-channel-claimed-category","category",false,[])}
             ]})})},
@@ -383,7 +380,7 @@ export const defaultOptionsStructure = new api.ODCheckerArrayStructure("opendisc
     ]})},
 
     //WEBSITE
-    {name:"website",priority:0,properties:[{key:"type",value:"website"}],checker:new api.ODCheckerObjectStructure("opendiscord:options-website",{children:[
+    {name:"website",priority:0,properties:[{key:"type",value:"website"}],checker:new api.ODCheckerObjectStructure("opendiscord:options-website",{cliDisplayKeyInParentArray:"name",cliDisplayAdditionalKeysInParentArray:["id","type"],children:[
         {key:"id",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_UniqueId("opendiscord:website-id","openticket","option-ids",{regex:/^[A-Za-z0-9-éèçàêâôûî]+$/,minLength:3,maxLength:40})},
         {key:"name",optional:false,priority:0,checker:new api.ODCheckerStringStructure("opendiscord:website-name",{minLength:2,maxLength:50})},
         {key:"description",optional:false,priority:0,checker:new api.ODCheckerStringStructure("opendiscord:website-description",{maxLength:256})},
@@ -408,7 +405,7 @@ export const defaultOptionsStructure = new api.ODCheckerArrayStructure("opendisc
     ]})},
 
     //REACTION ROLES
-    {name:"role",priority:0,properties:[{key:"type",value:"role"}],checker:new api.ODCheckerObjectStructure("opendiscord:options-role",{children:[
+    {name:"role",priority:0,properties:[{key:"type",value:"role"}],checker:new api.ODCheckerObjectStructure("opendiscord:options-role",{cliDisplayKeyInParentArray:"name",cliDisplayAdditionalKeysInParentArray:["id","type"],children:[
         {key:"id",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_UniqueId("opendiscord:role-id","openticket","option-ids",{regex:/^[A-Za-z0-9-éèçàêâôûî]+$/,minLength:3,maxLength:40})},
         {key:"name",optional:false,priority:0,checker:new api.ODCheckerStringStructure("opendiscord:role-name",{minLength:2,maxLength:50})},
         {key:"description",optional:false,priority:0,checker:new api.ODCheckerStringStructure("opendiscord:role-description",{maxLength:256})},
@@ -430,18 +427,18 @@ export const defaultOptionsStructure = new api.ODCheckerArrayStructure("opendisc
         }})},
 
         //ROLE SETTINGS
-        {key:"roles",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_DiscordIdArray("opendiscord:role-roles","role",[],{allowDoubles:false,minLength:1})},
+        {key:"roles",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_DiscordIdArray("opendiscord:role-roles","role",[],{allowDoubles:false,minLength:1,cliDisplayPropertyName:"role"})},
         {key:"mode",optional:false,priority:0,checker:new api.ODCheckerStringStructure("opendiscord:role-mode",{choices:["add","remove","add&remove"]})},
-        {key:"removeRolesOnAdd",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_DiscordIdArray("opendiscord:role-remove-roles","role",[],{allowDoubles:false})},
+        {key:"removeRolesOnAdd",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_DiscordIdArray("opendiscord:role-remove-roles","role",[],{allowDoubles:false,cliDisplayPropertyName:"role"})},
         {key:"addOnMemberJoin",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:role-add-on-join",{})},
     ]})},
 ]})})
 
-export const defaultPanelsStructure = new api.ODCheckerArrayStructure("opendiscord:panels",{allowedTypes:["object"],propertyChecker:new api.ODCheckerObjectStructure("opendiscord:panels",{children:[
+export const defaultPanelsStructure = new api.ODCheckerArrayStructure("opendiscord:panels",{allowedTypes:["object"],cliDisplayPropertyName:"panel",propertyChecker:new api.ODCheckerObjectStructure("opendiscord:panels",{cliDisplayKeyInParentArray:"name",cliDisplayAdditionalKeysInParentArray:["id","dropdown"],children:[
     {key:"id",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_UniqueId("opendiscord:panel-id","openticket","panel-ids",{regex:/^[A-Za-z0-9-éèçàêâôûî]+$/,minLength:3,maxLength:40})},
     {key:"name",optional:false,priority:0,checker:new api.ODCheckerStringStructure("opendiscord:panel-name",{minLength:3,maxLength:50})},
     {key:"dropdown",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:panel-dropdown",{})},
-    {key:"options",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_UniqueIdArray("opendiscord:panel-options","openticket","option-ids","option-ids-used",{allowDoubles:false,maxLength:25})},
+    {key:"options",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_UniqueIdArray("opendiscord:panel-options","openticket","option-ids","option-ids-used",{allowDoubles:false,maxLength:25,cliDisplayPropertyName:"option"})},
     
     //EMBED & TEXT
     {key:"text",optional:false,priority:0,checker:new api.ODCheckerStringStructure("opendiscord:panel-text",{maxLength:4096})},
@@ -461,7 +458,7 @@ export const defaultPanelsStructure = new api.ODCheckerArrayStructure("opendisco
     ]})},
 ]})})
 
-export const defaultQuestionsStructure = new api.ODCheckerArrayStructure("opendiscord:questions",{allowedTypes:["object"],propertyChecker:new api.ODCheckerObjectStructure("opendiscord:questions",{children:[
+export const defaultQuestionsStructure = new api.ODCheckerArrayStructure("opendiscord:questions",{allowedTypes:["object"],cliDisplayPropertyName:"question",propertyChecker:new api.ODCheckerObjectStructure("opendiscord:questions",{cliDisplayKeyInParentArray:"name",cliDisplayAdditionalKeysInParentArray:["id","type"],children:[
     {key:"id",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_UniqueId("opendiscord:question-id","openticket","question-ids",{regex:/^[A-Za-z0-9-éèçàêâôûî]+$/,minLength:3,maxLength:40})},
     {key:"name",optional:false,priority:0,checker:new api.ODCheckerStringStructure("opendiscord:question-name",{minLength:3,maxLength:45})},
     {key:"type",optional:false,priority:0,checker:new api.ODCheckerStringStructure("opendiscord:question-type",{choices:["short","paragraph"]})},
@@ -605,3 +602,13 @@ export const defaultDropdownOptionsFunction = (manager:api.ODCheckerManager, fun
 
     return {valid:(final.length < 1),messages:final}
 }
+
+/* TODO
+ * - add & duplicate functionality for arrays (complex)
+ * - move & remove functionality for arrays (simple)
+ * - add/duplicate generators + forms for each structure type
+ * - implement default value & skip values in all structures
+ * - when sub-arrays are required to be configured in an add/duplicate generator, it will have an extra "next" option in the menu to go back to the next property to configure.
+ * - when sub-objects are required to be configured in an add/duplicate generator, it will have an extra "next" option in the menu to go back to the next property to configure.
+ * - and more
+ */

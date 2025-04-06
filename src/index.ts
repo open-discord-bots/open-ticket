@@ -269,9 +269,10 @@ const main = async () => {
     //render config checker
     const advancedCheckerFlag = opendiscord.flags.get("opendiscord:checker")
     const disableCheckerFlag = opendiscord.flags.get("opendiscord:no-checker")
+    const useCliFlag = opendiscord.flags.get("opendiscord:cli")
 
     await opendiscord.events.get("onCheckerRender").emit([opendiscord.checkers.renderer,opendiscord.checkers])
-    if (opendiscord.defaults.getDefault("checkerRendering") && !(disableCheckerFlag ? disableCheckerFlag.value : false)){
+    if (opendiscord.defaults.getDefault("checkerRendering") && !(disableCheckerFlag ? disableCheckerFlag.value : false) && !(useCliFlag ? useCliFlag.value : false)){
         //check if there is a result (otherwise throw minor error)
         const result = opendiscord.checkers.lastResult
         if (!result) return opendiscord.log("Failed to render Config Checker! (couldn't fetch result)","error")
@@ -290,12 +291,20 @@ const main = async () => {
     }
 
     //quit config checker (when required)
-    if (opendiscord.checkers.lastResult && !opendiscord.checkers.lastResult.valid && !(disableCheckerFlag ? disableCheckerFlag.value : false)){
+    if (opendiscord.checkers.lastResult && !opendiscord.checkers.lastResult.valid && !(disableCheckerFlag ? disableCheckerFlag.value : false) && !(useCliFlag ? useCliFlag.value : false)){
         await opendiscord.events.get("onCheckerQuit").emit([opendiscord.checkers])
         if (opendiscord.defaults.getDefault("checkerQuit")){
             process.exit(1)
             //there is no afterCheckerQuitted event :)
         }
+    }
+
+    //switch to CLI context instead of running the bot
+    if (useCliFlag && useCliFlag.value){
+        await (await (import("./core/startup/cli.js"))).execute()
+        await utilities.timer(1000)
+        console.log("\n\n"+ansis.red("❌ Something went wrong in the Interactive Setup CLI. Please try again or report a bug in our discord server."))
+        process.exit(0)
     }
 
     //plugin loading before client
