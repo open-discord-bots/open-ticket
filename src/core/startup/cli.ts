@@ -146,7 +146,7 @@ async function renderConfigArrayStructureSelector(checker:api.ODChecker,backFn:(
     if (!structure.options.propertyChecker) return await backFn()
 
     const propertyName = structure.options.cliDisplayPropertyName ?? "index"
-    const answer = await terminal.singleColumnMenu([
+    const answer = await terminal.singleColumnMenu(data.length < 1 ? ["Add "+propertyName] : [
         "Add "+propertyName,
         "Edit "+propertyName,
         "Move "+propertyName,
@@ -211,12 +211,11 @@ async function renderconfigArrayStructureMoveSelector(checker:api.ODChecker,back
     }).promise
 
     if (dataAnswer.canceled) return await backFn()
-    const subData = data[dataAnswer.selectedIndex]
     
     renderHeader([...path,dataAnswer.selectedIndex])
     terminal(ansis.bold.green("Please select the position you would like to move to.\n")+ansis.italic.gray("(use arrow keys to navigate, go back using escape)\n"))
 
-    const moveAnswer = await terminal.singleColumnMenu([...data.map((d,i) => "Position "+(i+1)),"Last Position"],{
+    const moveAnswer = await terminal.singleColumnMenu(data.map((d,i) => "Position "+(i+1)),{
         leftPadding:"> ",
         style:terminal.cyan,
         selectedStyle:terminal.bgDefaultColor.bold,
@@ -226,7 +225,14 @@ async function renderconfigArrayStructureMoveSelector(checker:api.ODChecker,back
     }).promise
     
     if (moveAnswer.canceled) return await renderconfigArrayStructureMoveSelector(checker,backFn,arrayStructure,structure,data,parent,parentIndex,path)
-    console.log("move from:",dataAnswer.selectedIndex,"to:",moveAnswer.selectedIndex)
+    
+        const subData = data[dataAnswer.selectedIndex]
+    const slicedData = [...data.slice(0,dataAnswer.selectedIndex),...data.slice(dataAnswer.selectedIndex+1)]
+    const insertedData = [...slicedData.slice(0,moveAnswer.selectedIndex),subData,...slicedData.slice(moveAnswer.selectedIndex)]
+    insertedData.forEach((d,i) => data[i] = d)
+    terminal.bold.blue("\n\n✅ Property moved succesfully!")
+    await utilities.timer(400)
+    await backFn()
 }
 
 async function renderconfigArrayStructureRemoveSelector(checker:api.ODChecker,backFn:(() => api.ODPromiseVoid),arrayStructure:api.ODCheckerArrayStructure,structure:api.ODCheckerStructure,data:any[],parent:object,parentIndex:string|number,path:(string|number)[]){
@@ -246,8 +252,10 @@ async function renderconfigArrayStructureRemoveSelector(checker:api.ODChecker,ba
     }).promise
 
     if (dataAnswer.canceled) return await backFn()
-    const subData = data[dataAnswer.selectedIndex]
-    console.log("delete position:",dataAnswer.selectedIndex)
+    data.splice(dataAnswer.selectedIndex,1)
+    terminal.bold.blue("\n\n✅ Property deleted succesfully!")
+    await utilities.timer(400)
+    await backFn()
 }
 
 async function renderConfigBooleanStructureEditor(checker:api.ODChecker,backFn:(() => api.ODPromiseVoid),structure:api.ODCheckerBooleanStructure,data:boolean,parent:object,parentIndex:string|number,path:(string|number)[]){
