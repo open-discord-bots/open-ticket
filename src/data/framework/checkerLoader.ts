@@ -602,13 +602,3 @@ export const defaultDropdownOptionsFunction = (manager:api.ODCheckerManager, fun
 
     return {valid:(final.length < 1),messages:final}
 }
-
-/* TODO
- * - add & duplicate functionality for arrays (complex)
- * - move & remove functionality for arrays (simple)
- * - add/duplicate generators + forms for each structure type
- * - implement default value & skip values in all structures
- * - when sub-arrays are required to be configured in an add/duplicate generator, it will have an extra "next" option in the menu to go back to the next property to configure.
- * - when sub-objects are required to be configured in an add/duplicate generator, it will have an extra "next" option in the menu to go back to the next property to configure.
- * - and more
- */
