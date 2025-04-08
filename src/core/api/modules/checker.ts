@@ -410,7 +410,7 @@ export interface ODCheckerStructureOptions {
     /**The description of this config in the Interactive Setup CLI. */
     cliDisplayDescription?:string
     /**The default value of this variable when creating it in the Interactive Setup CLI. When not specified, the user will be asked to insert a value. */
-    cliInitDefaultValue?:string
+    cliInitDefaultValue?:ODValidJsonType
 }
 
 /**## ODCheckerStructure `class`
@@ -445,7 +445,7 @@ export class ODCheckerStructure {
  */
 export interface ODCheckerObjectStructureOptions extends ODCheckerStructureOptions {
     /**Add a checker for a property in an object (can also be optional) */
-    children?:{key:string, priority:number, optional:boolean, cliHideInEditMode?:boolean, checker:ODCheckerStructure}[],
+    children:{key:string, priority:number, optional:boolean, cliHideInEditMode?:boolean, checker:ODCheckerStructure}[],
     /**A list of keys to skip when creating this object with the Interactive Setup CLI. The default value of these properties will be used instead. */
     cliInitSkipKeys?:string[],
     /**The key of a (primitive) property in this object to show the value of in the Interactive Setup CLI when listed in an array. */
@@ -900,7 +900,7 @@ export interface ODCheckerTypeSwitchStructureOptions extends ODCheckerStructureO
     /**A checker when the property is something else */
     other?:ODCheckerStructure,
     /**A list of allowed types */
-    allowedTypes?:("string"|"number"|"boolean"|"null"|"array"|"object"|"other")[]
+    allowedTypes:("string"|"number"|"boolean"|"null"|"array"|"object"|"other")[]
 }
 
 /**## ODCheckerTypeSwitchStructure `class`
@@ -954,9 +954,9 @@ export class ODCheckerTypeSwitchStructure extends ODCheckerStructure {
  */
 export interface ODCheckerObjectSwitchStructureOptions extends ODCheckerStructureOptions {
     /**An array of object checkers with their name, properties & priority. */
-    objects?:{
+    objects:{
         /**The properties to match for this checker to be used. */
-        properties:{key:string, value:any}[],
+        properties:{key:string, value:boolean|string|number}[],
         /**The name for this object type (used in rendering) */
         name:string,
         /**The higher the priority, the earlier this checker will be tested. */
@@ -1022,11 +1022,11 @@ export class ODCheckerObjectSwitchStructure extends ODCheckerStructure {
  */
 export interface ODCheckerEnabledObjectStructureOptions extends ODCheckerStructureOptions {
     /**The name of the property to match the `enabledValue`. */
-    property?:string,
-    /**The value of the property to be enabled. Defaults to `true` */
-    enabledValue?:any,
+    property:string,
+    /**The value of the property to be enabled. (e.g. `true`) */
+    enabledValue:boolean|string|number,
     /**The object checker to use once the property has been matched. */
-    checker?:ODCheckerObjectStructure
+    checker:ODCheckerObjectStructure
 }
 
 /**## ODCheckerEnabledObjectStructure `class`
