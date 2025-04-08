@@ -301,7 +301,7 @@ export const defaultOptionsStructure = new api.ODCheckerArrayStructure("opendisc
     //TICKET
     {name:"ticket",priority:0,properties:[{key:"type",value:"ticket"}],checker:new api.ODCheckerObjectStructure("opendiscord:ticket",{children:[
         {key:"id",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_UniqueId("opendiscord:ticket-id","openticket","option-ids",{regex:/^[A-Za-z0-9-éèçàêâôûî]+$/,minLength:3,maxLength:40})},
-        {key:"name",optional:false,priority:0,checker:new api.ODCheckerStringStructure("opendiscord:ticket-name",{minLength:2,maxLength:50})},
+        {key:"name",optional:false,priority:0,checker:new api.ODCheckerStringStructure("opendiscord:ticket-name",{minLength:2,maxLength:45})},
         {key:"description",optional:false,priority:0,checker:new api.ODCheckerStringStructure("opendiscord:ticket-description",{maxLength:256})},
 
         //TICKET BUTTON
