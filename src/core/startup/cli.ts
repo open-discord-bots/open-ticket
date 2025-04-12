@@ -350,18 +350,28 @@ async function renderConfigStringStructureEditor(checker:api.ODChecker,backFn:((
         selectedStyle:terminal.bgBlue.white
     }
 
-    const answer = await terminal.inputField({
+    const input = terminal.inputField({
         default:prefillValue,
         style:terminal.cyan,
         hintStyle:terminal.gray,
-        cancelable:true,
+        cancelable:false,
         autoComplete:autocompleteList,
         autoCompleteHint:(!!autocompleteList),
         autoCompleteMenu:(autocompleteList) ? autoCompleteMenuOpts as Terminal.Autocompletion : false
-    }).promise
-    
-    if (typeof answer != "string") return await backFn()
-    
+    })
+
+    terminal.on("key",async (name:string,matches:string[],data:object) => {
+        if (name == "ESCAPE"){
+            terminal.removeListener("key","cli-render-string-structure-edit")
+            input.abort()
+            await backFn()
+        }
+    },({id:"cli-render-string-structure-edit"} as any))
+
+    const answer = await input.promise
+    terminal.removeListener("key","cli-render-string-structure-edit")
+    if (typeof answer != "string") return
+
     //run config checker
     const newValue = answer.replaceAll("\\n","\n")
     const newPath = [...path]
@@ -541,8 +551,7 @@ async function chooseAdditionConfigStructure(checker:api.ODChecker,backFn:(() =>
     else await backFn()
 }
 
-async function renderAdditionConfigObjectStructure(checker:api.ODChecker,backFn:(() => api.ODPromiseVoid),nextFn:((data:any) => api.ODPromiseVoid),structure:api.ODCheckerObjectStructure,parent:object|any[],parentIndex:string|number,path:(string|number)[]){
-    const localData = {}
+async function renderAdditionConfigObjectStructure(checker:api.ODChecker,backFn:(() => api.ODPromiseVoid),nextFn:((data:any) => api.ODPromiseVoid),structure:api.ODCheckerObjectStructure,parent:object|any[],parentIndex:string|number,path:(string|number)[],localData:object={}){
     const children = structure.options.children ?? []
     const skipKeys = (structure.options.cliInitSkipKeys ?? [])
     //add skipped properties
@@ -592,16 +601,36 @@ async function configureAdditionObjectProperties(checker:api.ODChecker,children:
 
 async function renderAdditionConfigEnabledObjectStructure(checker:api.ODChecker,backFn:(() => api.ODPromiseVoid),nextFn:((data:any) => api.ODPromiseVoid),structure:api.ODCheckerEnabledObjectStructure,parent:object|any[],parentIndex:string|number,path:(string|number)[]){
     const enabledProperty = structure.options.property
+    const enabledValue = structure.options.enabledValue
     const subStructure = structure.options.checker
     if (!enabledProperty || !subStructure || !subStructure.options.children) return await backFn()
+    
+    let propertyStructure: api.ODCheckerBooleanStructure|api.ODCheckerNumberStructure|api.ODCheckerStringStructure
+    if (typeof enabledValue == "string") propertyStructure = new api.ODCheckerStringStructure("opendiscord:CLI-checker-enabled-object-structure",{})
+    else if (typeof enabledValue == "number") propertyStructure = new api.ODCheckerNumberStructure("opendiscord:CLI-checker-enabled-object-structure",{})
+    else if (typeof enabledValue == "boolean") propertyStructure = new api.ODCheckerBooleanStructure("opendiscord:CLI-checker-enabled-object-structure",{})
+    else throw new Error("OT CLI => enabled object structure has an invalid type of enabledProperty. It must be a primitive boolean/number/string.")
 
-    if (!subStructure.options.children.find((child) => child.key === structure.options.property)){
-        if (typeof structure.options.enabledValue == "string") subStructure.options.children.unshift({key:enabledProperty,optional:false,priority:1,checker:new api.ODCheckerStringStructure("opendiscord:CLI-checker-enabled-object-structure",{})})
-        else if (typeof structure.options.enabledValue == "number") subStructure.options.children.unshift({key:enabledProperty,optional:false,priority:1,checker:new api.ODCheckerNumberStructure("opendiscord:CLI-checker-enabled-object-structure",{})})
-        else if (typeof structure.options.enabledValue == "boolean") subStructure.options.children.unshift({key:enabledProperty,optional:false,priority:1,checker:new api.ODCheckerBooleanStructure("opendiscord:CLI-checker-enabled-object-structure",{})})
-    }
+    const localData = {}
+    await chooseAdditionConfigStructure(checker,backFn,async (data) => {
+        if (data === enabledValue) await renderAdditionConfigObjectStructure(checker,async () => {await renderAdditionConfigEnabledObjectStructure(checker,backFn,nextFn,structure,parent,parentIndex,path)},nextFn,subStructure,parent,parentIndex,path,localData)
+        else{
+            localData[enabledProperty] = data
+            //copy old object checker to new object checker => all options get de-referenced (this is needed for the new object skip keys are temporary)
+            const newStructure = new api.ODCheckerObjectStructure(subStructure.id,{children:[]})
+            
+            //copy all options over to the new checker
+            newStructure.options.children = [...subStructure.options.children]
+            newStructure.options.cliInitSkipKeys = subStructure.options.children.map((child) => child.key)
+            for (const key of Object.keys(subStructure.options)){
+                if (key != "children" && key != "cliInitSkipKeys") newStructure.options[key] = subStructure.options[key]
+            }
 
-    await chooseAdditionConfigStructure(checker,backFn,nextFn,subStructure,parent,parentIndex,path)
+            //adds all properties to object as "skipKeys", then continues to next function
+            await renderAdditionConfigObjectStructure(checker,async () => {await renderAdditionConfigEnabledObjectStructure(checker,backFn,nextFn,structure,parent,parentIndex,path)},nextFn,newStructure,parent,parentIndex,path,localData)
+            await nextFn(localData)
+        }
+    },propertyStructure,localData,enabledProperty,[...path,parentIndex])
 }
 
 async function renderAdditionConfigObjectSwitchStructure(checker:api.ODChecker,backFn:(() => api.ODPromiseVoid),nextFn:((data:any) => api.ODPromiseVoid),structure:api.ODCheckerObjectSwitchStructure,parent:object|any[],parentIndex:string|number,path:(string|number)[]){
@@ -654,6 +683,7 @@ async function renderAdditionConfigBooleanStructure(checker:api.ODChecker,backFn
     terminal(ansis.bold.green("You are now creating "+(typeof parentIndex == "string" ? "the boolean property "+ansis.blue("\""+parentIndex+"\"") : "boolean property "+ansis.blue("#"+(parentIndex+1)))+".\n")+ansis.italic.gray("(use arrow keys to navigate, go back using escape)\n"))
     
     terminal.gray("\nProperty: "+ansis.bold.blue((typeof parentIndex == "number") ? "#"+(parentIndex+1) : (structure.options.cliDisplayName ?? parentIndex))+"\n")
+    terminal.gray("Description: "+ansis.bold(structure.options.cliDisplayDescription ?? "/")+"\n")
 
     const answer = await terminal.singleColumnMenu(["false (Disabled)","true (Enabled)"],{
         leftPadding:"> ",
@@ -691,6 +721,7 @@ async function renderAdditionConfigNumberStructure(checker:api.ODChecker,backFn:
     terminal(ansis.bold.green("You are now creating "+(typeof parentIndex == "string" ? "the number property "+ansis.blue("\""+parentIndex+"\"") : "number property "+ansis.blue("#"+(parentIndex+1)))+".\n")+ansis.italic.gray("(insert a new value and press enter, go back using escape)\n"))
     
     terminal.gray("\nProperty: "+ansis.bold.blue(structure.options.cliDisplayName ?? (typeof parentIndex == "number" ? "#"+(parentIndex+1) : parentIndex))+"\n")
+    terminal.gray("Description: "+ansis.bold(structure.options.cliDisplayDescription ?? "/")+"\n")
 
     const answer = await terminal.inputField({
         default:prefillValue,
@@ -725,6 +756,7 @@ async function renderAdditionConfigStringStructure(checker:api.ODChecker,backFn:
     terminal(ansis.bold.green("You are now creating "+(typeof parentIndex == "string" ? "the string property "+ansis.blue("\""+parentIndex+"\"") : "string property "+ansis.blue("#"+(parentIndex+1)))+".\n")+ansis.italic.gray("(insert a new value and press enter, go back using escape)\n"))
     
     terminal.gray("\nProperty: "+ansis.bold.blue(structure.options.cliDisplayName ?? (typeof parentIndex == "number" ? "#"+(parentIndex+1) : parentIndex))+"\n")
+    terminal.gray("Description: "+ansis.bold(structure.options.cliDisplayDescription ?? "/")+"\n")
 
     const autocompleteList = structure.options.cliAutocompleteList ?? structure.options.choices
     const autoCompleteMenuOpts: Terminal.SingleLineMenuOptions = {
@@ -732,17 +764,27 @@ async function renderAdditionConfigStringStructure(checker:api.ODChecker,backFn:
         selectedStyle:terminal.bgBlue.white
     }
 
-    const answer = await terminal.inputField({
+    const input = terminal.inputField({
         default:prefillValue,
         style:terminal.cyan,
         hintStyle:terminal.gray,
-        cancelable:true,
+        cancelable:false,
         autoComplete:autocompleteList,
         autoCompleteHint:(!!autocompleteList),
         autoCompleteMenu:(autocompleteList) ? autoCompleteMenuOpts as Terminal.Autocompletion : false
-    }).promise
-    
-    if (typeof answer != "string") return await backFn()
+    })
+
+    terminal.on("key",async (name:string,matches:string[],data:object) => {
+        if (name == "ESCAPE"){
+            terminal.removeListener("key","cli-render-string-structure-add")
+            input.abort()
+            await backFn()
+        }
+    },({id:"cli-render-string-structure-add"} as any))
+
+    const answer = await input.promise
+    terminal.removeListener("key","cli-render-string-structure-add")
+    if (typeof answer != "string") return
     
     //run config checker
     const newValue = answer.replaceAll("\\n","\n")
@@ -769,6 +811,7 @@ async function renderAdditionConfigNullStructure(checker:api.ODChecker,backFn:((
     terminal(ansis.bold.green("You are now creating "+(typeof parentIndex == "string" ? "the null property "+ansis.blue("\""+parentIndex+"\"") : "null property "+ansis.blue("#"+(parentIndex+1)))+".\n")+ansis.italic.gray("(use arrow keys to navigate, go back using escape)\n"))
     
     terminal.gray("\nProperty: "+ansis.bold.blue(structure.options.cliDisplayName ?? (typeof parentIndex == "number" ? "#"+(parentIndex+1) : parentIndex))+"\n")
+    terminal.gray("Description: "+ansis.bold(structure.options.cliDisplayDescription ?? "/")+"\n")
 
     const answer = await terminal.singleColumnMenu(["null"],{
         leftPadding:"> ",
