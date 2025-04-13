@@ -26,7 +26,7 @@ export const registerActions = async () => {
             await opendiscord.stats.get("opendiscord:user").setStat("opendiscord:tickets-claimed",user.id,1,"increase")
 
             //update category
-            if (params.allowCategoryChange){
+            if (typeof params.allowCategoryChange == "boolean" ? params.allowCategoryChange : true){
                 const rawClaimCategory = ticket.option.get("opendiscord:channel-categories-claimed").value.find((c) => c.user == user.id)
                 const claimCategory = (rawClaimCategory) ? rawClaimCategory.category : null
                 if (claimCategory){

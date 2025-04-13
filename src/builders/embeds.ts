@@ -604,8 +604,8 @@ const ticketEmbeds = () => {
                 instance.setFields(embedOptions.fields)
             }
 
-            if (ticket.get("opendiscord:closed").value && ticket.get("opendiscord:autodelete-enabled").value) instance.setFooter("⏱️ "+lang.getTranslationWithParams("actions.descriptions.ticketMessageAutodelete",[ticket.option.get("opendiscord:autodelete-days").value.toString()]))
-            else if (!ticket.get("opendiscord:closed").value && ticket.get("opendiscord:autoclose-enabled").value) instance.setFooter("⏱️ "+lang.getTranslationWithParams("actions.descriptions.ticketMessageAutoclose",[ticket.option.get("opendiscord:autoclose-hours").value.toString()]))
+            if (ticket.get("opendiscord:closed").value && ticket.get("opendiscord:autodelete-enabled").value) instance.setFooter("⏱️ "+lang.getTranslationWithParams("actions.descriptions.ticketMessageAutodelete",[ticket.get("opendiscord:autodelete-days").value.toString()]))
+            else if (!ticket.get("opendiscord:closed").value && ticket.get("opendiscord:autoclose-enabled").value) instance.setFooter("⏱️ "+lang.getTranslationWithParams("actions.descriptions.ticketMessageAutoclose",[ticket.get("opendiscord:autoclose-hours").value.toString()]))
             
             if (ticket.get("opendiscord:claimed").value){
                 const claimUser = await opendiscord.tickets.getTicketUser(ticket,"claimer")

@@ -22,7 +22,7 @@ export const registerActions = async () => {
             ticket.get("opendiscord:busy").value = true
 
             //update category
-            if (params.allowCategoryChange){
+            if (typeof params.allowCategoryChange == "boolean" ? params.allowCategoryChange : true){
                 const channelCategory = ticket.option.get("opendiscord:channel-category").value
                 const channelBackupCategory = ticket.option.get("opendiscord:channel-category-backup").value
                 if (channelCategory !== ""){

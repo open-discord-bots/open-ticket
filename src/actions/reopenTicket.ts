@@ -28,7 +28,7 @@ export const registerActions = async () => {
             await opendiscord.stats.get("opendiscord:user").setStat("opendiscord:tickets-reopened",user.id,1,"increase")
 
             //update category
-            if (params.allowCategoryChange){
+            if (typeof params.allowCategoryChange == "boolean" ? params.allowCategoryChange : true){
                 const channelCategory = ticket.option.get("opendiscord:channel-category").value
                 const channelBackupCategory = ticket.option.get("opendiscord:channel-category-backup").value
                 if (channelCategory !== ""){

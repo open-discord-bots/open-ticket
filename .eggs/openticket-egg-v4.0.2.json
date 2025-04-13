@@ -1,0 +1,62 @@
+{
+    "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PTERODACTYL PANEL - PTERODACTYL.IO",
+    "meta": {
+        "version": "PTDL_v2",
+        "update_url": null
+    },
+    "exported_at": "2025-03-16T18:10:18+01:00",
+    "name": "Open Ticket (v4.0.2)",
+    "author": "support@dj-dj.be",
+    "description": "This is the official Pterodactyl egg for Open Ticket v4.0.2, the most advanced & customisable discord ticket bot that you will ever find! You can customise up to 300+ variables! This includes Html Transcripts, Advanced Plugins, Custom Embeds, Questions\/Modals, Stats & more!",
+    "features": null,
+    "docker_images": {
+        "ghcr.io\/parkervcp\/yolks:nodejs_20": "ghcr.io\/parkervcp\/yolks:nodejs_20"
+    },
+    "file_denylist": [],
+    "startup": "if [[ ! -z ${NODE_PACKAGES} ]]; then npm install ${NODE_PACKAGES}; fi; if [[ ! -z ${UNNODE_PACKAGES} ]]; then npm uninstall ${UNNODE_PACKAGES}; fi; if [ -f \/home\/container\/package.json ]; then npm install; fi; node \"\/home\/container\/index.js\" ${NODE_FLAGS};",
+    "config": {
+        "files": "{}",
+        "startup": "{\r\n    \"done\": \"STARTUP INFO:\"\r\n}",
+        "logs": "{}",
+        "stop": "^C"
+    },
+    "scripts": {
+        "installation": {
+            "script": "#!\/bin\/bash\r\n# Open Ticket Installation Script (v4.0.2)\r\n# Inspired by: Node.js Installation Script\r\n# \u00a9 DJdj Development\r\n\r\necho -e \"[OT INSTALLER] installing dependencies. please wait...\"\r\napt update\r\napt install -y git curl\r\n\r\necho -e \"[OT INSTALLER] updating npm. please wait...\"\r\nnpm install npm@latest --location=global\r\n\r\nmkdir -p \/mnt\/server\r\ncd \/mnt\/server\r\n\r\nBRANCH=\"v4.0.2\"\r\n\r\nif [ \"$(ls -A \/mnt\/server)\" ]; then\r\n    echo -e \"[OT INSTALLER] \/mnt\/server directory is not empty.\"\r\n    if [ -d .git ]; then\r\n        echo -e \"[OT INSTALLER] .git directory exists\"\r\n        if [ -f .git\/config ]; then\r\n            echo -e \"[OT INSTALLER] loading info from git config\"\r\n            ORIGIN=$(git config --get remote.origin.url)\r\n        else\r\n            echo -e \"[OT INSTALLER] files found with no git config\"\r\n            echo -e \"[OT INSTALLER] closing out without touching things to not break anything\"\r\n            exit 10\r\n        fi\r\n    fi\r\n\r\n    if [ \"${ORIGIN}\" == \"https:\/\/github.com\/open-discord-bots\/open-ticket.git\" ]; then\r\n        echo \"pulling latest from github\"\r\n        git pull\r\n    fi\r\nelse\r\n    echo -e \"[OT INSTALLER] \/mnt\/server is empty.\"\r\n    echo -e \"[OT INSTALLER] cloning files into repo.\"\r\n    if [ -z ${BRANCH} ]; then\r\n        echo -e \"[OT INSTALLER] cloning default branch\"\r\n        git clone https:\/\/github.com\/open-discord-bots\/open-ticket.git .\r\n    else\r\n        echo -e \"[OT INSTALLER] cloning ${BRANCH}'\"\r\n        git clone --single-branch --branch ${BRANCH} https:\/\/github.com\/open-discord-bots\/open-ticket.git .\r\n    fi\r\nfi\r\n\r\necho -e \"[OT INSTALLER] installing Open Ticket node.js packages.\"\r\nif [ -f \/mnt\/server\/package.json ]; then\r\n    \/usr\/local\/bin\/npm install --omit=dev\r\nfi\r\n\r\necho -e \"[OT INSTALLER] installing custom node.js packages.\"\r\nif [[ ! -z ${NODE_PACKAGES} ]]; then\r\n    \/usr\/local\/bin\/npm install ${NODE_PACKAGES}\r\nfi\r\n\r\necho -e \"[OT INSTALLER] install complete!\"\r\nexit 0",
+            "container": "node:latest",
+            "entrypoint": "bash"
+        }
+    },
+    "variables": [
+        {
+            "name": "Additional Npm Packages",
+            "description": "Specify additional npm packages used by Open Ticket plugins. Use spaces to separate.",
+            "env_variable": "NODE_PACKAGES",
+            "default_value": "",
+            "user_viewable": false,
+            "user_editable": true,
+            "rules": "string|nullable",
+            "field_type": "text"
+        },
+        {
+            "name": "Startup Flags",
+            "description": "Start the bot with additional Open Ticket flags. Separate using spaces.\r\nA full reference list can be found in the documentation.",
+            "env_variable": "NODE_FLAGS",
+            "default_value": "",
+            "user_viewable": false,
+            "user_editable": true,
+            "rules": "string|nullable",
+            "field_type": "text"
+        },
+        {
+            "name": "Uninstall Npm Packages",
+            "description": "A list of npm packages to uninstall. Separate by spaces.",
+            "env_variable": "UNNODE_PACKAGES",
+            "default_value": "",
+            "user_viewable": false,
+            "user_editable": true,
+            "rules": "string|nullable",
+            "field_type": "text"
+        }
+    ]
+}

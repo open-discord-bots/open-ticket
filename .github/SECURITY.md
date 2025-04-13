@@ -20,6 +20,7 @@ This list will be updated on every release.
 | Version    | Supported | Notes                          |
 |------------|-----------|--------------------------------|
 | 4.1.0      | 🟦        |                                |
+| 4.0.2      | ✅        |                                |
 | 4.0.1      | ✅        |                                |
 | 4.0.0      | ✅        |                                |
 | 3.5.9      | 🚧        | Supported until May 2025 (LTS) |

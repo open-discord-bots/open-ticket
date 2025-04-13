@@ -8,7 +8,7 @@
 <br>Powered By<br>
 <img src="https://apis.dj-dj.be/cdn/opendiscord/logo.png" alt="Open Ticket" width="170px"><br>
 <a href="https://discord.com/invite/26vT9wt3n3"><img alt="Discord Invite Link" src="https://img.shields.io/badge/discord-support%20server-5865F2.svg?style=flat-square&logo=discord"></img></a>
-<a href="https://github.com/open-discord-bots/open-ticket/releases/tag/v4.0.1"><img alt="Open Ticket Version" src="https://img.shields.io/badge/version-4.0.1-brightgreen.svg?style=flat-square"></img></a>
+<a href="https://github.com/open-discord-bots/open-ticket/releases/tag/v4.0.2"><img alt="Open Ticket Version" src="https://img.shields.io/badge/version-4.0.2-brightgreen.svg?style=flat-square"></img></a>
 <a href="https://otdocs.dj-dj.be"><img alt="Open Ticket Documentation" src="https://img.shields.io/badge/discord.js-v14-CB3837.svg?style=flat-square&logo=npm"></img></a>
 <a href="https://github.com/open-discord-bots/open-ticket/blob/main/LICENSE"><img alt="Open Ticket License" src="https://img.shields.io/badge/license-GPL%203.0-important.svg?style=flat-square"></img></a>
 <a href="https://otdocs.dj-dj.be"><img alt="Open Ticket Stars" src="https://img.shields.io/github/stars/djj123dj/open-ticket?color=yellow&label=stars&logo=github&style=flat-square"></img></a>
@@ -20,7 +20,7 @@
 
 <p align="center">
 Open Ticket is the most advanced & customisable discord ticket bot that you will ever find! You can customise up to 300+ variables! This includes <code>Html Transcripts</code>, <code>Advanced Plugins</code>, <code>Custom Embeds</code>, <code>Questions/Modals</code>, <code>Stats</code> & more!
-You're also able to customise every little aspect of the bot! From embeds to transcripts. Open Ticket is also translated in more than <code>26 Languages</code>! If you need any help, feel free to join our <a href="https://discord.dj-dj.be">discord server</a>!
+You're also able to customise every little aspect of the bot! From embeds to transcripts. Open Ticket is also translated in more than <code>27 Languages</code>! If you need any help, feel free to join our <a href="https://discord.dj-dj.be">discord server</a>!
 </p>
 
 <p align="center"><b>⭐️ Help us grow by giving a star! ⭐️</b></p>
@@ -32,7 +32,7 @@ You're also able to customise every little aspect of the bot! From embeds to tra
 - **📈 scalable** - Open Ticket is made to handle huge servers! (Already tested in **servers with 100k members**)
 - **📄 HTML transcripts** - Make use of the most customisable, beautiful and easy-to-use HTML Transcripts!
 - **✅ ticket actions** - Close, Reopen, Delete, Claim, Pin, Rename & Move all your tickets!
-- **🇬🇧 translation** - Open Ticket has been translated in more than **26 languages** by our community!
+- **🇬🇧 translation** - Open Ticket has been translated in more than **27 languages** by our community!
 - **🎨 customisation** - Open Ticket has been created around customisation, everything can be customised!
 - **🖥️ interactions** - The bot has full support for Buttons, Dropdowns, Slash Commands and Modals!
 - **∞ unlimited** - Create an infinite amount of tickets & panels!
@@ -58,9 +58,9 @@ You're also able to customise every little aspect of the bot! From embeds to tra
   - **😁 And so much more...**
 
 > ### 📦 Resources
-> Resources might not be accurate yet! *(because v4 is still in beta)*<br>
+> Not all resources are accurate yet! We are working on this.<br>
 > <a href="https://www.youtube.com/watch?v=2jK9kAf6ASU"><img src="https://apis.dj-dj.be/cdn/openticket/open-ticket-tutorial.png" alt="Open Ticket Tutorial" width="180px"></a>
-> <a href="https://otdocs.dj-dj.be"><img src="https://apis.dj-dj.be/cdn/openticket/open-ticket-docs.png" alt="Open Ticket Docs" width="180px"></a>
+> <a href="https://openticket.dj-dj.be/message.html?msg=The%20current%20tutorial%20is%20outdated,%20we%27re%20still%20working%20on%20a%20new%20one!"><img src="https://apis.dj-dj.be/cdn/openticket/open-ticket-docs.png" alt="Open Ticket Docs" width="180px"></a>
 > <a href="https://github.com/open-discord-bots/plugins"><img src="https://apis.dj-dj.be/cdn/openticket/open-ticket-plugins.png" alt="Open Ticket Plugins" width="180px"></a>
 
 ### ❤️ Sponsors
@@ -68,12 +68,10 @@ A big thanks to all our sponsors! Without them, it wouldn't be possible to creat
 
 <table>
 <tr>
-<td><img src="https://github.com/roppl3r.png" alt="Profile Picture" width="80px"></td>
-<td><img src="https://github.com/BENZORICH.png" alt="Profile Picture" width="80px"></td>
+<td><img src="https://github.com/roppl3r.png" alt="Profile Picture" width="100px"></td>
 </tr>
 <tr>
-<th><a href="https://github.com/roppl3r">roppl3r</a></th>
-<th><a href="https://github.com/BENZORICH">BENZORICH</a></th>
+<td align="center"><a href="https://github.com/roppl3r"><b>roppl3r</b></a></td>
 </tr>
 </table>
 
@@ -82,6 +80,7 @@ A big thanks to all our sponsors! Without them, it wouldn't be possible to creat
 <img src="https://github.com/SpyEye2.png" alt="SpyEye" width="40px">
 <img src="https://github.com/mods-hd.png" alt="Mods HD" width="40px">
 <img src="https://github.com/DOSEV5.png" alt="DOSEV5" width="40px">
+<img src="https://github.com/BENZORICH.png" alt="BENZORICH" width="40px">
 </a>
 
 ### ⏱️ Quick Setup
@@ -96,10 +95,83 @@ A big thanks to all our sponsors! Without them, it wouldn't be possible to creat
 > ### [📔 Visit Documentation](https://otdocs.dj-dj.be)
 
 ## 📸 Preview
-<img alt="Ticket Message" width="350px" src="https://apis.dj-dj.be/cdn/openticket/preview-v4/ticket.png">
-<img alt="Ticket Stats Message" width="350px" src="https://apis.dj-dj.be/cdn/openticket/preview-v4/stats.png">
-<img alt="Example Panel 1" width="350px" src="https://apis.dj-dj.be/cdn/openticket/preview-v4/panel-1.png">
-<img alt="Example Panel 2" width="350px" src="https://apis.dj-dj.be/cdn/openticket/preview-v4/panel-2.png">
+<img alt="An example of a panel." src="https://apis.dj-dj.be/cdn/openticket/preview-v4/panel-examples.png">
+<img alt="An example of a ticket message." src="https://apis.dj-dj.be/cdn/openticket/preview-v4/ticket-example.png">
+<img alt="Examples of built-in commands." src="https://apis.dj-dj.be/cdn/openticket/preview-v4/command-examples.png">
+
+## 🛠️ Contributors
+### 🖥️ Team & Contributors
+A list of people that contributed or provided the most support for Open Ticket.
+<table>
+<tr>
+<td align="center"><img src="https://github.com/DJj123dj.png" alt="Profile Picture" width="80px"></td>
+<td align="center"><img src="https://github.com/smetsliam.png" alt="Profile Picture" width="80px"></td>
+<td align="center"><img src="https://github.com/FrankVissers.png" alt="Profile Picture" width="80px"></td>
+<td align="center"><img src="https://github.com/Sank34.png" alt="Profile Picture" width="80px"></td>
+<td align="center"><img src="https://github.com/Roppl3r.png" alt="Profile Picture" width="80px"></td>
+</tr>
+<tr>
+<th><a href="https://github.com/DJj123dj">💻 DJj123dj</a></th>
+<th><a href="https://github.com/smetsliam">💬 smetsliam</a></th>
+<th><a href="https://github.com/FrankVissers">💬 Frank Vissers</a></th>
+<th><a href="https://github.com/Sank34">💬 Sanke</a></th>
+<th><a href="https://github.com/Roppl3r">🧩 Roppl3r</a></th>
+</tr>
+</table>
+
+### 💬 Translators
+Without our translators, it wouldn't be possible to translate Open Ticket in so many languages!
+- 🟢 Available - 🤖 Made Using AI - 🔴 Unavailable/Outdated
+
+|🔍 |Language             |Maintainer (Github/Discord) |
+|---|---------------------|----------------------------|
+|🟢 |🇬🇧 English            |djj123dj                   |
+|🟢 |🇳🇱 Dutch              |djj123dj                   |
+|🟢 |🇩🇪 German             |benzorich                  |
+|🟢 |🇪🇸 Spanish            |redactado & josuens        |
+|🟢 |🇵🇹 Portuguese         |quiradon                   |
+|🟢 |❓ Catalan            |guillee3                   |
+|🟢 |🇨🇿 Czech              |spyeye_                    |
+|🟢 |🇭🇺 Hungarian          |kornel0706                 |
+|🟢 |🇷🇴 Romanian           |sankedev                   |
+|🟢 |🇺🇦 Ukrainian          |anderskiy                  |
+|🟢 |🇮🇩 Indonesian         |erxg                       |
+|🟢 |🇮🇹 Italian            |fraden1mvp.                |
+|🟢 |🇩🇰 Danish             |the_gamer                  |
+|🟢 |🇹🇭 Thai               |modshd                     |
+|🟢 |🇹🇷 Turkish            |palestinian                |
+|🟢 |🇫🇷 French             |guillee.3                  |
+|🟢 |🇦🇪 Arabic             |palestinian                |
+|🟢 |🇮🇳 Hindi              |an_developer               |
+|🟢 |🇱🇹 Lithuanian         |tsgindrius                 |
+|🟢 |🇵🇱 Polish             |danoglez                   |
+|🟢 |🇳🇴 Norwegian          |NoOneNook                  |
+|🟢 |🇸🇪 Swedish            |NoOneNook                  |
+|🤖 |🇪🇪 Estonian           |iamnotmega                 |
+|🤖 |🇫🇮 Finnish            |iamnotmega                 |
+|🤖 |🇷🇺 Russian            |NoOneNook                  |
+|🤖 |🇱🇻 Latvian            |NoOneNook                  |
+|🤖 |🇻🇳 Vietnamese         |ngocdiep2006               |
+|🔴 |🇯🇵 Japanese           |[⭐ Contribute!](.github/CONTRIBUTING.md)|
+|🔴 |🇰🇷 Korean             |[⭐ Contribute!](.github/CONTRIBUTING.md)|
+|🔴 |🇨🇳 Simplified Chinese |[⭐ Contribute!](.github/CONTRIBUTING.md)|
+|🔴 |🇨🇳 Traditional Chinese|[⭐ Contribute!](.github/CONTRIBUTING.md)|
+|🔴 |🇸🇮 Slovenian          |[⭐ Contribute!](.github/CONTRIBUTING.md)|
+|🔴 |🇬🇷 Greek              |[⭐ Contribute!](.github/CONTRIBUTING.md)|
+|🔴 |❓ Kurdish            |[⭐ Contribute!](.github/CONTRIBUTING.md)|
+|🔴 |❓ Persian            |[⭐ Contribute!](.github/CONTRIBUTING.md)|
+
+## ⭐️ Star History
+Please give this repository a star if you like it.  
+This will help us grow and reach even more people!
+
+<a href="https://star-history.com/#open-discord-bots/open-ticket&Date">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=open-discord-bots/open-ticket&type=Date&theme=dark" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=open-discord-bots/open-ticket&type=Date" />
+   <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=open-discord-bots/open-ticket&type=Date" />
+ </picture>
+</a>
 
 ## 🧩 Plugins
 **Download all plugins in our [Official Plugin Repository](https://github.com/open-discord-bots/plugins)!**<br>
@@ -153,76 +225,10 @@ A big thanks to all our sponsors! Without them, it wouldn't be possible to creat
 - **💼 Management** - These plugins add features that help you manage your server.
 - **🤖 Client** - These plugins add features affecting the discord client or bot itself.
 
-## 🛠️ Contributors
-### 🖥️ Team
-This is the main team working on Open Ticket. Don't forget to check their profiles!
-<table>
-<tr>
-<td><img src="https://github.com/DJj123dj.png" alt="Profile Picture" width="80px"></td>
-<td><img src="https://github.com/Sank34.png" alt="Profile Picture" width="80px"></td>
-<td><img src="https://github.com/smetsliam.png" alt="Profile Picture" width="80px"></td>
-</tr>
-<tr>
-<th><a href="https://github.com/DJj123dj">💻 DJj123dj</a></th>
-<th><a href="https://github.com/Sank34">💬 Sanke</a></th>
-<th><a href="https://github.com/smetsliam">💬 DevBack</a></th>
-</tr>
-</table>
-
-### 💬 Translators
-|Language             |Maintainer (discord name) |Status                       |
-|---------------------|--------------------------|-----------------------------|
-|🇬🇧 English            |djj123dj                  |🟢 Up To Date                |
-|🇳🇱 Dutch              |djj123dj                  |🟢 Up To Date                |
-|🇩🇪 German             |benzorich                 |🟢 Up To Date                |
-|🇪🇸 Spanish            |redactado & josuens       |🟢 Up To Date                |
-|🇵🇹 Portuguese         |quiradon                  |🟢 Up To Date                |
-|❓ Catalan            |guillee3                  |🟢 Up To Date                |
-|🇨🇿 Czech              |spyeye_                   |🟢 Up To Date                |
-|🇭🇺 Hungarian          |kornel0706                |🟢 Up To Date                |
-|🇷🇴 Romanian           |sankedev                  |🟢 Up To Date                |
-|🇺🇦 Ukrainian          |anderskiy                 |🟢 Up To Date                |
-|🇮🇩 Indonesian         |erxg                      |🟢 Up To Date                |
-|🇮🇹 Italian            |fraden1mvp.               |🟢 Up To Date                |
-|🇩🇰 Danish             |the_gamer                 |🟢 Up To Date                |
-|🇹🇭 Thai               |modshd                    |🟢 Up To Date                |
-|🇹🇷 Turkish            |palestinian               |🟢 Up To Date                |
-|🇫🇷 French             |guillee.3                 |🟢 Up To Date                |
-|🇦🇪 Arabic             |palestinian               |🟢 Up To Date                |
-|🇮🇳 Hindi              |an_developer              |🟢 Up To Date                |
-|🇱🇹 Lithuanian         |tsgindrius                |🟢 Up To Date                |
-|🇵🇱 Polish             |danoglez                  |🟢 Up To Date                |
-|🇳🇴 Norwegian          |NoOneNook                 |🟢 Up To Date                |
-|🇸🇪 Swedish            |NoOneNook                 |🟢 Up To Date                |
-|🇪🇪 Estonian           |iamnotmega                |🔵 Up To Date (AI)           |
-|🇫🇮 Finnish            |iamnotmega                |🔵 Up To Date (AI)           |
-|🇷🇺 Russian            |NoOneNook                 |🔵 Up To Date (AI)           |
-|🇱🇻 Latvian            |NoOneNook                 |🔵 Up To Date (AI)           |
-|🇯🇵 Japanese           |/                         |🔴 Missing                   |
-|🇰🇷 Korean             |/                         |🔴 Missing                   |
-|🇨🇳 Simplified Chinese |/                         |🔴 Missing                   |
-|🇨🇳 Traditional Chinese|/                         |🔴 Missing                   |
-|🇻🇳 Vietnamese         |/                         |🔴 Missing                   |
-|🇸🇮 Slovenian          |/                         |🔴 Missing                   |
-|🇬🇷 Greek              |/                         |🔴 Missing                   |
-|❓ Kurdish            |/                         |🔴 Missing                   |
-|❓ Persian            |/                         |🔴 Missing                   |
-
-## ⭐️ Star History
-Please help us grow by giving a star! It would help us a lot!
-
-<a href="https://star-history.com/#open-discord-bots/open-ticket&Date">
- <picture>
-   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=open-discord-bots/open-ticket&type=Date&theme=dark" />
-   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=open-discord-bots/open-ticket&type=Date" />
-   <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=open-discord-bots/open-ticket&type=Date" />
- </picture>
-</a>
-
 ---
 <img src="https://apis.dj-dj.be/cdn/openticket/logo.png" alt="Open Ticket Logo" width="170px">
 
 **README.md**<br>
-[changelog](https://otgithub.dj-dj.be/releases) - [documentation](https://otdocs.dj-dj.be) - [tutorial](https://www.youtube.com/watch?v=2jK9kAf6ASU) - [website](https://openticket.dj-dj.be) - [discord](https://discord.dj-dj.be) - [license](./LICENSE.md)<br>
+[changelog](https://otgithub.dj-dj.be/releases) - [documentation](https://otdocs.dj-dj.be) - [tutorial](https://www.youtube.com/watch?v=2jK9kAf6ASU) - [website](https://openticket.dj-dj.be) - [discord server](https://discord.dj-dj.be) - [license](./LICENSE.md)<br>
 
 © 2025 - [DJdj Development](https://www.dj-dj.be) - [Terms](https://www.dj-dj.be/terms) - [Privacy Policy](https://www.dj-dj.be/privacy) - [Support Us](https://github.com/sponsors/DJj123dj)

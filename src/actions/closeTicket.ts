@@ -28,7 +28,7 @@ export const registerActions = async () => {
             await opendiscord.stats.get("opendiscord:user").setStat("opendiscord:tickets-closed",user.id,1,"increase")
 
             //update category
-            if (params.allowCategoryChange){
+            if (typeof params.allowCategoryChange == "boolean" ? params.allowCategoryChange : true){
                 const closeCategory = ticket.option.get("opendiscord:channel-category-closed").value
                 if (closeCategory !== ""){
                     try {

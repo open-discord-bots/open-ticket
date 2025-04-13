@@ -2,7 +2,7 @@
     "_INFO":{
         "support":"https://otdocs.dj-dj.be",
         "discord":"https://discord.dj-dj.be",
-        "version":"open-ticket-v4.0.1"
+        "version":"open-ticket-v4.0.2"
     },
     
     "token":"your bot token here! (or leave empty when using 'tokenFromENV')",
