@@ -145,6 +145,9 @@ async function renderConfigArrayStructureSelector(checker:api.ODChecker,backFn:(
     terminal(ansis.bold.green("Please select what you would like to do.\n")+ansis.italic.gray("(use arrow keys to navigate, go back using escape)\n"))
     if (!structure.options.propertyChecker) return await backFn()
 
+    terminal.gray("\nProperty: "+ansis.bold.blue(structure.options.cliDisplayName ?? parentIndex.toString())+"\n")
+    terminal.gray("Description: "+ansis.bold(structure.options.cliDisplayDescription ?? "/")+"\n")
+
     const propertyName = structure.options.cliDisplayPropertyName ?? "index"
     const answer = await terminal.singleColumnMenu(data.length < 1 ? ["Add "+propertyName] : [
         "Add "+propertyName,
@@ -166,6 +169,7 @@ async function renderConfigArrayStructureSelector(checker:api.ODChecker,backFn:(
     if (answer.canceled) return await backFn()
     if (answer.selectedIndex == 0) await chooseAdditionConfigStructure(checker,backFnFunc,async (newData) => {
         data[data.length] = newData
+        await checker.config.save()
         await backFnFunc()
     },structure.options.propertyChecker,data,data.length,path,[])
     else if (answer.selectedIndex == 1) await renderConfigArrayStructureEditSelector(checker,backFnFunc,structure,structure.options.propertyChecker,data,parent,parentIndex,path)
@@ -231,6 +235,8 @@ async function renderconfigArrayStructureMoveSelector(checker:api.ODChecker,back
     const slicedData = [...data.slice(0,dataAnswer.selectedIndex),...data.slice(dataAnswer.selectedIndex+1)]
     const insertedData = [...slicedData.slice(0,moveAnswer.selectedIndex),subData,...slicedData.slice(moveAnswer.selectedIndex)]
     insertedData.forEach((d,i) => data[i] = d)
+
+    await checker.config.save()
     terminal.bold.blue("\n\n✅ Property moved succesfully!")
     await utilities.timer(400)
     await backFn()
@@ -254,6 +260,8 @@ async function renderconfigArrayStructureRemoveSelector(checker:api.ODChecker,ba
 
     if (dataAnswer.canceled) return await backFn()
     data.splice(dataAnswer.selectedIndex,1)
+
+    await checker.config.save()
     terminal.bold.blue("\n\n✅ Property deleted succesfully!")
     await utilities.timer(400)
     await backFn()
@@ -277,6 +285,8 @@ async function renderConfigArrayStructureDuplicateSelector(checker:api.ODChecker
 
     if (dataAnswer.canceled) return await backFn()
     data.push(JSON.parse(JSON.stringify(data[dataAnswer.selectedIndex])))
+
+    await checker.config.save()
     terminal.bold.blue("\n\n✅ Property duplicated succesfully!")
     await utilities.timer(400)
     await backFn()
@@ -288,6 +298,7 @@ async function renderConfigBooleanStructureEditor(checker:api.ODChecker,backFn:(
     terminal(ansis.bold.green("You are now editing "+(typeof parentIndex == "string" ? "the boolean property "+ansis.blue("\""+parentIndex+"\"") : "boolean property "+ansis.blue("#"+(parentIndex+1)))+".\n")+ansis.italic.gray("(use arrow keys to navigate, go back using escape)\n"))
     
     terminal.gray("\nCurrent value: "+ansis.bold[data ? "green" : "red"](data.toString())+"\n")
+    terminal.gray("Description: "+ansis.bold(structure.options.cliDisplayDescription ?? "/")+"\n")
 
     const answer = await terminal.singleColumnMenu(["false (Disabled)","true (Enabled)"],{
         leftPadding:"> ",
@@ -309,6 +320,8 @@ async function renderConfigBooleanStructureEditor(checker:api.ODChecker,backFn:(
 
     if (isDataValid){
         parent[parentIndex] = newValue
+
+        await checker.config.save()
         terminal.bold.blue("\n\n✅ Variable saved succesfully!")
         await utilities.timer(400)
         await backFn()
@@ -327,6 +340,7 @@ async function renderConfigNumberStructureEditor(checker:api.ODChecker,backFn:((
     terminal(ansis.bold.green("You are now editing "+(typeof parentIndex == "string" ? "the number property "+ansis.blue("\""+parentIndex+"\"") : "number property "+ansis.blue("#"+(parentIndex+1)))+".\n")+ansis.italic.gray("(insert a new value and press enter, go back using escape)\n"))
     
     terminal.gray("\nCurrent value: "+ansis.bold.blue(data.toString())+"\n")
+    terminal.gray("Description: "+ansis.bold(structure.options.cliDisplayDescription ?? "/")+"\n")
 
     const answer = await terminal.inputField({
         default:prefillValue,
@@ -345,6 +359,8 @@ async function renderConfigNumberStructureEditor(checker:api.ODChecker,backFn:((
 
     if (isDataValid){
         parent[parentIndex] = newValue
+
+        await checker.config.save()
         terminal.bold.blue("\n\n✅ Variable saved succesfully!")
         await utilities.timer(400)
         await backFn()
@@ -363,8 +379,10 @@ async function renderConfigStringStructureEditor(checker:api.ODChecker,backFn:((
     terminal(ansis.bold.green("You are now editing "+(typeof parentIndex == "string" ? "the string property "+ansis.blue("\""+parentIndex+"\"") : "string property "+ansis.blue("#"+(parentIndex+1)))+".\n")+ansis.italic.gray("(insert a new value and press enter, go back using escape)\n"))
     
     terminal.gray("\nCurrent value:"+(data.includes("\n") ? "\n" : " \"")+ansis.bold.blue(data)+ansis.gray(!data.includes("\n") ? "\"\n" : "\n"))
+    terminal.gray("Description: "+ansis.bold(structure.options.cliDisplayDescription ?? "/")+"\n")
 
-    const autocompleteList = structure.options.cliAutocompleteList ?? structure.options.choices
+    const customExtraOptions = (structure instanceof api.ODCheckerCustomStructure_DiscordId) ? structure.extraOptions : undefined
+    const autocompleteList = (structure.options.cliAutocompleteList ?? customExtraOptions) ?? structure.options.choices
     const autoCompleteMenuOpts: Terminal.SingleLineMenuOptions = {
         style:terminal.white,
         selectedStyle:terminal.bgBlue.white
@@ -401,6 +419,8 @@ async function renderConfigStringStructureEditor(checker:api.ODChecker,backFn:((
 
     if (isDataValid){
         parent[parentIndex] = newValue
+
+        await checker.config.save()
         terminal.bold.blue("\n\n✅ Variable saved succesfully!")
         await utilities.timer(400)
         await backFn()
@@ -419,6 +439,7 @@ async function renderConfigNullStructureEditor(checker:api.ODChecker,backFn:(() 
     terminal(ansis.bold.green("You are now editing "+(typeof parentIndex == "string" ? "the null property "+ansis.blue("\""+parentIndex+"\"") : "null property "+ansis.blue("#"+(parentIndex+1)))+".\n")+ansis.italic.gray("(use arrow keys to navigate, go back using escape)\n"))
     
     terminal.gray("\nCurrent value: "+ansis.bold.blue("null")+"\n")
+    terminal.gray("Description: "+ansis.bold(structure.options.cliDisplayDescription ?? "/")+"\n")
 
     const answer = await terminal.singleColumnMenu(["null"],{
         leftPadding:"> ",
@@ -440,6 +461,8 @@ async function renderConfigNullStructureEditor(checker:api.ODChecker,backFn:(() 
 
     if (isDataValid){
         parent[parentIndex] = newValue
+
+        await checker.config.save()
         terminal.bold.blue("\n\n✅ Variable saved succesfully!")
         await utilities.timer(400)
         await backFn()
@@ -457,6 +480,7 @@ async function renderConfigTypeSwitchStructureEditor(checker:api.ODChecker,backF
     terminal(ansis.bold.green("You are now editing "+(typeof parentIndex == "string" ? "the property "+ansis.blue("\""+parentIndex+"\"") : "property "+ansis.blue("#"+(parentIndex+1)))+".\n")+ansis.italic.gray("(use arrow keys to navigate, go back using escape)\n"))
     
     terminal.gray("\nCurrent value: "+ansis.bold.blue(data.toString())+"\n")
+    terminal.gray("Description: "+ansis.bold(structure.options.cliDisplayDescription ?? "/")+"\n")
 
     const actionsList: string[] = []
     if (structure.options.boolean) actionsList.push("Edit as boolean")
@@ -779,7 +803,8 @@ async function renderAdditionConfigStringStructure(checker:api.ODChecker,backFn:
     terminal.gray("\nProperty: "+ansis.bold.blue(structure.options.cliDisplayName ?? [...localPath,parentIndex].join("."))+"\n")
     terminal.gray("Description: "+ansis.bold(structure.options.cliDisplayDescription ?? "/")+"\n")
 
-    const autocompleteList = structure.options.cliAutocompleteList ?? structure.options.choices
+    const customExtraOptions = (structure instanceof api.ODCheckerCustomStructure_DiscordId) ? structure.extraOptions : undefined
+    const autocompleteList = (structure.options.cliAutocompleteList ?? customExtraOptions) ?? structure.options.choices
     const autoCompleteMenuOpts: Terminal.SingleLineMenuOptions = {
         style:terminal.white,
         selectedStyle:terminal.bgBlue.white
