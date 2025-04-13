@@ -167,14 +167,11 @@ async function renderConfigArrayStructureSelector(checker:api.ODChecker,backFn:(
     if (answer.selectedIndex == 0) await chooseAdditionConfigStructure(checker,backFnFunc,async (newData) => {
         data[data.length] = newData
         await backFnFunc()
-    },structure.options.propertyChecker,data,data.length,path)
+    },structure.options.propertyChecker,data,data.length,path,[])
     else if (answer.selectedIndex == 1) await renderConfigArrayStructureEditSelector(checker,backFnFunc,structure,structure.options.propertyChecker,data,parent,parentIndex,path)
     else if (answer.selectedIndex == 2) await renderconfigArrayStructureMoveSelector(checker,backFnFunc,structure,structure.options.propertyChecker,data,parent,parentIndex,path)
     else if (answer.selectedIndex == 3) await renderconfigArrayStructureRemoveSelector(checker,backFnFunc,structure,structure.options.propertyChecker,data,parent,parentIndex,path)
-    else if (answer.selectedIndex == 4){
-        //TODO => duplicate trigger chooseConfigStructure() function but for "addition instead of editing"
-    }
-    
+    else if (answer.selectedIndex == 4) await renderConfigArrayStructureDuplicateSelector(checker,backFnFunc,structure,structure.options.propertyChecker,data,parent,parentIndex,path)
 }
 
 async function renderConfigArrayStructureEditSelector(checker:api.ODChecker,backFn:(() => api.ODPromiseVoid),arrayStructure:api.ODCheckerArrayStructure,structure:api.ODCheckerStructure,data:any[],parent:object,parentIndex:string|number,path:(string|number)[]){
@@ -258,6 +255,29 @@ async function renderconfigArrayStructureRemoveSelector(checker:api.ODChecker,ba
     if (dataAnswer.canceled) return await backFn()
     data.splice(dataAnswer.selectedIndex,1)
     terminal.bold.blue("\n\n✅ Property deleted succesfully!")
+    await utilities.timer(400)
+    await backFn()
+}
+
+async function renderConfigArrayStructureDuplicateSelector(checker:api.ODChecker,backFn:(() => api.ODPromiseVoid),arrayStructure:api.ODCheckerArrayStructure,structure:api.ODCheckerStructure,data:any[],parent:object,parentIndex:string|number,path:(string|number)[]){
+    const propertyName = arrayStructure.options.cliDisplayPropertyName ?? "index"
+    renderHeader(path)
+    terminal(ansis.bold.green("Please select the "+propertyName+" you would like to duplicate.\n")+ansis.italic.gray("(use arrow keys to navigate, go back using escape)\n"))
+
+    const longestDataListName = Math.max(...data.map((d,i) => getArrayPreviewStructureNameLength(structure,d,data,i)))
+    const dataList = data.map((d,i) => (i+1)+". "+getArrayPreviewFromStructure(structure,d,data,i,longestDataListName))
+    const dataAnswer = await terminal.singleColumnMenu(dataList,{
+        leftPadding:"> ",
+        style:terminal.cyan,
+        selectedStyle:terminal.bgDefaultColor.bold,
+        submittedStyle:terminal.bgBlue,
+        extraLines:2,
+        cancelable:true
+    }).promise
+
+    if (dataAnswer.canceled) return await backFn()
+    data.push(JSON.parse(JSON.stringify(data[dataAnswer.selectedIndex])))
+    terminal.bold.blue("\n\n✅ Property duplicated succesfully!")
     await utilities.timer(400)
     await backFn()
 }
@@ -539,19 +559,20 @@ function getArrayPreviewFromStructure(structure:api.ODCheckerStructure,data:api.
     }else return "<unknown-property>"
 }
 
-async function chooseAdditionConfigStructure(checker:api.ODChecker,backFn:(() => api.ODPromiseVoid),nextFn:((data:any) => api.ODPromiseVoid),structure:api.ODCheckerStructure,parent:object|any[],parentIndex:string|number,path:(string|number)[]){
-    if (structure instanceof api.ODCheckerObjectStructure) await renderAdditionConfigObjectStructure(checker,backFn,nextFn,structure,parent,parentIndex,path)
-    else if (structure instanceof api.ODCheckerBooleanStructure) await renderAdditionConfigBooleanStructure(checker,backFn,nextFn,structure,parent,parentIndex,path)
-    else if (structure instanceof api.ODCheckerNumberStructure) await renderAdditionConfigNumberStructure(checker,backFn,nextFn,structure,parent,parentIndex,path)
-    else if (structure instanceof api.ODCheckerStringStructure) await renderAdditionConfigStringStructure(checker,backFn,nextFn,structure,parent,parentIndex,path)
-    else if (structure instanceof api.ODCheckerNullStructure) await renderAdditionConfigNullStructure(checker,backFn,nextFn,structure,parent,parentIndex,path)
-    else if (structure instanceof api.ODCheckerEnabledObjectStructure) await renderAdditionConfigEnabledObjectStructure(checker,backFn,nextFn,structure,parent,parentIndex,path)
-    else if (structure instanceof api.ODCheckerObjectSwitchStructure) await renderAdditionConfigObjectSwitchStructure(checker,backFn,nextFn,structure,parent,parentIndex,path)
-    //TODO: array, type switch, ...
+async function chooseAdditionConfigStructure(checker:api.ODChecker,backFn:(() => api.ODPromiseVoid),nextFn:((data:any) => api.ODPromiseVoid),structure:api.ODCheckerStructure,parent:object|any[],parentIndex:string|number,path:(string|number)[],localPath:(string|number)[]){
+    if (structure instanceof api.ODCheckerObjectStructure) await renderAdditionConfigObjectStructure(checker,backFn,nextFn,structure,parent,parentIndex,path,localPath)
+    else if (structure instanceof api.ODCheckerBooleanStructure) await renderAdditionConfigBooleanStructure(checker,backFn,nextFn,structure,parent,parentIndex,path,localPath)
+    else if (structure instanceof api.ODCheckerNumberStructure) await renderAdditionConfigNumberStructure(checker,backFn,nextFn,structure,parent,parentIndex,path,localPath)
+    else if (structure instanceof api.ODCheckerStringStructure) await renderAdditionConfigStringStructure(checker,backFn,nextFn,structure,parent,parentIndex,path,localPath)
+    else if (structure instanceof api.ODCheckerNullStructure) await renderAdditionConfigNullStructure(checker,backFn,nextFn,structure,parent,parentIndex,path,localPath)
+    else if (structure instanceof api.ODCheckerEnabledObjectStructure) await renderAdditionConfigEnabledObjectStructure(checker,backFn,nextFn,structure,parent,parentIndex,path,localPath)
+    else if (structure instanceof api.ODCheckerObjectSwitchStructure) await renderAdditionConfigObjectSwitchStructure(checker,backFn,nextFn,structure,parent,parentIndex,path,localPath)
+    else if (structure instanceof api.ODCheckerArrayStructure) await renderAdditionConfigArrayStructureSelector(checker,backFn,nextFn,structure,parent,parentIndex,path,localPath)
+    else if (structure instanceof api.ODCheckerTypeSwitchStructure) await renderAdditionConfigTypeSwitchStructure(checker,backFn,nextFn,structure,parent,parentIndex,path,localPath)
     else await backFn()
 }
 
-async function renderAdditionConfigObjectStructure(checker:api.ODChecker,backFn:(() => api.ODPromiseVoid),nextFn:((data:any) => api.ODPromiseVoid),structure:api.ODCheckerObjectStructure,parent:object|any[],parentIndex:string|number,path:(string|number)[],localData:object={}){
+async function renderAdditionConfigObjectStructure(checker:api.ODChecker,backFn:(() => api.ODPromiseVoid),nextFn:((data:any) => api.ODPromiseVoid),structure:api.ODCheckerObjectStructure,parent:object|any[],parentIndex:string|number,path:(string|number)[],localPath:(string|number)[],localData:object={}){
     const children = structure.options.children ?? []
     const skipKeys = (structure.options.cliInitSkipKeys ?? [])
     //add skipped properties
@@ -574,7 +595,7 @@ async function renderAdditionConfigObjectStructure(checker:api.ODChecker,backFn:
 
     //add properties that need to be configured
     const configChildren = children.filter((c) => !skipKeys.includes(c.key)).map((c) => {return {key:c.key,checker:c.checker}})
-    await configureAdditionObjectProperties(checker,configChildren,0,localData,[...path,parentIndex],async () => {
+    await configureAdditionObjectProperties(checker,configChildren,0,localData,[...path,parentIndex],(typeof parentIndex == "number") ? [...localPath] : [...localPath,parentIndex],async () => {
         //go back to previous screen
         await backFn()
     },async () => {
@@ -585,21 +606,21 @@ async function renderAdditionConfigObjectStructure(checker:api.ODChecker,backFn:
     })
 }
 
-async function configureAdditionObjectProperties(checker:api.ODChecker,children:{key:string,checker:api.ODCheckerStructure}[],currentIndex:number,localData:object,path:(string|number)[],backFn:(() => api.ODPromiseVoid),nextFn:(() => api.ODPromiseVoid)){
+async function configureAdditionObjectProperties(checker:api.ODChecker,children:{key:string,checker:api.ODCheckerStructure}[],currentIndex:number,localData:object,path:(string|number)[],localPath:(string|number)[],backFn:(() => api.ODPromiseVoid),nextFn:(() => api.ODPromiseVoid)){
     if (children.length < 1) return await nextFn()
     
     const child = children[currentIndex]
     await chooseAdditionConfigStructure(checker,async () => {
-        if (children[currentIndex-1]) await configureAdditionObjectProperties(checker,children,currentIndex-1,localData,path,backFn,nextFn)
+        if (children[currentIndex-1]) await configureAdditionObjectProperties(checker,children,currentIndex-1,localData,path,localPath,backFn,nextFn)
         else await backFn()
     },async (data) => {
         localData[child.key] = data
-        if (children[currentIndex+1]) await configureAdditionObjectProperties(checker,children,currentIndex+1,localData,path,backFn,nextFn)
+        if (children[currentIndex+1]) await configureAdditionObjectProperties(checker,children,currentIndex+1,localData,path,localPath,backFn,nextFn)
         else await nextFn()
-    },child.checker,localData,child.key,path)
+    },child.checker,localData,child.key,path,localPath)
 }
 
-async function renderAdditionConfigEnabledObjectStructure(checker:api.ODChecker,backFn:(() => api.ODPromiseVoid),nextFn:((data:any) => api.ODPromiseVoid),structure:api.ODCheckerEnabledObjectStructure,parent:object|any[],parentIndex:string|number,path:(string|number)[]){
+async function renderAdditionConfigEnabledObjectStructure(checker:api.ODChecker,backFn:(() => api.ODPromiseVoid),nextFn:((data:any) => api.ODPromiseVoid),structure:api.ODCheckerEnabledObjectStructure,parent:object|any[],parentIndex:string|number,path:(string|number)[],localPath:(string|number)[]){
     const enabledProperty = structure.options.property
     const enabledValue = structure.options.enabledValue
     const subStructure = structure.options.checker
@@ -613,7 +634,7 @@ async function renderAdditionConfigEnabledObjectStructure(checker:api.ODChecker,
 
     const localData = {}
     await chooseAdditionConfigStructure(checker,backFn,async (data) => {
-        if (data === enabledValue) await renderAdditionConfigObjectStructure(checker,async () => {await renderAdditionConfigEnabledObjectStructure(checker,backFn,nextFn,structure,parent,parentIndex,path)},nextFn,subStructure,parent,parentIndex,path,localData)
+        if (data === enabledValue) await renderAdditionConfigObjectStructure(checker,async () => {await renderAdditionConfigEnabledObjectStructure(checker,backFn,nextFn,structure,parent,parentIndex,path,localPath)},nextFn,subStructure,parent,parentIndex,path,localPath,localData)
         else{
             localData[enabledProperty] = data
             //copy old object checker to new object checker => all options get de-referenced (this is needed for the new object skip keys are temporary)
@@ -627,13 +648,13 @@ async function renderAdditionConfigEnabledObjectStructure(checker:api.ODChecker,
             }
 
             //adds all properties to object as "skipKeys", then continues to next function
-            await renderAdditionConfigObjectStructure(checker,async () => {await renderAdditionConfigEnabledObjectStructure(checker,backFn,nextFn,structure,parent,parentIndex,path)},nextFn,newStructure,parent,parentIndex,path,localData)
+            await renderAdditionConfigObjectStructure(checker,async () => {await renderAdditionConfigEnabledObjectStructure(checker,backFn,nextFn,structure,parent,parentIndex,path,localPath)},nextFn,newStructure,parent,parentIndex,path,localPath,localData)
             await nextFn(localData)
         }
-    },propertyStructure,localData,enabledProperty,[...path,parentIndex])
+    },propertyStructure,localData,enabledProperty,[...path,parentIndex],[...localPath,parentIndex])
 }
 
-async function renderAdditionConfigObjectSwitchStructure(checker:api.ODChecker,backFn:(() => api.ODPromiseVoid),nextFn:((data:any) => api.ODPromiseVoid),structure:api.ODCheckerObjectSwitchStructure,parent:object|any[],parentIndex:string|number,path:(string|number)[]){
+async function renderAdditionConfigObjectSwitchStructure(checker:api.ODChecker,backFn:(() => api.ODPromiseVoid),nextFn:((data:any) => api.ODPromiseVoid),structure:api.ODCheckerObjectSwitchStructure,parent:object|any[],parentIndex:string|number,path:(string|number)[],localPath:(string|number)[]){
     renderHeader([...path,parentIndex])
     terminal(ansis.bold.green("What type of object would you like to add?\n")+ansis.italic.gray("(use arrow keys to navigate, go back using escape)\n"))
 
@@ -675,14 +696,14 @@ async function renderAdditionConfigObjectSwitchStructure(checker:api.ODChecker,b
         }
     }
 
-    await chooseAdditionConfigStructure(checker,backFn,nextFn,newStructure,parent,parentIndex,path)
+    await chooseAdditionConfigStructure(checker,backFn,nextFn,newStructure,parent,parentIndex,path,localPath)
 }
 
-async function renderAdditionConfigBooleanStructure(checker:api.ODChecker,backFn:(() => api.ODPromiseVoid),nextFn:((data:any) => api.ODPromiseVoid),structure:api.ODCheckerBooleanStructure,parent:object|any[],parentIndex:string|number,path:(string|number)[]){
+async function renderAdditionConfigBooleanStructure(checker:api.ODChecker,backFn:(() => api.ODPromiseVoid),nextFn:((data:any) => api.ODPromiseVoid),structure:api.ODCheckerBooleanStructure,parent:object|any[],parentIndex:string|number,path:(string|number)[],localPath:(string|number)[]){
     renderHeader([...path,parentIndex])
     terminal(ansis.bold.green("You are now creating "+(typeof parentIndex == "string" ? "the boolean property "+ansis.blue("\""+parentIndex+"\"") : "boolean property "+ansis.blue("#"+(parentIndex+1)))+".\n")+ansis.italic.gray("(use arrow keys to navigate, go back using escape)\n"))
     
-    terminal.gray("\nProperty: "+ansis.bold.blue((typeof parentIndex == "number") ? "#"+(parentIndex+1) : (structure.options.cliDisplayName ?? parentIndex))+"\n")
+    terminal.gray("\nProperty: "+ansis.bold.blue(structure.options.cliDisplayName ?? [...localPath,parentIndex].join("."))+"\n")
     terminal.gray("Description: "+ansis.bold(structure.options.cliDisplayDescription ?? "/")+"\n")
 
     const answer = await terminal.singleColumnMenu(["false (Disabled)","true (Enabled)"],{
@@ -712,15 +733,15 @@ async function renderAdditionConfigBooleanStructure(checker:api.ODChecker,backFn
         terminal.bold.blue("\n\n❌ Variable is invalid! Please try again!")
         terminal.gray("\n"+messages)
         await utilities.timer(1000+(2000*checker.messages.length))
-        await renderAdditionConfigBooleanStructure(checker,backFn,nextFn,structure,parent,parentIndex,path)
+        await renderAdditionConfigBooleanStructure(checker,backFn,nextFn,structure,parent,parentIndex,path,localPath)
     }
 }
 
-async function renderAdditionConfigNumberStructure(checker:api.ODChecker,backFn:(() => api.ODPromiseVoid),nextFn:((data:any) => api.ODPromiseVoid),structure:api.ODCheckerNumberStructure,parent:object|any[],parentIndex:string|number,path:(string|number)[],prefillValue?:string){
+async function renderAdditionConfigNumberStructure(checker:api.ODChecker,backFn:(() => api.ODPromiseVoid),nextFn:((data:any) => api.ODPromiseVoid),structure:api.ODCheckerNumberStructure,parent:object|any[],parentIndex:string|number,path:(string|number)[],localPath:(string|number)[],prefillValue?:string){
     renderHeader([...path,parentIndex])
     terminal(ansis.bold.green("You are now creating "+(typeof parentIndex == "string" ? "the number property "+ansis.blue("\""+parentIndex+"\"") : "number property "+ansis.blue("#"+(parentIndex+1)))+".\n")+ansis.italic.gray("(insert a new value and press enter, go back using escape)\n"))
     
-    terminal.gray("\nProperty: "+ansis.bold.blue(structure.options.cliDisplayName ?? (typeof parentIndex == "number" ? "#"+(parentIndex+1) : parentIndex))+"\n")
+    terminal.gray("\nProperty: "+ansis.bold.blue(structure.options.cliDisplayName ?? [...localPath,parentIndex].join("."))+"\n")
     terminal.gray("Description: "+ansis.bold(structure.options.cliDisplayDescription ?? "/")+"\n")
 
     const answer = await terminal.inputField({
@@ -747,15 +768,15 @@ async function renderAdditionConfigNumberStructure(checker:api.ODChecker,backFn:
         terminal.bold.blue("\n\n❌ Variable is invalid! Please try again!")
         terminal.red("\n"+messages)
         await utilities.timer(1000+(2000*checker.messages.length))
-        await renderAdditionConfigNumberStructure(checker,backFn,nextFn,structure,parent,parentIndex,path,answer)
+        await renderAdditionConfigNumberStructure(checker,backFn,nextFn,structure,parent,parentIndex,path,localPath,answer)
     }
 }
 
-async function renderAdditionConfigStringStructure(checker:api.ODChecker,backFn:(() => api.ODPromiseVoid),nextFn:((data:any) => api.ODPromiseVoid),structure:api.ODCheckerStringStructure,parent:object|any[],parentIndex:string|number,path:(string|number)[],prefillValue?:string){
+async function renderAdditionConfigStringStructure(checker:api.ODChecker,backFn:(() => api.ODPromiseVoid),nextFn:((data:any) => api.ODPromiseVoid),structure:api.ODCheckerStringStructure,parent:object|any[],parentIndex:string|number,path:(string|number)[],localPath:(string|number)[],prefillValue?:string){
     renderHeader([...path,parentIndex])
     terminal(ansis.bold.green("You are now creating "+(typeof parentIndex == "string" ? "the string property "+ansis.blue("\""+parentIndex+"\"") : "string property "+ansis.blue("#"+(parentIndex+1)))+".\n")+ansis.italic.gray("(insert a new value and press enter, go back using escape)\n"))
     
-    terminal.gray("\nProperty: "+ansis.bold.blue(structure.options.cliDisplayName ?? (typeof parentIndex == "number" ? "#"+(parentIndex+1) : parentIndex))+"\n")
+    terminal.gray("\nProperty: "+ansis.bold.blue(structure.options.cliDisplayName ?? [...localPath,parentIndex].join("."))+"\n")
     terminal.gray("Description: "+ansis.bold(structure.options.cliDisplayDescription ?? "/")+"\n")
 
     const autocompleteList = structure.options.cliAutocompleteList ?? structure.options.choices
@@ -802,15 +823,15 @@ async function renderAdditionConfigStringStructure(checker:api.ODChecker,backFn:
         terminal.bold.blue("\n\n❌ Variable is invalid! Please try again!")
         terminal.red("\n"+messages)
         await utilities.timer(1000+(2000*checker.messages.length))
-        await renderAdditionConfigStringStructure(checker,backFn,nextFn,structure,parent,parentIndex,path,answer)
+        await renderAdditionConfigStringStructure(checker,backFn,nextFn,structure,parent,parentIndex,path,localPath,answer)
     }
 }
 
-async function renderAdditionConfigNullStructure(checker:api.ODChecker,backFn:(() => api.ODPromiseVoid),nextFn:((data:any) => api.ODPromiseVoid),structure:api.ODCheckerNullStructure,parent:object|any[],parentIndex:string|number,path:(string|number)[]){
+async function renderAdditionConfigNullStructure(checker:api.ODChecker,backFn:(() => api.ODPromiseVoid),nextFn:((data:any) => api.ODPromiseVoid),structure:api.ODCheckerNullStructure,parent:object|any[],parentIndex:string|number,path:(string|number)[],localPath:(string|number)[]){
     renderHeader([...path,parentIndex])
     terminal(ansis.bold.green("You are now creating "+(typeof parentIndex == "string" ? "the null property "+ansis.blue("\""+parentIndex+"\"") : "null property "+ansis.blue("#"+(parentIndex+1)))+".\n")+ansis.italic.gray("(use arrow keys to navigate, go back using escape)\n"))
     
-    terminal.gray("\nProperty: "+ansis.bold.blue(structure.options.cliDisplayName ?? (typeof parentIndex == "number" ? "#"+(parentIndex+1) : parentIndex))+"\n")
+    terminal.gray("\nProperty: "+ansis.bold.blue(structure.options.cliDisplayName ?? [...localPath,parentIndex].join("."))+"\n")
     terminal.gray("Description: "+ansis.bold(structure.options.cliDisplayDescription ?? "/")+"\n")
 
     const answer = await terminal.singleColumnMenu(["null"],{
@@ -840,8 +861,84 @@ async function renderAdditionConfigNullStructure(checker:api.ODChecker,backFn:((
         terminal.bold.blue("\n\n❌ Variable is invalid! Please try again!")
         terminal.red("\n"+messages)
         await utilities.timer(1000+(2000*checker.messages.length))
-        await renderAdditionConfigNullStructure(checker,backFn,nextFn,structure,parent,parentIndex,path)
+        await renderAdditionConfigNullStructure(checker,backFn,nextFn,structure,parent,parentIndex,path,localPath)
     }
+}
+
+async function renderAdditionConfigArrayStructureSelector(checker:api.ODChecker,backFn:(() => api.ODPromiseVoid),nextFn:((data:any) => api.ODPromiseVoid),structure:api.ODCheckerArrayStructure,parent:object|any[],parentIndex:string|number,path:(string|number)[],localPath:(string|number)[],localData:any[]=[]){
+    renderHeader([...path,parentIndex])
+    terminal(ansis.bold.green("Please select what you would like to do with the new array.\n")+ansis.italic.gray("(use arrow keys to navigate, go back using escape)\n"))
+    if (!structure.options.propertyChecker) return await backFn()
+
+    terminal.gray("\nProperty: "+ansis.bold.blue(structure.options.cliDisplayName ?? [...localPath,parentIndex].join("."))+"\n")
+    terminal.gray("Description: "+ansis.bold(structure.options.cliDisplayDescription ?? "/")+"\n")
+    
+    const propertyName = structure.options.cliDisplayPropertyName ?? "index"
+    const answer = await terminal.singleColumnMenu(localData.length < 1 ? [ansis.magenta("-> Continue to next variable"),"Add "+propertyName] : [
+        ansis.magenta("-> Continue to next variable"),
+        "Add "+propertyName,
+        "Edit "+propertyName,
+        "Move "+propertyName,
+        "Remove "+propertyName,
+        "Duplicate "+propertyName,
+        
+    ],{
+        leftPadding:"> ",
+        style:terminal.cyan,
+        selectedStyle:terminal.bgDefaultColor.bold,
+        submittedStyle:terminal.bgBlue,
+        extraLines:2,
+        cancelable:true
+    }).promise
+    
+    const backFnFunc = async () => {await renderAdditionConfigArrayStructureSelector(checker,backFn,nextFn,structure,parent,parentIndex,path,localPath,localData)}
+
+    if (answer.canceled) return await backFn()
+    if (answer.selectedIndex == 0) await nextFn(localData)
+    else if (answer.selectedIndex == 1) await chooseAdditionConfigStructure(checker,backFnFunc,async (newData) => {
+        localData[localData.length] = newData
+        await backFnFunc()
+    },structure.options.propertyChecker,localData,localData.length,path,[])
+    else if (answer.selectedIndex == 2) await renderConfigArrayStructureEditSelector(checker,backFnFunc,structure,structure.options.propertyChecker,localData,parent,parentIndex,path)
+    else if (answer.selectedIndex == 3) await renderconfigArrayStructureMoveSelector(checker,backFnFunc,structure,structure.options.propertyChecker,localData,parent,parentIndex,path)
+    else if (answer.selectedIndex == 4) await renderconfigArrayStructureRemoveSelector(checker,backFnFunc,structure,structure.options.propertyChecker,localData,parent,parentIndex,path)
+    else if (answer.selectedIndex == 5) await renderConfigArrayStructureDuplicateSelector(checker,backFnFunc,structure,structure.options.propertyChecker,localData,parent,parentIndex,path)
+}
+
+
+async function renderAdditionConfigTypeSwitchStructure(checker:api.ODChecker,backFn:(() => api.ODPromiseVoid),nextFn:((data:any) => api.ODPromiseVoid),structure:api.ODCheckerTypeSwitchStructure,parent:object|any[],parentIndex:string|number,path:(string|number)[],localPath:(string|number)[]){
+    renderHeader(path)
+    terminal(ansis.bold.green("You are now creating "+(typeof parentIndex == "string" ? "the property "+ansis.blue("\""+parentIndex+"\"") : "property "+ansis.blue("#"+(parentIndex+1)))+".\n")+ansis.italic.gray("(use arrow keys to navigate, go back using escape)\n"))
+    
+    terminal.gray("\nProperty: "+ansis.bold.blue(structure.options.cliDisplayName ?? [...localPath,parentIndex].join("."))+"\n")
+    terminal.gray("Description: "+ansis.bold(structure.options.cliDisplayDescription ?? "/")+"\n")
+
+    const actionsList: string[] = []
+    if (structure.options.boolean) actionsList.push("Create as boolean")
+    if (structure.options.string) actionsList.push("Create as string")
+    if (structure.options.number) actionsList.push("Create as number")
+    if (structure.options.object) actionsList.push("Create as object")
+    if (structure.options.array) actionsList.push("Create as array/list")
+    if (structure.options.null) actionsList.push("Create as null")
+    
+    const answer = await terminal.singleColumnMenu(actionsList,{
+        leftPadding:"> ",
+        style:terminal.cyan,
+        selectedStyle:terminal.bgDefaultColor.bold,
+        submittedStyle:terminal.bgBlue,
+        extraLines:2,
+        cancelable:true
+    }).promise
+    
+    if (answer.canceled) return await backFn()
+    
+    //run selected structure editor (untested)
+    if (answer.selectedText.startsWith("Create as boolean") && structure.options.boolean) await renderAdditionConfigBooleanStructure(checker,async () => {await renderAdditionConfigTypeSwitchStructure(checker,backFn,nextFn,structure,parent,parentIndex,path,localPath)},nextFn,structure.options.boolean,parent,parentIndex,path,localPath)
+    else if (answer.selectedText.startsWith("Create as string") && structure.options.string) await renderAdditionConfigStringStructure(checker,async () => {await renderAdditionConfigTypeSwitchStructure(checker,backFn,nextFn,structure,parent,parentIndex,path,localPath)},nextFn,structure.options.string,parent,parentIndex,path,localPath)
+    else if (answer.selectedText.startsWith("Create as number") && structure.options.number) await renderAdditionConfigNumberStructure(checker,async () => {await renderAdditionConfigTypeSwitchStructure(checker,backFn,nextFn,structure,parent,parentIndex,path,localPath)},nextFn,structure.options.number,parent,parentIndex,path,localPath)
+    else if (answer.selectedText.startsWith("Create as object") && structure.options.object) await renderAdditionConfigObjectStructure(checker,async () => {await renderAdditionConfigTypeSwitchStructure(checker,backFn,nextFn,structure,parent,parentIndex,path,localPath)},nextFn,structure.options.object,parent,parentIndex,path,localPath)
+    else if (answer.selectedText.startsWith("Create as array/list") && structure.options.array) await renderAdditionConfigArrayStructureSelector(checker,async () => {await renderAdditionConfigTypeSwitchStructure(checker,backFn,nextFn,structure,parent,parentIndex,path,localPath)},nextFn,structure.options.array,parent,parentIndex,path,localPath)
+    else if (answer.selectedText.startsWith("Create as null") && structure.options.null) await renderAdditionConfigNullStructure(checker,async () => {await renderAdditionConfigTypeSwitchStructure(checker,backFn,nextFn,structure,parent,parentIndex,path,localPath)},nextFn,structure.options.null,parent,parentIndex,path,localPath)
 }
 
 export async function execute(){
