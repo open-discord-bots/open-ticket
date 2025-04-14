@@ -88,7 +88,7 @@ async function renderConfigObjectStructureSelector(checker:api.ODChecker,backFn:
     if (!structure.options.children) return await backFn()
 
     const list = structure.options.children.filter((child) => !child.cliHideInEditMode)
-    const nameList = list.map((child) => (child.checker.options.cliDisplayName ? child.checker.options.cliDisplayName+" ("+child.key+")" : child.key))
+    const nameList = list.map((child) => (child.checker.options.cliDisplayName ? child.checker.options.cliDisplayName : child.key))
     const nameLength = utilities.getLongestLength(nameList)
     const finalnameList = nameList.map((name,index) => name.padEnd(nameLength+5," ")+ansis.gray(list[index].checker.options.cliDisplayDescription ? "=> "+list[index].checker.options.cliDisplayDescription : ""))
 
@@ -145,8 +145,10 @@ async function renderConfigArrayStructureSelector(checker:api.ODChecker,backFn:(
     terminal(ansis.bold.green("Please select what you would like to do.\n")+ansis.italic.gray("(use arrow keys to navigate, go back using escape)\n"))
     if (!structure.options.propertyChecker) return await backFn()
 
-    terminal.gray("\nProperty: "+ansis.bold.blue(structure.options.cliDisplayName ?? parentIndex.toString())+"\n")
-    terminal.gray("Description: "+ansis.bold(structure.options.cliDisplayDescription ?? "/")+"\n")
+    if (typeof parentIndex == "string" || !isNaN(parentIndex)){
+        terminal.gray("\nProperty: "+ansis.bold.blue(structure.options.cliDisplayName ?? parentIndex.toString())+"\n")
+        terminal.gray("Description: "+ansis.bold(structure.options.cliDisplayDescription ?? "/")+"\n")
+    }
 
     const propertyName = structure.options.cliDisplayPropertyName ?? "index"
     const answer = await terminal.singleColumnMenu(data.length < 1 ? ["Add "+propertyName] : [

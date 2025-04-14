@@ -29,7 +29,7 @@
         "@types/terminal-kit": "^2.5.7",
         "ansis": "^2.3.0",
         "discord.js": "^14.17.2",
-        "formatted-json-stringify": "^1.1.0",
+        "formatted-json-stringify": "^1.2.0",
         "terminal-kit": "^3.1.2",
         "typescript": "^5.5.4"
     },
