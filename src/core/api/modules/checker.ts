@@ -409,6 +409,8 @@ export interface ODCheckerStructureOptions {
     cliDisplayName?:string
     /**The description of this config in the Interactive Setup CLI. */
     cliDisplayDescription?:string
+    /**Hide the description of this config in the Interactive Setup CLI parent view/list. */
+    cliHideDescriptionInParent?:boolean
     /**The default value of this variable when creating it in the Interactive Setup CLI. When not specified, the user will be asked to insert a value. */
     cliInitDefaultValue?:ODValidJsonType
 }

@@ -90,7 +90,7 @@ async function renderConfigObjectStructureSelector(checker:api.ODChecker,backFn:
     const list = structure.options.children.filter((child) => !child.cliHideInEditMode)
     const nameList = list.map((child) => (child.checker.options.cliDisplayName ? child.checker.options.cliDisplayName : child.key))
     const nameLength = utilities.getLongestLength(nameList)
-    const finalnameList = nameList.map((name,index) => name.padEnd(nameLength+5," ")+ansis.gray(list[index].checker.options.cliDisplayDescription ? "=> "+list[index].checker.options.cliDisplayDescription : ""))
+    const finalnameList = nameList.map((name,index) => name.padEnd(nameLength+5," ")+ansis.gray((!list[index].checker.options.cliHideDescriptionInParent && list[index].checker.options.cliDisplayDescription) ? "=> "+list[index].checker.options.cliDisplayDescription : ""))
 
 
     const answer = await terminal.singleColumnMenu(finalnameList,{

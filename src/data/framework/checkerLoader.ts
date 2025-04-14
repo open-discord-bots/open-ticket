@@ -120,11 +120,11 @@ export const registerDefaultCheckerCustomTranslations = (tm:api.ODCheckerTransla
 }
 
 //UTILITY FUNCTIONS
-const createMsgStructure = (id:api.ODValidId) => {
+const createMsgStructure = (id:api.ODValidId,displayName:string) => {
     return new api.ODCheckerObjectStructure(id,{children:[
-        {key:"dm",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:msg-dm",{})},
-        {key:"logs",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:msg-logs",{})},
-    ]})
+        {key:"dm",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:msg-dm",{cliInitDefaultValue:false,cliDisplayName:"DM Enabled",cliDisplayDescription:"Will this action be sent in DM to the creator of the ticket?"})},
+        {key:"logs",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:msg-logs",{cliInitDefaultValue:true,cliDisplayName:"Logs Enabled",cliDisplayDescription:"Will this action be sent in the Discord log channel?"})},
+    ],cliDisplayName:displayName})
 }
 const createTicketEmbedStructure = (id:api.ODValidId) => {
     return new api.ODCheckerEnabledObjectStructure(id,{property:"enabled",enabledValue:true,checker:new api.ODCheckerObjectStructure(id,{children:[
@@ -140,14 +140,14 @@ const createTicketEmbedStructure = (id:api.ODValidId) => {
             {key:"inline",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:ticket-embed-field-inline",{})}
         ]})})},
         {key:"timestamp",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:ticket-embed-timestamp",{})}
-    ]})})
+    ]}),cliInitDefaultValue:{enabled:false,title:"",description:"",customColor:"",image:"",thumbnail:"",fields:[],timestamp:false}})
 }
 const createTicketPingStructure = (id:api.ODValidId) => {
     return new api.ODCheckerObjectStructure(id,{children:[
         {key:"@here",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:ticket-ping-here",{})},
         {key:"@everyone",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:ticket-ping-everyone",{})},
         {key:"custom",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_DiscordIdArray("opendiscord:ticket-ping-custom","role",[],{allowDoubles:false,cliDisplayPropertyName:"custom role id"})},
-    ]})
+    ],cliInitDefaultValue:{"@here":true,"@everyone":false,custom:[]}})
 }
 const createPanelEmbedStructure = (id:api.ODValidId) => {
     return new api.ODCheckerEnabledObjectStructure(id,{property:"enabled",enabledValue:true,checker:new api.ODCheckerObjectStructure(id,{children:[
@@ -166,7 +166,7 @@ const createPanelEmbedStructure = (id:api.ODValidId) => {
             {key:"inline",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:panel-embed-field-inline",{})}
         ]})})},
         {key:"timestamp",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:panel-embed-timestamp",{})}
-    ]})})
+    ]}),cliInitDefaultValue:{enabled:false,title:"",description:"",customColor:"",url:"",image:"",thumbnail:"",footer:"",fields:[],timestamp:false}})
 }
 
 function loadFromEnv(){
@@ -194,8 +194,8 @@ export const defaultGeneralStructure = new api.ODCheckerObjectStructure("opendis
 
     //BASIC
     {key:"token",optional:false,priority:0,checker:(loadFromEnv()) ? new api.ODCheckerStringStructure("opendiscord:token-disabled",{cliDisplayName:"Token",cliDisplayDescription:"The token of your discord bot."}) : new api.ODCheckerCustomStructure_DiscordToken("opendiscord:token",{cliDisplayName:"Token",cliDisplayDescription:"The token of your discord bot."})},
-    {key:"tokenFromENV",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:token-env",{})},
-    {key:"mainColor",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_HexColor("opendiscord:main-color",true,false)},
+    {key:"tokenFromENV",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:token-env",{cliDisplayName:"Token From ENV",cliDisplayDescription:"Use the token from the .env file instead of general.json."})},
+    {key:"mainColor",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_HexColor("opendiscord:main-color",true,false,{cliDisplayName:"Main Color",cliDisplayDescription:"The main color of your bot, used in almost all embeds."})},
     {key:"language",optional:false,priority:0,checker:new api.ODCheckerStringStructure("opendiscord:language",{
         custom:(checker,value,locationTrace,locationId,locationDocs) => {
             const lt = checker.locationTraceDeref(locationTrace)
@@ -206,92 +206,97 @@ export const defaultGeneralStructure = new api.ODCheckerObjectStructure("opendis
                 return false
             }else return true
         },
-        cliAutocompleteList:opendiscord.defaults.getDefault("languageList")
+        cliAutocompleteList:opendiscord.defaults.getDefault("languageList"),
+        cliDisplayName:"Language",
+        cliDisplayDescription:"The language of the bot. Visit README.md for a list of available translations."
     })},
-    {key:"prefix",optional:false,priority:0,checker:new api.ODCheckerStringStructure("opendiscord:prefix",{minLength:1})},
-    {key:"serverId",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_DiscordId("opendiscord:server-id","server",false,[])},
-    {key:"globalAdmins",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_DiscordIdArray("opendiscord:global-admins","role",[],{allowDoubles:false,cliDisplayPropertyName:"global admin role"})},
-    {key:"slashCommands",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:slash-commands",{})},
-    {key:"textCommands",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:text-commands",{})},
+    {key:"prefix",optional:false,priority:0,checker:new api.ODCheckerStringStructure("opendiscord:prefix",{minLength:1,cliDisplayName:"Prefix",cliDisplayDescription:"The prefix used for the text-commands from the bot."})},
+    {key:"serverId",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_DiscordId("opendiscord:server-id","server",false,[],{cliDisplayName:"Server Id",cliDisplayDescription:"The ID of the discord server you will be using this bot in."})},
+    {key:"globalAdmins",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_DiscordIdArray("opendiscord:global-admins","role",[],{allowDoubles:false,cliDisplayPropertyName:"global admin role",cliDisplayName:"Global Admin Roles",cliDisplayDescription:"A list of role IDs that are able to interact with all commands and tickets."})},
+    {key:"slashCommands",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:slash-commands",{cliDisplayName:"Enable Slash Commands",cliDisplayDescription:"Enable/disable slash commands in the bot. When disabled, the commands will not be displayed."})},
+    {key:"textCommands",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:text-commands",{cliDisplayName:"Enable Text Commands",cliDisplayDescription:"Enable/disable text commands in the bot. (Disabling is recommended in large servers)"})},
 
     //STATUS
     {key:"status",optional:false,priority:0,checker:new api.ODCheckerEnabledObjectStructure("opendiscord:status",{
         property:"enabled",
         enabledValue:true,
         checker:new api.ODCheckerObjectStructure("opendiscord:status",{children:[
-            {key:"type",optional:false,priority:0,checker:new api.ODCheckerStringStructure("opendiscord:status-type",{choices:["listening","watching","playing","custom"]})},
-            {key:"text",optional:false,priority:0,checker:new api.ODCheckerStringStructure("opendiscord:status-text",{minLength:1,maxLength:128})},
-            {key:"status",optional:false,priority:0,checker:new api.ODCheckerStringStructure("opendiscord:status-type",{choices:["online","invisible","idle","dnd"]})},
-        ]})
+            {key:"enabled",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:status-enabled",{cliDisplayName:"Enabled",cliDisplayDescription:"Enable/disable the status. When disabled, the bot will be online without any status."})},
+            {key:"type",optional:false,priority:0,checker:new api.ODCheckerStringStructure("opendiscord:status-type",{choices:["listening","watching","playing","custom"],cliDisplayName:"Type",cliDisplayDescription:"The type of status: Listening, Watching, Playing or Custom."})},
+            {key:"text",optional:false,priority:0,checker:new api.ODCheckerStringStructure("opendiscord:status-text",{minLength:1,maxLength:128,cliDisplayName:"Text",cliDisplayDescription:"The text displayed in the status."})},
+            {key:"status",optional:false,priority:0,checker:new api.ODCheckerStringStructure("opendiscord:status-status",{choices:["online","invisible","idle","dnd"],cliDisplayName:"Status",cliDisplayDescription:"The profile status of the bot: Online, Invisible, Idle or Do Not Disturb."})},
+        ]}),
+        cliDisplayName:"Bot Status",
+        cliDisplayDescription:"Manage the status of the bot."
     })},
 
     //SYSTEM
     {key:"system",optional:false,priority:0,checker:new api.ODCheckerObjectStructure("opendiscord:system",{children:[
-        {key:"removeParticipantsOnClose",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:remove-participants-on-close",{})},
-        {key:"replyOnTicketCreation",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:reply-on-ticket-creation",{})},
-        {key:"replyOnReactionRole",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:reply-on-reaction-role",{})},
-        {key:"useTranslatedConfigChecker",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:use-translated-config-checker",{})},
-        {key:"preferSlashOverText",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:prefer-slash-over-text",{})},
-        {key:"sendErrorOnUnknownCommand",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:send-error-on-unknown-command",{})},
-        {key:"questionFieldsInCodeBlock",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:question-fields-in-code-block",{})},
-        {key:"disableVerifyBars",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:disable-verify-bars",{})},
-        {key:"useRedErrorEmbeds",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:use-red-error-embeds",{})},
-        {key:"emojiStyle",optional:false,priority:0,checker:new api.ODCheckerStringStructure("opendiscord:emoji-style",{choices:["before","after","double","disabled"]})},
+        {key:"removeParticipantsOnClose",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:remove-participants-on-close",{cliDisplayName:"Remove Participants On Close",cliDisplayDescription:"When enabled, all participants except admins will be removed from the ticket."})},
+        {key:"replyOnTicketCreation",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:reply-on-ticket-creation",{cliDisplayName:"Reply On Ticket Creation",cliDisplayDescription:"When enabled, the bot will send an ephemeral reply in the channel of the panel when creating a ticket."})},
+        {key:"replyOnReactionRole",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:reply-on-reaction-role",{cliDisplayName:"Reply On Reaction Role",cliDisplayDescription:"When enabled, the bot will send an ephemeral reply in the channel of the panel when using a role button."})},
+        {key:"useTranslatedConfigChecker",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:use-translated-config-checker",{cliDisplayName:"Use Translated Config Checker",cliDisplayDescription:"Use a translated config checker to better understand the errors the bot gives."})},
+        {key:"preferSlashOverText",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:prefer-slash-over-text",{cliDisplayName:"Prefer Slash Over Text",cliDisplayDescription:"Prefer displaying slash commands over text commands in help menus."})},
+        {key:"sendErrorOnUnknownCommand",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:send-error-on-unknown-command",{cliDisplayName:"Send Error On Unknown Command",cliDisplayDescription:"Send an error when using the text-command prefix without a valid command."})},
+        {key:"questionFieldsInCodeBlock",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:question-fields-in-code-block",{cliDisplayName:"Questions Fields In Code Blocks",cliDisplayDescription:"Display question fields in code blocks instead of plain text."})},
+        {key:"disableVerifyBars",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:disable-verify-bars",{cliDisplayName:"Disable Verifybars",cliDisplayDescription:"Disable the (✅/❌) verify buttons in all commands. (Not recommended)"})},
+        {key:"useRedErrorEmbeds",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:use-red-error-embeds",{cliDisplayName:"Use Red Error Embeds",cliDisplayDescription:"Display all error messages with a red border instead of the default color of the bot."})},
+        {key:"emojiStyle",optional:false,priority:0,checker:new api.ODCheckerStringStructure("opendiscord:emoji-style",{choices:["before","after","double","disabled"],cliDisplayName:"Emoji Style",cliDisplayDescription:"Choose how the bot will display emojis in message titles. (Visit docs for more info)"})},
 
-        {key:"enableTicketClaimButtons",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:enable-ticket-claim-buttons",{})},
-        {key:"enableTicketCloseButtons",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:enable-ticket-close-buttons",{})},
-        {key:"enableTicketPinButtons",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:enable-ticket-pin-buttons",{})},
-        {key:"enableTicketDeleteButtons",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:enable-ticket-delete-buttons",{})},
-        {key:"enableTicketActionWithReason",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:enable-ticket-action-with-reason",{})},
-        {key:"enableDeleteWithoutTranscript",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:enable-delete-without-transcript",{})},
+        {key:"enableTicketClaimButtons",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:enable-ticket-claim-buttons",{cliDisplayName:"Enable Ticket Claim Buttons",cliDisplayDescription:"Enable/disable buttons for claiming a ticket. Be aware that this doesn't disable the command!"})},
+        {key:"enableTicketCloseButtons",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:enable-ticket-close-buttons",{cliDisplayName:"Enable Ticket Close Buttons",cliDisplayDescription:"Enable/disable buttons for closing a ticket. Be aware that this doesn't disable the command!"})},
+        {key:"enableTicketPinButtons",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:enable-ticket-pin-buttons",{cliDisplayName:"Enable Ticket Pin Buttons",cliDisplayDescription:"Enable/disable buttons for pinning a ticket. Be aware that this doesn't disable the command!"})},
+        {key:"enableTicketDeleteButtons",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:enable-ticket-delete-buttons",{cliDisplayName:"Enable Ticket Delete Buttons",cliDisplayDescription:"Enable/disable buttons for deleting a ticket. Be aware that this doesn't disable the command!"})},
+        {key:"enableTicketActionWithReason",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:enable-ticket-action-with-reason",{cliDisplayName:"Enable Ticket Action With Reason",cliDisplayDescription:"Enable/disable buttons to write an additional reason for all ticket actions."})},
+        {key:"enableDeleteWithoutTranscript",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:enable-delete-without-transcript",{cliDisplayName:"Enable Delete Without Transcript",cliDisplayDescription:"Enable/disable the ability to delete tickets without a transcript."})},
 
         {key:"logs",optional:false,priority:0,checker:new api.ODCheckerEnabledObjectStructure("opendiscord:system-logs",{property:"enabled",enabledValue:true,checker:new api.ODCheckerObjectStructure("opendiscord:system-logs",{children:[
-            {key:"channel",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_DiscordId("opendiscord:log-channel","channel",false,[])},
-        ]})})},
+            {key:"channel",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_DiscordId("opendiscord:log-channel","channel",false,[],{cliDisplayName:"Log Channel",cliDisplayDescription:"The ID of the discord channel to log messages to. You can configure the messages somewhere else."})},
+        ]}),cliDisplayName:"Discord Logs",cliDisplayDescription:"Manage everything related to logs in a discord channel."})},
 
         {key:"limits",optional:false,priority:0,checker:new api.ODCheckerEnabledObjectStructure("opendiscord:limits",{property:"enabled",enabledValue:true,checker:new api.ODCheckerObjectStructure("opendiscord:limits",{children:[
-            {key:"globalMaximum",optional:false,priority:0,checker:new api.ODCheckerNumberStructure("opendiscord:limits-global",{zeroAllowed:false,negativeAllowed:false,floatAllowed:false,min:1})},
-            {key:"userMaximum",optional:false,priority:0,checker:new api.ODCheckerNumberStructure("opendiscord:limits-user",{zeroAllowed:false,negativeAllowed:false,floatAllowed:false,min:1})}
-        ]})})},
+            {key:"globalMaximum",optional:false,priority:0,checker:new api.ODCheckerNumberStructure("opendiscord:limits-global",{zeroAllowed:false,negativeAllowed:false,floatAllowed:false,min:1,cliDisplayName:"Global Maximum",cliDisplayDescription:"The maximum amount of tickets that are able to exist in the server at the same time."})},
+            {key:"userMaximum",optional:false,priority:0,checker:new api.ODCheckerNumberStructure("opendiscord:limits-user",{zeroAllowed:false,negativeAllowed:false,floatAllowed:false,min:1,cliDisplayName:"User Maximum",cliDisplayDescription:"The maximum amount of tickets from a specific user that are able to exist in the server at the same time."})}
+        ]}),cliDisplayName:"Global Limits",cliDisplayDescription:"Manage global limits for ticket creation to reduce the workload on your support team."})},
 
         {key:"permissions",optional:false,priority:0,checker:new api.ODCheckerObjectStructure("opendiscord:system-permissions",{children:[
-            {key:"help",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_DiscordId("opendiscord:permissions-help","role",false,["admin","everyone","none"])},
-            {key:"panel",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_DiscordId("opendiscord:permissions-panel","role",false,["admin","everyone","none"])},
-            {key:"ticket",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_DiscordId("opendiscord:permissions-ticket","role",false,["admin","everyone","none"])},
-            {key:"close",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_DiscordId("opendiscord:permissions-close","role",false,["admin","everyone","none"])},
-            {key:"delete",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_DiscordId("opendiscord:permissions-delete","role",false,["admin","everyone","none"])},
-            {key:"reopen",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_DiscordId("opendiscord:permissions-reopen","role",false,["admin","everyone","none"])},
-            {key:"claim",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_DiscordId("opendiscord:permissions-claim","role",false,["admin","everyone","none"])},
-            {key:"unclaim",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_DiscordId("opendiscord:permissions-unclaim","role",false,["admin","everyone","none"])},
-            {key:"pin",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_DiscordId("opendiscord:permissions-pin","role",false,["admin","everyone","none"])},
-            {key:"unpin",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_DiscordId("opendiscord:permissions-unpin","role",false,["admin","everyone","none"])},
-            {key:"move",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_DiscordId("opendiscord:permissions-move","role",false,["admin","everyone","none"])},
-            {key:"rename",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_DiscordId("opendiscord:permissions-rename","role",false,["admin","everyone","none"])},
-            {key:"add",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_DiscordId("opendiscord:permissions-add","role",false,["admin","everyone","none"])},
-            {key:"remove",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_DiscordId("opendiscord:permissions-remove","role",false,["admin","everyone","none"])},
-            {key:"blacklist",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_DiscordId("opendiscord:permissions-blacklist","role",false,["admin","everyone","none"])},
-            {key:"stats",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_DiscordId("opendiscord:permissions-stats","role",false,["admin","everyone","none"])},
-            {key:"clear",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_DiscordId("opendiscord:permissions-clear","role",false,["admin","everyone","none"])},
-            {key:"autoclose",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_DiscordId("opendiscord:permissions-autoclose","role",false,["admin","everyone","none"])},
-            {key:"autodelete",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_DiscordId("opendiscord:permissions-autodelete","role",false,["admin","everyone","none"])}
-        ]})},
+            {key:"help",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_DiscordId("opendiscord:permissions-help","role",false,["admin","everyone","none"],{cliDisplayName:"Help",cliHideDescriptionInParent:true,cliDisplayDescription:"Set the permissions to 'everyone' for everyone, 'admin' for admin only, 'none' to disable or a custom discord role ID."})},
+            {key:"panel",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_DiscordId("opendiscord:permissions-panel","role",false,["admin","everyone","none"],{cliDisplayName:"Panel",cliHideDescriptionInParent:true,cliDisplayDescription:"Set the permissions to 'everyone' for everyone, 'admin' for admin only, 'none' to disable or a custom discord role ID."})},
+            {key:"ticket",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_DiscordId("opendiscord:permissions-ticket","role",false,["admin","everyone","none"],{cliDisplayName:"Ticket",cliHideDescriptionInParent:true,cliDisplayDescription:"Set the permissions to 'everyone' for everyone, 'admin' for admin only, 'none' to disable or a custom discord role ID."})},
+            {key:"close",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_DiscordId("opendiscord:permissions-close","role",false,["admin","everyone","none"],{cliDisplayName:"Close",cliHideDescriptionInParent:true,cliDisplayDescription:"Set the permissions to 'everyone' for everyone, 'admin' for admin only, 'none' to disable or a custom discord role ID."})},
+            {key:"delete",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_DiscordId("opendiscord:permissions-delete","role",false,["admin","everyone","none"],{cliDisplayName:"Delete",cliHideDescriptionInParent:true,cliDisplayDescription:"Set the permissions to 'everyone' for everyone, 'admin' for admin only, 'none' to disable or a custom discord role ID."})},
+            {key:"reopen",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_DiscordId("opendiscord:permissions-reopen","role",false,["admin","everyone","none"],{cliDisplayName:"Reopen",cliHideDescriptionInParent:true,cliDisplayDescription:"Set the permissions to 'everyone' for everyone, 'admin' for admin only, 'none' to disable or a custom discord role ID."})},
+            {key:"claim",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_DiscordId("opendiscord:permissions-claim","role",false,["admin","everyone","none"],{cliDisplayName:"Claim",cliHideDescriptionInParent:true,cliDisplayDescription:"Set the permissions to 'everyone' for everyone, 'admin' for admin only, 'none' to disable or a custom discord role ID."})},
+            {key:"unclaim",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_DiscordId("opendiscord:permissions-unclaim","role",false,["admin","everyone","none"],{cliDisplayName:"Unclaim",cliHideDescriptionInParent:true,cliDisplayDescription:"Set the permissions to 'everyone' for everyone, 'admin' for admin only, 'none' to disable or a custom discord role ID."})},
+            {key:"pin",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_DiscordId("opendiscord:permissions-pin","role",false,["admin","everyone","none"],{cliDisplayName:"Pin",cliHideDescriptionInParent:true,cliDisplayDescription:"Set the permissions to 'everyone' for everyone, 'admin' for admin only, 'none' to disable or a custom discord role ID."})},
+            {key:"unpin",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_DiscordId("opendiscord:permissions-unpin","role",false,["admin","everyone","none"],{cliDisplayName:"Unpin",cliHideDescriptionInParent:true,cliDisplayDescription:"Set the permissions to 'everyone' for everyone, 'admin' for admin only, 'none' to disable or a custom discord role ID."})},
+            {key:"move",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_DiscordId("opendiscord:permissions-move","role",false,["admin","everyone","none"],{cliDisplayName:"Move",cliHideDescriptionInParent:true,cliDisplayDescription:"Set the permissions to 'everyone' for everyone, 'admin' for admin only, 'none' to disable or a custom discord role ID."})},
+            {key:"rename",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_DiscordId("opendiscord:permissions-rename","role",false,["admin","everyone","none"],{cliDisplayName:"Rename",cliHideDescriptionInParent:true,cliDisplayDescription:"Set the permissions to 'everyone' for everyone, 'admin' for admin only, 'none' to disable or a custom discord role ID."})},
+            {key:"add",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_DiscordId("opendiscord:permissions-add","role",false,["admin","everyone","none"],{cliDisplayName:"Add User",cliHideDescriptionInParent:true,cliDisplayDescription:"Set the permissions to 'everyone' for everyone, 'admin' for admin only, 'none' to disable or a custom discord role ID."})},
+            {key:"remove",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_DiscordId("opendiscord:permissions-remove","role",false,["admin","everyone","none"],{cliDisplayName:"Remove User",cliHideDescriptionInParent:true,cliDisplayDescription:"Set the permissions to 'everyone' for everyone, 'admin' for admin only, 'none' to disable or a custom discord role ID."})},
+            {key:"blacklist",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_DiscordId("opendiscord:permissions-blacklist","role",false,["admin","everyone","none"],{cliDisplayName:"Blacklist",cliHideDescriptionInParent:true,cliDisplayDescription:"Set the permissions to 'everyone' for everyone, 'admin' for admin only, 'none' to disable or a custom discord role ID."})},
+            {key:"stats",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_DiscordId("opendiscord:permissions-stats","role",false,["admin","everyone","none"],{cliDisplayName:"Stats",cliHideDescriptionInParent:true,cliDisplayDescription:"Set the permissions to 'everyone' for everyone, 'admin' for admin only, 'none' to disable or a custom discord role ID."})},
+            {key:"clear",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_DiscordId("opendiscord:permissions-clear","role",false,["admin","everyone","none"],{cliDisplayName:"Clear Tickets",cliHideDescriptionInParent:true,cliDisplayDescription:"Set the permissions to 'everyone' for everyone, 'admin' for admin only, 'none' to disable or a custom discord role ID."})},
+            {key:"autoclose",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_DiscordId("opendiscord:permissions-autoclose","role",false,["admin","everyone","none"],{cliDisplayName:"Autoclose",cliHideDescriptionInParent:true,cliDisplayDescription:"Set the permissions to 'everyone' for everyone, 'admin' for admin only, 'none' to disable or a custom discord role ID."})},
+            {key:"autodelete",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_DiscordId("opendiscord:permissions-autodelete","role",false,["admin","everyone","none"],{cliDisplayName:"Autodelete",cliHideDescriptionInParent:true,cliDisplayDescription:"Set the permissions to 'everyone' for everyone, 'admin' for admin only, 'none' to disable or a custom discord role ID."})}
+        ],cliDisplayName:"Permissions",cliDisplayDescription:"Manage all button & command permissions in the bot. (Visit docs for more info)"})},
 
         {key:"messages",optional:false,priority:0,checker:new api.ODCheckerObjectStructure("opendiscord:system-permissions",{children:[
-            {key:"creation",optional:false,priority:0,checker:createMsgStructure("opendiscord:msg-creation")},
-            {key:"closing",optional:false,priority:0,checker:createMsgStructure("opendiscord:msg-closing")},
-            {key:"deleting",optional:false,priority:0,checker:createMsgStructure("opendiscord:msg-deleting")},
-            {key:"reopening",optional:false,priority:0,checker:createMsgStructure("opendiscord:msg-reopening")},
-            {key:"claiming",optional:false,priority:0,checker:createMsgStructure("opendiscord:msg-claiming")},
-            {key:"pinning",optional:false,priority:0,checker:createMsgStructure("opendiscord:msg-pinning")},
-            {key:"adding",optional:false,priority:0,checker:createMsgStructure("opendiscord:msg-adding")},
-            {key:"removing",optional:false,priority:0,checker:createMsgStructure("opendiscord:msg-removing")},
-            {key:"renaming",optional:false,priority:0,checker:createMsgStructure("opendiscord:msg-renaming")},
-            {key:"moving",optional:false,priority:0,checker:createMsgStructure("opendiscord:msg-moving")},
-            {key:"blacklisting",optional:false,priority:0,checker:createMsgStructure("opendiscord:msg-blacklisting")},
-            {key:"roleAdding",optional:false,priority:0,checker:createMsgStructure("opendiscord:msg-role-adding")},
-            {key:"roleRemoving",optional:false,priority:0,checker:createMsgStructure("opendiscord:msg-role-removing")}
-        ]})},
-    ]})}
+            {key:"creation",optional:false,priority:0,checker:createMsgStructure("opendiscord:msg-creation","Ticket Created")},
+            {key:"closing",optional:false,priority:0,checker:createMsgStructure("opendiscord:msg-closing","Ticket Closed")},
+            {key:"deleting",optional:false,priority:0,checker:createMsgStructure("opendiscord:msg-deleting","Ticket Deleted")},
+            {key:"reopening",optional:false,priority:0,checker:createMsgStructure("opendiscord:msg-reopening","Ticket Reopened")},
+            {key:"claiming",optional:false,priority:0,checker:createMsgStructure("opendiscord:msg-claiming","Ticket Claimed")},
+            {key:"pinning",optional:false,priority:0,checker:createMsgStructure("opendiscord:msg-pinning","Ticket Pinned")},
+            {key:"adding",optional:false,priority:0,checker:createMsgStructure("opendiscord:msg-adding","User Added")},
+            {key:"removing",optional:false,priority:0,checker:createMsgStructure("opendiscord:msg-removing","User Removed")},
+            {key:"renaming",optional:false,priority:0,checker:createMsgStructure("opendiscord:msg-renaming","Ticket Renamed")},
+            {key:"moving",optional:false,priority:0,checker:createMsgStructure("opendiscord:msg-moving","Ticket Moved")},
+            {key:"blacklisting",optional:false,priority:0,checker:createMsgStructure("opendiscord:msg-blacklisting","User Blacklisted")},
+            {key:"roleAdding",optional:false,priority:0,checker:createMsgStructure("opendiscord:msg-role-adding","Role Added")},
+            {key:"roleRemoving",optional:false,priority:0,checker:createMsgStructure("opendiscord:msg-role-removing","Role Removed")}
+        ],cliDisplayName:"Messages",cliDisplayDescription:"Manage all messages & DM's for each action of the bot. (Visit docs for more info)"})},
+    ],cliDisplayName:"System",cliDisplayDescription:"Configure everything related to the ticket system."})}
 ]})
 
 export const defaultOptionsStructure = new api.ODCheckerArrayStructure("opendiscord:options",{allowedTypes:["object"],cliDisplayPropertyName:"option",propertyChecker:new api.ODCheckerObjectSwitchStructure("opendiscord:options",{objects:[
