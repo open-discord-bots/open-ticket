@@ -87,11 +87,15 @@ async function renderConfigObjectStructureSelector(checker:api.ODChecker,backFn:
     terminal(ansis.bold.green("Please select which variable you would like to edit.\n")+ansis.italic.gray("(use arrow keys to navigate, go back using escape)\n"))
     if (!structure.options.children) return await backFn()
 
+    if (structure.options.cliDisplayName){
+        terminal.gray("\nProperty: "+ansis.bold.blue(structure.options.cliDisplayName)+"\n")
+        terminal.gray("Description: "+ansis.bold(structure.options.cliDisplayDescription ?? "/")+"\n")
+    }
+    
     const list = structure.options.children.filter((child) => !child.cliHideInEditMode)
     const nameList = list.map((child) => (child.checker.options.cliDisplayName ? child.checker.options.cliDisplayName : child.key))
     const nameLength = utilities.getLongestLength(nameList)
     const finalnameList = nameList.map((name,index) => name.padEnd(nameLength+5," ")+ansis.gray((!list[index].checker.options.cliHideDescriptionInParent && list[index].checker.options.cliDisplayDescription) ? "=> "+list[index].checker.options.cliDisplayDescription : ""))
-
 
     const answer = await terminal.singleColumnMenu(finalnameList,{
         leftPadding:"> ",
@@ -145,7 +149,7 @@ async function renderConfigArrayStructureSelector(checker:api.ODChecker,backFn:(
     terminal(ansis.bold.green("Please select what you would like to do.\n")+ansis.italic.gray("(use arrow keys to navigate, go back using escape)\n"))
     if (!structure.options.propertyChecker) return await backFn()
 
-    if (typeof parentIndex == "string" || !isNaN(parentIndex)){
+    if (structure.options.cliDisplayName || typeof parentIndex == "string" || !isNaN(parentIndex)){
         terminal.gray("\nProperty: "+ansis.bold.blue(structure.options.cliDisplayName ?? parentIndex.toString())+"\n")
         terminal.gray("Description: "+ansis.bold(structure.options.cliDisplayDescription ?? "/")+"\n")
     }

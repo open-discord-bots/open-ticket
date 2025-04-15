@@ -1418,10 +1418,10 @@ export class ODCheckerCustomStructure_UniqueIdArray extends ODCheckerArrayStruct
     /**The scope to push unique ids when used in this array! */
     readonly usedScope: string|null
 
-    constructor(id:ODValidId, source:string, scope:string, usedScope?:string, options?:ODCheckerArrayStructureOptions){
+    constructor(id:ODValidId, source:string, scope:string, usedScope?:string, options?:ODCheckerArrayStructureOptions, idOptions?:Omit<ODCheckerStringStructureOptions,"minLength"|"custom">){
         //add premade custom structure checker
         const newOptions = options ?? {}
-        newOptions.propertyChecker = new ODCheckerStringStructure("opendiscord:unique-id",{minLength:1,custom:(checker,value,locationTrace,locationId,locationDocs) => {
+        newOptions.propertyChecker = new ODCheckerStringStructure("opendiscord:unique-id",{...(idOptions ?? {}),minLength:1,custom:(checker,value,locationTrace,locationId,locationDocs) => {
             if (typeof value != "string") return false
             const localLt = checker.locationTraceDeref(locationTrace)
             localLt.pop()
