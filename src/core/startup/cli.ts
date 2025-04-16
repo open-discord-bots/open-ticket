@@ -388,7 +388,8 @@ async function renderConfigStringStructureEditor(checker:api.ODChecker,backFn:((
     terminal.gray("Description: "+ansis.bold(structure.options.cliDisplayDescription ?? "/")+"\n")
 
     const customExtraOptions = (structure instanceof api.ODCheckerCustomStructure_DiscordId) ? structure.extraOptions : undefined
-    const autocompleteList = (structure.options.cliAutocompleteList ?? customExtraOptions) ?? structure.options.choices
+    const customAutocompleteFunc = structure.options.cliAutocompleteFunc ? await structure.options.cliAutocompleteFunc() : null
+    const autocompleteList = ((customAutocompleteFunc ?? structure.options.cliAutocompleteList) ?? customExtraOptions) ?? structure.options.choices
     const autoCompleteMenuOpts: Terminal.SingleLineMenuOptions = {
         style:terminal.white,
         selectedStyle:terminal.bgBlue.white
@@ -810,7 +811,8 @@ async function renderAdditionConfigStringStructure(checker:api.ODChecker,backFn:
     terminal.gray("Description: "+ansis.bold(structure.options.cliDisplayDescription ?? "/")+"\n")
 
     const customExtraOptions = (structure instanceof api.ODCheckerCustomStructure_DiscordId) ? structure.extraOptions : undefined
-    const autocompleteList = (structure.options.cliAutocompleteList ?? customExtraOptions) ?? structure.options.choices
+    const customAutocompleteFunc = structure.options.cliAutocompleteFunc ? await structure.options.cliAutocompleteFunc() : null
+    const autocompleteList = ((customAutocompleteFunc ?? structure.options.cliAutocompleteList) ?? customExtraOptions) ?? structure.options.choices
     const autoCompleteMenuOpts: Terminal.SingleLineMenuOptions = {
         style:terminal.white,
         selectedStyle:terminal.bgBlue.white

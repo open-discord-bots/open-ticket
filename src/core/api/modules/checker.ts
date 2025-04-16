@@ -529,7 +529,9 @@ export interface ODCheckerStringStructureOptions extends ODCheckerStructureOptio
     /**The string needs to match this regex */
     regex?:RegExp,
     /**Provide an optional list for autocomplete when using the Interactive Setup CLI. Defaults to the `choices` option. */
-    cliAutocompleteList?:string[]
+    cliAutocompleteList?:string[],
+    /**Dynamically provide a list for autocomplete items when using the Interactive Setup CLI. */
+    cliAutocompleteFunc?:() => Promise<string[]|null>
 }
 
 /**## ODCheckerStringStructure `class`

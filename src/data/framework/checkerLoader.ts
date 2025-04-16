@@ -301,11 +301,11 @@ export const defaultGeneralStructure = new api.ODCheckerObjectStructure("opendis
             {key:"roleRemoving",optional:false,priority:0,checker:createMsgStructure("opendiscord:msg-role-removing","Role Removed")}
         ],cliDisplayName:"Messages",cliDisplayDescription:"Manage all messages & DM's for each action of the bot. (Visit docs for more info)"})},
     ],cliDisplayName:"System",cliDisplayDescription:"Configure everything related to the ticket system."})}
-]})
+],cliDisplayName:"General",cliDisplayDescription:"General settings for the bot."})
 
 export const defaultOptionsStructure = new api.ODCheckerArrayStructure("opendiscord:options",{allowedTypes:["object"],cliDisplayPropertyName:"option",propertyChecker:new api.ODCheckerObjectSwitchStructure("opendiscord:options",{objects:[
     //TICKET
-    {name:"Ticket",priority:0,properties:[{key:"type",value:"ticket"}],checker:new api.ODCheckerObjectStructure("opendiscord:ticket",{cliDisplayKeyInParentArray:"name",cliDisplayAdditionalKeysInParentArray:["id","type"],children:[
+    {name:"Ticket",priority:0,properties:[{key:"type",value:"ticket"}],checker:new api.ODCheckerObjectStructure("opendiscord:ticket",{cliDisplayKeyInParentArray:"name",cliDisplayAdditionalKeysInParentArray:["id","type"],cliInitSkipKeys:["readonlyAdmins"],children:[
         {key:"id",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_UniqueId("opendiscord:ticket-id","openticket","option-ids",{regex:/^[A-Za-z0-9-éèçàêâôûî]+$/,minLength:3,maxLength:40,cliDisplayName:"Id",cliDisplayDescription:"The id of this ticket option. Used in panels."})},
         {key:"name",optional:false,priority:0,checker:new api.ODCheckerStringStructure("opendiscord:ticket-name",{minLength:2,maxLength:45,cliDisplayName:"Name",cliDisplayDescription:"The name of this ticket option."})},
         {key:"description",optional:false,priority:0,checker:new api.ODCheckerStringStructure("opendiscord:ticket-description",{maxLength:256,cliDisplayName:"Description",cliDisplayDescription:"The description of this ticket option."})},
@@ -328,12 +328,17 @@ export const defaultOptionsStructure = new api.ODCheckerArrayStructure("opendisc
 
         //TICKET ADMINS
         {key:"ticketAdmins",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_DiscordIdArray("opendiscord:ticket-ticket-admins","role",[],{allowDoubles:false,cliDisplayPropertyName:"ticket admin role",cliDisplayName:"Ticket Admin Roles",cliDisplayDescription:"A list of role IDs that are only able to interact with this ticket option."},{cliDisplayName:"Ticket Admin Role",cliDisplayDescription:"The discord role ID of a ticket admin."})},
-        {key:"readonlyAdmins",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_DiscordIdArray("opendiscord:ticket-readonly-admins","role",[],{allowDoubles:false,cliDisplayPropertyName:"read-only ticket admin role",cliDisplayName:"Readonly Admin Roles",cliDisplayDescription:"A list of role IDs that are only able to read this ticket option."},{cliDisplayName:"Readonly Admin Role",cliDisplayDescription:"The discord role ID of a readonly admin."})},
+        {key:"readonlyAdmins",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_DiscordIdArray("opendiscord:ticket-readonly-admins","role",[],{allowDoubles:false,cliInitDefaultValue:[],cliDisplayPropertyName:"read-only ticket admin role",cliDisplayName:"Readonly Admin Roles",cliDisplayDescription:"A list of role IDs that are only able to read this ticket option."},{cliDisplayName:"Readonly Admin Role",cliDisplayDescription:"The discord role ID of a readonly admin."})},
         {key:"allowCreationByBlacklistedUsers",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:ticket-allow-blacklisted-users",{cliDisplayName:"Allow Creation By Blacklisted Users",cliDisplayDescription:"When enabled, the blacklist doesn't apply to this ticket option/type and users are still able to create a ticket."})},
-        {key:"questions",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_UniqueIdArray("opendiscord:option-questions","openticket","question-ids","question-ids-used",{allowDoubles:false,maxLength:5,cliDisplayPropertyName:"question",cliDisplayName:"Questions",cliDisplayDescription:"A list of valid question IDs to ask before creating this ticket."},{cliDisplayName:"Question ID",cliDisplayDescription:"A valid question ID from the questions.json config."})},
+        {key:"questions",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_UniqueIdArray("opendiscord:option-questions","openticket","question-ids","question-ids-used",{allowDoubles:false,maxLength:5,cliDisplayPropertyName:"question",cliDisplayName:"Questions",cliDisplayDescription:"A list of valid question IDs to ask before creating this ticket."},{cliDisplayName:"Question ID",cliDisplayDescription:"A valid question ID from the questions.json config.",cliAutocompleteFunc:async () => {
+            const uncheckedRawData = opendiscord.configs.get("opendiscord:questions").data
+            if (!Array.isArray(uncheckedRawData)) return null
+            const idList = uncheckedRawData.filter((option) => typeof option == "object" && typeof option["id"] == "string").map((option) => option.id)
+            return (idList.length > 0) ? idList : null
+        }})},
 
         //TICKET CHANNEL
-        {key:"channel",optional:false,priority:0,checker:new api.ODCheckerObjectStructure("opendiscord:ticket-channel",{children:[
+        {key:"channel",optional:false,priority:0,checker:new api.ODCheckerObjectStructure("opendiscord:ticket-channel",{cliInitSkipKeys:["backupCategory","claimedCategory"],children:[
             {key:"prefix",optional:false,priority:0,checker:new api.ODCheckerStringStructure("opendiscord:ticket-channel-prefix",{maxLength:25,regex:/^[^\s]*$/,cliDisplayName:"Prefix",cliDisplayDescription:"The prefix of the name of the ticket channel. (e.g. 'question-')"})},
             {key:"suffix",optional:false,priority:0,checker:new api.ODCheckerStringStructure("opendiscord:ticket-channel-suffix",{choices:["user-name","user-id","random-number","random-hex","counter-dynamic","counter-fixed"],cliDisplayName:"Suffix",cliDisplayDescription:"The suffix mode to use. The number/text will be appended after the prefix."})},
             
@@ -387,8 +392,8 @@ export const defaultOptionsStructure = new api.ODCheckerArrayStructure("opendisc
         //LIMITS
         {key:"limits",optional:false,priority:0,checker:new api.ODCheckerEnabledObjectStructure("opendiscord:ticket-limits",{property:"enabled",enabledValue:true,checker:new api.ODCheckerObjectStructure("opendiscord:ticket-limits",{children:[
             {key:"enabled",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:ticket-limits-enabled",{cliDisplayName:"Enabled",cliDisplayDescription:"Enable/disable the limits of this ticket option. This is not related to the global ticket limits."})},
-            {key:"globalMaximum",optional:false,priority:0,checker:new api.ODCheckerNumberStructure("opendiscord:ticket-limits-global",{zeroAllowed:false,negativeAllowed:false,floatAllowed:false,min:1,cliDisplayName:"Global Maximum",cliDisplayDescription:"The maximum amount of tickets of this type/option that are able to exist in the server at the same time."})},
-            {key:"userMaximum",optional:false,priority:0,checker:new api.ODCheckerNumberStructure("opendiscord:ticket-limits-user",{zeroAllowed:false,negativeAllowed:false,floatAllowed:false,min:1,cliDisplayName:"User Maximum",cliDisplayDescription:"The maximum amount of tickets of this type/option from a specific user that are able to exist in the server at the same time."})}
+            {key:"globalMaximum",optional:false,priority:0,checker:new api.ODCheckerNumberStructure("opendiscord:ticket-limits-global",{zeroAllowed:false,negativeAllowed:false,floatAllowed:false,min:1,cliInitDefaultValue:10,cliDisplayName:"Global Maximum",cliDisplayDescription:"The maximum amount of tickets of this type/option that are able to exist in the server at the same time."})},
+            {key:"userMaximum",optional:false,priority:0,checker:new api.ODCheckerNumberStructure("opendiscord:ticket-limits-user",{zeroAllowed:false,negativeAllowed:false,floatAllowed:false,min:1,cliInitDefaultValue:3,cliDisplayName:"User Maximum",cliDisplayDescription:"The maximum amount of tickets of this type/option from a specific user that are able to exist in the server at the same time."})}
         ],cliDisplayName:"Option Limits",cliDisplayDescription:"Manage option-based limits for ticket creation to reduce the workload on your support team."}),cliDisplayName:"Limits",cliDisplayDescription:"Manage option-based limits for ticket creation to reduce the workload on your support team."})},
     ],cliDisplayName:"Ticket Option",cliDisplayDescription:"Manage all ticket-specific settings of this option/type."})},
 
@@ -451,15 +456,20 @@ export const defaultPanelsStructure = new api.ODCheckerArrayStructure("opendisco
     {key:"id",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_UniqueId("opendiscord:panel-id","openticket","panel-ids",{regex:/^[A-Za-z0-9-éèçàêâôûî]+$/,minLength:3,maxLength:40,cliDisplayName:"Id",cliDisplayDescription:"The id of this panel. Used in the /panel command."})},
     {key:"name",optional:false,priority:0,checker:new api.ODCheckerStringStructure("opendiscord:panel-name",{minLength:3,maxLength:50,cliDisplayName:"Name",cliDisplayDescription:"The name of this panel."})},
     {key:"dropdown",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:panel-dropdown",{cliDisplayName:"Dropdown",cliDisplayDescription:"Decide whether to use buttons or a dropdown in the panel. Dropdowns only support options of the 'ticket' type!"})},
-    {key:"options",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_UniqueIdArray("opendiscord:panel-options","openticket","option-ids","option-ids-used",{allowDoubles:false,maxLength:25,cliDisplayPropertyName:"option",cliDisplayName:"Options",cliDisplayDescription:"A list of valid option IDs to show in this panel."},{cliDisplayName:"Option ID",cliDisplayDescription:"A valid option ID from the options.json config."})},
+    {key:"options",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_UniqueIdArray("opendiscord:panel-options","openticket","option-ids","option-ids-used",{allowDoubles:false,maxLength:25,cliDisplayPropertyName:"option",cliDisplayName:"Options",cliDisplayDescription:"A list of valid option IDs to show in this panel."},{cliDisplayName:"Option ID",cliDisplayDescription:"A valid option ID from the options.json config.",cliAutocompleteFunc:async () => {
+        const uncheckedRawData = opendiscord.configs.get("opendiscord:options").data
+        if (!Array.isArray(uncheckedRawData)) return null
+        const idList = uncheckedRawData.filter((option) => typeof option == "object" && typeof option["id"] == "string").map((option) => option.id)
+        return (idList.length > 0) ? idList : null
+    }})},
     
     //EMBED & TEXT
     {key:"text",optional:false,priority:0,checker:new api.ODCheckerStringStructure("opendiscord:panel-text",{maxLength:4096,cliDisplayName:"Panel Text",cliDisplayDescription:"The raw text of the panel message. Leave empty to use the embed."})},
     {key:"embed",optional:false,priority:0,checker:createPanelEmbedStructure("opendiscord:panel-embed")},
     
     //SETTINGS
-    {key:"settings",optional:false,priority:0,checker:new api.ODCheckerObjectStructure("opendiscord:panel-settings",{children:[
-        {key:"dropdownPlaceholder",optional:false,priority:0,checker:new api.ODCheckerStringStructure("opendiscord:panel-settings-placeholder",{maxLength:100,cliDisplayName:"Dropdown Placeholder",cliDisplayDescription:"Configure the text displayed in the dropdown when nothing is selected."})},
+    {key:"settings",optional:false,priority:0,checker:new api.ODCheckerObjectStructure("opendiscord:panel-settings",{cliInitSkipKeys:["dropdownPlaceholder","describeOptionsCustomTitle"],children:[
+        {key:"dropdownPlaceholder",optional:false,priority:0,checker:new api.ODCheckerStringStructure("opendiscord:panel-settings-placeholder",{maxLength:100,cliInitDefaultValue:"Create a ticket!",cliDisplayName:"Dropdown Placeholder",cliDisplayDescription:"Configure the text displayed in the dropdown when nothing is selected."})},
         {key:"enableMaxTicketsWarningInText",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:panel-settings-maxtickets-text",{cliDisplayName:"Enable Max Tickets Warning (Text)",cliDisplayDescription:"Enable/disable the warning which shows how many tickets you can create in the text contents of the panel."})},
         {key:"enableMaxTicketsWarningInEmbed",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:panel-settings-maxtickets-embed",{cliDisplayName:"Enable Max Tickets Warning (Embed)",cliDisplayDescription:"Enable/disable the warning which shows how many tickets you can create in the embed of the panel."})},
         
@@ -472,82 +482,89 @@ export const defaultPanelsStructure = new api.ODCheckerArrayStructure("opendisco
 ],cliDisplayName:"Panel",cliDisplayDescription:"Manage, customise and configure a panel to your preference."}),cliDisplayName:"Panels",cliDisplayDescription:"A list of all panels in the bot. Here you can add, modify & remove existing panels or customise them to your preference."})
 
 export const defaultQuestionsStructure = new api.ODCheckerArrayStructure("opendiscord:questions",{allowedTypes:["object"],cliDisplayPropertyName:"question",propertyChecker:new api.ODCheckerObjectStructure("opendiscord:questions",{cliDisplayKeyInParentArray:"name",cliDisplayAdditionalKeysInParentArray:["id","type"],children:[
-    {key:"id",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_UniqueId("opendiscord:question-id","openticket","question-ids",{regex:/^[A-Za-z0-9-éèçàêâôûî]+$/,minLength:3,maxLength:40})},
-    {key:"name",optional:false,priority:0,checker:new api.ODCheckerStringStructure("opendiscord:question-name",{minLength:3,maxLength:45})},
-    {key:"type",optional:false,priority:0,checker:new api.ODCheckerStringStructure("opendiscord:question-type",{choices:["short","paragraph"]})},
+    {key:"id",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_UniqueId("opendiscord:question-id","openticket","question-ids",{regex:/^[A-Za-z0-9-éèçàêâôûî]+$/,minLength:3,maxLength:40,cliDisplayName:"Id",cliDisplayDescription:"The id of this question. Used in ticket options."})},
+    {key:"name",optional:false,priority:0,checker:new api.ODCheckerStringStructure("opendiscord:question-name",{minLength:3,maxLength:45,cliDisplayName:"Name",cliDisplayDescription:"The name of this question."})},
+    {key:"type",optional:false,priority:0,checker:new api.ODCheckerStringStructure("opendiscord:question-type",{choices:["short","paragraph"],cliDisplayName:"Type",cliDisplayDescription:"The type of this question (short/paragraph)."})},
     
-    {key:"required",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:question-required",{})},
-    {key:"placeholder",optional:false,priority:0,checker:new api.ODCheckerStringStructure("opendiscord:question-placeholder",{maxLength:100})},
+    {key:"required",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:question-required",{cliDisplayName:"Required",cliDisplayDescription:"Is this question required? If not, it can be left empty."})},
+    {key:"placeholder",optional:false,priority:0,checker:new api.ODCheckerStringStructure("opendiscord:question-placeholder",{maxLength:100,cliDisplayName:"Placeholder",cliDisplayDescription:"The placeholder to show in the field when nothing has been written yet."})},
     
     {key:"length",optional:false,priority:0,checker:new api.ODCheckerEnabledObjectStructure("opendiscord:question-length",{property:"enabled",enabledValue:true,checker:new api.ODCheckerObjectStructure("opendiscord:question-length",{children:[
-        {key:"min",optional:false,priority:0,checker:new api.ODCheckerNumberStructure("opendiscord:question-length-min",{min:0,max:1024,negativeAllowed:false,floatAllowed:false})},
-        {key:"max",optional:false,priority:0,checker:new api.ODCheckerNumberStructure("opendiscord:question-length-max",{min:1,max:1024,negativeAllowed:false,floatAllowed:false})},
-    ]})})},
-]})})
+        {key:"enabled",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:question-length-enabled",{cliDisplayName:"Enabled",cliDisplayDescription:"Enable/disable length validation for this question."})},
+        {key:"min",optional:false,priority:0,checker:new api.ODCheckerNumberStructure("opendiscord:question-length-min",{min:0,max:1024,negativeAllowed:false,floatAllowed:false,cliDisplayName:"Min Length",cliDisplayDescription:"The minimum amount of characters required."})},
+        {key:"max",optional:false,priority:0,checker:new api.ODCheckerNumberStructure("opendiscord:question-length-max",{min:1,max:1024,negativeAllowed:false,floatAllowed:false,cliInitDefaultValue:100,cliDisplayName:"Max Length",cliDisplayDescription:"The maximum amount of characters allowed."})},
+    ],cliDisplayName:"Length Validation",cliDisplayDescription:"Add length validation to the question. This way, the contents must be at least/most ... characters."}),cliDisplayName:"Length Validation",cliDisplayDescription:"Add length validation to the question. This way, the contents must be at least/most ... characters."})},
+],cliDisplayName:"Question",cliDisplayDescription:"Manage, customise and configure a question to your preference."}),cliDisplayName:"Questions",cliDisplayDescription:"A list of all questions in the bot. Here you can add, modify & remove existing questions or customise them to your preference."})
 
 export const defaultTranscriptsStructure = new api.ODCheckerObjectStructure("opendiscord:transcripts",{children:[
     //GENERAL
     {key:"general",optional:false,priority:0,checker:new api.ODCheckerEnabledObjectStructure("opendiscord:transcripts-general",{property:"enabled",enabledValue:true,checker:new api.ODCheckerObjectStructure("opendiscord:transcripts-general",{children:[
-        {key:"enableChannel",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:transcripts-enable-channel",{})},
-        {key:"enableCreatorDM",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:transcripts-enable-creator-dm",{})},
-        {key:"enableParticipantDM",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:transcripts-enable-participant-dm",{})},
-        {key:"enableActiveAdminDM",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:transcripts-enable-active-admin-dm",{})},
-        {key:"enableEveryAdminDM",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:transcripts-enable-every-admin-dm",{})},
+        {key:"enabled",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:transcripts-enabled",{cliDisplayName:"Enabled",cliDisplayDescription:"Enable/disable the transcript system."})},
+        
+        {key:"enableChannel",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:transcripts-enable-channel",{cliDisplayName:"Enable Channel",cliDisplayDescription:"Send the transcript to a specific channel in your server (configurable in 'channel' property)."})},
+        {key:"enableCreatorDM",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:transcripts-enable-creator-dm",{cliDisplayName:"Enable Creator DM",cliDisplayDescription:"Send the transcript in DM to the creator of the ticket."})},
+        {key:"enableParticipantDM",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:transcripts-enable-participant-dm",{cliDisplayName:"Enable Participant DM",cliDisplayDescription:"Send the transcript in DM to all non-admin participants of the ticket."})},
+        {key:"enableActiveAdminDM",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:transcripts-enable-active-admin-dm",{cliDisplayName:"Enable Active Admin DM",cliDisplayDescription:"Send the transcript in DM to all admins that actively wrote in the ticket."})},
+        {key:"enableEveryAdminDM",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:transcripts-enable-every-admin-dm",{cliDisplayName:"Enable Every Admin DM",cliDisplayDescription:"Send the transcript in DM to all admins assigned to the ticket."})},
 
-        {key:"channel",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_DiscordId("opendiscord:transcripts-channel","channel",true,[])},
-        {key:"mode",optional:false,priority:0,checker:new api.ODCheckerStringStructure("opendiscord:transcripts-mode",{choices:["html","text"]})},
-    ]})})},
+        {key:"channel",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_DiscordId("opendiscord:transcripts-channel","channel",true,[],{cliDisplayName:"Channel",cliDisplayDescription:"The discord channel ID to send the transcript to."})},
+        {key:"mode",optional:false,priority:0,checker:new api.ODCheckerStringStructure("opendiscord:transcripts-mode",{choices:["html","text"],cliDisplayName:"Transcript Mode",cliDisplayDescription:"The transcript type to use: 'text' or 'html'."})},
+    ],cliDisplayName:"General",cliDisplayDescription:"General settings for the transcripts."}),cliDisplayName:"General",cliDisplayDescription:"General settings for the transcripts."})},
 
     //EMBED SETTINGS
     {key:"embedSettings",optional:false,priority:0,checker:new api.ODCheckerObjectStructure("opendiscord:transcripts-embed-settings",{children:[
-        {key:"customColor",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_HexColor("opendiscord:transcripts-embed-color",false,true)},
-        {key:"listAllParticipants",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:transcripts-embed-list-participants",{})},
-        {key:"includeTicketStats",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:transcripts-embed-include-ticket-stats",{})},
-    ]})},
+        {key:"customColor",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_HexColor("opendiscord:transcripts-embed-color",false,true,{cliDisplayName:"Custom Color",cliDisplayDescription:"Use a custom color in the embed. When empty, the default bot color will be used."})},
+        {key:"listAllParticipants",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:transcripts-embed-list-participants",{cliDisplayName:"List Participants",cliDisplayDescription:"List all participants of the ticket in the embed."})},
+        {key:"includeTicketStats",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:transcripts-embed-include-ticket-stats",{cliDisplayName:"Include Ticket Stats",cliDisplayDescription:"Include some stats from the ticket in the embed."})},
+    ],cliDisplayName:"Embed Settings",cliDisplayDescription:"Settings and customisability related to the embed which contains the transcript."})},
 
     //TEXT STYLE
     {key:"textTranscriptStyle",optional:false,priority:0,checker:new api.ODCheckerObjectStructure("opendiscord:transcripts-text",{children:[
-        {key:"layout",optional:false,priority:0,checker:new api.ODCheckerStringStructure("opendiscord:transcripts-text-layout",{choices:["simple","normal","detailed"]})},
-        {key:"includeStats",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:transcripts-text-include-stats",{})},
-        {key:"includeIds",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:transcripts-text-include-ids",{})},
-        {key:"includeEmbeds",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:transcripts-text-include-embeds",{})},
-        {key:"includeFiles",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:transcripts-text-include-files",{})},
-        {key:"includeBotMessages",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:transcripts-text-include-bots",{})},
+        {key:"layout",optional:false,priority:0,checker:new api.ODCheckerStringStructure("opendiscord:transcripts-text-layout",{choices:["simple","normal","detailed"],cliDisplayName:"Layout",cliDisplayDescription:"The layout to use in the text-transcripts (simple, normal, detailed)."})},
+        {key:"includeStats",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:transcripts-text-include-stats",{cliDisplayName:"Include Stats",cliDisplayDescription:"Include statistics in the transcript?"})},
+        {key:"includeIds",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:transcripts-text-include-ids",{cliDisplayName:"Include Ids",cliDisplayDescription:"Include role, channel & user ID's in the transcript?"})},
+        {key:"includeEmbeds",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:transcripts-text-include-embeds",{cliDisplayName:"Include Embeds",cliDisplayDescription:"Include message embeds in the transcript?"})},
+        {key:"includeFiles",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:transcripts-text-include-files",{cliDisplayName:"Include Files",cliDisplayDescription:"Include files & attachments in the transcript?"})},
+        {key:"includeBotMessages",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:transcripts-text-include-bots",{cliDisplayName:"Include Bots",cliDisplayDescription:"Include messages sent by bots/apps?"})},
 
-        {key:"fileMode",optional:false,priority:0,checker:new api.ODCheckerStringStructure("opendiscord:transcripts-text-file-mode",{choices:["custom","channel-name","channel-id","user-name","user-id"]})},
-        {key:"customFileName",optional:false,priority:0,checker:new api.ODCheckerStringStructure("opendiscord:transcripts-file-name",{maxLength:512,regex:/^[^\.#%&{}\\<>*?/!'":@`|=]*$/})},
-    ]})},
+        {key:"fileMode",optional:false,priority:0,checker:new api.ODCheckerStringStructure("opendiscord:transcripts-text-file-mode",{choices:["custom","channel-name","channel-id","user-name","user-id"],cliDisplayName:"File Mode",cliDisplayDescription:"Select the mode the transcript will be named: custom, channel-name, user-name, user-id."})},
+        {key:"customFileName",optional:false,priority:0,checker:new api.ODCheckerStringStructure("opendiscord:transcripts-file-name",{maxLength:512,regex:/^[^\.#%&{}\\<>*?/!'":@`|=]*$/,cliDisplayName:"Custom File Name",cliDisplayDescription:"Use this as transcript name when the mode is set to 'custom'."})},
+    ],cliDisplayName:"Text Transcript Style",cliDisplayDescription:"Configure the 'Text Transcripts' from Open Ticket."})},
 
     //HTML STYLE
     {key:"htmlTranscriptStyle",optional:false,priority:0,checker:new api.ODCheckerObjectStructure("opendiscord:transcripts-html",{children:[
         //HTML BACKGROUND
         {key:"background",optional:false,priority:0,checker:new api.ODCheckerEnabledObjectStructure("opendiscord:transcripts-html-background",{property:"enableCustomBackground",enabledValue:true,checker:new api.ODCheckerObjectStructure("opendiscord:transcripts-html-background",{children:[
-            {key:"backgroundColor",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_HexColor("opendiscord:transcripts-html-background-color",false,true)},
-            {key:"backgroundImage",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_UrlString("opendiscord:transcripts-html-background-image",true,{allowHttp:false,allowedExtensions:[".png",".jpg",".jpeg",".webp",".gif"]})},
-        ]})})},
+            {key:"enableCustomBackground",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:transcripts-html-background-enabled",{cliDisplayName:"Enabled",cliDisplayDescription:"Enable/disable background customisation in the HTML Transcripts."})},
+            {key:"backgroundColor",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_HexColor("opendiscord:transcripts-html-background-color",false,true,{cliDisplayName:"Background Color",cliDisplayDescription:"The hex-color of the background."})},
+            {key:"backgroundImage",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_UrlString("opendiscord:transcripts-html-background-image",true,{allowHttp:false,allowedExtensions:[".png",".jpg",".jpeg",".webp",".gif"]},{cliDisplayName:"Background Image",cliDisplayDescription:"A URL to an image to use in the background. This will overwrite the background color."})},
+        ],cliDisplayName:"Background Style",cliDisplayDescription:"Customise the background of the HTML Transcripts."}),cliDisplayName:"Background Style",cliDisplayDescription:"Customise the background of the HTML Transcripts."})},
 
         //HTML HEADER
         {key:"header",optional:false,priority:0,checker:new api.ODCheckerEnabledObjectStructure("opendiscord:transcripts-html-header",{property:"enableCustomHeader",enabledValue:true,checker:new api.ODCheckerObjectStructure("opendiscord:transcripts-html-header",{children:[
-            {key:"backgroundColor",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_HexColor("opendiscord:transcripts-html-header-bgcolor",false,false)},
-            {key:"decoColor",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_HexColor("opendiscord:transcripts-html-header-decocolor",false,false)},
-            {key:"textColor",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_HexColor("opendiscord:transcripts-html-header-textcolor",false,false)},
-        ]})})},
+            {key:"enableCustomHeader",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:transcripts-html-header-enabled",{cliDisplayName:"Enabled",cliDisplayDescription:"Enable/disable header customisation in the HTML Transcripts."})},
+            {key:"backgroundColor",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_HexColor("opendiscord:transcripts-html-header-bgcolor",false,false,{cliDisplayName:"Background Color",cliDisplayDescription:"The hex-color of the header background."})},
+            {key:"decoColor",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_HexColor("opendiscord:transcripts-html-header-decocolor",false,false,{cliDisplayName:"Decoration Color",cliDisplayDescription:"The hex-color of the header decoration (e.g. horizontal line)."})},
+            {key:"textColor",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_HexColor("opendiscord:transcripts-html-header-textcolor",false,false,{cliDisplayName:"Text Color",cliDisplayDescription:"The hex-color of the header text."})},
+        ],cliDisplayName:"Header Style",cliDisplayDescription:"Customise the header of the HTML Transcripts."}),cliDisplayName:"Header Style",cliDisplayDescription:"Customise the header of the HTML Transcripts."})},
 
         //HTML STATS
         {key:"stats",optional:false,priority:0,checker:new api.ODCheckerEnabledObjectStructure("opendiscord:transcripts-html-stats",{property:"enableCustomStats",enabledValue:true,checker:new api.ODCheckerObjectStructure("opendiscord:transcripts-html-stats",{children:[
-            {key:"backgroundColor",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_HexColor("opendiscord:transcripts-html-stats-bgcolor",false,false)},
-            {key:"keyTextColor",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_HexColor("opendiscord:transcripts-html-stats-keycolor",false,false)},
-            {key:"valueTextColor",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_HexColor("opendiscord:transcripts-html-stats-valuecolor",false,false)},
-            {key:"hideBackgroundColor",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_HexColor("opendiscord:transcripts-html-stats-hidebgcolor",false,false)},
-            {key:"hideTextColor",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_HexColor("opendiscord:transcripts-html-stats-hidecolor",false,false)},
-        ]})})},
+            {key:"enableCustomStats",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:transcripts-html-stats-enabled",{cliDisplayName:"Enabled",cliDisplayDescription:"Enable/disable stats customisation in the HTML Transcripts."})},
+            {key:"backgroundColor",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_HexColor("opendiscord:transcripts-html-stats-bgcolor",false,false,{cliDisplayName:"Background Color",cliDisplayDescription:"The hex-color of the stats background."})},
+            {key:"keyTextColor",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_HexColor("opendiscord:transcripts-html-stats-keycolor",false,false,{cliDisplayName:"Key Text Color",cliDisplayDescription:"The hex-color of the stats key text."})},
+            {key:"valueTextColor",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_HexColor("opendiscord:transcripts-html-stats-valuecolor",false,false,{cliDisplayName:"Value Text Color",cliDisplayDescription:"The hex-color of the stats value text."})},
+            {key:"hideBackgroundColor",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_HexColor("opendiscord:transcripts-html-stats-hidebgcolor",false,false,{cliDisplayName:"Hide Background Color",cliDisplayDescription:"The hex-color of the stats hide button background."})},
+            {key:"hideTextColor",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_HexColor("opendiscord:transcripts-html-stats-hidecolor",false,false,{cliDisplayName:"Hide Text Color",cliDisplayDescription:"The hex-color of the stats hide button text."})},
+        ],cliDisplayName:"Stats Style",cliDisplayDescription:"Customise the stats of the HTML Transcripts."}),cliDisplayName:"Stats Style",cliDisplayDescription:"Customise the stats of the HTML Transcripts."})},
 
         //HTML FAVICON
         {key:"favicon",optional:false,priority:0,checker:new api.ODCheckerEnabledObjectStructure("opendiscord:transcripts-html-favicon",{property:"enableCustomFavicon",enabledValue:true,checker:new api.ODCheckerObjectStructure("opendiscord:transcripts-html-favicon",{children:[
-            {key:"imageUrl",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_UrlString("opendiscord:transcripts-html-favicon-image",true,{allowHttp:false,allowedExtensions:[".png",".jpg",".jpeg",".webp"]})},
-        ]})})},
-    ]})},
-]})
+            {key:"enableCustomFavicon",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:transcripts-html-favicon-enabled",{cliDisplayName:"Enabled",cliDisplayDescription:"Enable/disable favicon customisation in the HTML Transcripts."})},
+            {key:"imageUrl",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_UrlString("opendiscord:transcripts-html-favicon-image",true,{allowHttp:false,allowedExtensions:[".png",".jpg",".jpeg",".webp"]},{cliDisplayName:"LOREMIPSUM",cliDisplayDescription:"IPSUMLOREM"})},
+        ],cliDisplayName:"Favicon Style",cliDisplayDescription:"Customise the favicon of the HTML Transcripts."}),cliDisplayName:"Favicon Style",cliDisplayDescription:"Customise the favicon of the HTML Transcripts."})},
+    ],cliDisplayName:"Html Transcript Style",cliDisplayDescription:"Configure the 'Html Transcripts' from Open Ticket."})},
+],cliDisplayName:"Transcripts",cliDisplayDescription:"All settings related to transcripts."})
 
 export const defaultUnusedOptionsFunction = (manager:api.ODCheckerManager, functions:api.ODCheckerFunctionManager): api.ODCheckerResult => {
     const optionList: string[] = manager.storage.get("openticket","option-ids")
