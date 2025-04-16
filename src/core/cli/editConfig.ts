@@ -1,50 +1,9 @@
 import {opendiscord, api, utilities} from "../../index"
 import {Terminal, terminal} from "terminal-kit"
 import ansis from "ansis"
+import {renderHeader} from "./cli"
 
-const logo = [
-    "   ██████╗ ██████╗ ███████╗███╗   ██╗    ████████╗██╗ ██████╗██╗  ██╗███████╗████████╗  ",
-    "  ██╔═══██╗██╔══██╗██╔════╝████╗  ██║    ╚══██╔══╝██║██╔════╝██║ ██╔╝██╔════╝╚══██╔══╝  ",
-    "  ██║   ██║██████╔╝█████╗  ██╔██╗ ██║       ██║   ██║██║     █████╔╝ █████╗     ██║     ",
-    "  ██║   ██║██╔═══╝ ██╔══╝  ██║╚██╗██║       ██║   ██║██║     ██╔═██╗ ██╔══╝     ██║     ",
-    "  ╚██████╔╝██║     ███████╗██║ ╚████║       ██║   ██║╚██████╗██║  ██╗███████╗   ██║     ",
-    "   ╚═════╝ ╚═╝     ╚══════╝╚═╝  ╚═══╝       ╚═╝   ╚═╝ ╚═════╝╚═╝  ╚═╝╚══════╝   ╚═╝     "
-]
-
-/**A utility function to center text to a certain width. */
-function centerText(text:string,width:number){
-    if (width < text.length) return text
-    let newWidth = width-ansis.strip(text).length+1
-    let final = " ".repeat(newWidth/2)+text
-    return final
-}
-
-/**A utility function to terminate the interactive CLI. */
-async function terminate(){
-    terminal.grabInput(false)
-    terminal.clear()
-    terminal.green("👋 Exited the Open Ticket Interactive Setup CLI.\n")
-    process.exit(0)
-}
-terminal.on("key",(name,matches,data) => {
-    if (name == "CTRL_C") terminate()
-})
-
-/**Render the header of the interactive CLI. */
-function renderHeader(path:(string|number)[]){
-    terminal.grabInput(true)
-    terminal.clear().moveTo(1,1)
-    terminal(ansis.hex("#f8ba00")(logo.join("\n")+"\n"))
-    terminal.bold(centerText("Interactive Setup CLI  -  Version: "+opendiscord.versions.get("opendiscord:version").toString()+"  -  Support: https://discord.dj-dj.be\n",88))
-    if (path.length < 1) terminal.cyan(centerText("👋 Hi! Welcome to the Open Ticket Interactive Setup CLI! 👋\n\n",88))
-    else terminal.cyan(centerText("🌐 Current Location: "+path.map((v,i) => {
-        if (i == 0) return v.toString()
-        else if (typeof v == "string") return ".\""+v+"\""
-        else if (typeof v == "number") return "."+v
-    }).join("")+"\n\n",88))
-}
-
-async function renderConfigSelector(backFn:(() => api.ODPromiseVoid)){
+export async function renderEditConfig(backFn:(() => api.ODPromiseVoid)){
     renderHeader([])
     terminal(ansis.bold.green("Please select which config you would like to edit.\n")+ansis.italic.gray("(use arrow keys to navigate, go back using escape)\n"))
 
@@ -65,7 +24,7 @@ async function renderConfigSelector(backFn:(() => api.ODPromiseVoid)){
     if (answer.canceled) return await backFn()
     const checker = checkerList[answer.selectedIndex]
     const configData = checker.config.data as api.ODValidJsonType
-    await chooseConfigStructure(checker,async () => {await renderConfigSelector(backFn)},checker.structure,configData,{},NaN,["("+checker.config.path+")"])
+    await chooseConfigStructure(checker,async () => {await renderEditConfig(backFn)},checker.structure,configData,{},NaN,["("+checker.config.path+")"])
 }
 
 async function chooseConfigStructure(checker:api.ODChecker,backFn:(() => api.ODPromiseVoid),structure:api.ODCheckerStructure,data:api.ODValidJsonType,parent:object|any[],parentIndex:string|number,path:(string|number)[]){
@@ -938,7 +897,6 @@ async function renderAdditionConfigArrayStructureSelector(checker:api.ODChecker,
     else if (answer.selectedIndex == 5) await renderConfigArrayStructureDuplicateSelector(checker,backFnFunc,structure,structure.options.propertyChecker,localData,parent,parentIndex,path)
 }
 
-
 async function renderAdditionConfigTypeSwitchStructure(checker:api.ODChecker,backFn:(() => api.ODPromiseVoid),nextFn:((data:any) => api.ODPromiseVoid),structure:api.ODCheckerTypeSwitchStructure,parent:object|any[],parentIndex:string|number,path:(string|number)[],localPath:(string|number)[]){
     renderHeader(path)
     terminal(ansis.bold.green("You are now creating "+(typeof parentIndex == "string" ? "the property "+ansis.blue("\""+parentIndex+"\"") : "property "+ansis.blue("#"+(parentIndex+1)))+".\n")+ansis.italic.gray("(use arrow keys to navigate, go back using escape)\n"))
@@ -972,12 +930,4 @@ async function renderAdditionConfigTypeSwitchStructure(checker:api.ODChecker,bac
     else if (answer.selectedText.startsWith("Create as object") && structure.options.object) await renderAdditionConfigObjectStructure(checker,async () => {await renderAdditionConfigTypeSwitchStructure(checker,backFn,nextFn,structure,parent,parentIndex,path,localPath)},nextFn,structure.options.object,parent,parentIndex,path,localPath)
     else if (answer.selectedText.startsWith("Create as array/list") && structure.options.array) await renderAdditionConfigArrayStructureSelector(checker,async () => {await renderAdditionConfigTypeSwitchStructure(checker,backFn,nextFn,structure,parent,parentIndex,path,localPath)},nextFn,structure.options.array,parent,parentIndex,path,localPath)
     else if (answer.selectedText.startsWith("Create as null") && structure.options.null) await renderAdditionConfigNullStructure(checker,async () => {await renderAdditionConfigTypeSwitchStructure(checker,backFn,nextFn,structure,parent,parentIndex,path,localPath)},nextFn,structure.options.null,parent,parentIndex,path,localPath)
-}
-
-export async function execute(){
-    if (terminal.width < 100 || terminal.height < 35){
-        terminal(ansis.red.bold("\n\nMake sure your console or cmd window has a "+ansis.cyan("minimum width & height")+" of "+ansis.cyan("100x35")+" characters."))
-        terminal(ansis.red.bold("\nOtherwise the Open Ticket Interactive Setup CLI will be rendered incorrectly."))
-        terminal(ansis.red.bold("\nThe current terminal dimensions are: "+ansis.cyan(terminal.width+"x"+terminal.height)+"."))
-    }else await renderConfigSelector(terminate)
 }

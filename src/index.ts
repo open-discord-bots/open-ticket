@@ -301,7 +301,7 @@ const main = async () => {
 
     //switch to CLI context instead of running the bot
     if (useCliFlag && useCliFlag.value){
-        await (await (import("./core/startup/cli.js"))).execute()
+        await (await (import("./core/cli/cli.js"))).execute()
         await utilities.timer(1000)
         console.log("\n\n"+ansis.red("❌ Something went wrong in the Interactive Setup CLI. Please try again or report a bug in our discord server."))
         process.exit(0)
