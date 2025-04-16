@@ -255,13 +255,13 @@ export const defaultGeneralStructure = new api.ODCheckerObjectStructure("opendis
         {key:"logs",optional:false,priority:0,checker:new api.ODCheckerEnabledObjectStructure("opendiscord:system-logs",{property:"enabled",enabledValue:true,checker:new api.ODCheckerObjectStructure("opendiscord:system-logs",{children:[
             {key:"enabled",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:logs-enabled",{cliDisplayName:"Enabled",cliDisplayDescription:"Enable/disable discord logs in a discord channel."})},
             {key:"channel",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_DiscordId("opendiscord:logs-channel","channel",false,[],{cliDisplayName:"Log Channel",cliDisplayDescription:"The ID of the discord channel to log messages to. You can configure the messages somewhere else."})},
-        ]}),cliDisplayName:"Discord Logs",cliDisplayDescription:"Manage everything related to logs in a discord channel."})},
+        ],cliDisplayName:"Discord Logs",cliDisplayDescription:"Manage everything related to logs in a discord channel."}),cliDisplayName:"Discord Logs",cliDisplayDescription:"Manage everything related to logs in a discord channel."})},
 
         {key:"limits",optional:false,priority:0,checker:new api.ODCheckerEnabledObjectStructure("opendiscord:limits",{property:"enabled",enabledValue:true,checker:new api.ODCheckerObjectStructure("opendiscord:limits",{children:[
             {key:"enabled",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:limits-enabled",{cliDisplayName:"Enabled",cliDisplayDescription:"Enable/disable global limits."})},
             {key:"globalMaximum",optional:false,priority:0,checker:new api.ODCheckerNumberStructure("opendiscord:limits-global",{zeroAllowed:false,negativeAllowed:false,floatAllowed:false,min:1,cliDisplayName:"Global Maximum",cliDisplayDescription:"The maximum amount of tickets that are able to exist in the server at the same time."})},
             {key:"userMaximum",optional:false,priority:0,checker:new api.ODCheckerNumberStructure("opendiscord:limits-user",{zeroAllowed:false,negativeAllowed:false,floatAllowed:false,min:1,cliDisplayName:"User Maximum",cliDisplayDescription:"The maximum amount of tickets from a specific user that are able to exist in the server at the same time."})}
-        ]}),cliDisplayName:"Global Limits",cliDisplayDescription:"Manage global limits for ticket creation to reduce the workload on your support team."})},
+        ],cliDisplayName:"Global Limits",cliDisplayDescription:"Manage global limits for ticket creation to reduce the workload on your support team."}),cliDisplayName:"Global Limits",cliDisplayDescription:"Manage global limits for ticket creation to reduce the workload on your support team."})},
 
         {key:"permissions",optional:false,priority:0,checker:new api.ODCheckerObjectStructure("opendiscord:system-permissions",{children:[
             {key:"help",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_DiscordId("opendiscord:permissions-help","role",false,["admin","everyone","none"],{cliDisplayName:"Help",cliHideDescriptionInParent:true,cliDisplayDescription:"Set the permissions to 'everyone' for everyone, 'admin' for admin only, 'none' to disable or a custom discord role ID."})},
@@ -324,7 +324,7 @@ export const defaultOptionsStructure = new api.ODCheckerArrayStructure("opendisc
                 checker.createMessage("opendiscord:invalid-button","error",`This button needs to have at least an "emoji" or "label"!`,lt,null,[`"emoji"`,`"label"`],locationId,locationDocs)
                 return false
             }else return true
-        },cliDisplayName:"Button",cliDisplayDescription:"Customise the layout of the button/dropdown of this ticket option."})},
+        },cliDisplayName:"Button",cliDisplayDescription:"Customise the button/dropdown layout of this ticket option."})},
 
         //TICKET ADMINS
         {key:"ticketAdmins",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_DiscordIdArray("opendiscord:ticket-ticket-admins","role",[],{allowDoubles:false,cliDisplayPropertyName:"ticket admin role",cliDisplayName:"Ticket Admin Roles",cliDisplayDescription:"A list of role IDs that are only able to interact with this ticket option."},{cliDisplayName:"Ticket Admin Role",cliDisplayDescription:"The discord role ID of a ticket admin."})},
@@ -349,55 +349,59 @@ export const defaultOptionsStructure = new api.ODCheckerArrayStructure("opendisc
 
         //DM MESSAGE
         {key:"dmMessage",optional:false,priority:0,checker:new api.ODCheckerEnabledObjectStructure("opendiscord:ticket-dm-message",{property:"enabled",enabledValue:true,checker:new api.ODCheckerObjectStructure("opendiscord:ticket-dm-message",{children:[
-            {key:"text",optional:false,priority:0,checker:new api.ODCheckerStringStructure("opendiscord:ticket-message-text",{maxLength:4096})},
+            {key:"enabled",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:ticket-message-enabled",{cliDisplayName:"Enabled",cliDisplayDescription:"Enable/disable the DM message on ticket creation."})},
+            {key:"text",optional:false,priority:0,checker:new api.ODCheckerStringStructure("opendiscord:ticket-message-text",{maxLength:4096,cliDisplayName:"Message Text",cliDisplayDescription:"The raw text of the DM message. Leave empty to only use the embed."})},
             {key:"embed",optional:false,priority:0,checker:createTicketEmbedStructure("opendiscord:ticket-message-embed")}
-        ]})})},
+        ],cliDisplayName:"DM Message",cliDisplayDescription:"The DM message is the message that will be sent to the creator of the ticket when he/she creates a ticket."}),cliDisplayName:"DM Message",cliDisplayDescription:"The DM message is the message that will be sent to the creator of the ticket when he/she creates a ticket."})},
 
         //TICKET MESSAGE
         {key:"ticketMessage",optional:false,priority:0,checker:new api.ODCheckerEnabledObjectStructure("opendiscord:ticket-message",{property:"enabled",enabledValue:true,checker:new api.ODCheckerObjectStructure("opendiscord:ticket-message",{children:[
-            {key:"text",optional:false,priority:0,checker:new api.ODCheckerStringStructure("opendiscord:ticket-message-text",{maxLength:4096})},
+            {key:"enabled",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:ticket-message-enabled",{cliDisplayName:"Enabled",cliDisplayDescription:"Enable/disable the ticket message on ticket creation. (Recommended)"})},
+            {key:"text",optional:false,priority:0,checker:new api.ODCheckerStringStructure("opendiscord:ticket-message-text",{maxLength:4096,cliDisplayName:"Message Text",cliDisplayDescription:"The raw text of the ticket message. Leave empty to only use the embed."})},
             {key:"embed",optional:false,priority:0,checker:createTicketEmbedStructure("opendiscord:ticket-message-embed")},
             {key:"ping",optional:false,priority:0,checker:createTicketPingStructure("opendiscord:ticket-message-ping")}
-        ]})})},
+        ],cliDisplayName:"Ticket Message",cliDisplayDescription:"The Ticket Message is the message that will be sent in the ticket itself. It contains a few buttons for quick access to actions."}),cliDisplayName:"Ticket Message",cliDisplayDescription:"The Ticket Message is the message that will be sent in the ticket itself. It contains a few buttons for quick access to actions."})},
 
         //AUTOCLOSE
         {key:"autoclose",optional:false,priority:0,checker:new api.ODCheckerObjectStructure("opendiscord:ticket-autoclose",{children:[
-            {key:"enableInactiveHours",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:ticket-autoclose-enable-hours",{})},
-            {key:"inactiveHours",optional:false,priority:0,checker:new api.ODCheckerNumberStructure("opendiscord:ticket-autoclose-hours",{zeroAllowed:false,negativeAllowed:false,floatAllowed:true,min:1,max:8544})},
-            {key:"enableUserLeave",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:ticket-autoclose-enable-leave",{})},
-            {key:"disableOnClaim",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:ticket-autoclose-disable-claim",{})},
-        ]})},
+            {key:"enableInactiveHours",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:ticket-autoclose-enable-hours",{cliDisplayName:"Enable Inactive Hours",cliDisplayDescription:"Enable/disable closing the ticket when it has been inactive for the configured amount of time."})},
+            {key:"inactiveHours",optional:false,priority:0,checker:new api.ODCheckerNumberStructure("opendiscord:ticket-autoclose-hours",{zeroAllowed:false,negativeAllowed:false,floatAllowed:true,min:1,max:8544,cliDisplayName:"Inactive Hours",cliDisplayDescription:"The amount of hours the ticket must be inactive."})},
+            {key:"enableUserLeave",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:ticket-autoclose-enable-leave",{cliDisplayName:"Enable User Leave",cliDisplayDescription:"Instantly close the ticket when the creator of the ticket leaves the server."})},
+            {key:"disableOnClaim",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:ticket-autoclose-disable-claim",{cliDisplayName:"Disable On Claim",cliDisplayDescription:"Disable the autoclose system when the ticket is claimed by any admin."})},
+        ],cliDisplayName:"Autoclose",cliDisplayDescription:"Manage the autoclose system for this ticket type/option."})},
 
         //AUTODELETE
         {key:"autodelete",optional:false,priority:0,checker:new api.ODCheckerObjectStructure("opendiscord:ticket-autodelete",{children:[
-            {key:"enableInactiveDays",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:ticket-autodelete-enable-days",{})},
-            {key:"inactiveDays",optional:false,priority:0,checker:new api.ODCheckerNumberStructure("opendiscord:ticket-autodelete-days",{zeroAllowed:false,negativeAllowed:false,floatAllowed:true,min:1,max:356})},
-            {key:"enableUserLeave",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:ticket-autodelete-enable-leave",{})},
-            {key:"disableOnClaim",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:ticket-autodelete-disable-claim",{})},
-        ]})},
+            {key:"enableInactiveDays",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:ticket-autodelete-enable-days",{cliDisplayName:"Enable Inactive Days",cliDisplayDescription:"Enable/disable deleting the ticket when it has been inactive for the configured amount of time."})},
+            {key:"inactiveDays",optional:false,priority:0,checker:new api.ODCheckerNumberStructure("opendiscord:ticket-autodelete-days",{zeroAllowed:false,negativeAllowed:false,floatAllowed:true,min:1,max:356,cliDisplayName:"Inactive Days",cliDisplayDescription:"The amount of days the ticket must be inactive."})},
+            {key:"enableUserLeave",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:ticket-autodelete-enable-leave",{cliDisplayName:"Enable User Leave",cliDisplayDescription:"Instantly delete the ticket when the creator of the ticket leaves the server."})},
+            {key:"disableOnClaim",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:ticket-autodelete-disable-claim",{cliDisplayName:"Disable On Claim",cliDisplayDescription:"Disable the autodelete system when the ticket is claimed by any admin."})},
+        ],cliDisplayName:"Autodelete",cliDisplayDescription:"Manage the autodelete system for this ticket type/option."})},
 
         //COOLDOWN
         {key:"cooldown",optional:false,priority:0,checker:new api.ODCheckerEnabledObjectStructure("opendiscord:ticket-cooldown",{property:"enabled",enabledValue:true,checker:new api.ODCheckerObjectStructure("opendiscord:ticket-cooldown",{children:[
-            {key:"cooldownMinutes",optional:false,priority:0,checker:new api.ODCheckerNumberStructure("opendiscord:ticket-cooldown-minutes",{zeroAllowed:false,negativeAllowed:false,floatAllowed:false,min:1,max:512640})},
-        ]})})},
+            {key:"enabled",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:ticket-cooldown-enabled",{cliDisplayName:"Enabled",cliDisplayDescription:"Enable/disable the cooldown of this ticket option."})},
+            {key:"cooldownMinutes",optional:false,priority:0,checker:new api.ODCheckerNumberStructure("opendiscord:ticket-cooldown-minutes",{zeroAllowed:false,negativeAllowed:false,floatAllowed:false,min:1,max:512640,cliDisplayName:"Cooldown Minutes",cliDisplayDescription:"The amount of minutes a user needs to wait before creating another ticket of this type/option."})},
+        ],cliDisplayName:"Cooldown",cliDisplayDescription:"Manage cooldowns for this ticket type/option."}),cliDisplayName:"Cooldown",cliDisplayDescription:"Manage cooldowns for this ticket type/option."})},
 
         //LIMITS
         {key:"limits",optional:false,priority:0,checker:new api.ODCheckerEnabledObjectStructure("opendiscord:ticket-limits",{property:"enabled",enabledValue:true,checker:new api.ODCheckerObjectStructure("opendiscord:ticket-limits",{children:[
-            {key:"globalMaximum",optional:false,priority:0,checker:new api.ODCheckerNumberStructure("opendiscord:ticket-limits-global",{zeroAllowed:false,negativeAllowed:false,floatAllowed:false,min:1})},
-            {key:"userMaximum",optional:false,priority:0,checker:new api.ODCheckerNumberStructure("opendiscord:ticket-limits-user",{zeroAllowed:false,negativeAllowed:false,floatAllowed:false,min:1})}
-        ]})})},
-    ]})},
+            {key:"enabled",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:ticket-limits-enabled",{cliDisplayName:"Enabled",cliDisplayDescription:"Enable/disable the limits of this ticket option. This is not related to the global ticket limits."})},
+            {key:"globalMaximum",optional:false,priority:0,checker:new api.ODCheckerNumberStructure("opendiscord:ticket-limits-global",{zeroAllowed:false,negativeAllowed:false,floatAllowed:false,min:1,cliDisplayName:"Global Maximum",cliDisplayDescription:"The maximum amount of tickets of this type/option that are able to exist in the server at the same time."})},
+            {key:"userMaximum",optional:false,priority:0,checker:new api.ODCheckerNumberStructure("opendiscord:ticket-limits-user",{zeroAllowed:false,negativeAllowed:false,floatAllowed:false,min:1,cliDisplayName:"User Maximum",cliDisplayDescription:"The maximum amount of tickets of this type/option from a specific user that are able to exist in the server at the same time."})}
+        ],cliDisplayName:"Option Limits",cliDisplayDescription:"Manage option-based limits for ticket creation to reduce the workload on your support team."}),cliDisplayName:"Limits",cliDisplayDescription:"Manage option-based limits for ticket creation to reduce the workload on your support team."})},
+    ],cliDisplayName:"Ticket Option",cliDisplayDescription:"Manage all ticket-specific settings of this option/type."})},
 
     //WEBSITE
-    {name:"website",priority:0,properties:[{key:"type",value:"website"}],checker:new api.ODCheckerObjectStructure("opendiscord:options-website",{cliDisplayKeyInParentArray:"name",cliDisplayAdditionalKeysInParentArray:["id","type"],children:[
-        {key:"id",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_UniqueId("opendiscord:website-id","openticket","option-ids",{regex:/^[A-Za-z0-9-éèçàêâôûî]+$/,minLength:3,maxLength:40})},
-        {key:"name",optional:false,priority:0,checker:new api.ODCheckerStringStructure("opendiscord:website-name",{minLength:2,maxLength:45})},
-        {key:"description",optional:false,priority:0,checker:new api.ODCheckerStringStructure("opendiscord:website-description",{maxLength:256})},
+    {name:"Website",priority:0,properties:[{key:"type",value:"website"}],checker:new api.ODCheckerObjectStructure("opendiscord:website",{cliDisplayKeyInParentArray:"name",cliDisplayAdditionalKeysInParentArray:["id","type"],children:[
+        {key:"id",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_UniqueId("opendiscord:website-id","openticket","option-ids",{regex:/^[A-Za-z0-9-éèçàêâôûî]+$/,minLength:3,maxLength:40,cliDisplayName:"Id",cliDisplayDescription:"The id of this website option. Used in panels."})},
+        {key:"name",optional:false,priority:0,checker:new api.ODCheckerStringStructure("opendiscord:website-name",{minLength:2,maxLength:45,cliDisplayName:"Name",cliDisplayDescription:"The name of this website option."})},
+        {key:"description",optional:false,priority:0,checker:new api.ODCheckerStringStructure("opendiscord:website-description",{maxLength:256,cliDisplayName:"Description",cliDisplayDescription:"The description of this website option."})},
         
         //WEBSITE BUTTON
         {key:"button",optional:false,priority:0,checker:new api.ODCheckerObjectStructure("opendiscord:ticket-button",{children:[
-            {key:"emoji",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_EmojiString("opendiscord:ticket-button-emoji",0,1,true)},
-            {key:"label",optional:false,priority:0,checker:new api.ODCheckerStringStructure("opendiscord:ticket-button-label",{maxLength:80})},
+            {key:"emoji",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_EmojiString("opendiscord:ticket-button-emoji",0,1,true,{cliDisplayName:"Emoji",cliDisplayDescription:"The emoji of the button. At least 1 of 2 (emoji/label) must be provided."})},
+            {key:"label",optional:false,priority:0,checker:new api.ODCheckerStringStructure("opendiscord:ticket-button-label",{maxLength:80,cliDisplayName:"Label",cliDisplayDescription:"The label of the button. At least 1 of 2 (emoji/label) must be provided."})},
         ],custom:(checker,value,locationTrace,locationId,locationDocs) => {
             const lt = checker.locationTraceDeref(locationTrace)
             //check if emoji & label exists
@@ -407,23 +411,23 @@ export const defaultOptionsStructure = new api.ODCheckerArrayStructure("opendisc
                 checker.createMessage("opendiscord:invalid-button","error",`This button needs to have at least an "emoji" or "label"!`,lt,null,[`"emoji"`,`"label"`],locationId,locationDocs)
                 return false
             }else return true
-        }})},
+        },cliDisplayName:"Button",cliDisplayDescription:"Customise the button layout of this website option."})},
 
         //WEBSITE URL
-        {key:"url",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_UrlString("opendiscord:website-url",false,{allowHttp:false})},
-    ]})},
+        {key:"url",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_UrlString("opendiscord:website-url",false,{allowHttp:false},{cliDisplayName:"URL",cliDisplayDescription:"The URL this button will link to."})},
+    ],cliDisplayName:"Website Option",cliDisplayDescription:"Manage all settings of this website/url option."})},
 
     //REACTION ROLES
-    {name:"role",priority:0,properties:[{key:"type",value:"role"}],checker:new api.ODCheckerObjectStructure("opendiscord:options-role",{cliDisplayKeyInParentArray:"name",cliDisplayAdditionalKeysInParentArray:["id","type"],children:[
-        {key:"id",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_UniqueId("opendiscord:role-id","openticket","option-ids",{regex:/^[A-Za-z0-9-éèçàêâôûî]+$/,minLength:3,maxLength:40})},
-        {key:"name",optional:false,priority:0,checker:new api.ODCheckerStringStructure("opendiscord:role-name",{minLength:2,maxLength:45})},
-        {key:"description",optional:false,priority:0,checker:new api.ODCheckerStringStructure("opendiscord:role-description",{maxLength:256})},
+    {name:"Reaction Role",priority:0,properties:[{key:"type",value:"role"}],checker:new api.ODCheckerObjectStructure("opendiscord:role",{cliDisplayKeyInParentArray:"name",cliDisplayAdditionalKeysInParentArray:["id","type"],children:[
+        {key:"id",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_UniqueId("opendiscord:role-id","openticket","option-ids",{regex:/^[A-Za-z0-9-éèçàêâôûî]+$/,minLength:3,maxLength:40,cliDisplayName:"Id",cliDisplayDescription:"The id of this role option. Used in panels."})},
+        {key:"name",optional:false,priority:0,checker:new api.ODCheckerStringStructure("opendiscord:role-name",{minLength:2,maxLength:45,cliDisplayName:"Name",cliDisplayDescription:"The name of this role option."})},
+        {key:"description",optional:false,priority:0,checker:new api.ODCheckerStringStructure("opendiscord:role-description",{maxLength:256,cliDisplayName:"Description",cliDisplayDescription:"The description of this role option."})},
 
         //ROLE BUTTON
         {key:"button",optional:false,priority:0,checker:new api.ODCheckerObjectStructure("opendiscord:ticket-button",{children:[
-            {key:"emoji",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_EmojiString("opendiscord:ticket-button-emoji",0,1,true)},
-            {key:"label",optional:false,priority:0,checker:new api.ODCheckerStringStructure("opendiscord:ticket-button-label",{maxLength:80})},
-            {key:"color",optional:false,priority:0,checker:new api.ODCheckerStringStructure("opendiscord:ticket-button-color",{choices:["gray","red","green","blue"]})},
+            {key:"emoji",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_EmojiString("opendiscord:ticket-button-emoji",0,1,true,{cliDisplayName:"Emoji",cliDisplayDescription:"The emoji of the button. At least 1 of 2 (emoji/label) must be provided."})},
+            {key:"label",optional:false,priority:0,checker:new api.ODCheckerStringStructure("opendiscord:ticket-button-label",{maxLength:80,cliDisplayName:"Label",cliDisplayDescription:"The label of the button. At least 1 of 2 (emoji/label) must be provided."})},
+            {key:"color",optional:false,priority:0,checker:new api.ODCheckerStringStructure("opendiscord:ticket-button-color",{choices:["gray","red","green","blue"],cliDisplayName:"Color",cliDisplayDescription:"The color of the button. Does not apply when using a dropdown panel."})},
         ],custom:(checker,value,locationTrace,locationId,locationDocs) => {
             const lt = checker.locationTraceDeref(locationTrace)
             //check if emoji & label exists
@@ -433,39 +437,39 @@ export const defaultOptionsStructure = new api.ODCheckerArrayStructure("opendisc
                 checker.createMessage("opendiscord:invalid-button","error",`This button needs to have at least an "emoji" or "label"!`,lt,null,[`"emoji"`,`"label"`],locationId,locationDocs)
                 return false
             }else return true
-        }})},
+        },cliDisplayName:"Button",cliDisplayDescription:"Customise the button layout of this reaction role option."})},
 
         //ROLE SETTINGS
-        {key:"roles",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_DiscordIdArray("opendiscord:role-roles","role",[],{allowDoubles:false,minLength:1,cliDisplayPropertyName:"role"})},
-        {key:"mode",optional:false,priority:0,checker:new api.ODCheckerStringStructure("opendiscord:role-mode",{choices:["add","remove","add&remove"]})},
-        {key:"removeRolesOnAdd",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_DiscordIdArray("opendiscord:role-remove-roles","role",[],{allowDoubles:false,cliDisplayPropertyName:"role"})},
-        {key:"addOnMemberJoin",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:role-add-on-join",{})},
-    ]})},
-]})})
+        {key:"roles",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_DiscordIdArray("opendiscord:role-roles","role",[],{allowDoubles:false,minLength:1,cliDisplayPropertyName:"role",cliDisplayName:"Roles",cliDisplayDescription:"A list of roles to add/remove when clicking on the button."},{cliDisplayName:"Role",cliDisplayDescription:"The discord role ID you want to add/remove."})},
+        {key:"mode",optional:false,priority:0,checker:new api.ODCheckerStringStructure("opendiscord:role-mode",{choices:["add","remove","add&remove"],cliDisplayName:"Mode",cliDisplayDescription:"Decide how the button will work: add-only, remove-only or add & remove."})},
+        {key:"removeRolesOnAdd",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_DiscordIdArray("opendiscord:role-remove-roles","role",[],{allowDoubles:false,cliDisplayPropertyName:"role",cliDisplayName:"Remove Roles On Add",cliDisplayDescription:"An additional list of roles to remove when the roles of this option are added. (Can be used to select between roles)"},{cliDisplayName:"Remove Role",cliDisplayDescription:"The discord role ID you want to remove when other roles are added."})},
+        {key:"addOnMemberJoin",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:role-add-on-join",{cliDisplayName:"Add On Member Join",cliDisplayDescription:"Automatically add these roles to a user when joining the server."})},
+    ],cliDisplayName:"Reaction Role Option",cliDisplayDescription:"Manage all settings of this reaction role option."})},
+],cliDisplayName:"Option",cliDisplayDescription:"Manage an option of one of the 3 types: ticket, website, role."}),cliDisplayName:"Options",cliDisplayDescription:"A list of all options in the bot. Here you can add, modify & remove ticket types, website buttons & reaction roles!"})
 
 export const defaultPanelsStructure = new api.ODCheckerArrayStructure("opendiscord:panels",{allowedTypes:["object"],cliDisplayPropertyName:"panel",propertyChecker:new api.ODCheckerObjectStructure("opendiscord:panels",{cliDisplayKeyInParentArray:"name",cliDisplayAdditionalKeysInParentArray:["id","dropdown"],children:[
-    {key:"id",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_UniqueId("opendiscord:panel-id","openticket","panel-ids",{regex:/^[A-Za-z0-9-éèçàêâôûî]+$/,minLength:3,maxLength:40})},
-    {key:"name",optional:false,priority:0,checker:new api.ODCheckerStringStructure("opendiscord:panel-name",{minLength:3,maxLength:50})},
-    {key:"dropdown",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:panel-dropdown",{})},
-    {key:"options",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_UniqueIdArray("opendiscord:panel-options","openticket","option-ids","option-ids-used",{allowDoubles:false,maxLength:25,cliDisplayPropertyName:"option"})},
+    {key:"id",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_UniqueId("opendiscord:panel-id","openticket","panel-ids",{regex:/^[A-Za-z0-9-éèçàêâôûî]+$/,minLength:3,maxLength:40,cliDisplayName:"Id",cliDisplayDescription:"The id of this panel. Used in the /panel command."})},
+    {key:"name",optional:false,priority:0,checker:new api.ODCheckerStringStructure("opendiscord:panel-name",{minLength:3,maxLength:50,cliDisplayName:"Name",cliDisplayDescription:"The name of this panel."})},
+    {key:"dropdown",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:panel-dropdown",{cliDisplayName:"Dropdown",cliDisplayDescription:"Decide whether to use buttons or a dropdown in the panel. Dropdowns only support options of the 'ticket' type!"})},
+    {key:"options",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_UniqueIdArray("opendiscord:panel-options","openticket","option-ids","option-ids-used",{allowDoubles:false,maxLength:25,cliDisplayPropertyName:"option",cliDisplayName:"Options",cliDisplayDescription:"A list of valid option IDs to show in this panel."},{cliDisplayName:"Option ID",cliDisplayDescription:"A valid option ID from the options.json config."})},
     
     //EMBED & TEXT
-    {key:"text",optional:false,priority:0,checker:new api.ODCheckerStringStructure("opendiscord:panel-text",{maxLength:4096})},
+    {key:"text",optional:false,priority:0,checker:new api.ODCheckerStringStructure("opendiscord:panel-text",{maxLength:4096,cliDisplayName:"Panel Text",cliDisplayDescription:"The raw text of the panel message. Leave empty to use the embed."})},
     {key:"embed",optional:false,priority:0,checker:createPanelEmbedStructure("opendiscord:panel-embed")},
     
     //SETTINGS
     {key:"settings",optional:false,priority:0,checker:new api.ODCheckerObjectStructure("opendiscord:panel-settings",{children:[
-        {key:"dropdownPlaceholder",optional:false,priority:0,checker:new api.ODCheckerStringStructure("opendiscord:panel-settings-placeholder",{maxLength:100})},
-        {key:"enableMaxTicketsWarningInText",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:panel-settings-maxtickets-text",{})},
-        {key:"enableMaxTicketsWarningInEmbed",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:panel-settings-maxtickets-embed",{})},
+        {key:"dropdownPlaceholder",optional:false,priority:0,checker:new api.ODCheckerStringStructure("opendiscord:panel-settings-placeholder",{maxLength:100,cliDisplayName:"Dropdown Placeholder",cliDisplayDescription:"Configure the text displayed in the dropdown when nothing is selected."})},
+        {key:"enableMaxTicketsWarningInText",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:panel-settings-maxtickets-text",{cliDisplayName:"Enable Max Tickets Warning (Text)",cliDisplayDescription:"Enable/disable the warning which shows how many tickets you can create in the text contents of the panel."})},
+        {key:"enableMaxTicketsWarningInEmbed",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:panel-settings-maxtickets-embed",{cliDisplayName:"Enable Max Tickets Warning (Embed)",cliDisplayDescription:"Enable/disable the warning which shows how many tickets you can create in the embed of the panel."})},
         
-        {key:"describeOptionsLayout",optional:false,priority:0,checker:new api.ODCheckerStringStructure("opendiscord:panel-settings-describe-layout",{choices:["simple","normal","detailed"]})},
-        {key:"describeOptionsCustomTitle",optional:false,priority:0,checker:new api.ODCheckerStringStructure("opendiscord:panel-settings-describe-title",{maxLength:512})},
-        {key:"describeOptionsInText",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:panel-settings-describe-text",{})},
-        {key:"describeOptionsInEmbedFields",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:panel-settings-describe-fields",{})},
-        {key:"describeOptionsInEmbedDescription",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:panel-settings-describe-embed",{})},
-    ]})},
-]})})
+        {key:"describeOptionsLayout",optional:false,priority:0,checker:new api.ODCheckerStringStructure("opendiscord:panel-settings-describe-layout",{choices:["simple","normal","detailed"],cliDisplayName:"Describe Options Layout",cliDisplayDescription:"The layout to use in the auto-generated option descriptions (simple, normal, detailed)."})},
+        {key:"describeOptionsCustomTitle",optional:false,priority:0,checker:new api.ODCheckerStringStructure("opendiscord:panel-settings-describe-title",{maxLength:512,cliDisplayName:"Describe Options Title",cliDisplayDescription:"Customise the title to use in the auto-generated option descriptions."})},
+        {key:"describeOptionsInText",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:panel-settings-describe-text",{cliDisplayName:"Describe Options In Text",cliDisplayDescription:"Enable/disable showing the auto-generated option descriptions in the raw text contents of the panel."})},
+        {key:"describeOptionsInEmbedFields",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:panel-settings-describe-fields",{cliDisplayName:"Describe Options In Embed Fields",cliDisplayDescription:"Enable/disable showing the auto-generated option descriptions in the embed fields of the panel."})},
+        {key:"describeOptionsInEmbedDescription",optional:false,priority:0,checker:new api.ODCheckerBooleanStructure("opendiscord:panel-settings-describe-embed",{cliDisplayName:"Describe Options In Embed Description",cliDisplayDescription:"Enable/disable showing the auto-generated option descriptions in the embed description of the panel."})},
+    ],cliDisplayName:"Settings",cliDisplayDescription:"Manage additional settings & customisability for this panel."})},
+],cliDisplayName:"Panel",cliDisplayDescription:"Manage, customise and configure a panel to your preference."}),cliDisplayName:"Panels",cliDisplayDescription:"A list of all panels in the bot. Here you can add, modify & remove existing panels or customise them to your preference."})
 
 export const defaultQuestionsStructure = new api.ODCheckerArrayStructure("opendiscord:questions",{allowedTypes:["object"],cliDisplayPropertyName:"question",propertyChecker:new api.ODCheckerObjectStructure("opendiscord:questions",{cliDisplayKeyInParentArray:"name",cliDisplayAdditionalKeysInParentArray:["id","type"],children:[
     {key:"id",optional:false,priority:0,checker:new api.ODCheckerCustomStructure_UniqueId("opendiscord:question-id","openticket","question-ids",{regex:/^[A-Za-z0-9-éèçàêâôûî]+$/,minLength:3,maxLength:40})},
