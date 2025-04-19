@@ -169,12 +169,12 @@
             "rolesEmpty":"Geen enkele rollen zijn bijgewerkt!",
 
             "autocloseLeave":"Dit ticket is automatisch gesloten omdat de maker de server verlaten is!",
-            "autocloseTimeout":"Dit ticket is automatisch gesloten omdat het inactief was voor meer dan `{0} uur`!",
+            "autocloseTimeout":"Dit ticket is automatisch gesloten omdat het meer dan `{0} uur` inactief was!",
             "autodeleteLeave":"Dit ticket is automatisch verwijderd omdat de maker de server verlaten is!",
-            "autodeleteTimeout":"Dit ticket is automatisch verwijderd omdat het inactief was voor meer dan `{0} dagen`!",
-            "autocloseEnabled":"Autoclose is ingeschakeld in dit ticket!\nHet wordt gesloten wanneer het inactief is voor meer dan `{0} uur`!",
+            "autodeleteTimeout":"Dit ticket is automatisch verwijderd omdat het meer dan `{0} dagen` inactief was!",
+            "autocloseEnabled":"Autoclose is ingeschakeld in dit ticket!\nHet wordt gesloten na `{0} uur` inactiviteit!",
             "autocloseDisabled":"Autoclose is uitgeschakeld in dit ticket!\nHet wordt niet meer automatisch gesloten!",
-            "autodeleteEnabled":"Autodelete is ingeschakeld in dit ticket!\nHet wordt verwijderd wanneer het inactief is voor meer dan `{0} dagen`!",
+            "autodeleteEnabled":"Autodelete is ingeschakeld in dit ticket!\nHet wordt verwijderd na `{0} dagen` inactiviteit!",
             "autodeleteDisabled":"Autodelete is uitgeschakeld in dit ticket!\nHet wordt niet meer automatisch verwijderd!",
 
             "ticketMessageLimit":"Je kan maar {0} ticket(s) op het zelfde moment aanmaken!",
