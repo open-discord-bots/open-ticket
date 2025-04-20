@@ -1,6 +1,7 @@
 import {opendiscord, api, utilities} from "../../index"
 import {Terminal, terminal} from "terminal-kit"
 import ansis from "ansis"
+import * as discord from "discord.js"
 import {renderHeader} from "./cli"
 
 export async function renderQuickSetup(backFn:() => api.ODPromiseVoid){
@@ -172,7 +173,41 @@ async function renderQuickSetupBotToken(backFn:() => api.ODPromiseVoid){
             terminal.gray("Your bot should be online with the status 'Configuring Open Ticket...'.")
             await utilities.timer(3000)
             //continue
-            //TODO
+            await renderQuickSetupServer(result,async () => {await renderQuickSetupBotToken(backFn)})
         }
     }
+}
+
+async function renderQuickSetupServer(client:api.ODClientManager,backFn:() => api.ODPromiseVoid){
+    renderHeader("⏱️ Open Ticket Quick Setup: Discord Server")
+
+    terminal.bold.blue("(Step 3) Please select a Discord Server to use.\n")
+    terminal.gray("The bot will only work in this server.\n\n")
+
+    const guilds = await client.getGuilds()
+    const nameList = guilds.map((g) => g.name)
+    const longestName = utilities.getLongestLength(nameList)
+    const guildList = guilds.map((g) => g.name.padEnd(longestName+5," ")+ansis.gray(" ("+g.id+")"))
+
+    const answer = await terminal.singleColumnMenu([ansis.green("🔄 <Refresh List>"),...guildList],{
+        leftPadding:"> ",
+        style:terminal.cyan,
+        selectedStyle:terminal.bgDefaultColor.bold,
+        submittedStyle:terminal.bgBlue,
+        extraLines:2,
+        cancelable:true
+    }).promise
+
+    if (answer.canceled) return backFn()
+    if (answer.selectedIndex == 0) return await renderQuickSetupServer(client,backFn)
+    const server = guilds[answer.selectedIndex-1]
+    await renderQuickSetupAdminRoles(client,server,[],async () => {await renderQuickSetupServer(client,backFn)})
+}
+
+async function renderQuickSetupAdminRoles(client:api.ODClientManager,guild:discord.Guild,selectedAdmins:string[],backFn:() => api.ODPromiseVoid){
+    renderHeader("⏱️ Open Ticket Quick Setup: Admin Roles")
+
+    terminal.bold.blue("(Step 4) Please select all 'Global Admins' roles to use.\n")
+    terminal.gray("Users with one of these roles will be able to access & interact with all tickets.\n\n")
+
 }

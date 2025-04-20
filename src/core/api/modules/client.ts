@@ -114,7 +114,7 @@ export class ODClientManager {
         this.#debug.debug("Created client with permissions: "+this.permissions.join(", "))
     }
     /**Get all servers the bot is part of. */
-    getGuilds(){
+    async getGuilds(): Promise<discord.Guild[]> {
         if (!this.initiated) throw new ODSystemError("Client isn't initiated yet!")
         if (!this.ready) throw new ODSystemError("Client isn't ready yet!")
         
