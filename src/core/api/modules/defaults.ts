@@ -13,6 +13,8 @@ export interface ODDefaults {
     crashOnError:boolean,
     /**Enable the system responsible for the `--debug` flag. */
     debugLoading:boolean,
+    /**Enable the system responsible for the `--silent` flag. */
+    silentLoading:boolean,
     /**When enabled, you're able to use the "!OPENTICKET:dump" command to send the OT debug file. This is only possible when you're the owner of the bot. */
     allowDumpCommand:boolean,
     /**Enable loading all Open Ticket plugins, sadly enough is only useful for the system :) */
@@ -233,6 +235,7 @@ export class ODDefaultsManager {
             errorHandling:true,
             crashOnError:false,
             debugLoading:true,
+            silentLoading:true,
             allowDumpCommand:true,
             pluginLoading:true,
             softPluginLoading:false,

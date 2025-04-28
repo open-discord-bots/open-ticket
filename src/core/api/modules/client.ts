@@ -114,7 +114,7 @@ export class ODClientManager {
         this.#debug.debug("Created client with permissions: "+this.permissions.join(", "))
     }
     /**Get all servers the bot is part of. */
-    getGuilds(){
+    async getGuilds(): Promise<discord.Guild[]> {
         if (!this.initiated) throw new ODSystemError("Client isn't initiated yet!")
         if (!this.ready) throw new ODSystemError("Client isn't ready yet!")
         
@@ -135,8 +135,8 @@ export class ODClientManager {
             })
         }
     }
-    /**Log-in with a discord auth token. */
-    login(): Promise<boolean> {
+    /**Log-in with a discord auth token. Rejects returns `false` using 'softErrors' on failure. */
+    login(softErrors?:boolean): Promise<boolean> {
         return new Promise(async (resolve,reject) => {
             if (!this.initiated) reject("Client isn't initiated yet!")
             if (!this.token) reject("Client doesn't have a token!")
@@ -158,7 +158,8 @@ export class ODClientManager {
                 this.#debug.debug("Finished discord.js client.login()")
                 this.loggedIn = true
             }catch(err){
-                if (err.message.toLowerCase().includes("used disallowed intents")){
+                if (softErrors) return resolve(false)
+                else if (err.message.toLowerCase().includes("used disallowed intents")){
                     process.emit("uncaughtException",new ODSystemError("Used disallowed intents"))
                 }else if (err.message.toLowerCase().includes("tokeninvalid") || err.message.toLowerCase().includes("an invalid token was provided")){
                     process.emit("uncaughtException",new ODSystemError("Invalid discord bot token provided"))

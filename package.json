@@ -14,9 +14,11 @@
     "scripts": {
         "build": "node index.js --compile-only",
         "start": "node index.js",
+        "setup": "node index.js --cli",
         "startnc": "node index.js --no-compile",
-        "test": "node index.js --dev-config --dev-database",
-        "testnc": "node index.js --no-compile --dev-config --dev-database",
+        "test": "node index.js --dev-config --dev-database --soft-plugins",
+        "testsetup": "node index.js --cli --dev-config --dev-database --soft-plugins",
+        "testnc": "node index.js --no-compile --dev-config --dev-database --soft-plugins",
         "docs": "npx typedoc --options .docs/typedoc-config.json && node .docs/createDocs.js"
     },
     "type": "commonjs",
@@ -24,9 +26,11 @@
     "dependencies": {
         "@discordjs/rest": "^2.4.2",
         "@types/node": "^22.5.0",
+        "@types/terminal-kit": "^2.5.7",
         "ansis": "^2.3.0",
         "discord.js": "^14.19.1",
-        "formatted-json-stringify": "^1.1.0",
+        "formatted-json-stringify": "^1.2.1",
+        "terminal-kit": "^3.1.2",
         "typescript": "^5.5.4"
     },
     "repository": {

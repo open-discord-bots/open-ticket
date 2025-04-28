@@ -31,12 +31,13 @@ moduleInstalled("discord.js",true)
 moduleInstalled("ansis",true)
 moduleInstalled("formatted-json-stringify",true)
 moduleInstalled("typescript",true)
+moduleInstalled("terminal-kit",true)
 tempError()
 
 //init API
 import * as api from "../api/api" //import for local use
 export * as api from "../api/api" //export to other parts of bot
-
+import ansis from "ansis" //import ansis for usage in initialization
 
 export const opendiscord = new api.ODMain()
 console.log("\n--------------------------- OPEN TICKET STARTUP ---------------------------")
@@ -103,6 +104,10 @@ export interface ODUtilities {
      * Same as `string.replace(search, value)` but with async compatibility
      */
     asyncReplace(text:string, regex:RegExp, func:(value:string,...args:any[]) => Promise<string>): Promise<string>
+    /**## getLongestLength `utility function`
+     * Get the length of the longest string in the array.
+     */
+    getLongestLength(text:string[]): number
     /**## easterEggs `utility object`
      * Object containing data for Open Ticket easter eggs.
      */
@@ -207,6 +212,9 @@ export const utilities: ODUtilities = {
             return replaceResult ?? match
         })
         return result
+    },
+    getLongestLength(texts:string[]): number {
+        return Math.max(...texts.map((t) => ansis.strip(t).length))
     },
     easterEggs:{
         /* THANK YOU TO ALL OUR CONTRIBUTORS!!! */

@@ -19,11 +19,11 @@
 </p>
 
 <p align="center">
-Open Ticket is the most advanced & customisable discord ticket bot that you will ever find! You can customise up to 300+ variables! This includes <code>Html Transcripts</code>, <code>Advanced Plugins</code>, <code>Custom Embeds</code>, <code>Questions/Modals</code>, <code>Stats</code> & more!
-You're also able to customise every little aspect of the bot! From embeds to transcripts. Open Ticket is also translated in more than <code>27 Languages</code>! If you need any help, feel free to join our <a href="https://discord.dj-dj.be">discord server</a>!
+Open Ticket is the most advanced & customisable discord ticket bot available! You are able to customise up to 300+ settings and aspects! This includes <code>Html Transcripts</code>, <code>Advanced Plugins</code>, <code>Custom Embeds</code>, <code>Questions/Modals</code>, <code>Stats</code> & more!
+The bot is translated in more than <code>27 Languages</code> and has been battle tested in large Discord servers! If you need any help, feel free to join our <a href="https://discord.dj-dj.be">discord server</a>!
 </p>
 
-<p align="center"><b>⭐️ Help us grow by giving a star! ⭐️</b></p>
+<h3 align="center"><b>⭐️ Help us grow by giving a star! ⭐️</b></h3>
 
 ### 📌 Features
 - **🦇 pterodactyl support** - Open Ticket works perfect on Pterodactyl based panels! [(Download official eggs)](.eggs/README.md)
@@ -68,10 +68,10 @@ A big thanks to all our sponsors! Without them, it wouldn't be possible to creat
 
 <table>
 <tr>
-<td><img src="https://github.com/roppl3r.png" alt="Profile Picture" width="100px"></td>
+<td><img src="https://github.com/guillee3.png" alt="Profile Picture" width="100px"></td>
 </tr>
 <tr>
-<td align="center"><a href="https://github.com/roppl3r"><b>roppl3r</b></a></td>
+<td align="center"><a href="https://github.com/guillee3"><b>guillee3</b></a></td>
 </tr>
 </table>
 

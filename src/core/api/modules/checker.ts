@@ -289,6 +289,16 @@ export class ODCheckerFunctionManager extends ODManager<ODCheckerFunction> {
  */
 export type ODCheckerLocationTrace = (string|number)[]
 
+/**## ODCheckerOptions `interface`
+ * This interface contains all optional properties to customise in the `ODChecker` class.
+ */
+export interface ODCheckerOptions {
+    /**The name of this config in the Interactive Setup CLI. */
+    cliDisplayName?:string
+    /**The description of this config in the Interactive Setup CLI. */
+    cliDisplayDescription?:string
+} 
+
 /**## ODChecker `class`
  * This is an Open Ticket config checker.
  * 
@@ -310,13 +320,16 @@ export class ODChecker extends ODManagerData {
     messages: ODCheckerMessage[] = []
     /**Temporary storage for the quit status from the check() method (not recommended to use) */
     quit: boolean = false
+    /**All additional properties of this config checker. */
+    options: ODCheckerOptions
 
-    constructor(id:ODValidId, storage: ODCheckerStorage, priority:number, config:ODConfig, structure: ODCheckerStructure){
+    constructor(id:ODValidId, storage: ODCheckerStorage, priority:number, config:ODConfig, structure:ODCheckerStructure, options?:ODCheckerOptions){
         super(id)
         this.storage = storage
         this.priority = priority
         this.config = config
         this.structure = structure
+        this.options = options ?? {}
     }
 
     /**Run this checker. Returns all errors*/
@@ -391,7 +404,15 @@ export interface ODCheckerStructureOptions {
     /**Add a custom checker function. Returns `true` when valid. */
     custom?:(checker:ODChecker, value:ODValidJsonType, locationTrace:ODCheckerLocationTrace, locationId:ODId, locationDocs:string|null) => boolean,
     /**Set the url to the documentation of this variable. */
-    docs?:string
+    docs?:string,
+    /**The name of this config in the Interactive Setup CLI. */
+    cliDisplayName?:string
+    /**The description of this config in the Interactive Setup CLI. */
+    cliDisplayDescription?:string
+    /**Hide the description of this config in the Interactive Setup CLI parent view/list. */
+    cliHideDescriptionInParent?:boolean
+    /**The default value of this variable when creating it in the Interactive Setup CLI. When not specified, the user will be asked to insert a value. */
+    cliInitDefaultValue?:ODValidJsonType
 }
 
 /**## ODCheckerStructure `class`
@@ -426,7 +447,13 @@ export class ODCheckerStructure {
  */
 export interface ODCheckerObjectStructureOptions extends ODCheckerStructureOptions {
     /**Add a checker for a property in an object (can also be optional) */
-    children?:{key:string, checker:ODCheckerStructure, priority:number, optional:boolean}[]
+    children:{key:string, priority:number, optional:boolean, cliHideInEditMode?:boolean, checker:ODCheckerStructure}[],
+    /**A list of keys to skip when creating this object with the Interactive Setup CLI. The default value of these properties will be used instead. */
+    cliInitSkipKeys?:string[],
+    /**The key of a (primitive) property in this object to show the value of in the Interactive Setup CLI when listed in an array. */
+    cliDisplayKeyInParentArray?:string,
+    /**A list of additional (primitive) property keys in this object to show the value of in the Interactive Setup CLI when listed in an array. */
+    cliDisplayAdditionalKeysInParentArray?:string[]
 }
 
 /**## ODCheckerObjectStructure `class`
@@ -500,7 +527,11 @@ export interface ODCheckerStringStructureOptions extends ODCheckerStructureOptio
     /**You need to choose between ... */
     choices?:string[],
     /**The string needs to match this regex */
-    regex?:RegExp
+    regex?:RegExp,
+    /**Provide an optional list for autocomplete when using the Interactive Setup CLI. Defaults to the `choices` option. */
+    cliAutocompleteList?:string[],
+    /**Dynamically provide a list for autocomplete items when using the Interactive Setup CLI. */
+    cliAutocompleteFunc?:() => Promise<string[]|null>
 }
 
 /**## ODCheckerStringStructure `class`
@@ -718,7 +749,9 @@ export interface ODCheckerArrayStructureOptions extends ODCheckerStructureOption
     /**Allow double values (only for `string`, `number` & `boolean`) */
     allowDoubles?:boolean
     /**Only allow these types in the array (for multi-type propertyCheckers) */
-    allowedTypes?:("string"|"number"|"boolean"|"null"|"array"|"object"|"other")[]
+    allowedTypes?:("string"|"number"|"boolean"|"null"|"array"|"object"|"other")[],
+    /**The name of the properties inside this array. Used in the GUI of the Interactive Setup CLI. */
+    cliDisplayPropertyName?:string
 }
 
 /**## ODCheckerArrayStructure `class`
@@ -863,15 +896,15 @@ export interface ODCheckerTypeSwitchStructureOptions extends ODCheckerStructureO
     /**A checker when the property is a boolean */
     boolean?:ODCheckerBooleanStructure,
     /**A checker when the property is null */
-    null?:ODCheckerStructure,
+    null?:ODCheckerNullStructure,
     /**A checker when the property is an array */
-    array?:ODCheckerStructure,
+    array?:ODCheckerArrayStructure,
     /**A checker when the property is an object */
     object?:ODCheckerObjectStructure,
     /**A checker when the property is something else */
     other?:ODCheckerStructure,
     /**A list of allowed types */
-    allowedTypes?:("string"|"number"|"boolean"|"null"|"array"|"object"|"other")[]
+    allowedTypes:("string"|"number"|"boolean"|"null"|"array"|"object"|"other")[]
 }
 
 /**## ODCheckerTypeSwitchStructure `class`
@@ -925,9 +958,9 @@ export class ODCheckerTypeSwitchStructure extends ODCheckerStructure {
  */
 export interface ODCheckerObjectSwitchStructureOptions extends ODCheckerStructureOptions {
     /**An array of object checkers with their name, properties & priority. */
-    objects?:{
+    objects:{
         /**The properties to match for this checker to be used. */
-        properties:{key:string, value:any}[],
+        properties:{key:string, value:boolean|string|number}[],
         /**The name for this object type (used in rendering) */
         name:string,
         /**The higher the priority, the earlier this checker will be tested. */
@@ -993,11 +1026,11 @@ export class ODCheckerObjectSwitchStructure extends ODCheckerStructure {
  */
 export interface ODCheckerEnabledObjectStructureOptions extends ODCheckerStructureOptions {
     /**The name of the property to match the `enabledValue`. */
-    property?:string,
-    /**The value of the property to be enabled. Defaults to `true` */
-    enabledValue?:any,
+    property:string,
+    /**The value of the property to be enabled. (e.g. `true`) */
+    enabledValue:boolean|string|number,
     /**The object checker to use once the property has been matched. */
-    checker?:ODCheckerObjectStructure
+    checker:ODCheckerObjectStructure
 }
 
 /**## ODCheckerEnabledObjectStructure `class`
@@ -1387,35 +1420,29 @@ export class ODCheckerCustomStructure_UniqueIdArray extends ODCheckerArrayStruct
     /**The scope to push unique ids when used in this array! */
     readonly usedScope: string|null
 
-    constructor(id:ODValidId, source:string, scope:string, usedScope?:string, options?:ODCheckerArrayStructureOptions){
+    constructor(id:ODValidId, source:string, scope:string, usedScope?:string, options?:ODCheckerArrayStructureOptions, idOptions?:Omit<ODCheckerStringStructureOptions,"minLength"|"custom">){
         //add premade custom structure checker
         const newOptions = options ?? {}
-        newOptions.custom = (checker,value,locationTrace,locationId,locationDocs) => {
-            const lt = checker.locationTraceDeref(locationTrace)
+        newOptions.propertyChecker = new ODCheckerStringStructure("opendiscord:unique-id",{...(idOptions ?? {}),minLength:1,custom:(checker,value,locationTrace,locationId,locationDocs) => {
+            if (typeof value != "string") return false
+            const localLt = checker.locationTraceDeref(locationTrace)
+            localLt.pop()
 
-            if (!Array.isArray(value)) return false
-            const uniqueArray: string[] = (checker.storage.get(source,scope) === null) ? [] : checker.storage.get(source,scope)
-
-            let localQuit = false
-            value.forEach((id,index) => {
-                if (typeof id != "string") return
-                const localLt = checker.locationTraceDeref(lt)
-                localLt.push(index)
-                if (uniqueArray.includes(id)){
-                    //exists
-                    if (usedScope){
-                        const current: string[] = checker.storage.get(source,usedScope) ?? []
-                        current.push(id)
-                        checker.storage.set(source,usedScope,current)
-                    }
-                }else{
-                    //doesn't exist
-                    checker.createMessage("opendiscord:id-non-existent","error",`The id "${id}" doesn't exist!`,localLt,null,[`"${id}"`],this.id,(this.options.docs ?? null))
-                    localQuit = true
+            const uniqueArray: string[] = checker.storage.get(source,scope) ?? []
+            if (uniqueArray.includes(value)){
+                //exists
+                if (usedScope){
+                    const current: string[] = checker.storage.get(source,usedScope) ?? []
+                    current.push(value)
+                    checker.storage.set(source,usedScope,current)
                 }
-            })
-            return !localQuit
-        }
+                return true
+            }else{
+                //doesn't exist
+                checker.createMessage("opendiscord:id-non-existent","error",`The id "${value}" doesn't exist!`,localLt,null,[`"${value}"`],locationId,locationDocs)
+                return false
+            }
+        }})
         super(id,newOptions)
         this.source = source
         this.scope = scope

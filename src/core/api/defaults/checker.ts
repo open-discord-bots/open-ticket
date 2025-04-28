@@ -183,14 +183,8 @@ export class ODCheckerRenderer_Default extends ODCheckerRenderer {
         return finalComponents
     }
     /**Get the length of the longest string in the array. */
-    #getLongestLength(text:string[]): number {
-        let finalLength = 0
-        text.forEach((t) => {
-            const l = ansis.strip(t).length
-            if (l > finalLength) finalLength = l
-        })
-
-        return finalLength
+    #getLongestLength(texts:string[]): number {
+        return Math.max(...texts.map((t) => ansis.strip(t).length))
     }
     /**Get a horizontal divider used between different parts of the config checker result. */
     #getHorizontalDivider(width:number): string {

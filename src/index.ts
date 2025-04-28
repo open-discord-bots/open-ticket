@@ -115,6 +115,17 @@ const main = async () => {
         opendiscord.debug.visible = (debugFlag) ? debugFlag.value : false
     }
 
+    //load silent mode
+    if (opendiscord.defaults.getDefault("silentLoading")){
+        const silentFlag = opendiscord.flags.get("opendiscord:silent")
+        opendiscord.console.silent = (silentFlag) ? silentFlag.value : false
+        if (opendiscord.console.silent){
+            opendiscord.console.silent = false
+            opendiscord.log("Silent mode is active! Logs won't be shown in the console.","warning")
+            opendiscord.console.silent = true
+        }
+    }
+
     //load progress bar renderers
     opendiscord.log("Loading progress bars...","system")
     if (opendiscord.defaults.getDefault("progressBarRendererLoading")){
@@ -258,9 +269,10 @@ const main = async () => {
     //render config checker
     const advancedCheckerFlag = opendiscord.flags.get("opendiscord:checker")
     const disableCheckerFlag = opendiscord.flags.get("opendiscord:no-checker")
+    const useCliFlag = opendiscord.flags.get("opendiscord:cli")
 
     await opendiscord.events.get("onCheckerRender").emit([opendiscord.checkers.renderer,opendiscord.checkers])
-    if (opendiscord.defaults.getDefault("checkerRendering") && !(disableCheckerFlag ? disableCheckerFlag.value : false)){
+    if (opendiscord.defaults.getDefault("checkerRendering") && !(disableCheckerFlag ? disableCheckerFlag.value : false) && !(useCliFlag ? useCliFlag.value : false)){
         //check if there is a result (otherwise throw minor error)
         const result = opendiscord.checkers.lastResult
         if (!result) return opendiscord.log("Failed to render Config Checker! (couldn't fetch result)","error")
@@ -279,12 +291,20 @@ const main = async () => {
     }
 
     //quit config checker (when required)
-    if (opendiscord.checkers.lastResult && !opendiscord.checkers.lastResult.valid && !(disableCheckerFlag ? disableCheckerFlag.value : false)){
+    if (opendiscord.checkers.lastResult && !opendiscord.checkers.lastResult.valid && !(disableCheckerFlag ? disableCheckerFlag.value : false) && !(useCliFlag ? useCliFlag.value : false)){
         await opendiscord.events.get("onCheckerQuit").emit([opendiscord.checkers])
         if (opendiscord.defaults.getDefault("checkerQuit")){
             process.exit(1)
             //there is no afterCheckerQuitted event :)
         }
+    }
+
+    //switch to CLI context instead of running the bot
+    if (useCliFlag && useCliFlag.value){
+        await (await (import("./core/cli/cli.js"))).execute()
+        await utilities.timer(1000)
+        console.log("\n\n"+ansis.red("❌ Something went wrong in the Interactive Setup CLI. Please try again or report a bug in our discord server."))
+        process.exit(0)
     }
 
     //plugin loading before client
@@ -353,7 +373,7 @@ const main = async () => {
             const client = opendiscord.client
 
             //check if all servers are valid
-            const botServers = client.getGuilds()
+            const botServers = await client.getGuilds()
             const generalConfig = opendiscord.configs.get("opendiscord:general")
             const serverId = generalConfig.data.serverId ? generalConfig.data.serverId : ""
             if (!serverId) throw new api.ODSystemError("Server Id Missing!")
@@ -822,6 +842,11 @@ const main = async () => {
             opendiscord.log("You are currently using a language which has been translated by Google Translate!","warning")
             opendiscord.log("Please help us improve the translation by contributing to our project!","warning")
             console.log("===================")
+        }
+        if (opendiscord.console.silent){
+            opendiscord.console.silent = false
+            opendiscord.log("Silent mode is active! Logs won't be shown in the console.","warning")
+            opendiscord.console.silent = true
         }
 
         await opendiscord.events.get("afterStartScreensRendered").emit([opendiscord.startscreen])

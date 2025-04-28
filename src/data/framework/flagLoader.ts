@@ -15,4 +15,6 @@ export const loadAllFlags = async () => {
     opendiscord.flags.add(new api.ODFlag("opendiscord:force-slash-update","Force Slash Update","Force update all slash commands.","--force-slash",["-fs"]))
     opendiscord.flags.add(new api.ODFlag("opendiscord:no-compile","No Compile","Disable compilation of plugins & bot before starting.","--no-compile",[]))
     opendiscord.flags.add(new api.ODFlag("opendiscord:compile-only","Compile Only","This description will never be shown because the bot wouldn't run when this flag is enabled :)","--compile-only",[]))
+    opendiscord.flags.add(new api.ODFlag("opendiscord:silent","Silent Mode","Run the bot without displaying logs. The startscreen will still be displayed.","--silent",[]))
+    opendiscord.flags.add(new api.ODFlag("opendiscord:cli","Run CLI","This description will never be shown because the bot wouldn't run when this flag is enabled :)","--cli",[]))
 }
