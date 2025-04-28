@@ -13,5 +13,11 @@ export const migrations = [
         for (const panel of (await globalDatabase.getCategory("opendiscord:panel-update") ?? [])){
             globalDatabase.set("opendiscord:panel-message",panel.key,panel.value)
         }
-    })
+    }),
+
+    //MIGRATE TO v4.0.2
+    new utilities.ODVersionMigration(api.ODVersion.fromString("opendiscord:version","v4.0.2"),async () => {},async () => {}),
+    
+    //MIGRATE TO v4.0.3
+    new utilities.ODVersionMigration(api.ODVersion.fromString("opendiscord:version","v4.0.3"),async () => {},async () => {})
 ]

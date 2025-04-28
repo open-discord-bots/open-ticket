@@ -1,7 +1,7 @@
 # Security Policy
 <img src="https://apis.dj-dj.be/cdn/openticket/logo.png" alt="Open Ticket Logo" width="500px">
 
-[![discord](https://img.shields.io/badge/discord-support%20server-5865F2.svg?style=flat-square&logo=discord)](https://discord.com/invite/26vT9wt3n3)  [![version](https://img.shields.io/badge/version-4.0.1-brightgreen.svg?style=flat-square)](https://github.com/open-discord-bots/open-ticket/releases/tag/v4.0.1)  [![Sponsor DJj123dj](https://img.shields.io/badge/sponsor-DJj123dj-ea4aaa?style=flat-square&logo=githubsponsors)](https://github.com/sponsors/DJj123dj)
+[![discord](https://img.shields.io/badge/discord-support%20server-5865F2.svg?style=flat-square&logo=discord)](https://discord.com/invite/26vT9wt3n3)  [![version](https://img.shields.io/badge/version-4.0.3-brightgreen.svg?style=flat-square)](https://github.com/open-discord-bots/open-ticket/releases/tag/v4.0.3)  [![Sponsor DJj123dj](https://img.shields.io/badge/sponsor-DJj123dj-ea4aaa?style=flat-square&logo=githubsponsors)](https://github.com/sponsors/DJj123dj)
 
 This is the Security Policy of Open Ticket!<br>
 Here you can find a list of all supported & deprecated versions of the bot.<br>
@@ -20,9 +20,10 @@ This list will be updated on every release.
 | Version    | Supported | Notes                          |
 |------------|-----------|--------------------------------|
 | 4.1.0      | 🟦        |                                |
-| 4.0.2      | ✅        |                                |
+| 4.0.3      | ✅        |                                |
+| 4.0.2      | ✅        | Major discord.js bug           |
 | 4.0.1      | ✅        |                                |
-| 4.0.0      | ✅        |                                |
+| 4.0.0      | 🚧        | Supported until May 2025       |
 | 3.5.9      | 🚧        | Supported until May 2025 (LTS) |
 | 3.5.8      | 🟧        | Documentation Only             |
 | < 3.5.8    | ❌        |                                |

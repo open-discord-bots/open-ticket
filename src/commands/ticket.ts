@@ -142,7 +142,8 @@ export const registerButtonResponders = async () => {
                 instance.modal(await opendiscord.builders.modals.getSafe("opendiscord:ticket-questions").build("panel-button",{guild,channel,user,option}))
             }else{
                 //create ticket
-                await instance.defer("reply",true)
+                await instance.defer((generalConfig.data.system.replyOnTicketCreation) ? "reply" : "update",true)
+
                 const res = await opendiscord.actions.get("opendiscord:create-ticket").run("panel-button",{guild,user,answers:[],option})
                 if (!res.channel || !res.ticket){
                     //error
@@ -196,7 +197,8 @@ export const registerDropdownResponders = async () => {
                 instance.modal(await opendiscord.builders.modals.getSafe("opendiscord:ticket-questions").build("panel-dropdown",{guild,channel,user,option}))
             }else{
                 //create ticket
-                await instance.defer("reply",true)
+                await instance.defer((generalConfig.data.system.replyOnTicketCreation) ? "reply" : "update",true)
+
                 const res = await opendiscord.actions.get("opendiscord:create-ticket").run("panel-dropdown",{guild,user,answers:[],option})
                 if (!res.channel || !res.ticket){
                     //error
@@ -264,7 +266,8 @@ export const registerModalResponders = async () => {
             })
 
             //create ticket
-            await instance.defer("reply",true)
+            await instance.defer((generalConfig.data.system.replyOnTicketCreation) ? "reply" : "update",true)
+            
             const res = await opendiscord.actions.get("opendiscord:create-ticket").run(originalSource,{guild,user,answers,option})
             if (!res.channel || !res.ticket){
                 //error

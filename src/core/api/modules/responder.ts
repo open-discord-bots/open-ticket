@@ -611,6 +611,7 @@ export class ODButtonResponderInstance {
     getMessageComponent(type:"button"|"string-dropdown"|"user-dropdown"|"channel-dropdown"|"role-dropdown"|"mentionable-dropdown", id:string|RegExp): discord.ButtonComponent|discord.StringSelectMenuComponent|discord.RoleSelectMenuComponent|discord.ChannelSelectMenuComponent|discord.MentionableSelectMenuComponent|discord.UserSelectMenuComponent|null {
         let result: discord.ButtonComponent|discord.StringSelectMenuComponent|discord.RoleSelectMenuComponent|discord.ChannelSelectMenuComponent|discord.MentionableSelectMenuComponent|discord.UserSelectMenuComponent|null = null
         this.message.components.forEach((row) => {
+            if (row.type != discord.ComponentType.ActionRow) return
             row.components.forEach((component) => {
                 if (type == "button" && component.type == discord.ComponentType.Button && component.customId && ((typeof id == "string") ? component.customId == id : id.test(component.customId))) result = component
                 else if (type == "string-dropdown" && component.type == discord.ComponentType.StringSelect && component.customId && ((typeof id == "string") ? component.customId == id : id.test(component.customId))) result = component
@@ -898,6 +899,7 @@ export class ODDropdownResponderInstance {
     getMessageComponent(type:"button"|"string-dropdown"|"user-dropdown"|"channel-dropdown"|"role-dropdown"|"mentionable-dropdown", id:string|RegExp): discord.ButtonComponent|discord.StringSelectMenuComponent|discord.RoleSelectMenuComponent|discord.ChannelSelectMenuComponent|discord.MentionableSelectMenuComponent|discord.UserSelectMenuComponent|null {
         let result: discord.ButtonComponent|discord.StringSelectMenuComponent|discord.RoleSelectMenuComponent|discord.ChannelSelectMenuComponent|discord.MentionableSelectMenuComponent|discord.UserSelectMenuComponent|null = null
         this.message.components.forEach((row) => {
+            if (row.type != discord.ComponentType.ActionRow) return
             row.components.forEach((component) => {
                 if (type == "button" && component.type == discord.ComponentType.Button && component.customId && ((typeof id == "string") ? component.customId == id : id.test(component.customId))) result = component
                 else if (type == "string-dropdown" && component.type == discord.ComponentType.StringSelect && component.customId && ((typeof id == "string") ? component.customId == id : id.test(component.customId))) result = component

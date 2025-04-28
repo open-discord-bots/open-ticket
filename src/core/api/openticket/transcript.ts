@@ -257,6 +257,7 @@ export class ODTranscriptCollector {
             const rows: ODTranscriptComponentRowData[] = []
             msg.components.forEach((row) => {
                 const components: ODTranscriptComponentRowData["components"] = []
+                if (row.type != discord.ComponentType.ActionRow) return
                 row.components.forEach((component) => {
                     if (component.type == discord.ComponentType.Button){
                         components.push({
