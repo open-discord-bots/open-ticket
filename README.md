@@ -108,14 +108,14 @@ A list of people that contributed or provided the most support for Open Ticket.
 <td align="center"><img src="https://github.com/smetsliam.png" alt="Profile Picture" width="80px"></td>
 <td align="center"><img src="https://github.com/FrankVissers.png" alt="Profile Picture" width="80px"></td>
 <td align="center"><img src="https://github.com/Sank34.png" alt="Profile Picture" width="80px"></td>
-<td align="center"><img src="https://github.com/Roppl3r.png" alt="Profile Picture" width="80px"></td>
+<td align="center"><img src="https://github.com/guillee3.png" alt="Profile Picture" width="80px"></td>
 </tr>
 <tr>
 <th><a href="https://github.com/DJj123dj">💻 DJj123dj</a></th>
 <th><a href="https://github.com/smetsliam">💬 smetsliam</a></th>
 <th><a href="https://github.com/FrankVissers">💬 Frank Vissers</a></th>
 <th><a href="https://github.com/Sank34">💬 Sanke</a></th>
-<th><a href="https://github.com/Roppl3r">🧩 Roppl3r</a></th>
+<th><a href="https://github.com/guillee3">🧩 Guillee3</a></th>
 </tr>
 </table>
 
