@@ -332,6 +332,17 @@ export class ODChecker extends ODManagerData {
         this.options = options ?? {}
     }
 
+    /**Get a human-readable number string. */
+    #ordinalNumber(num:number){
+        const i = Math.abs(Math.round(num))
+        const cent = i % 100
+        if (cent >= 10 && cent <= 20) return i+'th'
+        const dec = i % 10
+        if (dec === 1) return i+'st'
+        if (dec === 2) return i+'nd'
+        if (dec === 3) return i+'rd'
+        return i+'th'
+    }
     /**Run this checker. Returns all errors*/
     check(): ODCheckerResult {
         this.messages = []
@@ -343,12 +354,12 @@ export class ODChecker extends ODManagerData {
             messages:this.messages
         }
     }
-    /**Create a string from the location trace (path)*/
+    /**Create a string from the location trace/path in a human readable format. */
     locationTraceToString(trace:ODCheckerLocationTrace){
         const final: ODCheckerLocationTrace = []
         trace.forEach((t) => {
             if (typeof t == "number"){
-                final.push(`:${t}`)
+                final.push(`:(${this.#ordinalNumber(t+1)})`)
             }else{
                 final.push(`."${t}"`)
             }
