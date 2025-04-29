@@ -63,16 +63,6 @@ export class ODId {
     get value(){
         return this.#value
     }
-    /**The source of the id (text before `:`). (e.g. `openticket` for all built-in ids)
-     * 
-     * @deprecated Replaced with `getNamespace()` and will be removed in `v4.1.0`.
-     */
-    source: string
-    /**The identifier of the id (text after `:`). 
-     * 
-     * @deprecated Replaced with `getIdentifier()` and will be removed in `v4.1.0`.
-     */
-    identifier: string
     /**The change listener for the parent `ODManager` of this `ODId`. */
     #change: ((oldId:string,newId:string) => void)|null = null
 
@@ -92,21 +82,9 @@ export class ODId {
 
             if (result.length > 0) this.#value = result.join("")
             else throw new ODSystemError("invalid ID at 'new ODID(id: "+id+")'")
-            
-            const splitted = this.#value.split(":")
-            if (splitted.length > 1){
-                this.source = splitted[0]
-                splitted.shift()
-                this.identifier = splitted.join(":")
-            }else{
-                this.identifier = splitted.join(":")
-                this.source = ""
-            }
         }else{
             //id is ODId
             this.#value = id.#value
-            this.source = id.source
-            this.identifier = id.identifier
         }
     }
 
@@ -171,47 +149,6 @@ export class ODManagerChangeHelper {
     }
 }
 
-/**## ODManagerRedirectHelper `class`
- * @deprecated ### Will be removed in Open Ticket `v4.1.0`!
- * 
- * This is Open Ticket ticket manager redirect helper.
- * 
- * It is used to redirect a source to another source when the id isn't found.
- * 
- * It will be used in **Open Discord** to allow plugins from all projects to work seamlessly!
- * ## **(❌ SYSTEM ONLY!!)**
- */
-export class ODManagerRedirectHelper {
-    #data: {fromSource:string,toSource:string}[] = []
-
-    /****(❌ SYSTEM ONLY!!)** Add a redirect to this manager. Returns `true` when overwritten. */
-    add(fromSource:string, toSource:string){
-        const index = this.#data.findIndex((data) => data.fromSource === fromSource)
-        if (index > -1){
-            //already exists
-            this.#data[index] = {fromSource,toSource}
-            return true
-        }else{
-            //doesn't exist
-            this.#data.push({fromSource,toSource})
-            return false
-        }
-    }
-    /****(❌ SYSTEM ONLY!!)** Remove a redirect from this manager. Returns `true` when it existed. */
-    remove(fromSource:string, toSource:string){
-        const index = this.#data.findIndex((data) => data.fromSource === fromSource && data.toSource == toSource)
-        if (index > -1){
-            //already exists
-            this.#data.splice(index,1)
-            return true
-        }else return false
-    }
-    /**List all redirects from this manager. */
-    list(){
-        return [...this.#data]
-    }
-}
-
 /**## ODManagerData `class`
  * This is Open Ticket manager data.
  * 
@@ -261,11 +198,9 @@ export class ODManager<DataType extends ODManagerData> extends ODManagerChangeHe
     #changeListeners: ODManagerCallback<DataType>[] = []
     /**An array storing all listeners when data is removed. */
     #removeListeners: ODManagerCallback<DataType>[] = []
-    /**Handle all redirects in this `ODManager` */
-    redirects: ODManagerRedirectHelper = new ODManagerRedirectHelper()
-
+    
     constructor(debug?:ODDebugger, debugname?:string){
-        super()
+         super()
         this.#debug = debug
         this.#debugname = debugname
     }
@@ -333,15 +268,7 @@ export class ODManager<DataType extends ODManagerData> extends ODManagerChangeHe
         const newId = new ODId(id)
         const data = this.#data.get(newId.value)
         if (data) return data
-        else{
-            //DEPRECATED!!!
-            const redirect = this.redirects.list().find((redirect) => redirect.fromSource === newId.getNamespace())
-            if (!redirect) return null
-            else{
-                const redirectId = new ODId(redirect.toSource+":"+newId.getIdentifier())
-                return this.get(redirectId)
-            }
-        }
+        else return null
     }
     /**Remove data that matches the `ODId`. Returns the removed data. */
     remove(id:ODValidId): DataType|null {
@@ -349,15 +276,8 @@ export class ODManager<DataType extends ODManagerData> extends ODManagerChangeHe
         const data = this.#data.get(newId.value)
         
         if (!data){
-            //DEPRECATED!!!
-            const redirect = this.redirects.list().find((redirect) => redirect.fromSource === newId.getNamespace())
-            if (!redirect){
-                if (this.#debug) this.#debug.debug("Removed "+this.#debugname+" from manager",[{key:"id",value:newId.value},{key:"found",value:"false"}])
-                return null
-            }else{
-                const redirectId = new ODId(redirect.toSource+":"+newId.getIdentifier())
-                return this.remove(redirectId)
-            }
+            if (this.#debug) this.#debug.debug("Removed "+this.#debugname+" from manager",[{key:"id",value:newId.value},{key:"found",value:"false"}])
+            return null
         }else{
             this.#data.delete(newId.value)
             if (this.#debug) this.#debug.debug("Removed "+this.#debugname+" from manager",[{key:"id",value:newId.value},{key:"found",value:"true"}])
@@ -385,15 +305,7 @@ export class ODManager<DataType extends ODManagerData> extends ODManagerChangeHe
     exists(id:ODValidId): boolean {
         const newId = new ODId(id)
         if (this.#data.has(newId.value)) return true
-        else{
-            //DEPRECATED!!!
-            const redirect = this.redirects.list().find((redirect) => redirect.fromSource === newId.getNamespace())
-            if (!redirect) return false
-            else{
-                const redirectId = new ODId(redirect.toSource+":"+newId.getIdentifier())
-                return this.exists(redirectId)
-            }
-        }
+        else return false
     }
     /**Get all data inside this manager*/
     getAll(): DataType[] {
