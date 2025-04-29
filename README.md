@@ -59,8 +59,8 @@ The bot is translated in more than <code>27 Languages</code> and has been battle
 
 > ### 📦 Resources
 > Not all resources are accurate yet! We are working on this.<br>
-> <a href="https://www.youtube.com/watch?v=2jK9kAf6ASU"><img src="https://apis.dj-dj.be/cdn/openticket/open-ticket-tutorial.png" alt="Open Ticket Tutorial" width="180px"></a>
-> <a href="https://openticket.dj-dj.be/message.html?msg=The%20current%20tutorial%20is%20outdated,%20we%27re%20still%20working%20on%20a%20new%20one!"><img src="https://apis.dj-dj.be/cdn/openticket/open-ticket-docs.png" alt="Open Ticket Docs" width="180px"></a>
+> <a href="https://openticket.dj-dj.be/message.html?msg=The%20current%20tutorial%20is%20outdated,%20we%27re%20still%20working%20on%20a%20new%20one!"><img src="https://apis.dj-dj.be/cdn/openticket/open-ticket-tutorial.png" alt="Open Ticket Tutorial" width="180px"></a>
+> <a href="https://otdocs.dj-dj.be"><img src="https://apis.dj-dj.be/cdn/openticket/open-ticket-docs.png" alt="Open Ticket Docs" width="180px"></a>
 > <a href="https://github.com/open-discord-bots/plugins"><img src="https://apis.dj-dj.be/cdn/openticket/open-ticket-plugins.png" alt="Open Ticket Plugins" width="180px"></a>
 
 ### ❤️ Sponsors
