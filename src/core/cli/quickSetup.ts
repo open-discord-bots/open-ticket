@@ -4,6 +4,60 @@ import ansis from "ansis"
 import * as discord from "discord.js"
 import {renderHeader} from "./cli"
 
+interface ODQuickSetupVariables {
+    client?:api.ODClientManager,
+    guild?:discord.Guild,
+    globalAdmins?:string[],
+    mainColor?:discord.ColorResolvable
+}
+const quickSetupStorage: ODQuickSetupVariables = {}
+const autoCompleteMenuOpts: Terminal.SingleLineMenuOptions = {
+    style:terminal.white,
+    selectedStyle:terminal.bgBlue.white
+}
+const presetColors = new Map<string,number>([
+    ["dark red",discord.Colors.DarkRed],
+    ["red",0xff0000],
+    ["light red",0xf06c6c],
+    ["dark orange",0xed510e],
+    ["orange",0xed6f0e],
+    ["light orange",0xf0b06c],
+    ["openticket",0xf8ba00],
+    ["dark yellow",0xdeb100],
+    ["yellow",0xffff00],
+    ["light yellow",0xffff8c],
+    ["banana",0xffe896],
+    ["lime",0xa8e312],
+    ["dark green",0x009600],
+    ["green",0x00ff00],
+    ["light green",0x76f266],
+    ["dark cyan",0x00abab],
+    ["cyan",0x00ffff],
+    ["light cyan",0x63ffff],
+    ["aquamarine",0x7fffd4],
+    ["dark skyblue",0x006bc9],
+    ["skyblue",0x0095ff],
+    ["light skyblue",0x40bfff],
+    ["dark blue",0x00006e],
+    ["blue",0x0000ff],
+    ["light blue",0x5353fc],
+    ["blurple",0x5865F2],
+    ["dark purple",0x3f009e],
+    ["purple",0x8000ff],
+    ["light purple",0x9257eb],
+    ["dark pink",0xb82ab0],
+    ["pink",0xff6bf8],
+    ["light pink",0xff9cfa],
+    ["magenta",0xff00ff],
+    ["black",0x000000],
+    ["brown",0x806050],
+    ["dark gray",0x4f4f4f],
+    ["gray",0x808080],
+    ["light gray",0xb3b3b3],
+    ["white",0xffffff],
+    ["invisible",0x393A41]
+])
+
 export async function renderQuickSetup(backFn:() => api.ODPromiseVoid){
     if (quickSetupRequiresReset()) await renderQuickSetupWarning(backFn)
     else await renderQuickSetupWelcome(backFn)
@@ -173,12 +227,16 @@ async function renderQuickSetupBotToken(backFn:() => api.ODPromiseVoid){
             terminal.gray("Your bot should be online with the status 'Configuring Open Ticket...'.")
             await utilities.timer(3000)
             //continue
-            await renderQuickSetupServer(result,async () => {await renderQuickSetupBotToken(backFn)})
+            quickSetupStorage.client = result
+            await renderQuickSetupServer(async () => {await renderQuickSetupBotToken(backFn)})
         }
     }
 }
 
-async function renderQuickSetupServer(client:api.ODClientManager,backFn:() => api.ODPromiseVoid){
+async function renderQuickSetupServer(backFn:() => api.ODPromiseVoid){
+    const {client} = quickSetupStorage
+    if (!client) return
+
     renderHeader("⏱️ Open Ticket Quick Setup: Discord Server")
 
     terminal.bold.blue("(Step 3) Please select a Discord Server to use.\n")
@@ -199,15 +257,78 @@ async function renderQuickSetupServer(client:api.ODClientManager,backFn:() => ap
     }).promise
 
     if (answer.canceled) return backFn()
-    if (answer.selectedIndex == 0) return await renderQuickSetupServer(client,backFn)
+    if (answer.selectedIndex == 0) return await renderQuickSetupServer(backFn)
     const server = guilds[answer.selectedIndex-1]
-    await renderQuickSetupAdminRoles(client,server,[],async () => {await renderQuickSetupServer(client,backFn)})
+    quickSetupStorage.guild = server
+    await renderQuickSetupAdminRoles([],async () => {await renderQuickSetupServer(backFn)})
 }
 
-async function renderQuickSetupAdminRoles(client:api.ODClientManager,guild:discord.Guild,selectedAdmins:string[],backFn:() => api.ODPromiseVoid){
+async function renderQuickSetupAdminRoles(selectedAdmins:string[],backFn:() => api.ODPromiseVoid,cachedRoles?:discord.Role[]){
+    const {client,guild} = quickSetupStorage
+    if (!client || !guild) return
+
     renderHeader("⏱️ Open Ticket Quick Setup: Admin Roles")
 
     terminal.bold.blue("(Step 4) Please select all 'Global Admins' roles to use.\n")
     terminal.gray("Users with one of these roles will be able to access & interact with all tickets.\n\n")
 
+    const roles = cachedRoles ?? (await guild.roles.fetch()).toJSON().sort((a,b) => b.position-a.position)
+    const nameList = roles.map((r) => r.name)
+    const longestName = utilities.getLongestLength(nameList)
+    const roleList = roles.map((r) => selectedAdmins.includes(r.id) ? ansis.green("(✅) "+r.name.padEnd(longestName+5," ")+ansis.gray(" ("+r.id+")")) : r.name.padEnd(longestName+5," ")+ansis.gray(" ("+r.id+")"))
+    
+    const answer = await terminal.singleColumnMenu([ansis.green("🔄 <Refresh List>"),ansis.green("🆗 <Continue>"),...roleList],{
+        leftPadding:"> ",
+        style:terminal.cyan,
+        selectedStyle:terminal.bgDefaultColor.bold,
+        submittedStyle:terminal.bgBlue,
+        extraLines:2,
+        cancelable:true
+    }).promise
+    
+    if (answer.canceled) return backFn()
+    if (answer.selectedIndex == 0) return await renderQuickSetupAdminRoles(selectedAdmins,backFn)
+    if (answer.selectedIndex == 1){
+        quickSetupStorage.globalAdmins = selectedAdmins
+        return await renderQuickSetupColorPicker(backFn)
+    }
+    const adminRole = roles[answer.selectedIndex-2]
+    const index = selectedAdmins.findIndex((r) => r == adminRole.id)
+    if (index > -1) selectedAdmins.splice(index,1)
+    else selectedAdmins.push(adminRole.id)
+    return await renderQuickSetupAdminRoles(selectedAdmins,backFn,roles)
+}
+
+async function renderQuickSetupColorPicker(backFn:() => api.ODPromiseVoid,tryAgain?:boolean){
+    const {client,guild,globalAdmins} = quickSetupStorage
+    if (!client || !guild || !globalAdmins) return
+
+    renderHeader("⏱️ Open Ticket Quick Setup: Main Color")
+
+    terminal.bold.blue("(Step 5) Please insert a valid hex-color to use in all embeds.\n")
+    terminal.gray("You can also choose from existing presets. (e.g. red, green, blue, ...)\n\n")
+    terminal.gray(tryAgain ? ansis.bold.red("Invalid color, please try again!\n")+ansis.gray("> ") : "> ")
+
+    const answer = await terminal.inputField({
+        style:terminal.white,
+        hintStyle:terminal.gray,
+        cancelable:true,
+        autoComplete:Array.from(presetColors.keys()),
+        autoCompleteHint:true,
+        autoCompleteMenu:autoCompleteMenuOpts as Terminal.Autocompletion
+    }).promise
+
+    if (typeof answer != "string") return await backFn()
+    else{
+        if (!Array.from(presetColors.keys()).includes(answer) && !/^#[0-9a-f]{6}$/.test(answer)) return await renderQuickSetupColorPicker(backFn,true)
+        let color: discord.ColorResolvable
+        if (Array.from(presetColors.keys()).includes(answer)){
+            color = presetColors.get(answer) as number
+        }else{
+            color = answer as `#${string}`
+        }
+        quickSetupStorage.mainColor = color
+        //CONTINUE TO NEXT QUESTION
+        console.log(color)
+    }
 }
