@@ -5,7 +5,8 @@ const collector = opendiscord.transcripts.collector
 const messages = opendiscord.builders.messages
 const transcriptConfig = opendiscord.configs.get("opendiscord:transcripts")
 const textConfig = transcriptConfig.data.textTranscriptStyle
-const htmlVersion = Buffer.from("b3BlbnRpY2tldFRSQU5TQ1JJUFQxMjM0","base64").toString("utf8")
+const htmlVersion = Buffer.from("eW91LXNob3VsZG50LWJlLWxvb2tpbmctYXQtdGhpcy0tLWZvci1tb3JlLWluZm8tY29tbWEtc2VuZC1hLW1lc3NhZ2UtdG8tZGpqMTIzZGo=","base64").toString("utf8")
+const htmlDomain = atob("dC5kai1kai5iZQ==")
 
 export const replaceHtmlTranscriptMentions = async (text:string) => {
     const mainServer = opendiscord.client.mainServer
@@ -34,17 +35,30 @@ export const replaceHtmlTranscriptMentions = async (text:string) => {
     return defaultroletext
 }
 
+/**
+ * This function is used to authenticate with the HTML Transcript API.
+ * It is NOT the token of the bot but an internal AUTH TOKEN from the API.
+ * 
+ * Questions? Visit our discord server: https://discord.dj-dj.be
+ */
+function transcriptAuth(_A:{salt:number,secret:string}){
+    const _B = Buffer.from(_A.secret,"hex");const _C = Math["floor"](new Date().getTime()/(30*1000)).toString();const _D = Buffer.from(_C);const _E = Buffer.alloc(_D["length"]);_D.forEach((v,i) => {_E[i] = v ^ _B[i % _B["length"]];});return btoa(JSON.stringify({salt:_A.salt,secret:_A.secret,token:_E.toString("hex")}))
+}
+
 export const loadAllTranscriptCompilers = async () => {
     class ODHTTPHtmlPostRequest extends api.ODHTTPPostRequest {
-        constructor(domain:string, htmlFinal:api.ODTranscriptHtmlV2Data){
-            super("https://"+domain+"/transcripts/upload?auth="+htmlVersion+"&version=2",true,{
-                body:JSON.stringify(htmlFinal)
+        constructor(transcriptAuth:string,htmlFinal:api.ODTranscriptHtmlV2Data){
+            super("https://"+htmlDomain+"/api/v2/upload?auth="+htmlVersion+"&token="+transcriptAuth,true,{
+                body:JSON.stringify(htmlFinal),
+                headers:{
+                    "Content-Type":"application/json"
+                }
             })
         }
     }
 
     //TEXT COMPILER
-    opendiscord.transcripts.add(new api.ODTranscriptCompiler<{contents:string}>("opendiscord:text-compiler",undefined,async (ticket,channel,user) => {
+    opendiscord.transcripts.add(new api.ODTranscriptCompiler<{contents:string},null>("opendiscord:text-compiler",undefined,async (ticket,channel,user) => {
         //COMPILE
         const rawMessages = await collector.collectAllMessages(ticket)
         if (!rawMessages) return {ticket,channel,user,success:false,errorReason:"Unable to collect messages! Channel not found!",messages:null,data:null}
@@ -173,27 +187,51 @@ export const loadAllTranscriptCompilers = async () => {
     }))
 
     //HTML COMPILER
-    opendiscord.transcripts.add(new api.ODTranscriptCompiler<{url:string}>("opendiscord:html-compiler",async (ticket,channel,user) => {
+    opendiscord.transcripts.add(new api.ODTranscriptCompiler<{url:string,availableUntil:Date},{auth:string}|null>("opendiscord:html-compiler",async (ticket,channel,user) => {
         //INIT
-        const req = new api.ODHTTPGetRequest("https://apis.dj-dj.be/transcripts/status.json",false)
+        const req = new api.ODHTTPGetRequest(atob("aHR0cHM6Ly90LmRqLWRqLmJlL2FwaS92Mi9pbml0"),false)
         const res = await req.run()
-        if (!res || res.status != 200 || !res.body){
-            opendiscord.debugfile.writeNote("HTML Transcripts Error => status: "+res.status+", body:\n"+res.body)
-            process.emit("uncaughtException",new api.ODSystemError("HTML Transcripts INIT_COMMUNICATON error! (check otdebug.txt for details)"))
-            return {success:false,errorReason:"HTML Transcripts are currently unavailable!",pendingMessage:null}
+        //PENDING MESSAGE (not required anymore) => await messages.getSafe("opendiscord:transcript-html-progress").build("channel",{guild:channel.guild,channel,user,ticket,compiler:opendiscord.transcripts.get("opendiscord:html-compiler"),remaining:16000})
+        if (res.status == 200 && res.body){
+            const data: {salt:number,secret:string} = JSON.parse(atob(res.body))
+            return {success:true,errorReason:null,pendingMessage:null,initData:{auth:transcriptAuth(data)}}
         }
-        try{
-            const data = JSON.parse(res.body)
-            if (!data || data["v2"] != "online") return {success:false,errorReason:"HTML Transcripts are currently unavailable due to maintenance!",pendingMessage:null}
-        }catch{
-            opendiscord.debugfile.writeNote("HTML Transcripts Error => unable to parse status! body:\n"+res.body)
-            process.emit("uncaughtException",new api.ODSystemError("HTML Transcripts INIT_STATUS_PARSE error! (check otdebug.txt for details)"))
-            return {success:false,errorReason:"HTML Transcripts are currently unavailable due to JSON parse error!",pendingMessage:null}
+        else{
+            if (res.status == 503){
+                opendiscord.debugfile.writeNote("HTML Transcripts Error => status: "+res.status+", body:\n"+res.body)
+                process.emit("uncaughtException",new api.ODSystemError("HTML Transcripts INIT_COMMUNICATON_503 error! (check otdebug.txt for details)"))
+                return {success:false,errorReason:"The HTML Transcripts are currently unreachable. Please try again later.",pendingMessage:null,initData:null}
+
+            }else if (res.status == 429){
+                opendiscord.debugfile.writeNote("HTML Transcripts Error => status: "+res.status+", body:\n"+res.body)
+                process.emit("uncaughtException",new api.ODSystemError("HTML Transcripts INIT_COMMUNICATON_429 error! (check otdebug.txt for details)"))
+                return {success:false,errorReason:"The HTML Transcripts are currently unreachable because the bot is ratelimited. Please try again in a few minutes.",pendingMessage:null,initData:null}
+
+            }else if (res.status == 403){
+                opendiscord.debugfile.writeNote("HTML Transcripts Error => status: "+res.status+", body:\n"+res.body)
+                process.emit("uncaughtException",new api.ODSystemError("HTML Transcripts INIT_COMMUNICATON_403 error! (check otdebug.txt for details)"))
+                return {success:false,errorReason:"The HTML Transcripts are unreachable because the bot has been banned from using the API. If you don't know why, please contact us at https://discord.dj-dj.be",pendingMessage:null,initData:null}
+                
+            }else if (res.status == 500){
+                opendiscord.debugfile.writeNote("HTML Transcripts Error => status: "+res.status+", body:\n"+res.body)
+                process.emit("uncaughtException",new api.ODSystemError("HTML Transcripts INIT_COMMUNICATON_500 error! (check otdebug.txt for details)"))
+                return {success:false,errorReason:"Something went wrong while compiling the HTML Transcripts, please report this error at https://discord.dj-dj.be",pendingMessage:null,initData:null}
+                
+            }else if (res.status == 413){
+                opendiscord.debugfile.writeNote("HTML Transcripts Error => status: "+res.status+", body:\n"+res.body)
+                process.emit("uncaughtException",new api.ODSystemError("HTML Transcripts INIT_COMMUNICATON_413 error! (check otdebug.txt for details)"))
+                return {success:false,errorReason:"Unable to upload transcript, file size is too large (Max 5MB)!",pendingMessage:null,initData:null}
+                
+            }else{
+                opendiscord.debugfile.writeNote("HTML Transcripts Error => status: "+res.status+", body:\n"+res.body)
+                process.emit("uncaughtException",new api.ODSystemError("HTML Transcripts INIT_COMMUNICATON_UNKNOWN error! (check otdebug.txt for details)"))
+                return {success:false,errorReason:"Something went wrong while compiling the HTML Transcripts, please report this error at https://discord.dj-dj.be",pendingMessage:null,initData:null}
+            }
         }
         
-        return {success:true,errorReason:null,pendingMessage:await messages.getSafe("opendiscord:transcript-html-progress").build("channel",{guild:channel.guild,channel,user,ticket,compiler:opendiscord.transcripts.get("opendiscord:html-compiler"),remaining:16000})}
-    },async (ticket,channel,user) => {
+    },async (ticket,channel,user,initData) => {
         //COMPILE
+        if (!initData) return {ticket,channel,user,success:false,errorReason:"Could not authenticate with HTML Transcript API.",messages:null,data:null}
         const rawMessages = await collector.collectAllMessages(ticket)
         if (!rawMessages) return {ticket,channel,user,success:false,errorReason:"Unable to collect messages! Channel not found!",messages:null,data:null}
         const messages = await collector.convertMessagesToTranscriptData(rawMessages)
@@ -350,18 +388,14 @@ export const loadAllTranscriptCompilers = async () => {
         const dsf = transcriptConfig.data.htmlTranscriptStyle.favicon
 
         const creator = await opendiscord.tickets.getTicketUser(ticket,"creator")
-        const claimer = await opendiscord.tickets.getTicketUser(ticket,"claimer")
         const closer = await opendiscord.tickets.getTicketUser(ticket,"closer")
+        const claimer = await opendiscord.tickets.getTicketUser(ticket,"claimer")
+        const pinner = await opendiscord.tickets.getTicketUser(ticket,"pinner")
 
         const htmlFinal: api.ODTranscriptHtmlV2Data = {
-            version:"2",
+            version:"2.1",
             otversion:opendiscord.versions.get("opendiscord:version").toString(true),
-            bot:{
-                name:opendiscord.client.client.user.displayName,
-                id:opendiscord.client.client.user.id,
-                pfp:opendiscord.client.client.user.displayAvatarURL({extension:"png"}),
-            },
-            language:opendiscord.languages.getLanguageMetadata()?.language ?? "english",
+            language:opendiscord.languages.getLanguageMetadata()?.language.toLowerCase() ?? "english",
             style:{
                 background:{
                     backgroundData:(dsb.backgroundImage == "") ? dsb.backgroundColor : dsb.backgroundImage,
@@ -387,30 +421,44 @@ export const loadAllTranscriptCompilers = async () => {
                     enableCustomFavicon:dsf.enableCustomFavicon
                 }
             },
+            bot:{
+                name:opendiscord.client.client.user.displayName,
+                id:opendiscord.client.client.user.id,
+                pfp:opendiscord.client.client.user.displayAvatarURL({extension:"png"}),
+            },
             ticket:{
                 name:channel.name,
                 id:channel.id,
 
                 guildname:channel.guild.name,
                 guildid:channel.guild.id,
-                guildinvite:"",
+                guildinvite:false,
 
-                creatorname:(creator ? creator.displayName : "<unknown>"),
-                creatorid:(creator ? creator.id : "<unknown>"),
-                creatorpfp:(creator ? creator.displayAvatarURL() : "https://transcripts.dj-dj.be/favicon.png"),
+                createdname:(creator ? creator.displayName : false),
+                createdid:(creator ? creator.id : false),
+                createdpfp:(creator ? creator.displayAvatarURL() : false),
 
-                //closer is ticket deleter (small bug)
-                closedbyname:user.displayName,
-                closedbyid:user.id,
-                closedbypfp:user.displayAvatarURL(),
+                closedname:(closer ? closer.displayName : false),
+                closedid:(closer ? closer.id : false),
+                closedpfp:(closer ? closer.displayAvatarURL() : false),
 
-                //claiming is currently unused
-                claimedname:(claimer ? claimer.displayName : "<not-claimed>"),
-                claimedid:(claimer ? claimer.id : "<not-claimed>"),
-                claimedpfp:(claimer ? claimer.displayAvatarURL() : "https://transcripts.dj-dj.be/favicon.png"),
-                
-                closedtime:new Date().getTime(),
-                openedtime:ticket.get("opendiscord:opened-on").value ?? new Date().getTime(),
+                claimedname:(claimer ? claimer.displayName : false),
+                claimedid:(claimer ? claimer.id : false),
+                claimedpfp:(claimer ? claimer.displayAvatarURL() : false),
+
+                pinnedname:(pinner ? pinner.displayName : false),
+                pinnedid:(pinner ? pinner.id : false),
+                pinnedpfp:(pinner ? pinner.displayAvatarURL() : false),
+
+                deletedname:user.displayName,
+                deletedid:user.id,
+                deletedpfp:user.displayAvatarURL(),
+
+                createdtime:ticket.get("opendiscord:opened-on").value ?? false,
+                closedtime:ticket.get("opendiscord:closed-on").value ?? false,
+                claimedtime:ticket.get("opendiscord:claimed-on").value ?? false,
+                pinnedtime:ticket.get("opendiscord:pinned-on").value ?? false,
+                deletedtime:new Date().getTime(),
                 
                 //role colors are currently unused
                 roleColors:[],
@@ -440,39 +488,71 @@ export const loadAllTranscriptCompilers = async () => {
                 },
                 customFavicon:{
                     enabled:dsf.enableCustomFavicon,
-                    image:(dsf.imageUrl) ? dsf.imageUrl : "https://transcripts.dj-dj.be/favicon.png"
+                    image:(dsf.imageUrl) ? dsf.imageUrl : "https://t.dj-dj.be/favicon.png"
                 },
                 additionalFlags:[]
             }
         }
         
-        const req = new ODHTTPHtmlPostRequest("apis.dj-dj.be",htmlFinal)
+        const req = new ODHTTPHtmlPostRequest(initData.auth,htmlFinal)
         const res = await req.run()
+
         //check status
-        if (!res || res.status != 200 || !res.body){
-            //ratelimit error
-            if (res.status == 429) return {ticket,channel,user,success:false,errorReason:"Failed to upload HTML Transcripts! (Ratelimit)\nTry again in a few minutes!",messages,data:null}
-            
-            //unknown status error
-            opendiscord.debugfile.writeNote("HTML Transcripts Error => status: "+res.status+", body:\n"+res.body)
-            return {ticket,channel,user,success:false,errorReason:"Failed to upload HTML Transcripts! (Unknown Error)",messages,data:null}
-        }
-        //check body
-        try{
+        if (res.status == 200 && res.body){
+            //check body
             var data: api.ODTranscriptHtmlV2Response = JSON.parse(res.body)
             if (!data || data["status"] != "success"){
                 opendiscord.debugfile.writeNote("HTML Transcripts Error => status: "+res.status+", body:\n"+res.body)
-                return {ticket,channel,user,success:false,errorReason:"Failed to upload HTML Transcripts! (Server 500 Error)",messages,data:null}}
-        }catch{
-            opendiscord.debugfile.writeNote("HTML Transcripts Error => status: "+res.status+", body:\n"+res.body)
-            return {ticket,channel,user,success:false,errorReason:"Failed to upload HTML Transcripts! (JSON parse error)",messages,data:null}
-        }
+                process.emit("uncaughtException",new api.ODSystemError("HTML Transcripts COMPILE_JSON_STATUS error! (check otdebug.txt for details)"))
+                return {ticket,channel,user,success:false,errorReason:"TFailed to read the response of the HTML Transcripts server.",messages:null,data:null}
+            }
 
-        const url = "https://transcripts.dj-dj.be/v2/"+data.time+"_"+data.id+".html"
-        return {ticket,channel,user,success:true,errorReason:null,messages,data:{url}}
+            return {
+                ticket,channel,user,
+                success:true,
+                errorReason:null,
+                messages,
+                data:{
+                    url:data.url,
+                    availableUntil:new Date(data.availableUntil)
+                }
+            }
+
+        }else{
+            if (res.status == 503){
+                opendiscord.debugfile.writeNote("HTML Transcripts Error => status: "+res.status+", body:\n"+res.body)
+                process.emit("uncaughtException",new api.ODSystemError("HTML Transcripts COMPILE_COMMUNICATON_503 error! (check otdebug.txt for details)"))
+                return {ticket,channel,user,success:false,errorReason:"The HTML Transcripts are currently unreachable. Please try again later.",messages:null,data:null}
+
+            }else if (res.status == 429){
+                opendiscord.debugfile.writeNote("HTML Transcripts Error => status: "+res.status+", body:\n"+res.body)
+                process.emit("uncaughtException",new api.ODSystemError("HTML Transcripts COMPILE_COMMUNICATON_429 error! (check otdebug.txt for details)"))
+                return {ticket,channel,user,success:false,errorReason:"The HTML Transcripts are currently unreachable because the bot is ratelimited. Please try again in a few minutes.",messages:null,data:null}
+
+            }else if (res.status == 403){
+                opendiscord.debugfile.writeNote("HTML Transcripts Error => status: "+res.status+", body:\n"+res.body)
+                process.emit("uncaughtException",new api.ODSystemError("HTML Transcripts COMPILE_COMMUNICATON_403 error! (check otdebug.txt for details)"))
+                return {ticket,channel,user,success:false,errorReason:"The HTML Transcripts are unreachable because the bot has been banned from using the API. If you don't know why, please contact us at https://discord.dj-dj.be",messages:null,data:null}
+                
+            }else if (res.status == 500){
+                opendiscord.debugfile.writeNote("HTML Transcripts Error => status: "+res.status+", body:\n"+res.body)
+                process.emit("uncaughtException",new api.ODSystemError("HTML Transcripts COMPILE_COMMUNICATON_500 error! (check otdebug.txt for details)"))
+                return {ticket,channel,user,success:false,errorReason:"Something went wrong while compiling the HTML Transcripts, please report this error at https://discord.dj-dj.be",messages:null,data:null}
+                
+            }else if (res.status == 413){
+                opendiscord.debugfile.writeNote("HTML Transcripts Error => status: "+res.status+", body:\n"+res.body)
+                process.emit("uncaughtException",new api.ODSystemError("HTML Transcripts COMPILE_COMMUNICATON_413 error! (check otdebug.txt for details)"))
+                return {ticket,channel,user,success:false,errorReason:"Unable to upload transcript, file size is too large (Max 5MB)!",messages:null,data:null}
+                
+            }else{
+                opendiscord.debugfile.writeNote("HTML Transcripts Error => status: "+res.status+", body:\n"+res.body)
+                process.emit("uncaughtException",new api.ODSystemError("HTML Transcripts COMPILE_COMMUNICATON_UNKNOWN error! (check otdebug.txt for details)"))
+                return {ticket,channel,user,success:false,errorReason:"Something went wrong while compiling the HTML Transcripts, please report this error at https://discord.dj-dj.be",messages:null,data:null}
+            }
+        }
     },async (result) => {
         //READY
-        await utilities.timer(16000) //wait until transcript is ready
+        //WAIT UNTIL READY (not required anymore) => await utilities.timer(16000)
         return {
             channelMessage:await messages.getSafe("opendiscord:transcript-html-ready").build("channel",{guild:result.channel.guild,channel:result.channel,user:result.user,ticket:result.ticket,result,compiler:opendiscord.transcripts.get("opendiscord:html-compiler")}),
             creatorDmMessage:await messages.getSafe("opendiscord:transcript-html-ready").build("creator-dm",{guild:result.channel.guild,channel:result.channel,user:result.user,ticket:result.ticket,result,compiler:opendiscord.transcripts.get("opendiscord:html-compiler")}),
