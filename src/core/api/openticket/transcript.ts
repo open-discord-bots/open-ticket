@@ -15,7 +15,7 @@ import * as discord from "discord.js"
  * 
  * The 2 default built-in transcript generators are: `opendiscord:html-compiler` & `opendiscord:text-compiler`.
  */
-export class ODTranscriptManager extends ODManager<ODTranscriptCompiler<any>> {
+export class ODTranscriptManager extends ODManager<ODTranscriptCompiler<any,null|object>> {
     /**The manager responsible for collecting all messages in a channel. */
     collector: ODTranscriptCollector
     /**Alias for the client manager. */
@@ -31,12 +31,12 @@ export class ODTranscriptManager extends ODManager<ODTranscriptCompiler<any>> {
 /**## ODTranscriptCompilerInitFunction `type`
  * This function will initiate/prepare the transcript system for an incoming transcript.
  */
-export type ODTranscriptCompilerInitFunction = (ticket:ODTicket, channel:discord.TextChannel, user:discord.User) => (ODTranscriptCompilerInitResult)|Promise<ODTranscriptCompilerInitResult>
+export type ODTranscriptCompilerInitFunction<InitData extends object|null> = (ticket:ODTicket, channel:discord.TextChannel, user:discord.User) => (ODTranscriptCompilerInitResult<InitData>)|Promise<ODTranscriptCompilerInitResult<InitData>>
 
 /**## ODTranscriptCompilerCompileFunction `type`
  * This function will generate/compile the transcript itself.
  */
-export type ODTranscriptCompilerCompileFunction<Data extends object> = (ticket:ODTicket, channel:discord.TextChannel, user:discord.User) => ODTranscriptCompilerCompileResult<Data>|Promise<ODTranscriptCompilerCompileResult<Data>>
+export type ODTranscriptCompilerCompileFunction<Data extends object,InitData extends object|null> = (ticket:ODTicket, channel:discord.TextChannel, user:discord.User, initData:InitData) => ODTranscriptCompilerCompileResult<Data>|Promise<ODTranscriptCompilerCompileResult<Data>>
 
 /**## ODTicketClearFilter `type`
  * This function will finish, clear-up & shut-down the transcript system. This will also initiate the sending of the messages to all recipients.
@@ -46,13 +46,15 @@ export type ODTranscriptCompilerReadyFunction<Data extends object> = (result:ODT
 /**## ODTranscriptCompilerInitResult `interface`
  * This is the result which is returned by the `init()` function.
  */
-export interface ODTranscriptCompilerInitResult {
+export interface ODTranscriptCompilerInitResult<InitData extends object|null> {
     /**Was the initialization successfull? */
     success:boolean,
     /**When not successfull, what was the reason? This will also be shown to the user. */
     errorReason:string|null,
     /**An optional message which will be sent while the transcript is being generated. */
-    pendingMessage:ODMessageBuildResult|null
+    pendingMessage:ODMessageBuildResult|null,
+    /**An optional object containing data from the init() function which can be used in the compiler. */
+    initData:InitData,
 }
 
 /**## ODTranscriptCompilerCompileResult `interface`
@@ -98,15 +100,15 @@ export interface ODTranscriptCompilerReadyResult {
  * 
  * These functions should be defined when creating this compiler. Existing compilers already exist for html & text transcripts.
  */
-export class ODTranscriptCompiler<Data extends object> extends ODManagerData {
+export class ODTranscriptCompiler<Data extends object,InitData extends (object|null)> extends ODManagerData {
     /*Initialise the system every time a transcript is created. Returns optional "pending" message to display while the transcript is being compiled. */
-    init: ODTranscriptCompilerInitFunction|null
+    init: ODTranscriptCompilerInitFunction<InitData>|null
     /*Compile or create the transcript. Returns data to give to the ready() function for message creation. */
-    compile: ODTranscriptCompilerCompileFunction<Data>|null
+    compile: ODTranscriptCompilerCompileFunction<Data,InitData>|null
     /*Unload the system & create the final transcript message that will be sent. */
     ready: ODTranscriptCompilerReadyFunction<Data>|null
 
-    constructor(id:ODValidId, init?:ODTranscriptCompilerInitFunction, compile?:ODTranscriptCompilerCompileFunction<Data>, ready?:ODTranscriptCompilerReadyFunction<Data>|null){
+    constructor(id:ODValidId, init?:ODTranscriptCompilerInitFunction<InitData>, compile?:ODTranscriptCompilerCompileFunction<Data,InitData>, ready?:ODTranscriptCompilerReadyFunction<Data>|null){
         super(id)
         this.init = init ?? null
         this.compile = compile ?? null
@@ -119,8 +121,8 @@ export class ODTranscriptCompiler<Data extends object> extends ODManagerData {
  * It's used to generate typescript declarations for this class.
  */
 export interface ODTranscriptCompilerIds {
-    "opendiscord:html-compiler":ODTranscriptCompiler<{url:string}>,
-    "opendiscord:text-compiler":ODTranscriptCompiler<{contents:string}>,
+    "opendiscord:html-compiler":ODTranscriptCompiler<{url:string,availableUntil:Date},{auth:string}>,
+    "opendiscord:text-compiler":ODTranscriptCompiler<{contents:string},null>,
 }
 
 /**## ODTranscriptManager_Default `default_class`
@@ -131,16 +133,16 @@ export interface ODTranscriptCompilerIds {
  */
 export class ODTranscriptManager_Default extends ODTranscriptManager {
     get<QuestionId extends keyof ODTranscriptCompilerIds>(id:QuestionId): ODTranscriptCompilerIds[QuestionId]
-    get(id:ODValidId): ODTranscriptCompiler<any>|null
+    get(id:ODValidId): ODTranscriptCompiler<any,null|object>|null
     
-    get(id:ODValidId): ODTranscriptCompiler<any>|null {
+    get(id:ODValidId): ODTranscriptCompiler<any,null|object>|null {
         return super.get(id)
     }
 
     remove<QuestionId extends keyof ODTranscriptCompilerIds>(id:QuestionId): ODTranscriptCompilerIds[QuestionId]
-    remove(id:ODValidId): ODTranscriptCompiler<any>|null
+    remove(id:ODValidId): ODTranscriptCompiler<any,null|object>|null
     
-    remove(id:ODValidId): ODTranscriptCompiler<any>|null {
+    remove(id:ODValidId): ODTranscriptCompiler<any,null|object>|null {
         return super.remove(id)
     }
 
@@ -698,7 +700,7 @@ export interface ODTranscriptReactionData extends ODTranscriptEmojiData {
  * The structure of the data sent to the Open Ticket HTML Transcripts v2 API.
  */
 export interface ODTranscriptHtmlV2Data {
-    version:"2",
+    version:"2.1",
     otversion:string,
     language:string,
     style:{
@@ -734,25 +736,33 @@ export interface ODTranscriptHtmlV2Data {
     ticket:{
         name:string,
         id:string,
+
         guildname:string,
         guildid:string,
         guildinvite:string|false,
 
-        creatorname:string,
-        creatorid:string,
+        createdname:string|false,
+        createdid:string|false,
+        closedname:string|false,
+        closedid:string|false,
+        claimedname:string|false,
+        claimedid:string|false,
+        pinnedname:string|false,
+        pinnedid:string|false,
+        deletedname:string|false,
+        deletedid:string|false,
 
-        closedbyname:string,
-        closedbyid:string,
+        createdpfp:string|false,
+        closedpfp:string|false,
+        claimedpfp:string|false,
+        pinnedpfp:string|false,
+        deletedpfp:string|false,
 
-        claimedname:string,
-        claimedid:string,
-
-        creatorpfp:string,
-        closedbypfp:string,
-        claimedpfp:string,
-
-        closedtime:number,
-        openedtime:number,
+        createdtime:number|false,
+        closedtime:number|false,
+        claimedtime:number|false,
+        pinnedtime:number|false,
+        deletedtime:number|false,
 
         components:{
             messages:number,
@@ -916,22 +926,9 @@ export interface ODTranscriptHtmlV2Data {
  */
 export interface ODTranscriptHtmlV2Response {
     status:"success"|"error",
-    id:string,
+    type:"transcript",
+    url:string,
+    availableUntil:number, //UNIMPLEMENTED
     time:number,
-    estimated:{
-        lastdump: number,
-        processtime:number,
-        waittime:number
-    },
-    transcriptstatus:{
-        value:2,
-        data:{
-            fetchedmsgs:true,
-            uploaded:true,
-            inqueue:true,
-            processed:false,
-            waiting:false,
-            available:false
-        }
-    }
+    id:string
 }

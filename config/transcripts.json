@@ -49,7 +49,7 @@
         },
         "favicon":{
             "enableCustomFavicon":false,
-            "imageUrl":"https://transcripts.dj-dj.be/favicon.png"
+            "imageUrl":"https://t.dj-dj.be/favicon.png"
         }
     }
 }

@@ -38,7 +38,9 @@ export const registerActions = async () => {
             await opendiscord.events.get("onTranscriptInit").emit([opendiscord.transcripts,ticket,channel,user])
             if (instance.compiler.init){
                 try{
+                    instance.initData = null
                     const result = await instance.compiler.init(ticket,channel,user)
+                    instance.initData = result.initData
                     if (result.success && result.pendingMessage && transcriptConfig.data.general.enableChannel){
                         //send init message to channel
                         const post = opendiscord.posts.get("opendiscord:transcripts")
@@ -49,7 +51,9 @@ export const registerActions = async () => {
                         instance.pendingMessage = null
                         instance.errorReason = result.errorReason
                         throw new api.ODSystemError("ODAction(ot:create-transcript) => Known Init Error => "+result.errorReason)
-                    }else instance.pendingMessage = null
+                    }else{
+                        instance.pendingMessage = null
+                    }
                 }catch(err){
                     instance.success = false
                     cancel()
@@ -72,7 +76,7 @@ export const registerActions = async () => {
             await opendiscord.events.get("onTranscriptCompile").emit([opendiscord.transcripts,ticket,channel,user])
             if (instance.compiler.compile){
                 try{
-                    const result = await instance.compiler.compile(ticket,channel,user)
+                    const result = await instance.compiler.compile(ticket,channel,user,instance.initData)
                     if (!result.success){
                         instance.errorReason = result.errorReason
                         throw new api.ODSystemError("ODAction(ot:create-transcript) => Known Compiler Error => "+result.errorReason)

@@ -648,8 +648,8 @@ export class ODHTTPGetRequest {
         this.throwOnError = throwOnError
         const newConfig = config ?? {}
         newConfig.method = "GET"
-        if (newConfig.headers) Object.assign(newConfig.headers,{"User-Agent":"OpenDiscordBots-OpenTicket/4.0.3"})
-        else newConfig.headers = {"User-Agent":"OpenDiscordBots-OpenTicket/4.0.3"}
+        if (newConfig.headers) Object.assign(newConfig.headers,{"User-Agent":"OpenDiscordBots-OpenTicket/4.0.4"})
+        else newConfig.headers = {"User-Agent":"OpenDiscordBots-OpenTicket/4.0.4"}
         this.config = newConfig
     }
 
@@ -703,8 +703,8 @@ export class ODHTTPPostRequest {
         this.throwOnError = throwOnError
         const newConfig = config ?? {}
         newConfig.method = "POST"
-        if (newConfig.headers) Object.assign(newConfig.headers,{"User-Agent":"OpenDiscordBots-OpenTicket/4.0.3"})
-        else newConfig.headers = {"User-Agent":"OpenDiscordBots-OpenTicket/4.0.3"}
+        if (newConfig.headers) Object.assign(newConfig.headers,{"User-Agent":"OpenDiscordBots-OpenTicket/4.0.4"})
+        else newConfig.headers = {"User-Agent":"OpenDiscordBots-OpenTicket/4.0.4"}
         this.config = newConfig
     }
 

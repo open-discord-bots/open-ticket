@@ -25,7 +25,7 @@ export interface ODActionManagerIds_Default {
     "opendiscord:create-transcript":{
         source:"slash"|"text"|"ticket-message"|"reopen-message"|"close-message"|"autoclose-message"|"autodelete"|"clear"|"other",
         params:{guild:discord.Guild,channel:discord.GuildTextBasedChannel,user:discord.User,ticket:ODTicket},
-        result:{compiler:ODTranscriptCompiler<any>, success:boolean, result:ODTranscriptCompilerCompileResult<any>, errorReason:string|null, pendingMessage:ODMessageBuildSentResult<true>|null, participants:{user:discord.User,role:"creator"|"participant"|"admin"}[]},
+        result:{compiler:ODTranscriptCompiler<any,object|null>, success:boolean, result:ODTranscriptCompilerCompileResult<any>, errorReason:string|null, pendingMessage:ODMessageBuildSentResult<true>|null, initData:object|null, participants:{user:discord.User,role:"creator"|"participant"|"admin"}[]},
         workers:"opendiscord:select-compiler"|"opendiscord:init-transcript"|"opendiscord:compile-transcript"|"opendiscord:ready-transcript"|"opendiscord:logs"
     },
     "opendiscord:create-ticket":{
