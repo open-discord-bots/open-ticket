@@ -516,8 +516,6 @@ export interface ODSlashCommandUniversalCommand {
  * The builder for slash commands. Here you can add options to the command.
  */
 export interface ODSlashCommandBuilder extends discord.ChatInputApplicationCommandData {
-    /**@deprecated `dmPermission` is deprecated. Use `context` instead! (Not using contexts might result in the slash command being re-registered on every startup!) */
-    dmPermission?:boolean
     /**This field is required in Open Ticket for future compatibility. */
     integrationTypes:discord.ApplicationIntegrationType[],
     /**This field is required in Open Ticket for future compatibility. */

@@ -117,7 +117,11 @@ export interface ODUtilities {
      * 
      * It shouldn't be used by plugins because this is an internal API feature!
      */
-    ODVersionMigration:new (version:api.ODVersion,func:() => void|Promise<void>,afterInitFunc:() => void|Promise<void>) => ODVersionMigration
+    ODVersionMigration:new (version:api.ODVersion,func:() => void|Promise<void>,afterInitFunc:() => void|Promise<void>) => ODVersionMigration,
+    /**## ordinalNumber `utility function`
+     * Get a human readable ordinal number (e.g. 1st, 2nd, 3rd, 4th, ...) from a Javascript number.
+     */
+    ordinalNumber(num:number): string,
 }
 
 /**## ODVersionMigration `utility class`
@@ -252,5 +256,15 @@ export const utilities: ODUtilities = {
             "LOREMIPSUM", //TODO
         ]
     },
-    ODVersionMigration
+    ODVersionMigration,
+    ordinalNumber(num:number){
+        const i = Math.abs(Math.round(num))
+        const cent = i % 100
+        if (cent >= 10 && cent <= 20) return i+'th'
+        const dec = i % 10
+        if (dec === 1) return i+'st'
+        if (dec === 2) return i+'nd'
+        if (dec === 3) return i+'rd'
+        return i+'th'
+    }
 }
