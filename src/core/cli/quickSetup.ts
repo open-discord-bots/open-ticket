@@ -8,7 +8,11 @@ interface ODQuickSetupVariables {
     client?:api.ODClientManager,
     guild?:discord.Guild,
     globalAdmins?:string[],
-    mainColor?:discord.ColorResolvable
+    mainColor?:discord.ColorResolvable,
+    language?:string,
+    slashCommands?:boolean,
+    textCommands?:boolean,
+    status?:api.ODJsonConfig_DefaultStatusType
 }
 const quickSetupStorage: ODQuickSetupVariables = {}
 const autoCompleteMenuOpts: Terminal.SingleLineMenuOptions = {
@@ -328,7 +332,124 @@ async function renderQuickSetupColorPicker(backFn:() => api.ODPromiseVoid,tryAga
             color = answer as `#${string}`
         }
         quickSetupStorage.mainColor = color
-        //CONTINUE TO NEXT QUESTION
-        console.log(color)
+        await renderQuickSetupLanguage(async () => {await renderQuickSetupColorPicker(backFn)})
     }
+}
+
+async function renderQuickSetupLanguage(backFn:() => api.ODPromiseVoid,tryAgain?:boolean){
+    renderHeader("⏱️ Open Ticket Quick Setup: Language")
+    
+    terminal.bold.blue("(Step 6) What language would you like to use in the bot?\n")
+    terminal.gray("View a list of available languages here: https://otgithub.dj-dj.be/tree/main/README.md#-translators\n\n")
+    terminal.gray(tryAgain ? ansis.bold.red("Language not found, please try again!\n")+ansis.gray("> ") : "> ")
+
+    const answer = await terminal.inputField({
+        style:terminal.white,
+        hintStyle:terminal.gray,
+        cancelable:true,
+        autoComplete:opendiscord.defaults.getDefault("languageList"),
+        autoCompleteHint:true,
+        autoCompleteMenu:autoCompleteMenuOpts as Terminal.Autocompletion
+    }).promise
+
+    if (typeof answer != "string") return await backFn()
+    else{
+        if (!opendiscord.defaults.getDefault("languageList").includes(answer.toLowerCase())) return await renderQuickSetupLanguage(backFn,true)
+        quickSetupStorage.language = answer.toLowerCase()
+        await renderQuickSetupCommandTypes(async () => {await renderQuickSetupLanguage(backFn)})
+    }
+}
+
+async function renderQuickSetupCommandTypes(backFn:() => api.ODPromiseVoid){
+    renderHeader("⏱️ Open Ticket Quick Setup: Command Types")
+
+    terminal.bold.blue("(Step 7) Would you like to use slash commands, text commands or both?\n")
+    terminal.gray("Slash commands are recommended.\n\n")
+
+    const answer = await terminal.singleColumnMenu([
+        "Use Slash Commands",
+        "Use Text Commands",
+        "Use Both Slash & Text Commands",
+    ],{
+        leftPadding:"> ",
+        style:terminal.gray,
+        selectedStyle:terminal.bgDefaultColor.bold,
+        submittedStyle:terminal.bgBlue,
+        extraLines:2,
+        cancelable:true
+    }).promise
+
+    if (answer.canceled) return await backFn()
+    else if (answer.selectedIndex == 0){
+        quickSetupStorage.slashCommands = true
+        quickSetupStorage.textCommands = false
+    }else if (answer.selectedIndex == 1){
+        quickSetupStorage.slashCommands = false
+        quickSetupStorage.textCommands = true
+    }else if (answer.selectedIndex == 2){
+        quickSetupStorage.slashCommands = true
+        quickSetupStorage.textCommands = true
+    }
+    await renderQuickSetupStatusType(async () => {await renderQuickSetupCommandTypes(backFn)})
+}
+
+async function renderQuickSetupStatusType(backFn:() => api.ODPromiseVoid){
+    renderHeader("⏱️ Open Ticket Quick Setup: Status Type")
+
+    terminal.bold.blue("(Step 8) Please select the type of status you want to use.\n")
+    terminal.gray("The status will be shown below the bot name in the userlist.\n\n")
+
+    const answer = await terminal.singleColumnMenu([
+        "Disabled",
+        "Custom",
+        "Listening To ...",
+        "Watching ...",
+        "Playing ..."
+    ],{
+        leftPadding:"> ",
+        style:terminal.gray,
+        selectedStyle:terminal.bgDefaultColor.bold,
+        submittedStyle:terminal.bgBlue,
+        extraLines:2,
+        cancelable:true
+    }).promise
+
+    if (answer.canceled) return await backFn()
+    else if (answer.selectedIndex == 0) quickSetupStorage.status = {enabled:false,status:"online",type:"custom",text:""}
+    else if (answer.selectedIndex == 1) quickSetupStorage.status = {enabled:true,status:"online",type:"custom",text:""}
+    else if (answer.selectedIndex == 2) quickSetupStorage.status = {enabled:true,status:"online",type:"listening",text:""}
+    else if (answer.selectedIndex == 3) quickSetupStorage.status = {enabled:true,status:"online",type:"watching",text:""}
+    else if (answer.selectedIndex == 4) quickSetupStorage.status = {enabled:true,status:"online",type:"playing",text:""}
+    
+    if (answer.selectedIndex == 0) await renderQuickSetupLOREMIPSUM9(async () => {await renderQuickSetupStatusType(backFn)})
+    else await renderQuickSetupStatusText(async () => {await renderQuickSetupStatusType(backFn)})
+}
+
+async function renderQuickSetupStatusText(backFn:() => api.ODPromiseVoid){
+    const {status} = quickSetupStorage
+    if (!status) return
+
+    renderHeader("⏱️ Open Ticket Quick Setup: Status Text")
+
+    terminal.bold.blue("(Step 8.1) What text would you like to display in the status?\n")
+    terminal.gray("This will be appended after the type you have chosen in the previous question.\n\n> ")
+    terminal.gray(status.type == "listening" ? "Listening To " : (status.type == "playing" ? "Playing " : (status.type == "watching" ? "Watching " : "")))
+
+    const answer = await terminal.inputField({
+        style:terminal.white,
+        hintStyle:terminal.gray,
+        cancelable:true
+    }).promise
+
+    if (typeof answer != "string") return await backFn()
+    else{
+        status.text = answer
+        await renderQuickSetupLOREMIPSUM9(async () => {await renderQuickSetupStatusText(backFn)})
+    }
+}
+
+async function renderQuickSetupLOREMIPSUM9(backFn:() => api.ODPromiseVoid){
+    renderHeader("⏱️ Open Ticket Quick Setup: LOREMIPSUM")
+
+    console.log("todo",quickSetupStorage)
 }
