@@ -20,6 +20,7 @@ This list will be updated on every release.
 | Version    | Supported | Notes                                    |
 |------------|-----------|------------------------------------------|
 | 4.1.0      | 🟦        |                                          |
+| 4.0.5      | ✅        |                                          |
 | 4.0.4      | ✅        |                                          |
 | 4.0.3      | ✅        | Transcripts v2.0 (Offline August 2025)   |
 | 4.0.2      | 🚧        | Major discord.js bug                     |

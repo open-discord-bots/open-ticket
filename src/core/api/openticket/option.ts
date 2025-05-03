@@ -350,10 +350,10 @@ export class ODOptionSuffixManager extends ODManager<ODOptionSuffix> {
     }
 
     /**Instantly get the suffix from an `ODTicketOption`. */
-    getSuffixFromOption(option:ODTicketOption,user:discord.User): string|null {
+    async getSuffixFromOption(option:ODTicketOption,user:discord.User): Promise<string|null> {
         const suffix = this.getAll().find((suffix) => suffix.option.id.value == option.id.value)
         if (!suffix) return null
-        return suffix.getSuffix(user)
+        return await suffix.getSuffix(user)
     }
 }
 
@@ -374,7 +374,7 @@ export class ODOptionSuffix extends ODManagerData {
     }
 
     /**Get the suffix for a new ticket. */
-    getSuffix(user:discord.User): string {
+    async getSuffix(user:discord.User): Promise<string> {
         throw new ODSystemError("Tried to use an unimplemented ODOptionSuffix!")
     }
 }
@@ -387,7 +387,7 @@ export class ODOptionSuffix extends ODManagerData {
  * Use `getSuffix()` to get the new suffix!
  */
 export class ODOptionUserNameSuffix extends ODOptionSuffix {
-    getSuffix(user:discord.User): string {
+    async getSuffix(user:discord.User): Promise<string> {
         return user.username
     }
 }
@@ -400,7 +400,7 @@ export class ODOptionUserNameSuffix extends ODOptionSuffix {
  * Use `getSuffix()` to get the new suffix!
  */
 export class ODOptionUserIdSuffix extends ODOptionSuffix {
-    getSuffix(user:discord.User): string {
+    async getSuffix(user:discord.User): Promise<string> {
         return user.id
     }
 }
@@ -426,11 +426,11 @@ export class ODOptionCounterDynamicSuffix extends ODOptionSuffix {
     async #init(){
         if (!await this.database.exists("opendiscord:option-suffix-counter",this.option.id.value)) await this.database.set("opendiscord:option-suffix-counter",this.option.id.value,0)
     }
-    getSuffix(user:discord.User): string {
-        const rawCurrentValue = this.database.get("opendiscord:option-suffix-counter",this.option.id.value)
+    async getSuffix(user:discord.User): Promise<string> {
+        const rawCurrentValue = await this.database.get("opendiscord:option-suffix-counter",this.option.id.value)
         const currentValue = (typeof rawCurrentValue != "number") ? 0 : rawCurrentValue
         const newValue = currentValue+1
-        this.database.set("opendiscord:option-suffix-counter",this.option.id.value,newValue)
+        await this.database.set("opendiscord:option-suffix-counter",this.option.id.value,newValue)
         return newValue.toString()
     }
 }
@@ -456,12 +456,12 @@ export class ODOptionCounterFixedSuffix extends ODOptionSuffix {
     async #init(){
         if (!await this.database.exists("opendiscord:option-suffix-counter",this.option.id.value)) await this.database.set("opendiscord:option-suffix-counter",this.option.id.value,0)
     }
-    getSuffix(user:discord.User): string {
-        const rawCurrentValue = this.database.get("opendiscord:option-suffix-counter",this.option.id.value)
+    async getSuffix(user:discord.User): Promise<string> {
+        const rawCurrentValue = await this.database.get("opendiscord:option-suffix-counter",this.option.id.value)
         const currentValue = (typeof rawCurrentValue != "number") ? 0 : rawCurrentValue
         const newValue = (currentValue >= 9999) ? 0 : currentValue+1
         
-        this.database.set("opendiscord:option-suffix-counter",this.option.id.value,newValue)
+        await this.database.set("opendiscord:option-suffix-counter",this.option.id.value,newValue)
         if (newValue.toString().length == 1) return "000"+newValue.toString()
         else if (newValue.toString().length == 2) return "00"+newValue.toString()
         else if (newValue.toString().length == 3) return "0"+newValue.toString()
@@ -501,13 +501,13 @@ export class ODOptionRandomNumberSuffix extends ODOptionSuffix {
         if (history.includes(number)) return this.#generateUniqueValue(history)
         else return number
     }
-    getSuffix(user:discord.User): string {
-        const rawCurrentValues = this.database.get("opendiscord:option-suffix-history",this.option.id.value)
+    async getSuffix(user:discord.User): Promise<string> {
+        const rawCurrentValues = await this.database.get("opendiscord:option-suffix-history",this.option.id.value)
         const currentValues = ((Array.isArray(rawCurrentValues)) ? rawCurrentValues : []) as string[]
         const newValue = this.#generateUniqueValue(currentValues)
         currentValues.push(newValue)
         if (currentValues.length > 50) currentValues.shift()
-        this.database.set("opendiscord:option-suffix-history",this.option.id.value,currentValues)
+        await this.database.set("opendiscord:option-suffix-history",this.option.id.value,currentValues)
         return newValue
     }
 }
@@ -539,13 +539,13 @@ export class ODOptionRandomHexSuffix extends ODOptionSuffix {
         if (history.includes(hex)) return this.#generateUniqueValue(history)
         else return hex
     }
-    getSuffix(user:discord.User): string {
-        const rawCurrentValues = this.database.get("opendiscord:option-suffix-history",this.option.id.value)
+    async getSuffix(user:discord.User): Promise<string> {
+        const rawCurrentValues = await this.database.get("opendiscord:option-suffix-history",this.option.id.value)
         const currentValues = ((Array.isArray(rawCurrentValues)) ? rawCurrentValues : []) as string[]
         const newValue = this.#generateUniqueValue(currentValues)
         currentValues.push(newValue)
         if (currentValues.length > 50) currentValues.shift()
-        this.database.set("opendiscord:option-suffix-history",this.option.id.value,currentValues)
+        await this.database.set("opendiscord:option-suffix-history",this.option.id.value,currentValues)
         return newValue
     }
 }

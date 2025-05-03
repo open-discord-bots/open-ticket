@@ -257,7 +257,7 @@ export class ODQuickButton {
     /**The id of this button. */
     id: ODId
     /**The current data of this button */
-    data: ODButtonData = {
+    data: Partial<ODButtonData> = {
         customId:"",
         mode:"button",
         url:null,
@@ -267,7 +267,7 @@ export class ODQuickButton {
         disabled:false
     }
 
-    constructor(id:ODValidId,data:ODButtonData){
+    constructor(id:ODValidId,data:Partial<ODButtonData>){
         this.id = new ODId(id)
         this.data = data
     }
@@ -277,7 +277,7 @@ export class ODQuickButton {
         try {
             //create the discord.js button
             const button = new discord.ButtonBuilder()
-            if (this.data.mode == "button") button.setCustomId(this.data.customId)
+            if (this.data.mode == "button") button.setCustomId(this.data.customId ?? "od:unknown-button")
             if (this.data.mode == "url") button.setStyle(discord.ButtonStyle.Link)
             else if (this.data.color == "gray") button.setStyle(discord.ButtonStyle.Secondary)
             else if (this.data.color == "blue") button.setStyle(discord.ButtonStyle.Primary)
@@ -287,7 +287,7 @@ export class ODQuickButton {
             if (this.data.label) button.setLabel(this.data.label)
             if (this.data.emoji) button.setEmoji(this.data.emoji)
             if (this.data.disabled) button.setDisabled(this.data.disabled)
-            if (!this.data.emoji && !this.data.label) button.setLabel(this.data.customId)
+            if (!this.data.emoji && !this.data.label) button.setLabel(this.data.customId ?? "od:unknown-button")
 
             return {id:this.id,component:button}
         }catch(err){
@@ -564,7 +564,7 @@ export class ODQuickDropdown {
     /**The id of this dropdown. */
     id: ODId
     /**The current data of this dropdown */
-    data: ODDropdownData = {
+    data: Partial<ODDropdownData> = {
         customId:"",
         type:"string",
         placeholder:null,
@@ -580,7 +580,7 @@ export class ODQuickDropdown {
         mentionables:[]
     }
 
-    constructor(id:ODValidId,data:ODDropdownData){
+    constructor(id:ODValidId,data:Partial<ODDropdownData>){
         this.id = new ODId(id)
         this.data = data
     }
@@ -590,8 +590,9 @@ export class ODQuickDropdown {
         try{
             //create the discord.js dropdown
             if (this.data.type == "string"){
+                if (!this.data.options) throw new ODSystemError("ODQuickDropdown:build(): "+this.id.value+" => Dropdown requires at least 1 option to be present.")
                 const dropdown = new discord.StringSelectMenuBuilder()
-                dropdown.setCustomId(this.data.customId)
+                dropdown.setCustomId(this.data.customId ?? "od:unknown-dropdown")
                 dropdown.setOptions(...this.data.options)
                 if (this.data.placeholder) dropdown.setPlaceholder(this.data.placeholder)
                 if (this.data.minValues) dropdown.setMinValues(this.data.minValues)
@@ -601,8 +602,9 @@ export class ODQuickDropdown {
                 return {id:this.id,component:dropdown}
 
             }else if (this.data.type == "user"){
+                if (!this.data.users) throw new ODSystemError("ODQuickDropdown:build(): "+this.id.value+" => Dropdown requires at least 1 user option to be present.")
                 const dropdown = new discord.UserSelectMenuBuilder()
-                dropdown.setCustomId(this.data.customId)
+                dropdown.setCustomId(this.data.customId ?? "od:unknown-dropdown")
                 if (this.data.users.length > 0) dropdown.setDefaultUsers(...this.data.users.map((u) => u.id))
                 if (this.data.placeholder) dropdown.setPlaceholder(this.data.placeholder)
                 if (this.data.minValues) dropdown.setMinValues(this.data.minValues)
@@ -612,8 +614,9 @@ export class ODQuickDropdown {
                 return {id:this.id,component:dropdown}
 
             }else if (this.data.type == "role"){
+                if (!this.data.roles) throw new ODSystemError("ODQuickDropdown:build(): "+this.id.value+" => Dropdown requires at least 1 role option to be present.")
                 const dropdown = new discord.RoleSelectMenuBuilder()
-                dropdown.setCustomId(this.data.customId)
+                dropdown.setCustomId(this.data.customId ?? "od:unknown-dropdown")
                 if (this.data.roles.length > 0) dropdown.setDefaultRoles(...this.data.roles.map((r) => r.id))
                 if (this.data.placeholder) dropdown.setPlaceholder(this.data.placeholder)
                 if (this.data.minValues) dropdown.setMinValues(this.data.minValues)
@@ -623,8 +626,9 @@ export class ODQuickDropdown {
                 return {id:this.id,component:dropdown}
 
             }else if (this.data.type == "channel"){
+                if (!this.data.channels) throw new ODSystemError("ODQuickDropdown:build(): "+this.id.value+" => Dropdown requires at least 1 channel option to be present.")
                 const dropdown = new discord.ChannelSelectMenuBuilder()
-                dropdown.setCustomId(this.data.customId)
+                dropdown.setCustomId(this.data.customId ?? "od:unknown-dropdown")
                 if (this.data.channels.length > 0) dropdown.setDefaultChannels(...this.data.channels.map((c) => c.id))
                 if (this.data.placeholder) dropdown.setPlaceholder(this.data.placeholder)
                 if (this.data.minValues) dropdown.setMinValues(this.data.minValues)
@@ -634,6 +638,7 @@ export class ODQuickDropdown {
                 return {id:this.id,component:dropdown}
 
             }else if (this.data.type == "mentionable"){
+                if (!this.data.mentionables) throw new ODSystemError("ODQuickDropdown:build(): "+this.id.value+" => Dropdown requires at least 1 mentionable option to be present.")
                 const dropdown = new discord.MentionableSelectMenuBuilder()
 
                 const values: ({type:discord.SelectMenuDefaultValueType.User,id:string}|{type:discord.SelectMenuDefaultValueType.Role,id:string})[] = []
@@ -645,7 +650,7 @@ export class ODQuickDropdown {
                     }
                 })
 
-                dropdown.setCustomId(this.data.customId)
+                dropdown.setCustomId(this.data.customId ?? "od:unknown-dropdown")
                 if (this.data.mentionables.length > 0) dropdown.setDefaultValues(...values)
                 if (this.data.placeholder) dropdown.setPlaceholder(this.data.placeholder)
                 if (this.data.minValues) dropdown.setMinValues(this.data.minValues)
@@ -799,14 +804,14 @@ export class ODQuickFile {
     /**The id of this file. */
     id: ODId
     /**The current data of this file */
-    data: ODFileData = {
+    data: Partial<ODFileData> = {
         file:"",
         name:"file.txt",
         description:null,
         spoiler:false
     }
 
-    constructor(id:ODValidId,data:ODFileData){
+    constructor(id:ODValidId,data:Partial<ODFileData>){
         this.id = new ODId(id)
         this.data = data
     }
@@ -815,7 +820,7 @@ export class ODQuickFile {
     async build(): Promise<ODFileBuildResult> {
         try{
             //create the discord.js attachment
-            const file = new discord.AttachmentBuilder(this.data.file)
+            const file = new discord.AttachmentBuilder(this.data.file ?? "<empty-file>")
             file.setName(this.data.name ? this.data.name : "file.txt")
             if (this.data.description) file.setDescription(this.data.description)
             if (this.data.spoiler) file.setSpoiler(this.data.spoiler)
@@ -1055,7 +1060,7 @@ export class ODQuickEmbed {
     /**The id of this embed. */
     id: ODId
     /**The current data of this embed */
-    data: ODEmbedData = {
+    data: Partial<ODEmbedData> = {
         title:null,
         color:null,
         url:null,
@@ -1071,7 +1076,7 @@ export class ODQuickEmbed {
         timestamp:null
     }
 
-    constructor(id:ODValidId,data:ODEmbedData){
+    constructor(id:ODValidId,data:Partial<ODEmbedData>){
         this.id = new ODId(id)
         this.data = data
     }
@@ -1097,7 +1102,7 @@ export class ODQuickEmbed {
             if (this.data.image) embed.setImage(this.data.image)
             if (this.data.thumbnail) embed.setThumbnail(this.data.thumbnail)
             if (this.data.timestamp) embed.setTimestamp(this.data.timestamp)
-            if (this.data.fields.length > 0) embed.setFields(this.data.fields)
+            if (this.data.fields && this.data.fields.length > 0) embed.setFields(this.data.fields)
             
             return {id:this.id,embed}
         }catch(err){

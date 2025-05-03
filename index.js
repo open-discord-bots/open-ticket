@@ -14,7 +14,7 @@ process.argv.push(...flags)
 ██║   ██║██╔═══╝ ██╔══╝  ██║╚██╗██║       ██║   ██║██║     ██╔═██╗ ██╔══╝     ██║     
 ╚██████╔╝██║     ███████╗██║ ╚████║       ██║   ██║╚██████╗██║  ██╗███████╗   ██║     
  ╚═════╝ ╚═╝     ╚══════╝╚═╝  ╚═══╝       ╚═╝   ╚═╝ ╚═════╝╚═╝  ╚═╝╚══════╝   ╚═╝     
- v4.0.4 - Made by DJj123dj & Contributors
+ v4.0.5 - Made by DJj123dj & Contributors
 
  Discord: https://discord.dj-dj.be
  Docs: https://otdocs.dj-dj.be
