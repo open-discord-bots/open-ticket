@@ -8,7 +8,7 @@
 <br>Powered By<br>
 <img src="https://apis.dj-dj.be/cdn/opendiscord/logo.png" alt="Open Ticket" width="170px"><br>
 <a href="https://discord.com/invite/26vT9wt3n3"><img alt="Discord Invite Link" src="https://img.shields.io/badge/discord-support%20server-5865F2.svg?style=flat-square&logo=discord"></img></a>
-<a href="https://github.com/open-discord-bots/open-ticket/releases/tag/v4.0.5"><img alt="Open Ticket Version" src="https://img.shields.io/badge/version-4.0.5-brightgreen.svg?style=flat-square"></img></a>
+<a href="https://github.com/open-discord-bots/open-ticket/releases/tag/v4.0.6"><img alt="Open Ticket Version" src="https://img.shields.io/badge/version-4.0.6-brightgreen.svg?style=flat-square"></img></a>
 <a href="https://otdocs.dj-dj.be"><img alt="Open Ticket Documentation" src="https://img.shields.io/badge/discord.js-v14-CB3837.svg?style=flat-square&logo=npm"></img></a>
 <a href="https://github.com/open-discord-bots/open-ticket/blob/main/LICENSE"><img alt="Open Ticket License" src="https://img.shields.io/badge/license-GPL%203.0-important.svg?style=flat-square"></img></a>
 <a href="https://otdocs.dj-dj.be"><img alt="Open Ticket Stars" src="https://img.shields.io/github/stars/djj123dj/open-ticket?color=yellow&label=stars&logo=github&style=flat-square"></img></a>
@@ -20,7 +20,7 @@
 
 <p align="center">
 Open Ticket is the most advanced & customisable discord ticket bot available! You are able to customise up to 300+ settings and aspects! This includes <code>Html Transcripts</code>, <code>Advanced Plugins</code>, <code>Custom Embeds</code>, <code>Questions/Modals</code>, <code>Stats</code> & more!
-The bot is translated in more than <code>27 Languages</code> and has been battle tested in large Discord servers! If you need any help, feel free to join our <a href="https://discord.dj-dj.be">discord server</a>!
+The bot is translated in more than <code>28 Languages</code> and has been battle tested in large Discord servers! If you need any help, feel free to join our <a href="https://discord.dj-dj.be">discord server</a>!
 </p>
 
 <h3 align="center"><b>⭐️ Help us grow by giving a star! ⭐️</b></h3>
@@ -32,7 +32,7 @@ The bot is translated in more than <code>27 Languages</code> and has been battle
 - **📈 scalable** - Open Ticket is made to handle huge servers! (Already tested in **servers with 100k members**)
 - **📄 HTML transcripts** - Make use of the most customisable, beautiful and easy-to-use HTML Transcripts!
 - **✅ ticket actions** - Close, Reopen, Delete, Claim, Pin, Rename & Move all your tickets!
-- **🇬🇧 translation** - Open Ticket has been translated in more than **27 languages** by our community!
+- **🇬🇧 translation** - Open Ticket has been translated in more than **28 languages** by our community!
 - **🎨 customisation** - Open Ticket has been created around customisation, everything can be customised!
 - **🖥️ interactions** - The bot has full support for Buttons, Dropdowns, Slash Commands and Modals!
 - **∞ unlimited** - Create an infinite amount of tickets & panels!
@@ -93,6 +93,13 @@ A big thanks to all our sponsors! Without them, it wouldn't be possible to creat
 >    - Fix these errors and restart the bot.
 > 6. Enjoy using Open Ticket!
 > ### [📔 Visit Documentation](https://otdocs.dj-dj.be)
+>
+> ### 🖥️ Recommended Hostings
+> - [⭐ **Peakhosting.nl**](https://peakhosting.nl/) - Official support for Open Ticket pterodactyl eggs.
+> - **Any Pterodactyl-Based Panel** - Easy installation & configuration.
+> - **A Virtual Private Server (VPS)** - Extra customisation & more stability. Recommended for large servers.
+> 
+> *❤️ Want to display your hosting here? Contact us in our [Discord server](https://discord.dj-dj.be)!*
 
 ## 📸 Preview
 <img alt="An example of a panel." src="https://apis.dj-dj.be/cdn/openticket/preview-v4/panel-examples.png">
@@ -147,6 +154,7 @@ Without our translators, it wouldn't be possible to translate Open Ticket in so 
 |🟢 |🇵🇱 Polish             |danoglez                   |
 |🟢 |🇳🇴 Norwegian          |NoOneNook                  |
 |🟢 |🇸🇪 Swedish            |NoOneNook                  |
+|🟢 |🇮🇷 Persian            |dysashop & zhavis          |
 |🤖 |🇪🇪 Estonian           |iamnotmega                 |
 |🤖 |🇫🇮 Finnish            |iamnotmega                 |
 |🤖 |🇷🇺 Russian            |NoOneNook                  |
@@ -159,7 +167,6 @@ Without our translators, it wouldn't be possible to translate Open Ticket in so 
 |🔴 |🇸🇮 Slovenian          |[⭐ Contribute!](.github/CONTRIBUTING.md)|
 |🔴 |🇬🇷 Greek              |[⭐ Contribute!](.github/CONTRIBUTING.md)|
 |🔴 |❓ Kurdish            |[⭐ Contribute!](.github/CONTRIBUTING.md)|
-|🔴 |❓ Persian            |[⭐ Contribute!](.github/CONTRIBUTING.md)|
 
 ## ⭐️ Star History
 Please give this repository a star if you like it.  

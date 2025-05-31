@@ -17,7 +17,7 @@
             "image":"https://www.example.com/image.png (or leave empty)",
             "thumbnail":"https://www.example.com/image.png (or leave empty)",
             
-            "footer":"Open Ticket v4.0.5 (or leave empty)",
+            "footer":"Open Ticket v4.0.6 (or leave empty)",
             "fields":[
                 {"name":"field name","value":"field value","inline":false}
             ],

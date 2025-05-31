@@ -20,14 +20,14 @@ This list will be updated on every release.
 | Version    | Supported | Notes                                    |
 |------------|-----------|------------------------------------------|
 | 4.1.0      | 🟦        |                                          |
+| 4.0.6      | ✅        |                                          |
 | 4.0.5      | ✅        |                                          |
-| 4.0.4      | ✅        |                                          |
-| 4.0.3      | ✅        | Transcripts v2.0 (Offline August 2025)   |
-| 4.0.2      | 🚧        | Major discord.js bug                     |
-| 4.0.1      | 🚧        |                                          |
-| 4.0.0      | 🚧        | Supported until June 2025 (LTS)          |
-| 3.5.9      | 🟧        | Documentation Only                       |
-| < 3.5.9    | ❌        |                                          |
+| 4.0.4      | ✅        | Supported until July 2025 (LTS)          |
+| 4.0.3      | 🚧        | Transcripts v2.0 (Offline August 2025)   |
+| 4.0.2      | 🟧        | Documentation Only (discord.js bug)      |
+| 4.0.1      | 🟧        | Documentation Only                       |
+| 4.0.0      | 🟧        | Documentation Only                       |
+| < 4.0.0    | ❌        |                                          |
 
 ### 🕷️ Reporting Vulnerabilities
 You can report vulnerabilities, errors & bugs using one of the following methods:

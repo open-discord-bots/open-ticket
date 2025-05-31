@@ -578,8 +578,8 @@ export class ODSlashCommandComparator {
         }
     }
     /**Convert a `ODSlashCommandBuilder` to a universal Open Ticket slash command object for comparison. */
-    convertBuilder(builder:ODSlashCommandBuilder,guildId:string|null): ODSlashCommandUniversalCommand {
-        if (builder.type != discord.ApplicationCommandType.ChatInput) throw new ODSystemError("ODSlashCommandComparator:convertBuilder() is not supported for other types than 'ChatInput'!")
+    convertBuilder(builder:ODSlashCommandBuilder,guildId:string|null): ODSlashCommandUniversalCommand|null {
+        if (builder.type != discord.ApplicationCommandType.ChatInput) return null //throw new ODSystemError("ODSlashCommandComparator:convertBuilder() is not supported for other types than 'ChatInput'!")
         const nameLoc = builder.nameLocalizations ?? {}
         const descLoc = builder.descriptionLocalizations ?? {}
         return {
@@ -598,8 +598,8 @@ export class ODSlashCommandComparator {
         }
     }
     /**Convert a `discord.ApplicationCommand` to a universal Open Ticket slash command object for comparison. */
-    convertCommand(cmd:discord.ApplicationCommand): ODSlashCommandUniversalCommand {
-        if (cmd.type != discord.ApplicationCommandType.ChatInput) throw new ODSystemError("ODSlashCommandComparator:convertCommand() is not supported for other types than 'ChatInput'!")
+    convertCommand(cmd:discord.ApplicationCommand): ODSlashCommandUniversalCommand|null {
+        if (cmd.type != discord.ApplicationCommandType.ChatInput) return null //throw new ODSystemError("ODSlashCommandComparator:convertCommand() is not supported for other types than 'ChatInput'!")
         const nameLoc = cmd.nameLocalizations ?? {}
         const descLoc = cmd.descriptionLocalizations ?? {}
         return {
@@ -811,6 +811,10 @@ export class ODSlashCommandManager extends ODManager<ODSlashCommand> {
                 //command is registered (and may need to be updated)
                 const universalBuilder = this.comparator.convertBuilder(instance.builder,instance.guildId)
                 const universalCmd = this.comparator.convertCommand(cmd)
+
+                //command is not of the type 'chatinput'
+                if (!universalBuilder || !universalCmd) return
+
                 const didChange = !this.comparator.compare(universalBuilder,universalCmd)
                 const requiresUpdate = didChange || (instance.requiresUpdate ? instance.requiresUpdate(universalCmd) : false)
                 registered.push({instance,cmd:universalCmd,requiresUpdate})
@@ -820,8 +824,10 @@ export class ODSlashCommandManager extends ODManager<ODSlashCommand> {
         })
 
         cmds.forEach((cmd) => {
-            //command does not exist in the manager
-            unused.push({instance:null,cmd:this.comparator.convertCommand(cmd),requiresUpdate:false})
+            //command does not exist in the manager (only append to unused when type == 'chatinput')
+            const universalCmd = this.comparator.convertCommand(cmd)
+            if (!universalCmd) return
+            unused.push({instance:null,cmd:universalCmd,requiresUpdate:false})
         })
 
         return {registered,unregistered,unused}

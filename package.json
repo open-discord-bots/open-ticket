@@ -1,7 +1,7 @@
 {
     "name": "open-ticket",
     "author": "DJdj Development",
-    "version": "4.0.5",
+    "version": "4.0.6",
     "description": "The most advanced open-source discord ticket bot with HTML transcripts, plugins, questions, claiming, pinning & more! Using discord.js v14 & JSON database! ",
     "keywords": [
         "ticket-bot",
@@ -28,7 +28,7 @@
         "@types/node": "^22.5.0",
         "@types/terminal-kit": "^2.5.7",
         "ansis": "^2.3.0",
-        "discord.js": "^14.19.1",
+        "discord.js": "^14.19.3",
         "formatted-json-stringify": "^1.2.1",
         "terminal-kit": "^3.1.2",
         "typescript": "^5.5.4"

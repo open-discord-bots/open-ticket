@@ -30,6 +30,7 @@ export const loadAllLanguages = async () => {
     opendiscord.languages.add(new api.ODJsonLanguage("opendiscord:russian","russian.json"))
     opendiscord.languages.add(new api.ODJsonLanguage("opendiscord:swedish","swedish.json"))
     opendiscord.languages.add(new api.ODJsonLanguage("opendiscord:vietnamese","vietnamese.json"))
+    opendiscord.languages.add(new api.ODJsonLanguage("opendiscord:persian","persian.json"))
 
     /** How to add more languages?
      * - Register the language to the manager (see above)
