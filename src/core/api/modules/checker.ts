@@ -82,6 +82,10 @@ export class ODCheckerManager extends ODManager<ODChecker> {
             messages:final
         }
     }
+    /**Create temporary and unlisted `ODConfig`, `ODChecker` & `ODCheckerStorage` classes. This will help you use a `ODCheckerStructure` validator without officially registering it in `opendiscord.checkers`. */
+    createTemporaryCheckerEnvironment(){
+        return new ODChecker("opendiscord:temporary-environment",new ODCheckerStorage(),0,new ODConfig("opendiscord:temporary-environment",{}),new ODCheckerStructure("opendiscord:temporary-environment",{}))
+    }
 }
 
 /**## ODCheckerStorage `class`
