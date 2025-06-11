@@ -12,9 +12,20 @@ interface ODQuickSetupVariables {
     language?:string,
     slashCommands?:boolean,
     textCommands?:boolean,
-    status?:api.ODJsonConfig_DefaultStatusType
+    status?:api.ODJsonConfig_DefaultStatusType,
+    logChannel?:string|null,
+    ticketCategory?:string|null,
+    ticketOptions:({
+        name:string,
+        description:string,
+        buttonType:"label-emoji"|"emoji"|"label",
+        buttonColor:api.ODValidButtonColor,
+        buttonEmoji:string|null,
+        channelPrefix:string,
+        channelSuffix:api.ODJsonConfig_DefaultOptionTicketChannelType["suffix"]
+    }|null)[]
 }
-const quickSetupStorage: ODQuickSetupVariables = {}
+const quickSetupStorage: ODQuickSetupVariables = {ticketOptions:[]}
 const autoCompleteMenuOpts: Terminal.SingleLineMenuOptions = {
     style:terminal.white,
     selectedStyle:terminal.bgBlue.white
@@ -332,7 +343,7 @@ async function renderQuickSetupColorPicker(backFn:() => api.ODPromiseVoid,tryAga
             color = answer as `#${string}`
         }
         quickSetupStorage.mainColor = color
-        await renderQuickSetupLanguage(async () => {await renderQuickSetupColorPicker(backFn)})
+        return await renderQuickSetupLanguage(async () => {await renderQuickSetupColorPicker(backFn)})
     }
 }
 
@@ -340,7 +351,7 @@ async function renderQuickSetupLanguage(backFn:() => api.ODPromiseVoid,tryAgain?
     renderHeader("⏱️ Open Ticket Quick Setup: Language")
     
     terminal.bold.blue("(Step 6) What language would you like to use in the bot?\n")
-    terminal.gray("View a list of available languages here: https://otgithub.dj-dj.be/tree/main/README.md#-translators\n\n")
+    terminal.gray("View a list of available languages here: https://otgithub.dj-dj.be#-translators\n\n")
     terminal.gray(tryAgain ? ansis.bold.red("Language not found, please try again!\n")+ansis.gray("> ") : "> ")
 
     const answer = await terminal.inputField({
@@ -356,7 +367,7 @@ async function renderQuickSetupLanguage(backFn:() => api.ODPromiseVoid,tryAgain?
     else{
         if (!opendiscord.defaults.getDefault("languageList").includes(answer.toLowerCase())) return await renderQuickSetupLanguage(backFn,true)
         quickSetupStorage.language = answer.toLowerCase()
-        await renderQuickSetupCommandTypes(async () => {await renderQuickSetupLanguage(backFn)})
+        return await renderQuickSetupCommandTypes(async () => {await renderQuickSetupLanguage(backFn)})
     }
 }
 
@@ -390,7 +401,7 @@ async function renderQuickSetupCommandTypes(backFn:() => api.ODPromiseVoid){
         quickSetupStorage.slashCommands = true
         quickSetupStorage.textCommands = true
     }
-    await renderQuickSetupStatusType(async () => {await renderQuickSetupCommandTypes(backFn)})
+    return await renderQuickSetupStatusType(async () => {await renderQuickSetupCommandTypes(backFn)})
 }
 
 async function renderQuickSetupStatusType(backFn:() => api.ODPromiseVoid){
@@ -421,8 +432,8 @@ async function renderQuickSetupStatusType(backFn:() => api.ODPromiseVoid){
     else if (answer.selectedIndex == 3) quickSetupStorage.status = {enabled:true,status:"online",type:"watching",text:""}
     else if (answer.selectedIndex == 4) quickSetupStorage.status = {enabled:true,status:"online",type:"playing",text:""}
     
-    if (answer.selectedIndex == 0) await renderQuickSetupLOREMIPSUM9(async () => {await renderQuickSetupStatusType(backFn)})
-    else await renderQuickSetupStatusText(async () => {await renderQuickSetupStatusType(backFn)})
+    if (answer.selectedIndex == 0) return await renderQuickSetupLogs(async () => {await renderQuickSetupStatusType(backFn)})
+    else return await renderQuickSetupStatusText(async () => {await renderQuickSetupStatusType(backFn)})
 }
 
 async function renderQuickSetupStatusText(backFn:() => api.ODPromiseVoid){
@@ -444,36 +455,345 @@ async function renderQuickSetupStatusText(backFn:() => api.ODPromiseVoid){
     if (typeof answer != "string") return await backFn()
     else{
         status.text = answer
-        await renderQuickSetupLOREMIPSUM9(async () => {await renderQuickSetupStatusText(backFn)})
+        return await renderQuickSetupLogs(async () => {await renderQuickSetupStatusText(backFn)})
     }
 }
 
-async function renderQuickSetupLOREMIPSUM9(backFn:() => api.ODPromiseVoid){
+async function renderQuickSetupLogs(backFn:() => api.ODPromiseVoid){
+    const {client,guild} = quickSetupStorage
+    if (!client || !guild) return
+
+    renderHeader("⏱️ Open Ticket Quick Setup: Channel Logs")
+
+    terminal.bold.blue("(Step 9) Please select the 'Text Channel' to use for logs.\n")
+    terminal.gray("All logs of the bot will be sent here. Make sure only admins can access this channel.\n\n")
+
+    const rawChannels = (await guild.channels.fetch()).toJSON().filter((c) => c !== null && c.isTextBased())
+    const channels = rawChannels.sort((a,b) => (a.position + 50*((a.parent?.position ?? -1)+1)) - (b.position + 50*((b.parent?.position ?? -1)+1)))
+    const nameList = channels.map((r) => (r.parent ? r.parent.name+" > " : "")+r.name)
+    const longestName = utilities.getLongestLength(nameList)
+    const channelList = channels.map((r) => ((r.parent ? r.parent.name+" > " : "")+r.name).padEnd(longestName+5," ")+ansis.gray(" ("+r.id+")"))
+    
+    const answer = await terminal.singleColumnMenu([ansis.green("🔄 <Refresh List>"),ansis.red("❌ <Disable Logs>"),...channelList],{
+        leftPadding:"> ",
+        style:terminal.cyan,
+        selectedStyle:terminal.bgDefaultColor.bold,
+        submittedStyle:terminal.bgBlue,
+        extraLines:2,
+        cancelable:true
+    }).promise
+    
+    if (answer.canceled) return backFn()
+    else if (answer.selectedIndex == 0) return await renderQuickSetupLogs(backFn)
+    else if (answer.selectedIndex == 1){
+        quickSetupStorage.logChannel = null
+        return await renderQuickSetupTicketCategory(async () => {await renderQuickSetupLogs(backFn)})
+    }else{
+        const logChannel = channels[answer.selectedIndex-2]
+        quickSetupStorage.logChannel = logChannel.id
+        return await renderQuickSetupTicketCategory(async () => {await renderQuickSetupLogs(backFn)})
+    }
+}
+
+
+async function renderQuickSetupTicketCategory(backFn:() => api.ODPromiseVoid){
+    const {client,guild} = quickSetupStorage
+    if (!client || !guild) return
+
+    renderHeader("⏱️ Open Ticket Quick Setup: Ticket Category")
+
+    terminal.bold.blue("(Step 10) Please select which 'Category' you would like tickets to be created in.\n")
+    terminal.gray("When no category is selected, tickets will appear at the top of the channel list.\n\n")
+
+    const rawCategories = (await guild.channels.fetch()).toJSON().filter((c) => c !== null && c.type == discord.ChannelType.GuildCategory)
+    const categories = rawCategories.sort((a,b) => a.position-b.position)
+    const nameList = categories.map((r) => r.name)
+    const longestName = utilities.getLongestLength(nameList)
+    const categoryList = categories.map((r) => r.name.padEnd(longestName+5," ")+ansis.gray(" ("+r.id+")"))
+    
+    const answer = await terminal.singleColumnMenu([ansis.green("🔄 <Refresh List>"),ansis.red("❌ <Without Category>"),...categoryList],{
+        leftPadding:"> ",
+        style:terminal.cyan,
+        selectedStyle:terminal.bgDefaultColor.bold,
+        submittedStyle:terminal.bgBlue,
+        extraLines:2,
+        cancelable:true
+    }).promise
+    
+    if (answer.canceled) return backFn()
+    else if (answer.selectedIndex == 0) return await renderQuickSetupTicketCategory(backFn)
+    else if (answer.selectedIndex == 1){
+        quickSetupStorage.ticketCategory = null
+        return await renderQuickSetupTicketCount(async () => {await renderQuickSetupTicketCategory(backFn)})
+    }else{
+        const ticketCategory = categories[answer.selectedIndex-2]
+        quickSetupStorage.ticketCategory = ticketCategory.id
+        return await renderQuickSetupTicketCount(async () => {await renderQuickSetupTicketCategory(backFn)})
+    }
+}
+
+async function renderQuickSetupTicketCount(backFn:() => api.ODPromiseVoid){
+    renderHeader("⏱️ Open Ticket Quick Setup: Ticket Configuration")
+
+    terminal.bold.blue("(Step 11) How many ticket types would you like to create?\n")
+    terminal.gray("You can always add more ticket types afterwards.\n\n")
+
+    const answer = await terminal.singleColumnMenu([
+        "1️⃣ 1 Ticket Option",
+        "2️⃣ 2 Ticket Options",
+        "3️⃣ 3 Ticket Options",
+        "4️⃣ 4 Ticket Options",
+        "5️⃣ 5 Ticket Options",
+    ],{
+        leftPadding:"> ",
+        style:terminal.gray,
+        selectedStyle:terminal.bgDefaultColor.bold,
+        submittedStyle:terminal.bgBlue,
+        extraLines:2,
+        cancelable:true
+    }).promise
+
+    if (answer.canceled) return await backFn()
+    else{
+        const ticketCount = answer.selectedIndex+1
+        quickSetupStorage.ticketOptions = []
+        for (let i = 0; i < ticketCount; i++){
+            quickSetupStorage.ticketOptions.push(null)
+        }
+        return await renderQuickSetupCreateTicketName(0,ticketCount,async () => {await renderQuickSetupTicketCount(backFn)})
+    }
+}
+
+async function renderQuickSetupCreateTicketName(ticketIndex:number,requiredTickets:number,backFn:() => api.ODPromiseVoid){
+    renderHeader("⏱️ Open Ticket Quick Setup: Ticket Configuration (Ticket "+(ticketIndex+1)+"/"+requiredTickets+")")
+
+    terminal.bold.blue("("+utilities.ordinalNumber(ticketIndex+1)+" Ticket) Please insert the name of this ticket option\n")
+    terminal.gray("Recommendation: Clean, short, obvious name, not more than ±30 characters. \n\n")
+
+    const answer = await terminal.inputField({
+        style:terminal.white,
+        hintStyle:terminal.gray,
+        cancelable:true,
+    }).promise
+
+    if (typeof answer != "string"){
+        //delete option ticket from list when going back to menu or previous ticket settings
+        quickSetupStorage.ticketOptions[ticketIndex] = null
+        return await backFn()
+    }else if (answer.length == 0){
+        terminal.red.bold("\n\n❌ Please insert a valid ticket option name.\n")
+        await utilities.timer(2000)
+        return await renderQuickSetupCreateTicketName(ticketIndex,requiredTickets,backFn)
+    }else{
+        quickSetupStorage.ticketOptions[ticketIndex] = {
+            name:answer,
+            description:"",
+            buttonType:"label",
+            buttonEmoji:null,
+            buttonColor:"gray",
+            channelPrefix:"ticket-",
+            channelSuffix:"user-name"
+        }
+        return await renderQuickSetupCreateTicketDescription(ticketIndex,requiredTickets,async () => {await renderQuickSetupCreateTicketName(ticketIndex,requiredTickets,backFn)})
+    }
+}
+
+async function renderQuickSetupCreateTicketDescription(ticketIndex:number,requiredTickets:number,backFn:() => api.ODPromiseVoid){
+    renderHeader("⏱️ Open Ticket Quick Setup: Ticket Configuration (Ticket "+(ticketIndex+1)+"/"+requiredTickets+")")
+
+    terminal.bold.blue("("+utilities.ordinalNumber(ticketIndex+1)+" Ticket) Please insert the description of this ticket option\n")
+    terminal.gray("Recommendation: Use '\\n' (backslash-n) for a newline.\n\n")
+
+    const answer = await terminal.inputField({
+        style:terminal.white,
+        hintStyle:terminal.gray,
+        cancelable:true,
+    }).promise
+
+    if (typeof answer != "string") return await backFn()
+    else{
+        const ticketOption = quickSetupStorage.ticketOptions[ticketIndex]
+        if (ticketOption) ticketOption.description = answer.replaceAll("\\n","\n")
+        return await renderQuickSetupCreateTicketButtonType(ticketIndex,requiredTickets,async () => {await renderQuickSetupCreateTicketDescription(ticketIndex,requiredTickets,backFn)})
+    }
+}
+
+async function renderQuickSetupCreateTicketButtonType(ticketIndex:number,requiredTickets:number,backFn:() => api.ODPromiseVoid){
+    renderHeader("⏱️ Open Ticket Quick Setup: Ticket Configuration (Ticket "+(ticketIndex+1)+"/"+requiredTickets+")")
+
+    terminal.bold.blue("("+utilities.ordinalNumber(ticketIndex+1)+" Ticket) How would you like to display the ticket name in the button/dropdown?\n")
+    terminal.gray("You will be able to choose between dropdown/buttons when configuring panels.\n\n")
+
+    const answer = await terminal.singleColumnMenu([
+        "Emoji + Label/Name",
+        "Label/Name Only",
+        "Emoji Only"
+    ],{
+        leftPadding:"> ",
+        style:terminal.gray,
+        selectedStyle:terminal.bgDefaultColor.bold,
+        submittedStyle:terminal.bgBlue,
+        extraLines:2,
+        cancelable:true
+    }).promise
+
+    if (answer.canceled) return await backFn()
+    else{
+        const ticketOption = quickSetupStorage.ticketOptions[ticketIndex]
+        if (ticketOption) ticketOption.buttonType = (answer.selectedIndex == 0) ? "label-emoji" : ((answer.selectedIndex == 1) ? "label" : "emoji")
+        if (answer.selectedIndex == 0 || answer.selectedIndex == 2){
+            return await renderQuickSetupCreateTicketButtonEmoji(ticketIndex,requiredTickets,async () => {await renderQuickSetupCreateTicketButtonType(ticketIndex,requiredTickets,backFn)})
+        }else{
+            return await renderQuickSetupCreateTicketButtonColor(ticketIndex,requiredTickets,async () => {await renderQuickSetupCreateTicketButtonType(ticketIndex,requiredTickets,backFn)})
+        }
+    }
+}
+
+async function renderQuickSetupCreateTicketButtonEmoji(ticketIndex:number,requiredTickets:number,backFn:() => api.ODPromiseVoid){
+    renderHeader("⏱️ Open Ticket Quick Setup: Ticket Configuration (Ticket "+(ticketIndex+1)+"/"+requiredTickets+")")
+
+    terminal.bold.blue("("+utilities.ordinalNumber(ticketIndex+1)+" Ticket) Please insert the button emoji of this ticket option.\n")
+    terminal.gray("Only 1 emoji allowed. Tip: Insert custom emoji's via the following syntax: <:12345678910:emoji_name>\n\n")
+
+    const answer = await terminal.inputField({
+        style:terminal.white,
+        hintStyle:terminal.gray,
+        cancelable:true,
+    }).promise
+
+    if (typeof answer != "string") return await backFn()
+    else{
+        //check emoji using a local config checker instance
+        const isEmojiValid = (new api.ODCheckerCustomStructure_EmojiString("opendiscord:emoji-checker",1,1,true)).check(opendiscord.checkers.createTemporaryCheckerEnvironment(),answer,["emoji"])
+        if (!isEmojiValid){
+            terminal.red.bold("\n\n❌ Please insert a valid emoji.\n")
+            await utilities.timer(2000)
+            return await renderQuickSetupCreateTicketButtonEmoji(ticketIndex,requiredTickets,backFn)
+        }
+        
+        const ticketOption = quickSetupStorage.ticketOptions[ticketIndex]
+        if (ticketOption) ticketOption.buttonEmoji = answer
+        return await renderQuickSetupCreateTicketButtonColor(ticketIndex,requiredTickets,async () => {await renderQuickSetupCreateTicketButtonEmoji(ticketIndex,requiredTickets,backFn)})
+    }
+}
+
+async function renderQuickSetupCreateTicketButtonColor(ticketIndex:number,requiredTickets:number,backFn:() => api.ODPromiseVoid){
+    renderHeader("⏱️ Open Ticket Quick Setup: Ticket Configuration (Ticket "+(ticketIndex+1)+"/"+requiredTickets+")")
+
+    terminal.bold.blue("("+utilities.ordinalNumber(ticketIndex+1)+" Ticket) What color would you like the button to be?\n")
+    terminal.gray("This will not apply when choosing 'dropdown' mode in the panel configuration.\n\n")
+
+    const answer = await terminal.singleColumnMenu([
+        "Gray (Default)",
+        "Blue",
+        "Red",
+        "Green"
+    ],{
+        leftPadding:"> ",
+        style:terminal.gray,
+        selectedStyle:terminal.bgDefaultColor.bold,
+        submittedStyle:terminal.bgBlue,
+        extraLines:2,
+        cancelable:true
+    }).promise
+
+    if (answer.canceled) return await backFn()
+    else{
+        const ticketOption = quickSetupStorage.ticketOptions[ticketIndex]
+        if (ticketOption) ticketOption.buttonColor = (answer.selectedIndex == 0) ? "gray" : ((answer.selectedIndex == 1) ? "blue" : ((answer.selectedIndex == 2) ? "red" : "green"))
+        return await renderQuickSetupCreateTicketChannelPrefix(ticketIndex,requiredTickets,async () => {await renderQuickSetupCreateTicketButtonType(ticketIndex,requiredTickets,backFn)})
+    }
+}
+
+async function renderQuickSetupCreateTicketChannelPrefix(ticketIndex:number,requiredTickets:number,backFn:() => api.ODPromiseVoid){
+    renderHeader("⏱️ Open Ticket Quick Setup: Ticket Configuration (Ticket "+(ticketIndex+1)+"/"+requiredTickets+")")
+
+    terminal.bold.blue("("+utilities.ordinalNumber(ticketIndex+1)+" Ticket) Please insert the channel prefix of this ticket option.\n")
+    terminal.gray("Examples: 'ticket-', 'question-', 'test-channel-', ...\n\n")
+
+    const answer = await terminal.inputField({
+        style:terminal.white,
+        hintStyle:terminal.gray,
+        cancelable:true,
+    }).promise
+
+    if (typeof answer != "string") return await backFn()
+    else if (answer.length == 0){
+        terminal.red.bold("\n\n❌ Please insert a valid ticket option channel prefix.\n")
+        await utilities.timer(2000)
+        return await renderQuickSetupCreateTicketChannelPrefix(ticketIndex,requiredTickets,backFn)
+    }else{
+        const ticketOption = quickSetupStorage.ticketOptions[ticketIndex]
+        if (ticketOption) ticketOption.channelPrefix = answer
+        return await renderQuickSetupCreateTicketChannelSuffix(ticketIndex,requiredTickets,async () => {await renderQuickSetupCreateTicketChannelPrefix(ticketIndex,requiredTickets,backFn)})
+    }
+}
+
+async function renderQuickSetupCreateTicketChannelSuffix(ticketIndex:number,requiredTickets:number,backFn:() => api.ODPromiseVoid){
+    renderHeader("⏱️ Open Ticket Quick Setup: Ticket Configuration (Ticket "+(ticketIndex+1)+"/"+requiredTickets+")")
+
+    terminal.bold.blue("("+utilities.ordinalNumber(ticketIndex+1)+" Ticket) Please select the channel suffix mode of this ticket option.\n")
+    terminal.gray("The suffix is appended after the prefix and will be generated on ticket creation.\n\n")
+
+    const answer = await terminal.singleColumnMenu([
+        "Username            (e.g. #ticket-DJj123dj, #question-wumpus)",
+        "User Id             (e.g. #ticket-123456789, #question-01020304)",
+        "Random Number       (e.g. #ticket-1234, #question-1411)",
+        "Random Hex          (e.g. #ticket-f8ba, #question-01f3)",
+        "Dynamic Counter     (e.g. #ticket-1, #question-23)",
+        "Fixed Counter       (e.g. #ticket-0001, #question-0023)"
+    ],{
+        leftPadding:"> ",
+        style:terminal.gray,
+        selectedStyle:terminal.bgDefaultColor.bold,
+        submittedStyle:terminal.bgBlue,
+        extraLines:2,
+        cancelable:true
+    }).promise
+
+    if (answer.canceled) return await backFn()
+    else{
+        const ticketOption = quickSetupStorage.ticketOptions[ticketIndex]
+        if (ticketOption){
+            if (answer.selectedIndex == 0) ticketOption.channelSuffix = "user-name"
+            else if (answer.selectedIndex == 1) ticketOption.channelSuffix = "user-id"
+            else if (answer.selectedIndex == 2) ticketOption.channelSuffix = "random-number"
+            else if (answer.selectedIndex == 3) ticketOption.channelSuffix = "random-hex"
+            else if (answer.selectedIndex == 4) ticketOption.channelSuffix = "counter-dynamic"
+            else if (answer.selectedIndex == 5) ticketOption.channelSuffix = "counter-fixed"
+        }
+
+        //create next ticket
+        if (ticketIndex+1 < requiredTickets) return await renderQuickSetupCreateTicketName(ticketIndex+1,requiredTickets,async () => {await renderQuickSetupCreateTicketChannelSuffix(ticketIndex,requiredTickets,backFn)})
+        else return await renderQuickSetupLOREMIPSUM(async () => {await renderQuickSetupCreateTicketChannelSuffix(ticketIndex,requiredTickets,backFn)})
+    }
+}
+
+async function renderQuickSetupLOREMIPSUM(backFn:() => api.ODPromiseVoid){
     renderHeader("⏱️ Open Ticket Quick Setup: LOREMIPSUM")
 
     console.log("todo",quickSetupStorage)
 }
 
-async function renderQuickSetupLOREMIPSUM10(backFn:() => api.ODPromiseVoid){
-    renderHeader("⏱️ Open Ticket Quick Setup: LOREMIPSUM")
-
-    console.log("todo",quickSetupStorage)
-}
-
-async function renderQuickSetupLOREMIPSUM11(backFn:() => api.ODPromiseVoid){
-    renderHeader("⏱️ Open Ticket Quick Setup: LOREMIPSUM")
-
-    console.log("todo",quickSetupStorage)
-}
-
-async function renderQuickSetupLOREMIPSUM12(backFn:() => api.ODPromiseVoid){
-    renderHeader("⏱️ Open Ticket Quick Setup: LOREMIPSUM")
-
-    console.log("todo",quickSetupStorage)
-}
-
-async function renderQuickSetupLOREMIPSUM13(backFn:() => api.ODPromiseVoid){
-    renderHeader("⏱️ Open Ticket Quick Setup: LOREMIPSUM")
-
-    console.log("todo",quickSetupStorage)
-}
+/** Steps Todo
+ * - S12: Enable Autoclose => select to enable autoclose in all tickets
+ * - S13: Enable Cooldown => select to enable cooldown in all tickets (with a specific duration from dropdown)
+ * 
+ * - S15: Panel Name
+ * - S16: Panel Description
+ * - S17: Panel Mode => (dropdown/buttons)
+ * - S18: Panel Auto Describe Options => (dropdown: disabled, in text, in embed fields, in embed description)
+ * - S19: Panel Max Tickets Warning
+ * - S20: TODO!! => extra's in general.json "system" => e.g. removeParticipantsOnClose, reply Ticket creation, ...
+ * 
+ * - Ticket configuration => per-ticket configuration
+ *  - ticket name
+ *  - ticket description
+ *  - button type => (dropdown: label+emoji, label-only or emoji-only)
+ *  - button emoji
+ *  - ticket prefix
+ *  - ticket suffix (dropdown)
+ *  - (option ID autogenerated from name BE AWARE OF TICKETS WITH SAME NAME!! + remove unicode, spaces & special chars from id)
+ *  - (embed autofilled with name+desc+color, thumbnail will automatically be set to the server icon) 
+ *  - (ping will be @here) 
+ */
