@@ -453,3 +453,27 @@ async function renderQuickSetupLOREMIPSUM9(backFn:() => api.ODPromiseVoid){
 
     console.log("todo",quickSetupStorage)
 }
+
+async function renderQuickSetupLOREMIPSUM10(backFn:() => api.ODPromiseVoid){
+    renderHeader("⏱️ Open Ticket Quick Setup: LOREMIPSUM")
+
+    console.log("todo",quickSetupStorage)
+}
+
+async function renderQuickSetupLOREMIPSUM11(backFn:() => api.ODPromiseVoid){
+    renderHeader("⏱️ Open Ticket Quick Setup: LOREMIPSUM")
+
+    console.log("todo",quickSetupStorage)
+}
+
+async function renderQuickSetupLOREMIPSUM12(backFn:() => api.ODPromiseVoid){
+    renderHeader("⏱️ Open Ticket Quick Setup: LOREMIPSUM")
+
+    console.log("todo",quickSetupStorage)
+}
+
+async function renderQuickSetupLOREMIPSUM13(backFn:() => api.ODPromiseVoid){
+    renderHeader("⏱️ Open Ticket Quick Setup: LOREMIPSUM")
+
+    console.log("todo",quickSetupStorage)
+}

@@ -535,8 +535,22 @@ export interface ODCheckerStringStructureOptions extends ODCheckerStructureOptio
     endsWith?:string,
     /**This string needs to contain ... */
     contains?:string,
+    /**This string is not allowed to contain ... */
+    invertedContains?:string,
     /**You need to choose between ... */
     choices?:string[],
+    /**This string needs to be in lowercase. */
+    lowercaseOnly?:boolean,
+    /**This string needs to be in uppercase. */
+    uppercaseOnly?:boolean,
+    /**This string shouldn't contain any special characters (allowed: A-Z, a-z, 0-9, space, a few punctuation marks, ...). */
+    noSpecialCharacters?:boolean,
+    /**Do not allow any spaces in this string. */
+    withoutSpaces?:boolean,
+    /**Give a warning when a sentence doesn't start with a capital letter. Or require every word to start with a capital letter. (Ignores numbers, unicode characters, ...) */
+    capitalLetterWarning?:false|"sentence"|"word"
+    /**Give a warning when a sentence doesn't end with a punctuation letter (.,?!) */
+    punctuationWarning?:boolean
     /**The string needs to match this regex */
     regex?:RegExp,
     /**Provide an optional list for autocomplete when using the Interactive Setup CLI. Defaults to the `choices` option. */
@@ -582,13 +596,36 @@ export class ODCheckerStringStructure extends ODCheckerStructure {
         }else if (typeof this.options.contains != "undefined" && !value.includes(this.options.contains)){
             checker.createMessage("opendiscord:string-contains","error",`This string needs to contain "${this.options.contains}"!`,lt,null,[`"${this.options.contains}"`],this.id,(this.options.docs ?? null))
             return false
+        }else if (typeof this.options.invertedContains != "undefined" && value.includes(this.options.invertedContains)){
+            checker.createMessage("opendiscord:string-inverted-contains","error",`This string is not allowed to contain "${this.options.invertedContains}"!`,lt,null,[`"${this.options.invertedContains}"`],this.id,(this.options.docs ?? null))
+            return false
         }else if (typeof this.options.choices != "undefined" && !this.options.choices.includes(value)){
             checker.createMessage("opendiscord:string-choices","error",`This string can only be one of the following values: "${this.options.choices.join(`", "`)}"!`,lt,null,[`"${this.options.choices.join(`", "`)}"`],this.id,(this.options.docs ?? null))
+            return false
+        }else if (this.options.lowercaseOnly && value !== value.toLowerCase()){
+            checker.createMessage("opendiscord:string-lowercase","error",`This string must be written in lowercase only!`,lt,null,[],this.id,(this.options.docs ?? null))
+            return false
+        }else if (this.options.uppercaseOnly && value !== value.toUpperCase()){
+            checker.createMessage("opendiscord:string-uppercase","error",`This string must be written in uppercase only!`,lt,null,[],this.id,(this.options.docs ?? null))
+            return false
+        }else if (this.options.noSpecialCharacters && !/^[A-Za-z0-9 ]*$/.test(value)){
+            checker.createMessage("opendiscord:string-special-characters","error",`This string is not allowed to contain any special characters! (a-z, 0-9 & space only)`,lt,null,[],this.id,(this.options.docs ?? null))
+            return false
+        }else if (this.options.withoutSpaces && value.includes(" ")){
+            checker.createMessage("opendiscord:string-no-spaces","error",`This string is not allowed to contain spaces!`,lt,null,[],this.id,(this.options.docs ?? null))
             return false
         }else if (typeof this.options.regex != "undefined" && !this.options.regex.test(value)){
             checker.createMessage("opendiscord:string-regex","error","This string is invalid!",lt,null,[],this.id,(this.options.docs ?? null))
             return false
-        }else return super.check(checker,value,locationTrace)
+        }else{
+            //warnings
+            if ((this.options.capitalLetterWarning == "word" && !value.split(" ").every((word) => word.length == 0 || /^[^a-z].*/.test(word)))) checker.createMessage("opendiscord:string-capital-word","warning",`It's recommended that each word in this string starts with a capital letter!`,lt,null,[],this.id,(this.options.docs ?? null))
+            if ((this.options.capitalLetterWarning == "sentence" && !value.split(/ *[.?!] */).every((sentence) => sentence.length == 0 || /^[^a-z].*/.test(sentence)))) checker.createMessage("opendiscord:string-capital-word","warning",`It looks like some sentences in this string don't start with a capital letter!`,lt,null,[],this.id,(this.options.docs ?? null))
+                
+            //TODO: punctuation!!!
+            
+            return super.check(checker,value,locationTrace)
+        }
     }
 }
 
