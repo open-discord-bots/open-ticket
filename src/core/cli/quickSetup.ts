@@ -26,56 +26,65 @@ interface ODQuickSetupVariables {
     }|null)[],
     autocloseHours?:number|null,
     cooldownMinutes?:number|null,
-    removeParticipantsOnClose?:boolean
+    globalUserLimit?:number|null,
+    removeParticipantsOnClose?:boolean,
+    ticketMessageLayout?:"embed"|"text"|null,
+    emojiStyle?:api.ODJsonConfig_DefaultSystem["emojiStyle"],
+    panelName?:string,
+    panelDescription?:string,
+    panelDropdown?:boolean,
+    panelLayout?:"embed"|"text",
+    panelDescribeOptions?:"simple"|"normal"|"detailed"|null,
+    panelMaxTicketsWarning?:boolean,
 }
-const stepCount = (count:number) => "(Step "+count+"/20) "
+const stepCount = (count:number) => "(Step "+count+"/24) "
 
 const quickSetupStorage: ODQuickSetupVariables = {ticketOptions:[]}
 const autoCompleteMenuOpts: Terminal.SingleLineMenuOptions = {
     style:terminal.white,
     selectedStyle:terminal.bgBlue.white
 }
-const presetColors = new Map<string,number>([
-    ["dark red",discord.Colors.DarkRed],
-    ["red",0xff0000],
-    ["light red",0xf06c6c],
-    ["dark orange",0xed510e],
-    ["orange",0xed6f0e],
-    ["light orange",0xf0b06c],
-    ["openticket",0xf8ba00],
-    ["dark yellow",0xdeb100],
-    ["yellow",0xffff00],
-    ["light yellow",0xffff8c],
-    ["banana",0xffe896],
-    ["lime",0xa8e312],
-    ["dark green",0x009600],
-    ["green",0x00ff00],
-    ["light green",0x76f266],
-    ["dark cyan",0x00abab],
-    ["cyan",0x00ffff],
-    ["light cyan",0x63ffff],
-    ["aquamarine",0x7fffd4],
-    ["dark skyblue",0x006bc9],
-    ["skyblue",0x0095ff],
-    ["light skyblue",0x40bfff],
-    ["dark blue",0x00006e],
-    ["blue",0x0000ff],
-    ["light blue",0x5353fc],
-    ["blurple",0x5865F2],
-    ["dark purple",0x3f009e],
-    ["purple",0x8000ff],
-    ["light purple",0x9257eb],
-    ["dark pink",0xb82ab0],
-    ["pink",0xff6bf8],
-    ["light pink",0xff9cfa],
-    ["magenta",0xff00ff],
-    ["black",0x000000],
-    ["brown",0x806050],
-    ["dark gray",0x4f4f4f],
-    ["gray",0x808080],
-    ["light gray",0xb3b3b3],
-    ["white",0xffffff],
-    ["invisible",0x393A41]
+const presetColors = new Map<string,string>([
+    ["dark red","#992d22"],
+    ["red","#ff0000"],
+    ["light red","#f06c6c"],
+    ["dark orange","#ed510e"],
+    ["orange","#ed6f0e"],
+    ["light orange","#f0b06c"],
+    ["openticket","#f8ba00"],
+    ["dark yellow","#deb100"],
+    ["yellow","#ffff00"],
+    ["light yellow","#ffff8c"],
+    ["banana","#ffe896"],
+    ["lime","#a8e312"],
+    ["dark green","#009600"],
+    ["green","#00ff00"],
+    ["light green","#76f266"],
+    ["dark cyan","#00abab"],
+    ["cyan","#00ffff"],
+    ["light cyan","#63ffff"],
+    ["aquamarine","#7fffd4"],
+    ["dark skyblue","#006bc9"],
+    ["skyblue","#0095ff"],
+    ["light skyblue","#40bfff"],
+    ["dark blue","#00006e"],
+    ["blue","#0000ff"],
+    ["light blue","#5353fc"],
+    ["blurple","#5865F2"],
+    ["dark purple","#3f009e"],
+    ["purple","#8000ff"],
+    ["light purple","#9257eb"],
+    ["dark pink","#b82ab0"],
+    ["pink","#ff6bf8"],
+    ["light pink","#ff9cfa"],
+    ["magenta","#ff00ff"],
+    ["black","#000000"],
+    ["brown","#806050"],
+    ["dark gray","#4f4f4f"],
+    ["gray","#808080"],
+    ["light gray","#b3b3b3"],
+    ["white","#ffffff"],
+    ["invisible","#393A41"]
 ])
 
 export async function renderQuickSetup(backFn:() => api.ODPromiseVoid){
@@ -157,7 +166,7 @@ async function renderQuickSetupDevPortal(backFn:() => api.ODPromiseVoid){
         "👶 I've never seen a Discord bot before.",
     ],{
         leftPadding:"> ",
-        style:terminal.gray,
+        style:terminal.cyan,
         selectedStyle:terminal.bgDefaultColor.bold,
         submittedStyle:terminal.bgBlue,
         extraLines:2,
@@ -347,7 +356,7 @@ async function renderQuickSetupColorPicker(backFn:() => api.ODPromiseVoid){
 
         let color: discord.ColorResolvable
         if (Array.from(presetColors.keys()).includes(answer)){
-            color = presetColors.get(answer) as number
+            color = presetColors.get(answer) as `#${string}`
         }else{
             color = answer as `#${string}`
         }
@@ -396,7 +405,7 @@ async function renderQuickSetupCommandTypes(backFn:() => api.ODPromiseVoid){
         "Use Both Slash & Text Commands",
     ],{
         leftPadding:"> ",
-        style:terminal.gray,
+        style:terminal.cyan,
         selectedStyle:terminal.bgDefaultColor.bold,
         submittedStyle:terminal.bgBlue,
         extraLines:2,
@@ -431,7 +440,7 @@ async function renderQuickSetupStatusType(backFn:() => api.ODPromiseVoid){
         "Playing ..."
     ],{
         leftPadding:"> ",
-        style:terminal.gray,
+        style:terminal.cyan,
         selectedStyle:terminal.bgDefaultColor.bold,
         submittedStyle:terminal.bgBlue,
         extraLines:2,
@@ -559,7 +568,7 @@ async function renderQuickSetupTicketCount(backFn:() => api.ODPromiseVoid){
         "5️⃣ 5 Ticket Options",
     ],{
         leftPadding:"> ",
-        style:terminal.gray,
+        style:terminal.cyan,
         selectedStyle:terminal.bgDefaultColor.bold,
         submittedStyle:terminal.bgBlue,
         extraLines:2,
@@ -580,7 +589,7 @@ async function renderQuickSetupTicketCount(backFn:() => api.ODPromiseVoid){
 async function renderQuickSetupCreateTicketName(ticketIndex:number,requiredTickets:number,backFn:() => api.ODPromiseVoid){
     renderHeader("⏱️ Open Ticket Quick Setup: Ticket Configuration (Ticket "+(ticketIndex+1)+"/"+requiredTickets+")")
 
-    terminal.bold.blue("("+utilities.ordinalNumber(ticketIndex+1)+" Ticket) Please insert the name of this ticket option\n")
+    terminal.bold.blue("("+utilities.ordinalNumber(ticketIndex+1)+" Ticket) Please insert the name of this ticket option.\n")
     terminal.gray("Recommendation: Clean, short, obvious name, not more than ±30 characters.\n\n> ")
 
     const answer = await terminal.inputField({
@@ -614,7 +623,7 @@ async function renderQuickSetupCreateTicketName(ticketIndex:number,requiredTicke
 async function renderQuickSetupCreateTicketDescription(ticketIndex:number,requiredTickets:number,backFn:() => api.ODPromiseVoid){
     renderHeader("⏱️ Open Ticket Quick Setup: Ticket Configuration (Ticket "+(ticketIndex+1)+"/"+requiredTickets+")")
 
-    terminal.bold.blue("("+utilities.ordinalNumber(ticketIndex+1)+" Ticket) Please insert the description of this ticket option\n")
+    terminal.bold.blue("("+utilities.ordinalNumber(ticketIndex+1)+" Ticket) Please insert the description of this ticket option.\n")
     terminal.gray("Recommendation: Use '\\n' (backslash-n) for a newline.\n\n> ")
 
     const answer = await terminal.inputField({
@@ -643,7 +652,7 @@ async function renderQuickSetupCreateTicketButtonType(ticketIndex:number,require
         "Emoji Only"
     ],{
         leftPadding:"> ",
-        style:terminal.gray,
+        style:terminal.cyan,
         selectedStyle:terminal.bgDefaultColor.bold,
         submittedStyle:terminal.bgBlue,
         extraLines:2,
@@ -703,7 +712,7 @@ async function renderQuickSetupCreateTicketButtonColor(ticketIndex:number,requir
         "Green"
     ],{
         leftPadding:"> ",
-        style:terminal.gray,
+        style:terminal.cyan,
         selectedStyle:terminal.bgDefaultColor.bold,
         submittedStyle:terminal.bgBlue,
         extraLines:2,
@@ -749,15 +758,15 @@ async function renderQuickSetupCreateTicketChannelSuffix(ticketIndex:number,requ
     terminal.gray("The suffix is appended after the prefix and will be generated on ticket creation.\n\n")
 
     const answer = await terminal.singleColumnMenu([
-        "Username            (e.g. #ticket-DJj123dj, #question-wumpus)",
-        "User Id             (e.g. #ticket-123456789, #question-01020304)",
-        "Random Number       (e.g. #ticket-1234, #question-1411)",
-        "Random Hex          (e.g. #ticket-f8ba, #question-01f3)",
-        "Dynamic Counter     (e.g. #ticket-1, #question-23)",
-        "Fixed Counter       (e.g. #ticket-0001, #question-0023)"
+        "Username            "+ansis.gray("(e.g. #ticket-DJj123dj, #question-wumpus)"),
+        "User Id             "+ansis.gray("(e.g. #ticket-123456789, #question-01020304)"),
+        "Random Number       "+ansis.gray("(e.g. #ticket-1234, #question-1411)"),
+        "Random Hex          "+ansis.gray("(e.g. #ticket-f8ba, #question-01f3)"),
+        "Dynamic Counter     "+ansis.gray("(e.g. #ticket-1, #question-23)"),
+        "Fixed Counter       "+ansis.gray("(e.g. #ticket-0001, #question-0023)")
     ],{
         leftPadding:"> ",
-        style:terminal.gray,
+        style:terminal.cyan,
         selectedStyle:terminal.bgDefaultColor.bold,
         submittedStyle:terminal.bgBlue,
         extraLines:2,
@@ -800,7 +809,7 @@ async function renderQuickSetupAutoclose(backFn:() => api.ODPromiseVoid){
         "3 Days Inactivity",
     ],{
         leftPadding:"> ",
-        style:terminal.gray,
+        style:terminal.cyan,
         selectedStyle:terminal.bgDefaultColor.bold,
         submittedStyle:terminal.bgBlue,
         extraLines:2,
@@ -834,7 +843,7 @@ async function renderQuickSetupCooldown(backFn:() => api.ODPromiseVoid){
         "3 Hours Cooldown",
     ],{
         leftPadding:"> ",
-        style:terminal.gray,
+        style:terminal.cyan,
         selectedStyle:terminal.bgDefaultColor.bold,
         submittedStyle:terminal.bgBlue,
         extraLines:2,
@@ -845,14 +854,45 @@ async function renderQuickSetupCooldown(backFn:() => api.ODPromiseVoid){
     else{
         if (answer.selectedIndex == 0) quickSetupStorage.cooldownMinutes = null
         else quickSetupStorage.cooldownMinutes = [1,2,5,10,15,30,60,120,180][answer.selectedIndex-1]
-        return await renderQuickSetupCloseParticipants(async () => {await renderQuickSetupCooldown(backFn)})
+        return await renderQuickSetupLimits(async () => {await renderQuickSetupCooldown(backFn)})
+    }
+}
+
+async function renderQuickSetupLimits(backFn:() => api.ODPromiseVoid){
+    renderHeader("⏱️ Open Ticket Quick Setup: Ticket Limits")
+
+    terminal.bold.blue(stepCount(14)+"Would you like to enable user ticket creation limits?\n")
+    terminal.gray("Applies to all created tickets. You can always change/disable limits globally or per ticket-option in the config afterwards.\n\n")
+
+    const answer = await terminal.singleColumnMenu([
+        ansis.red("❌ <Disable Ticket Limits>"),
+        "Max 1 Ticket/Person",
+        "Max 2 Tickets/Person",
+        "Max 3 Tickets/Person",
+        "Max 5 Tickets/Person",
+        "Max 10 Tickets/Person",
+        "Max 20 Tickets/Person"
+    ],{
+        leftPadding:"> ",
+        style:terminal.cyan,
+        selectedStyle:terminal.bgDefaultColor.bold,
+        submittedStyle:terminal.bgBlue,
+        extraLines:2,
+        cancelable:true
+    }).promise
+
+    if (answer.canceled) return await backFn()
+    else{
+        if (answer.selectedIndex == 0) quickSetupStorage.globalUserLimit = null
+        else quickSetupStorage.globalUserLimit = [1,2,3,5,10,20][answer.selectedIndex-1]
+        return await renderQuickSetupCloseParticipants(async () => {await renderQuickSetupLimits(backFn)})
     }
 }
 
 async function renderQuickSetupCloseParticipants(backFn:() => api.ODPromiseVoid){
     renderHeader("⏱️ Open Ticket Quick Setup: Ticket Close Configuration")
 
-    terminal.bold.blue(stepCount(14)+"Would you like to remove all ticket participants when closing the ticket?\n")
+    terminal.bold.blue(stepCount(15)+"Would you like to remove all ticket participants when closing the ticket?\n")
     terminal.gray("When a ticket is closed, only admins can read/write in the ticket. Reopen ticket to restore read/write perms.\n\n")
 
     const answer = await terminal.singleColumnMenu([
@@ -860,7 +900,7 @@ async function renderQuickSetupCloseParticipants(backFn:() => api.ODPromiseVoid)
         "✅ Yes, remove ticket participants on close",
     ],{
         leftPadding:"> ",
-        style:terminal.gray,
+        style:terminal.cyan,
         selectedStyle:terminal.bgDefaultColor.bold,
         submittedStyle:terminal.bgBlue,
         extraLines:2,
@@ -870,35 +910,256 @@ async function renderQuickSetupCloseParticipants(backFn:() => api.ODPromiseVoid)
     if (answer.canceled) return await backFn()
     else{
         quickSetupStorage.removeParticipantsOnClose = (answer.selectedIndex == 1)
-        return await renderQuickSetupLOREMIPSUM(async () => {await renderQuickSetupCloseParticipants(backFn)})
+        return await renderQuickSetupTicketMessageLayout(async () => {await renderQuickSetupCloseParticipants(backFn)})
     }
 }
 
-async function renderQuickSetupLOREMIPSUM(backFn:() => api.ODPromiseVoid){
-    renderHeader("⏱️ Open Ticket Quick Setup: LOREMIPSUM")
+async function renderQuickSetupTicketMessageLayout(backFn:() => api.ODPromiseVoid){
+    renderHeader("⏱️ Open Ticket Quick Setup: Ticket Message Configuration")
 
-    console.log("todo",quickSetupStorage)
+    terminal.bold.blue(stepCount(16)+"How would you like the (initial) ticket message to be displayed?\n")
+    terminal.gray("This message is sent by the bot when creating a ticket and contains buttons like closing, claiming & deleting.\n\n")
+
+    const answer = await terminal.singleColumnMenu([
+        "📋 Embed Message "+ansis.gray("(Default)"),
+        "💬 Raw Text Message",
+        ansis.red("❌ No Message (Not Recommended)")
+    ],{
+        leftPadding:"> ",
+        style:terminal.cyan,
+        selectedStyle:terminal.bgDefaultColor.bold,
+        submittedStyle:terminal.bgBlue,
+        extraLines:2,
+        cancelable:true
+    }).promise
+
+    if (answer.canceled) return await backFn()
+    else{
+        quickSetupStorage.ticketMessageLayout = (answer.selectedIndex == 0) ? "embed" : (answer.selectedIndex == 1) ? "text" : null
+        return await renderQuickSetupEmojiStyle(async () => {await renderQuickSetupTicketMessageLayout(backFn)})
+    }
+}
+
+async function renderQuickSetupEmojiStyle(backFn:() => api.ODPromiseVoid){
+    renderHeader("⏱️ Open Ticket Quick Setup: Emoji Style")
+
+    terminal.bold.blue(stepCount(17)+"How would you like emojis to be displayed in messages?\n")
+    terminal.gray("This will affect emojis in all messages of the bot, but does not apply to buttons & dropdowns.\n\n")
+
+    const answer = await terminal.singleColumnMenu([
+        "✅  Before  ❌ (Default)   "+ansis.gray("(e.g. 🎫 Ticket Created)"),
+        "❌  After   ✅             "+ansis.gray("(e.g. Ticket Created 🎫)"),
+        "✅  Double  ✅             "+ansis.gray("(e.g. 🎫 Ticket Created 🎫)"),
+        "❌ Disabled ❌             "+ansis.gray("(e.g. Ticket Created)"),
+    ],{
+        leftPadding:"> ",
+        style:terminal.cyan,
+        selectedStyle:terminal.bgDefaultColor.bold,
+        submittedStyle:terminal.bgBlue,
+        extraLines:2,
+        cancelable:true
+    }).promise
+
+    if (answer.canceled) return await backFn()
+    else{
+        quickSetupStorage.emojiStyle = (answer.selectedIndex == 0) ? "before" : (answer.selectedIndex == 1) ? "after" : (answer.selectedIndex == 2) ? "double" : "disabled"
+        return await renderQuickSetupPanelName(async () => {await renderQuickSetupEmojiStyle(backFn)})
+    }
+}
+
+async function renderQuickSetupPanelName(backFn:() => api.ODPromiseVoid){
+    renderHeader("⏱️ Open Ticket Quick Setup: Panel Name")
+
+    terminal.bold.blue(stepCount(18)+"Please insert the name of the ticket panel.\n")
+    terminal.gray("This will be shown as the title of the panel message where all tickets are located.\n\n> ")
+
+    const answer = await terminal.inputField({
+        style:terminal.white,
+        hintStyle:terminal.gray,
+        cancelable:true
+    }).promise
+
+    if (typeof answer != "string") return await backFn()
+    else if (answer.length == 0){
+        terminal.red.bold("\n\n❌ Please insert a valid panel name.\n")
+        await utilities.timer(2000)
+        return await renderQuickSetupPanelName(backFn)
+    }else{
+        quickSetupStorage.panelName = answer
+        return await renderQuickSetupPanelDescription(async () => {await renderQuickSetupPanelName(backFn)})
+    }
+}
+
+async function renderQuickSetupPanelDescription(backFn:() => api.ODPromiseVoid){
+    renderHeader("⏱️ Open Ticket Quick Setup: Panel Description")
+
+    terminal.bold.blue(stepCount(19)+"Please insert the description of the ticket panel.\n")
+    terminal.gray("Shown below the title. Can be used to explain some info/rules about the ticket system.\n\n> ")
+
+    const answer = await terminal.inputField({
+        style:terminal.white,
+        hintStyle:terminal.gray,
+        cancelable:true
+    }).promise
+
+    if (typeof answer != "string") return await backFn()
+    else{
+        quickSetupStorage.panelDescription = answer
+        return await renderQuickSetupPanelDropdown(async () => {await renderQuickSetupPanelDescription(backFn)})
+    }
+}
+
+async function renderQuickSetupPanelDropdown(backFn:() => api.ODPromiseVoid){
+    renderHeader("⏱️ Open Ticket Quick Setup: Panel Mode")
+
+    terminal.bold.blue(stepCount(20)+"Do you want to show the tickets as buttons or a dropdown?\n")
+    terminal.gray("Dropdown doesn't support colors and cannot contain option types other than 'tickets' (e.g. website/url or reaction roles).\n\n")
+
+    const answer = await terminal.singleColumnMenu([
+        "Use Buttons  "+ansis.gray("(Recommended with 2 or less ticket options)"),
+        "Use Dropdown "+ansis.gray("(Recommended with 3 or more ticket options)"),
+    ],{
+        leftPadding:"> ",
+        style:terminal.cyan,
+        selectedStyle:terminal.bgDefaultColor.bold,
+        submittedStyle:terminal.bgBlue,
+        extraLines:2,
+        cancelable:true
+    }).promise
+
+    if (answer.canceled) return await backFn()
+    else{
+        quickSetupStorage.panelDropdown = (answer.selectedIndex == 1)
+        return await renderQuickSetupPanelLayout(async () => {await renderQuickSetupPanelDropdown(backFn)})
+    }
+}
+
+async function renderQuickSetupPanelLayout(backFn:() => api.ODPromiseVoid){
+    renderHeader("⏱️ Open Ticket Quick Setup: Panel Layout")
+
+    terminal.bold.blue(stepCount(21)+"How would you like the panel message to be displayed?\n")
+    terminal.gray("Most of the time embeds are used. But for a simpler solution, you can choose the text layout.\n\n")
+
+    const answer = await terminal.singleColumnMenu([
+        "📋 Embed Message "+ansis.gray("(Default)"),
+        "💬 Raw Text Message",
+    ],{
+        leftPadding:"> ",
+        style:terminal.cyan,
+        selectedStyle:terminal.bgDefaultColor.bold,
+        submittedStyle:terminal.bgBlue,
+        extraLines:2,
+        cancelable:true
+    }).promise
+
+    if (answer.canceled) return await backFn()
+    else{
+        quickSetupStorage.panelLayout = (answer.selectedIndex == 0) ? "embed" : "text"
+        return await renderQuickSetupPanelDescribeOptions(async () => {await renderQuickSetupPanelLayout(backFn)})
+    }
+}
+
+async function renderQuickSetupPanelDescribeOptions(backFn:() => api.ODPromiseVoid){
+    renderHeader("⏱️ Open Ticket Quick Setup: Panel Option Descriptions")
+
+    terminal.bold.blue(stepCount(22)+"Would you like the panel to have auto-generated (ticket-)option descriptions?\n")
+    terminal.gray("It will use the 'name' & 'description' of each ticket option and displays it below the panel description.\n\n")
+
+    const answer = await terminal.singleColumnMenu([
+        ansis.red("❌ <Disable Option Descriptions>"),
+        "🟢 Use Simple Option Descriptions",
+        "🟠 Use Normal Option Descriptions "+ansis.gray("(Default)"),
+        "🔴 Use Detailed Option Descriptions",
+    ],{
+        leftPadding:"> ",
+        style:terminal.cyan,
+        selectedStyle:terminal.bgDefaultColor.bold,
+        submittedStyle:terminal.bgBlue,
+        extraLines:2,
+        cancelable:true
+    }).promise
+
+    if (answer.canceled) return await backFn()
+    else{
+        quickSetupStorage.panelDescribeOptions = (answer.selectedIndex == 0) ? null : (answer.selectedIndex == 1) ? "simple" : (answer.selectedIndex == 2) ? "normal" : "detailed"
+        return await renderQuickSetupPanelMaxTicketsWarning(async () => {await renderQuickSetupPanelDescribeOptions(backFn)})
+    }
+}
+
+async function renderQuickSetupPanelMaxTicketsWarning(backFn:() => api.ODPromiseVoid){
+    renderHeader("⏱️ Open Ticket Quick Setup: Ticket Close Configuration")
+
+    terminal.bold.blue(stepCount(23)+"Would you like to show the maximum amount of tickets a user can create in the panel?\n")
+    terminal.gray("This will show the amount of tickets a user can create at the same time when limits are enabled.\n\n")
+
+    const answer = await terminal.singleColumnMenu([
+        "❌ No, don't show the max tickets warning in the panel",
+        "✅ Yes, show the max tickets warning in the panel",
+    ],{
+        leftPadding:"> ",
+        style:terminal.cyan,
+        selectedStyle:terminal.bgDefaultColor.bold,
+        submittedStyle:terminal.bgBlue,
+        extraLines:2,
+        cancelable:true
+    }).promise
+
+    if (answer.canceled) return await backFn()
+    else{
+        quickSetupStorage.panelMaxTicketsWarning = (answer.selectedIndex == 1)
+        return await renderQuickSetupReady(async () => {await renderQuickSetupPanelMaxTicketsWarning(backFn)})
+    }
+}
+
+async function renderQuickSetupReady(backFn:() => api.ODPromiseVoid){
+    renderHeader("😎 Open Ticket Quick Setup: Overview")
+
+    terminal.bold.blue(stepCount(24)+"This is the overview of your ticket bot configuration!\n")
+    terminal.gray("Press 'Enter' to save the result to the config.\n\n")
+
+    const commands = ((quickSetupStorage.slashCommands && quickSetupStorage.textCommands) ? "Slash & Text" : (quickSetupStorage.slashCommands) ? "Slash Only" : "Text Only")
+    const statusText = (quickSetupStorage.status?.type == "listening" ? "Listening To " : (quickSetupStorage.status?.type == "playing" ? "Playing " : (quickSetupStorage.status?.type == "watching" ? "Watching " : ""))) + quickSetupStorage.status?.text
+    const status = (quickSetupStorage.status?.enabled) ? statusText : "Disabled"
+
+
+    terminal([
+        ansis.bold.hex("#f8ba00")("Client: ")+(quickSetupStorage.client?.client.user.displayName ?? "?"),
+        ansis.bold.hex("#f8ba00")("Status: ")+status,
+        ansis.bold.hex("#f8ba00")("Server: ")+(quickSetupStorage.guild?.name ?? "?"),
+        ansis.bold.hex("#f8ba00")("Admins: ")+(quickSetupStorage.globalAdmins?.length ?? "?")+" Admins",
+        ansis.bold.hex("#f8ba00")("Color: ")+(quickSetupStorage.mainColor ?? "?"),
+        ansis.bold.hex("#f8ba00")("Language: ")+(quickSetupStorage.language ?? "?"),
+        ansis.bold.hex("#f8ba00")("Commands: ")+commands,
+        ansis.bold.hex("#f8ba00")("Options: ")+quickSetupStorage.ticketOptions.length+" Tickets",
+        ansis.bold.hex("#f8ba00")("Autoclose: ")+(quickSetupStorage.autocloseHours ? quickSetupStorage.autocloseHours+" Hours" : "Disabled"),
+        ansis.bold.hex("#f8ba00")("Cooldown: ")+(quickSetupStorage.cooldownMinutes ? quickSetupStorage.cooldownMinutes+" Minutes" : "Disabled"),
+        ansis.bold.hex("#f8ba00")("Limits: ")+(quickSetupStorage.globalUserLimit ? quickSetupStorage.globalUserLimit+" Tickets/Person" : "Disabled"),
+        ansis.bold.gray("+ 13 More Settings ..."),
+    ].join("\n")+"\n\n")
+
+    const answer = await terminal.singleColumnMenu([
+        ansis.green("Press 'Enter' to save configuration!")
+    ],{
+        leftPadding:"> ",
+        style:terminal.cyan,
+        selectedStyle:terminal.bgDefaultColor.bold,
+        submittedStyle:terminal.bgBlue,
+        extraLines:2,
+        cancelable:true
+    }).promise
+
+    //save configuration
+    if (answer.canceled) return await backFn()
+    else if (answer.selectedIndex == 0) return await saveQuickSetupConfig()
+}
+
+async function saveQuickSetupConfig(){
+    console.log(quickSetupStorage)
 }
 
 /** Steps Todo
- * - S15: Enable Reply on ticket creation
- * - S16: Panel Name
- * - S17: Panel Description
- * - S18: Panel Mode => (dropdown/buttons)
- * - S19: Panel Auto Describe Options => (dropdown: disabled, in text, in embed fields, in embed description)
- * - S20: Panel Max Tickets Warning
- * 
- * 
- * - S20: TODO!! => extra's in general.json "system" => e.g. removeParticipantsOnClose, reply Ticket creation, ...
- * 
  * ALREADY FINISHED:
  * - Ticket configuration => per-ticket configuration
- *  - ticket name
- *  - ticket description
- *  - button type => (dropdown: label+emoji, label-only or emoji-only)
- *  - button emoji
- *  - ticket prefix
- *  - ticket suffix (dropdown)
  *  - (option ID autogenerated from name BE AWARE OF TICKETS WITH SAME NAME!! + remove unicode, spaces & special chars from id)
  *  - (embed autofilled with name+desc+color, thumbnail will automatically be set to the server icon) 
  *  - (ping will be @here) 
