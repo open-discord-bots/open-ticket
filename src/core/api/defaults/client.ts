@@ -4,6 +4,16 @@
 import { ODValidId } from "../modules/base"
 import { ODClientManager, ODSlashCommand, ODTextCommand, ODSlashCommandManager, ODTextCommandManager, ODSlashCommandInteractionCallback, ODTextCommandInteractionCallback } from "../modules/client"
 
+/** (CONTRIBUTOR GUIDE) HOW TO ADD NEW COMMANDS?
+ * - Register the command in loadAllSlashCommands() & loadAllTextCommands() in (./src/data/framework/commandLoader.ts)
+ * - Add autocomplete for the command in OD(Slash/Text)CommandManagerIds_Default in (./src/core/api/defaults/client.ts)
+ * - Add the command to the help menu in (./src/data/framework/helpMenuLoader.ts)
+ * - If required, new config variables should be added (incl. logs, dm-logs & permissions).
+ * - Update the Open Ticket Documentation.
+ * - If the command contains complex logic or can be executed from a button/dropdown, it should be placed inside an `ODAction`.
+ * - Check all files, test the bot carefully & try a lot of different scenario's with different settings.
+ */
+
 /**## ODClientManager_Default `default_class`
  * This is a special class that adds type definitions & typescript to the ODClientManager class.
  * It doesn't add any extra features!

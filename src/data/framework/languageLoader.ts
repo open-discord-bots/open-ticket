@@ -1,5 +1,14 @@
 import {opendiscord, api, utilities} from "../../index"
 
+/** (CONTRIBUTOR GUIDE) HOW TO ADD NEW LANGUAGES?
+ * - Add the file to (./languages/) and make sure the metadata is valid.
+ * - Register the language in loadAllLanguages() in (./src/data/framework/languageLoader.ts).
+ * - Add autocomplete for the language in ODLanguageManagerIds_Default in (./src/core/api/defaults/language.ts).
+ * - Update the language list in the README.md translator list.
+ * - Update the 2 language counters in the README.md features list.
+ * - Update the Open Ticket Documentation.
+ */
+
 export const loadAllLanguages = async () => {
     //register languages
     opendiscord.languages.add(new api.ODJsonLanguage("opendiscord:custom","custom.json"))
@@ -31,11 +40,4 @@ export const loadAllLanguages = async () => {
     opendiscord.languages.add(new api.ODJsonLanguage("opendiscord:swedish","swedish.json"))
     opendiscord.languages.add(new api.ODJsonLanguage("opendiscord:vietnamese","vietnamese.json"))
     opendiscord.languages.add(new api.ODJsonLanguage("opendiscord:persian","persian.json"))
-
-    /** How to add more languages?
-     * - Register the language to the manager (see above)
-     * - Add the language to the list in the "ODLanguageManagerIds_Default" interface (./src/core/api/defaults/language.ts)
-     * - Update the language list in the README.md translator list
-     * - Update the language counter in the README.md features list
-     */
 }

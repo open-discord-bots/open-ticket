@@ -4,6 +4,52 @@
 import { ODValidId } from "../modules/base"
 import { ODLanguageManager, ODLanguage } from "../modules/language"
 
+/** (CONTRIBUTOR GUIDE) HOW TO ADD NEW LANGUAGES?
+ * - Add the file to (./languages/) and make sure the metadata is valid.
+ * - Register the language in loadAllLanguages() in (./src/data/framework/languageLoader.ts).
+ * - Add autocomplete for the language in ODLanguageManagerIds_Default in (./src/core/api/defaults/language.ts).
+ * - Update the language list in the README.md translator list.
+ * - Update the 2 language counters in the README.md features list.
+ * - Update the Open Ticket Documentation.
+ */
+
+/**## ODLanguageManagerIds_Default `interface`
+ * This interface is a list of ids available in the `ODLanguageManager_Default` class.
+ * It's used to generate typescript declarations for this class.
+ */
+export interface ODLanguageManagerIds_Default {
+    "opendiscord:custom":ODLanguage,
+    "opendiscord:english":ODLanguage,
+    "opendiscord:dutch":ODLanguage,
+    "opendiscord:portuguese":ODLanguage,
+    "opendiscord:czech":ODLanguage,
+    "opendiscord:german":ODLanguage,
+    "opendiscord:catalan":ODLanguage,
+    "opendiscord:hungarian":ODLanguage,
+    "opendiscord:spanish":ODLanguage,
+    "opendiscord:romanian":ODLanguage,
+    "opendiscord:ukrainian":ODLanguage,
+    "opendiscord:indonesian":ODLanguage,
+    "opendiscord:italian":ODLanguage,
+    "opendiscord:estonian":ODLanguage,
+    "opendiscord:finnish":ODLanguage,
+    "opendiscord:danish":ODLanguage,
+    "opendiscord:thai":ODLanguage,
+    "opendiscord:turkish":ODLanguage,
+    "opendiscord:french":ODLanguage,
+    "opendiscord:arabic":ODLanguage,
+    "opendiscord:hindi":ODLanguage,
+    "opendiscord:lithuanian":ODLanguage,
+    "opendiscord:polish":ODLanguage,
+    "opendiscord:latvian":ODLanguage,
+    "opendiscord:norwegian":ODLanguage,
+    "opendiscord:russian":ODLanguage,
+    "opendiscord:swedish":ODLanguage,
+    "opendiscord:vietnamese":ODLanguage,
+    "opendiscord:persian":ODLanguage,
+    //ADD NEW LANGUAGES HERE!!!
+}
+
 /**## ODLanguageManagerTranslations_Default `type`
  * This interface is a list of ids available in the `ODLanguageManager_Default` class.
  * It's used to generate typescript declarations for this class.
@@ -438,43 +484,6 @@ export type ODLanguageManagerTranslations_Default = (
     "stats.properties.usersBlacklisted"|
     "stats.properties.transcriptsCreated"
 )
-
-/**## ODLanguageManagerIds_Default `interface`
- * This interface is a list of ids available in the `ODLanguageManager_Default` class.
- * It's used to generate typescript declarations for this class.
- */
-export interface ODLanguageManagerIds_Default {
-    "opendiscord:custom":ODLanguage,
-    "opendiscord:english":ODLanguage,
-    "opendiscord:dutch":ODLanguage,
-    "opendiscord:portuguese":ODLanguage,
-    "opendiscord:czech":ODLanguage,
-    "opendiscord:german":ODLanguage,
-    "opendiscord:catalan":ODLanguage,
-    "opendiscord:hungarian":ODLanguage,
-    "opendiscord:spanish":ODLanguage,
-    "opendiscord:romanian":ODLanguage,
-    "opendiscord:ukrainian":ODLanguage,
-    "opendiscord:indonesian":ODLanguage,
-    "opendiscord:italian":ODLanguage,
-    "opendiscord:estonian":ODLanguage,
-    "opendiscord:finnish":ODLanguage,
-    "opendiscord:danish":ODLanguage,
-    "opendiscord:thai":ODLanguage,
-    "opendiscord:turkish":ODLanguage,
-    "opendiscord:french":ODLanguage,
-    "opendiscord:arabic":ODLanguage,
-    "opendiscord:hindi":ODLanguage,
-    "opendiscord:lithuanian":ODLanguage,
-    "opendiscord:polish":ODLanguage,
-    "opendiscord:latvian":ODLanguage,
-    "opendiscord:norwegian":ODLanguage,
-    "opendiscord:russian":ODLanguage,
-    "opendiscord:swedish":ODLanguage,
-    "opendiscord:vietnamese":ODLanguage,
-    "opendiscord:persian":ODLanguage,
-    //ADD NEW LANGUAGES HERE!!!
-}
 
 /**## ODLanguageManager_Default `default_class`
  * This is a special class that adds type definitions & typescript to the ODLanguageManager class.
