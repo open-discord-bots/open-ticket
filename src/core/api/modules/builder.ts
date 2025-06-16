@@ -257,15 +257,7 @@ export class ODQuickButton {
     /**The id of this button. */
     id: ODId
     /**The current data of this button */
-    data: Partial<ODButtonData> = {
-        customId:"",
-        mode:"button",
-        url:null,
-        color:null,
-        label:null,
-        emoji:null,
-        disabled:false
-    }
+    data: Partial<ODButtonData>
 
     constructor(id:ODValidId,data:Partial<ODButtonData>){
         this.id = new ODId(id)
@@ -277,12 +269,13 @@ export class ODQuickButton {
         try {
             //create the discord.js button
             const button = new discord.ButtonBuilder()
-            if (this.data.mode == "button") button.setCustomId(this.data.customId ?? "od:unknown-button")
+            if (this.data.mode == "button" || (!this.data.mode && this.data.customId)) button.setCustomId(this.data.customId ?? "od:unknown-button")
             if (this.data.mode == "url") button.setStyle(discord.ButtonStyle.Link)
             else if (this.data.color == "gray") button.setStyle(discord.ButtonStyle.Secondary)
             else if (this.data.color == "blue") button.setStyle(discord.ButtonStyle.Primary)
             else if (this.data.color == "green") button.setStyle(discord.ButtonStyle.Success)
             else if (this.data.color == "red") button.setStyle(discord.ButtonStyle.Danger)
+            else button.setStyle(discord.ButtonStyle.Secondary)
             if (this.data.url) button.setURL(this.data.url)
             if (this.data.label) button.setLabel(this.data.label)
             if (this.data.emoji) button.setEmoji(this.data.emoji)
@@ -564,21 +557,7 @@ export class ODQuickDropdown {
     /**The id of this dropdown. */
     id: ODId
     /**The current data of this dropdown */
-    data: Partial<ODDropdownData> = {
-        customId:"",
-        type:"string",
-        placeholder:null,
-        minValues:null,
-        maxValues:null,
-        disabled:false,
-        channelTypes:[],
-
-        options:[],
-        users:[],
-        roles:[],
-        channels:[],
-        mentionables:[]
-    }
+    data: Partial<ODDropdownData>
 
     constructor(id:ODValidId,data:Partial<ODDropdownData>){
         this.id = new ODId(id)
@@ -804,12 +783,7 @@ export class ODQuickFile {
     /**The id of this file. */
     id: ODId
     /**The current data of this file */
-    data: Partial<ODFileData> = {
-        file:"",
-        name:"file.txt",
-        description:null,
-        spoiler:false
-    }
+    data: Partial<ODFileData>
 
     constructor(id:ODValidId,data:Partial<ODFileData>){
         this.id = new ODId(id)
@@ -1060,21 +1034,7 @@ export class ODQuickEmbed {
     /**The id of this embed. */
     id: ODId
     /**The current data of this embed */
-    data: Partial<ODEmbedData> = {
-        title:null,
-        color:null,
-        url:null,
-        description:null,
-        authorText:null,
-        authorImage:null,
-        authorUrl:null,
-        footerText:null,
-        footerImage:null,
-        image:null,
-        thumbnail:null,
-        fields:[],
-        timestamp:null
-    }
+    data: Partial<ODEmbedData>
 
     constructor(id:ODValidId,data:Partial<ODEmbedData>){
         this.id = new ODId(id)
@@ -1186,13 +1146,10 @@ export class ODMessageInstance {
         content:null,
         poll:null,
         ephemeral:false,
-
         embeds:[],
         components:[],
         files:[],
-
-        additionalOptions:{
-        }
+        additionalOptions:{}
     }
 
     /**Set the content of this message */
@@ -1350,6 +1307,81 @@ export class ODMessage<Source extends string,Params> extends ODBuilderImplementa
 
         this.cache = result
         this.didCache = true
+        return result
+    }
+}
+
+/**## ODQuickMessage `class`
+ * This is an Open Ticket quick message builder.
+ * 
+ * With this class, you can quickly create a message to send in a discord channel.
+ * This quick message can be used by Open Ticket plugins instead of the normal builders to speed up the process!
+ * 
+ * Because of the quick functionality, these messages are less customisable by other plugins.
+ */
+export class ODQuickMessage {
+    /**The id of this message. */
+    id: ODId
+    /**The current data of this message. */
+    data: Partial<ODMessageData>
+
+    constructor(id:ODValidId,data:Partial<ODMessageData>){
+        this.id = new ODId(id)
+        this.data = data
+    }
+
+    /**Build this message & compile it for discord.js */
+    async build(): Promise<ODMessageBuildResult> {
+        //create the discord.js message
+        const componentArray: discord.ActionRowBuilder<discord.MessageActionRowComponentBuilder>[] = []
+        let currentRow: discord.ActionRowBuilder<discord.MessageActionRowComponentBuilder> = new discord.ActionRowBuilder()
+        this.data.components?.forEach((c) => {
+            //return when component crashed
+            if (c.component == null) return
+            else if (c.component == "\n"){
+                //create new current row when required
+                if (currentRow.components.length > 0){
+                    componentArray.push(currentRow)
+                    currentRow = new discord.ActionRowBuilder()
+                }
+            }else if (c.component instanceof discord.BaseSelectMenuBuilder){
+                //push current row when not empty
+                if (currentRow.components.length > 0){
+                    componentArray.push(currentRow)
+                    currentRow = new discord.ActionRowBuilder()
+                }
+                currentRow.addComponents(c.component)
+                //create new current row after dropdown
+                componentArray.push(currentRow)
+                currentRow = new discord.ActionRowBuilder()
+            }else{
+                //push button to current row
+                currentRow.addComponents(c.component)
+            }
+
+            //create new row when 5 rows in length
+            if (currentRow.components.length == 5){
+                componentArray.push(currentRow)
+                currentRow = new discord.ActionRowBuilder()
+            }
+        })
+        //push final row to array
+        if (currentRow.components.length > 0) componentArray.push(currentRow)
+
+        const filteredEmbeds = (this.data.embeds?.map((e) => e.embed).filter((e) => e instanceof discord.EmbedBuilder) as discord.EmbedBuilder[]) ?? [] 
+        const filteredFiles = (this.data.files?.map((f) => f.file).filter((f) => f instanceof discord.AttachmentBuilder) as discord.AttachmentBuilder[]) ?? []
+        
+        const message : discord.MessageCreateOptions = {
+            content:this.data.content ?? "",
+            poll:this.data.poll ?? undefined,
+            embeds:filteredEmbeds,
+            components:componentArray,
+            files:filteredFiles
+        }
+        
+        let result = {id:this.id,message,ephemeral:this.data.ephemeral ?? false}
+
+        Object.assign(result.message,this.data.additionalOptions)
         return result
     }
 }
