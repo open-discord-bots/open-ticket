@@ -4,6 +4,8 @@
 import {opendiscord, api, utilities} from "../index"
 import * as discord from "discord.js"
 
+const generalConfig = opendiscord.configs.get("opendiscord:general")
+
 export const registerActions = async () => {
     opendiscord.actions.add(new api.ODAction("opendiscord:reaction-role"))
     opendiscord.actions.get("opendiscord:reaction-role").workers.add([
@@ -79,6 +81,11 @@ export const registerActions = async () => {
 
             //update instance & finish event
             instance.result = result
+
+            if (generalConfig.data.system.logs.enabled && generalConfig.data.system.messages.roleAdding.logs){
+                const logChannel = opendiscord.posts.get("opendiscord:logs")
+                if (logChannel) { logChannel.send( await opendiscord.builders.messages.getSafe("opendiscord:reaction-role-logs").build(source,{guild,user,role,result}))}}
+
             await opendiscord.events.get("afterRolesUpdated").emit([user,role])
         }),
         new api.ODWorker("opendiscord:logs",0,(instance,params,source,cancel) => {

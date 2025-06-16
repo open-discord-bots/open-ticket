@@ -1107,7 +1107,44 @@ const roleEmbeds = () => {
             else instance.setDescription(lang.getTranslation("actions.descriptions.rolesEmpty"))
         })
     )
+
+    //REACTION ROLE LOGS
+    embeds.add(new api.ODEmbed("opendiscord:reaction-role-logs"))
+    embeds.get("opendiscord:reaction-role-logs")!.workers.add(
+        new api.ODWorker("opendiscord:reaction-role-logs",0,async (instance,params,source) => {
+            const {user,result} = params
+
+            const newResult = result
+                .filter(r => r.action != null && r.role?.id)
+                .sort((a, b) => {
+                    if (a.action === "added" && b.action === "removed") return -1;
+                    if (a.action === "removed" && b.action === "added") return 1;
+                    return 0;
+                })
+                .map(r => {
+                    return (r.action === "added")
+                        ? `🟢${lang.getTranslation("params.uppercase.added")} ${discord.roleMention(r.role.id)}`
+                        : `🔴 ${lang.getTranslation("params.uppercase.removed")} ${discord.roleMention(r.role.id)}`
+                })
+
+            let baseDescription = lang.getTranslationWithParams("actions.logs.roleLog", [discord.userMention(user.id)])
+            if (!baseDescription || baseDescription === "null") {
+                baseDescription = `Roles updated for ${discord.userMention(user.id)}`
+            }
+
+            const fullDescription = (newResult.length > 0) ? `${baseDescription}\n\n${newResult.join("\n")}` : `${baseDescription}\n\n${lang.getTranslation("actions.descriptions.rolesEmpty")}`
+
+            instance.setColor(generalConfig.data.mainColor)
+            instance.setTitle(utilities.emojiTitle("📋", lang.getTranslation("actions.titles.roles")))
+            instance.setThumbnail(user.displayAvatarURL())
+            instance.setAuthor(user.displayName, user.displayAvatarURL())
+            instance.setTimestamp(new Date())
+            instance.setDescription(fullDescription)
+        })
+    )
 }
+
+export default roleEmbeds
 
 const clearEmbeds = () => {
     //CLEAR VERIFY MESSAGE
