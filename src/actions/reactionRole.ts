@@ -81,12 +81,20 @@ export const registerActions = async () => {
 
             //update instance & finish event
             instance.result = result
-
-            if (generalConfig.data.system.logs.enabled && generalConfig.data.system.messages.roleAdding.logs){
-                const logChannel = opendiscord.posts.get("opendiscord:logs")
-                if (logChannel) { logChannel.send( await opendiscord.builders.messages.getSafe("opendiscord:reaction-role-logs").build(source,{guild,user,role,result}))}}
-
             await opendiscord.events.get("afterRolesUpdated").emit([user,role])
+        }),
+        new api.ODWorker("opendiscord:discord-logs",1,async (instance,params,source,cancel) => {
+            const {guild,user,option,overwriteMode} = params
+            if (!instance.role || !instance.result) return
+
+            //to logs
+            if (generalConfig.data.system.logs.enabled && (generalConfig.data.system.messages.roleAdding.logs || generalConfig.data.system.messages.roleRemoving.logs)){
+                const logChannel = opendiscord.posts.get("opendiscord:logs")
+                if (logChannel) logChannel.send(await opendiscord.builders.messages.getSafe("opendiscord:reaction-role-logs").build(source,{guild,user,role:instance.role,result:instance.result}))
+            }
+
+            //to dm
+            if (generalConfig.data.system.messages.roleAdding.dm || generalConfig.data.system.messages.roleRemoving.dm) await opendiscord.client.sendUserDm(user,await opendiscord.builders.messages.getSafe("opendiscord:reaction-role-dm").build(source,{guild,user,role:instance.role,result:instance.result}))
         }),
         new api.ODWorker("opendiscord:logs",0,(instance,params,source,cancel) => {
             const {guild,user,option} = params

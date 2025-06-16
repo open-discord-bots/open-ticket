@@ -1108,38 +1108,57 @@ const roleEmbeds = () => {
         })
     )
 
-    //REACTION ROLE LOGS
-    embeds.add(new api.ODEmbed("opendiscord:reaction-role-logs"))
-    embeds.get("opendiscord:reaction-role-logs")!.workers.add(
-        new api.ODWorker("opendiscord:reaction-role-logs",0,async (instance,params,source) => {
-            const {user,result} = params
-
-            const newResult = result
-                .filter(r => r.action != null && r.role?.id)
-                .sort((a, b) => {
-                    if (a.action === "added" && b.action === "removed") return -1;
-                    if (a.action === "removed" && b.action === "added") return 1;
-                    return 0;
-                })
-                .map(r => {
-                    return (r.action === "added")
-                        ? `🟢${lang.getTranslation("params.uppercase.added")} ${discord.roleMention(r.role.id)}`
-                        : `🔴 ${lang.getTranslation("params.uppercase.removed")} ${discord.roleMention(r.role.id)}`
-                })
-
-            let baseDescription = lang.getTranslationWithParams("actions.logs.roleLog", [discord.userMention(user.id)])
-            if (!baseDescription || baseDescription === "null") {
-                baseDescription = `Roles updated for ${discord.userMention(user.id)}`
-            }
-
-            const fullDescription = (newResult.length > 0) ? `${baseDescription}\n\n${newResult.join("\n")}` : `${baseDescription}\n\n${lang.getTranslation("actions.descriptions.rolesEmpty")}`
+    //REACTION ROLE DM
+    embeds.add(new api.ODEmbed("opendiscord:reaction-role-dm"))
+    embeds.get("opendiscord:reaction-role-dm").workers.add(
+        new api.ODWorker("opendiscord:reaction-role-dm",0,async (instance,params,source) => {
+            const {guild,user,role,result} = params
 
             instance.setColor(generalConfig.data.mainColor)
-            instance.setTitle(utilities.emojiTitle("📋", lang.getTranslation("actions.titles.roles")))
-            instance.setThumbnail(user.displayAvatarURL())
-            instance.setAuthor(user.displayName, user.displayAvatarURL())
+            instance.setTitle(utilities.emojiTitle("🎨",lang.getTranslation("actions.titles.roles")))
+            instance.setAuthor(user.displayName,user.displayAvatarURL())
             instance.setTimestamp(new Date())
-            instance.setDescription(fullDescription)
+
+            const newResult = result.filter((r) => r.action != null).sort((a,b) => {
+                if (a.action == "added" && b.action == "removed") return -1
+                else if (a.action == "removed" && b.action == "added") return 1
+                else return 0
+            }).map((r) => {
+                return (r.action == "added") ? "🟢 "+lang.getTranslation("params.uppercase.added")+" @"+r.role.name : "🔴 "+lang.getTranslation("params.uppercase.removed")+" @"+r.role.name
+            })
+            
+            //TODO TRANSLATION!!!
+            const baseDescription = ("Your roles in our server have been updated!")
+
+            if (newResult.length > 0) instance.setDescription(baseDescription+"\n\n"+newResult.join("\n"))
+            else instance.setDescription(baseDescription+"\n"+lang.getTranslation("actions.descriptions.rolesEmpty"))
+        })
+    )
+
+    //REACTION ROLE LOGS
+    embeds.add(new api.ODEmbed("opendiscord:reaction-role-logs"))
+    embeds.get("opendiscord:reaction-role-logs").workers.add(
+        new api.ODWorker("opendiscord:reaction-role-logs",0,async (instance,params,source) => {
+            const {guild,user,role,result} = params
+
+            instance.setColor(generalConfig.data.mainColor)
+            instance.setTitle(utilities.emojiTitle("🎨",lang.getTranslation("actions.titles.roles")))
+            instance.setAuthor(user.displayName,user.displayAvatarURL())
+            instance.setTimestamp(new Date())
+
+            const newResult = result.filter((r) => r.action != null).sort((a,b) => {
+                if (a.action == "added" && b.action == "removed") return -1
+                else if (a.action == "removed" && b.action == "added") return 1
+                else return 0
+            }).map((r) => {
+                return (r.action == "added") ? "🟢 "+lang.getTranslation("params.uppercase.added")+" "+discord.roleMention(r.role.id) : "🔴 "+lang.getTranslation("params.uppercase.removed")+" "+discord.roleMention(r.role.id)
+            })
+            
+            //TODO TRANSLATION!!!
+            const baseDescription = ("{0} has updated their roles!").replace("{0}",discord.userMention(user.id))
+
+            if (newResult.length > 0) instance.setDescription(baseDescription+"\n\n"+newResult.join("\n"))
+            else instance.setDescription(baseDescription+"\n"+lang.getTranslation("actions.descriptions.rolesEmpty"))
         })
     )
 }

@@ -965,13 +965,21 @@ const roleMessages = () => {
         })
     )
 
+    //REACTION ROLE DM
+    messages.add(new api.ODMessage("opendiscord:reaction-role-dm"))
+    messages.get("opendiscord:reaction-role-dm").workers.add(
+        new api.ODWorker("opendiscord:reaction-role-dm",0,async (instance,params,source) => {
+            const {guild,user,role,result} = params
+            instance.addEmbed(await embeds.getSafe("opendiscord:reaction-role-dm").build(source,{guild,user,role,result}))
+        })
+    )
+
     //REACTION ROLE LOGS
     messages.add(new api.ODMessage("opendiscord:reaction-role-logs"))
-    messages.get("opendiscord:reaction-role-logs")!.workers.add(
-        new api.ODWorker("opendiscord:reaction-role-logs",0,async(instance,params,source) => {
+    messages.get("opendiscord:reaction-role-logs").workers.add(
+        new api.ODWorker("opendiscord:reaction-role-logs",0,async (instance,params,source) => {
             const {guild,user,role,result} = params
-            const embed = await embeds.getSafe("opendiscord:reaction-role-logs").build(source,{guild,user,role,result})
-            instance.addEmbed(embed)
+            instance.addEmbed(await embeds.getSafe("opendiscord:reaction-role-logs").build(source,{guild,user,role,result}))
         })
     )
 }
