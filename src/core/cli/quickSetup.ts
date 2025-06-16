@@ -23,8 +23,13 @@ interface ODQuickSetupVariables {
         buttonEmoji:string|null,
         channelPrefix:string,
         channelSuffix:api.ODJsonConfig_DefaultOptionTicketChannelType["suffix"]
-    }|null)[]
+    }|null)[],
+    autocloseHours?:number|null,
+    cooldownMinutes?:number|null,
+    removeParticipantsOnClose?:boolean
 }
+const stepCount = (count:number) => "(Step "+count+"/20) "
+
 const quickSetupStorage: ODQuickSetupVariables = {ticketOptions:[]}
 const autoCompleteMenuOpts: Terminal.SingleLineMenuOptions = {
     style:terminal.white,
@@ -93,7 +98,7 @@ async function renderQuickSetupWarning(backFn:() => api.ODPromiseVoid) {
     renderHeader("⏱️ Open Ticket Quick Setup: Warning")
 
     terminal.bold(ansis.yellow("WARNING! ")+ansis.red("By using the 'Quick Setup' feature, your current config will be completely resetted!"))
-    terminal.gray("\n\nAre you sure you want to continue?")
+    terminal.gray("\nAre you sure you want to continue?\n")
 
     const answer = await terminal.singleColumnMenu([
         ansis.green("✅ No, take me back."),
@@ -119,11 +124,11 @@ async function renderQuickSetupWelcome(backFn:() => api.ODPromiseVoid){
         "Hi there! Thank you for downloading and installing Open Ticket.",
         "You have chosen to configure the bot using the 'Quick Setup CLI'.",
         "",
-        "This program will help you with configuring Open Ticket using a step-by-step method.",
-        "If you've ever used Google Forms, then this will probably be very easy for you 😉.",
+        "This tool will help you with configuring Open Ticket using a step-by-step method.",
+        ansis.gray("You can "+ansis.red.bold("navigate using the arrow-keys")+" and "+ansis.red.bold("go back using ESC")+"."),
         "",
-        ansis.magenta("The configuration should normally only take around 5 minutes."),
-        ansis.magenta("Once you've completed the form, the bot is technically ready for usage!")
+        ansis.magenta("The configuration should normally only take around 6 minutes."),
+        ansis.magenta("Once you've completed the form, the bot is ready for usage!")
     ].join("\n")+"\n\n")
 
     const answer = await terminal.singleColumnMenu([
@@ -144,7 +149,7 @@ async function renderQuickSetupWelcome(backFn:() => api.ODPromiseVoid){
 async function renderQuickSetupDevPortal(backFn:() => api.ODPromiseVoid){
     renderHeader("⏱️ Open Ticket Quick Setup: Discord Bot & Developer Portal")
 
-    terminal.bold.blue("(Step 1) Have you already created a Discord bot to use for Open Ticket?\n")
+    terminal.bold.blue(stepCount(1)+"Have you already created a Discord bot you can use for Open Ticket?\n")
 
     const answer = await terminal.singleColumnMenu([
         "✅ Yes I have, and it has been invited to the server.",
@@ -169,10 +174,10 @@ async function renderQuickSetupDevPortalGuide(variation:0|1,backFn:() => api.ODP
     renderHeader("⏱️ Open Ticket Quick Setup: Discord Bot & Developer Portal")
 
     if (variation == 0){
-        terminal.bold.blue("(Step 1.1) You've mentioned that you don't know how to create a Discord bot.\n\n")
+        terminal.bold.blue(stepCount(1.1)+"You've mentioned that you don't know how to create a Discord bot.\n\n")
         terminal.gray("Please visit the following URL for a step-by-step guide on how to create a Discord bot.\nIf it still doesn't work, join our Discord server and we will help you further!\n"+ansis.magenta("=> https://otdocs.dj-dj.be/docs/guides/get-started#bot\n\n"))
     }else{
-        terminal.bold.blue("(Step 1.2) You've mentioned that you've never seen Discord bot before.\n\n")
+        terminal.bold.blue(stepCount(1.2)+"You've mentioned that you've never seen Discord bot before.\n\n")
         terminal.gray("How did you even download Open Ticket 🤪? But all jokes aside, we have a step-by-step guide on how to create a Discord bot.\nIf it still doesn't work, join our Discord server and we will help you further!\n"+ansis.magenta("=> https://otdocs.dj-dj.be/docs/guides/get-started#bot\n\n"))
     }
 
@@ -217,8 +222,8 @@ async function quickSetupLogin(token:string): Promise<api.ODClientManager|null> 
 async function renderQuickSetupBotToken(backFn:() => api.ODPromiseVoid){
     renderHeader("⏱️ Open Ticket Quick Setup: Bot Token")
 
-    terminal.bold.blue("(Step 2) Please insert the token of your discord bot.\n")
-    terminal.gray("It will be safely stored in the 'config/general.json' file.\n\n> ")
+    terminal.bold.blue(stepCount(2)+"Please insert the token of your discord bot.\n")
+    terminal.gray("This is used to configure the bot and is then stored securely in the './config/general.json' file.\n\n> ")
 
     const answer = await terminal.inputField({
         style:terminal.white,
@@ -254,7 +259,7 @@ async function renderQuickSetupServer(backFn:() => api.ODPromiseVoid){
 
     renderHeader("⏱️ Open Ticket Quick Setup: Discord Server")
 
-    terminal.bold.blue("(Step 3) Please select a Discord Server to use.\n")
+    terminal.bold.blue(stepCount(3)+"Please select a Discord Server to use.\n")
     terminal.gray("The bot will only work in this server.\n\n")
 
     const guilds = await client.getGuilds()
@@ -284,7 +289,7 @@ async function renderQuickSetupAdminRoles(selectedAdmins:string[],backFn:() => a
 
     renderHeader("⏱️ Open Ticket Quick Setup: Admin Roles")
 
-    terminal.bold.blue("(Step 4) Please select all 'Global Admins' roles to use.\n")
+    terminal.bold.blue(stepCount(4)+"Please select all 'Global Admins' roles to use.\n")
     terminal.gray("Users with one of these roles will be able to access & interact with all tickets.\n\n")
 
     const roles = cachedRoles ?? (await guild.roles.fetch()).toJSON().sort((a,b) => b.position-a.position)
@@ -305,7 +310,7 @@ async function renderQuickSetupAdminRoles(selectedAdmins:string[],backFn:() => a
     if (answer.selectedIndex == 0) return await renderQuickSetupAdminRoles(selectedAdmins,backFn)
     if (answer.selectedIndex == 1){
         quickSetupStorage.globalAdmins = selectedAdmins
-        return await renderQuickSetupColorPicker(backFn)
+        return await renderQuickSetupColorPicker(async () => {await renderQuickSetupAdminRoles(selectedAdmins,backFn,cachedRoles)})
     }
     const adminRole = roles[answer.selectedIndex-2]
     const index = selectedAdmins.findIndex((r) => r == adminRole.id)
@@ -314,15 +319,14 @@ async function renderQuickSetupAdminRoles(selectedAdmins:string[],backFn:() => a
     return await renderQuickSetupAdminRoles(selectedAdmins,backFn,roles)
 }
 
-async function renderQuickSetupColorPicker(backFn:() => api.ODPromiseVoid,tryAgain?:boolean){
+async function renderQuickSetupColorPicker(backFn:() => api.ODPromiseVoid){
     const {client,guild,globalAdmins} = quickSetupStorage
     if (!client || !guild || !globalAdmins) return
 
     renderHeader("⏱️ Open Ticket Quick Setup: Main Color")
 
-    terminal.bold.blue("(Step 5) Please insert a valid hex-color to use in all embeds.\n")
-    terminal.gray("You can also choose from existing presets. (e.g. red, green, blue, ...)\n\n")
-    terminal.gray(tryAgain ? ansis.bold.red("Invalid color, please try again!\n")+ansis.gray("> ") : "> ")
+    terminal.bold.blue(stepCount(5)+"Please insert a valid hex-color to use in all embeds.\n")
+    terminal.gray("You can also choose from existing presets. (e.g. red, green, blue, ...)\n\n> ")
 
     const answer = await terminal.inputField({
         style:terminal.white,
@@ -335,7 +339,12 @@ async function renderQuickSetupColorPicker(backFn:() => api.ODPromiseVoid,tryAga
 
     if (typeof answer != "string") return await backFn()
     else{
-        if (!Array.from(presetColors.keys()).includes(answer) && !/^#[0-9a-f]{6}$/.test(answer)) return await renderQuickSetupColorPicker(backFn,true)
+        if (!Array.from(presetColors.keys()).includes(answer) && !/^#[0-9a-f]{6}$/.test(answer)){
+            terminal.red.bold("\n\n❌ Please insert a valid hex-color or a color from the list. (TIP: use tab for autocomplete)\n")
+            await utilities.timer(2000)
+            return await renderQuickSetupColorPicker(backFn)
+        }
+
         let color: discord.ColorResolvable
         if (Array.from(presetColors.keys()).includes(answer)){
             color = presetColors.get(answer) as number
@@ -347,12 +356,11 @@ async function renderQuickSetupColorPicker(backFn:() => api.ODPromiseVoid,tryAga
     }
 }
 
-async function renderQuickSetupLanguage(backFn:() => api.ODPromiseVoid,tryAgain?:boolean){
+async function renderQuickSetupLanguage(backFn:() => api.ODPromiseVoid){
     renderHeader("⏱️ Open Ticket Quick Setup: Language")
     
-    terminal.bold.blue("(Step 6) What language would you like to use in the bot?\n")
-    terminal.gray("View a list of available languages here: https://otgithub.dj-dj.be#-translators\n\n")
-    terminal.gray(tryAgain ? ansis.bold.red("Language not found, please try again!\n")+ansis.gray("> ") : "> ")
+    terminal.bold.blue(stepCount(6)+"What language would you like to use in the bot?\n")
+    terminal.gray("View a list of available languages here: https://otgithub.dj-dj.be#-translators\n\n> ")
 
     const answer = await terminal.inputField({
         style:terminal.white,
@@ -365,7 +373,12 @@ async function renderQuickSetupLanguage(backFn:() => api.ODPromiseVoid,tryAgain?
 
     if (typeof answer != "string") return await backFn()
     else{
-        if (!opendiscord.defaults.getDefault("languageList").includes(answer.toLowerCase())) return await renderQuickSetupLanguage(backFn,true)
+        if (!opendiscord.defaults.getDefault("languageList").includes(answer.toLowerCase())){
+            terminal.red.bold("\n\n❌ Please insert an available language from the list. (TIP: use tab for autocomplete)\n")
+            await utilities.timer(2000)
+            return await renderQuickSetupLanguage(backFn)
+        }
+
         quickSetupStorage.language = answer.toLowerCase()
         return await renderQuickSetupCommandTypes(async () => {await renderQuickSetupLanguage(backFn)})
     }
@@ -374,7 +387,7 @@ async function renderQuickSetupLanguage(backFn:() => api.ODPromiseVoid,tryAgain?
 async function renderQuickSetupCommandTypes(backFn:() => api.ODPromiseVoid){
     renderHeader("⏱️ Open Ticket Quick Setup: Command Types")
 
-    terminal.bold.blue("(Step 7) Would you like to use slash commands, text commands or both?\n")
+    terminal.bold.blue(stepCount(7)+"Would you like to use slash commands, text commands or both?\n")
     terminal.gray("Slash commands are recommended.\n\n")
 
     const answer = await terminal.singleColumnMenu([
@@ -407,7 +420,7 @@ async function renderQuickSetupCommandTypes(backFn:() => api.ODPromiseVoid){
 async function renderQuickSetupStatusType(backFn:() => api.ODPromiseVoid){
     renderHeader("⏱️ Open Ticket Quick Setup: Status Type")
 
-    terminal.bold.blue("(Step 8) Please select the type of status you want to use.\n")
+    terminal.bold.blue(stepCount(8)+"Please select the type of status you want to use.\n")
     terminal.gray("The status will be shown below the bot name in the userlist.\n\n")
 
     const answer = await terminal.singleColumnMenu([
@@ -442,7 +455,7 @@ async function renderQuickSetupStatusText(backFn:() => api.ODPromiseVoid){
 
     renderHeader("⏱️ Open Ticket Quick Setup: Status Text")
 
-    terminal.bold.blue("(Step 8.1) What text would you like to display in the status?\n")
+    terminal.bold.blue(stepCount(8.1)+"What text would you like to display in the status?\n")
     terminal.gray("This will be appended after the type you have chosen in the previous question.\n\n> ")
     terminal.gray(status.type == "listening" ? "Listening To " : (status.type == "playing" ? "Playing " : (status.type == "watching" ? "Watching " : "")))
 
@@ -465,7 +478,7 @@ async function renderQuickSetupLogs(backFn:() => api.ODPromiseVoid){
 
     renderHeader("⏱️ Open Ticket Quick Setup: Channel Logs")
 
-    terminal.bold.blue("(Step 9) Please select the 'Text Channel' to use for logs.\n")
+    terminal.bold.blue(stepCount(9)+"Please select the 'Text Channel' to use for logs.\n")
     terminal.gray("All logs of the bot will be sent here. Make sure only admins can access this channel.\n\n")
 
     const rawChannels = (await guild.channels.fetch()).toJSON().filter((c) => c !== null && c.isTextBased())
@@ -502,7 +515,7 @@ async function renderQuickSetupTicketCategory(backFn:() => api.ODPromiseVoid){
 
     renderHeader("⏱️ Open Ticket Quick Setup: Ticket Category")
 
-    terminal.bold.blue("(Step 10) Please select which 'Category' you would like tickets to be created in.\n")
+    terminal.bold.blue(stepCount(10)+"Please select which 'Category' you would like tickets to be created in.\n")
     terminal.gray("When no category is selected, tickets will appear at the top of the channel list.\n\n")
 
     const rawCategories = (await guild.channels.fetch()).toJSON().filter((c) => c !== null && c.type == discord.ChannelType.GuildCategory)
@@ -535,8 +548,8 @@ async function renderQuickSetupTicketCategory(backFn:() => api.ODPromiseVoid){
 async function renderQuickSetupTicketCount(backFn:() => api.ODPromiseVoid){
     renderHeader("⏱️ Open Ticket Quick Setup: Ticket Configuration")
 
-    terminal.bold.blue("(Step 11) How many ticket types would you like to create?\n")
-    terminal.gray("You can always add more ticket types afterwards.\n\n")
+    terminal.bold.blue(stepCount(11)+"How many ticket options/types would you like to create?\n")
+    terminal.gray("You can always add more ticket options/types in the config afterwards.\n\n")
 
     const answer = await terminal.singleColumnMenu([
         "1️⃣ 1 Ticket Option",
@@ -568,7 +581,7 @@ async function renderQuickSetupCreateTicketName(ticketIndex:number,requiredTicke
     renderHeader("⏱️ Open Ticket Quick Setup: Ticket Configuration (Ticket "+(ticketIndex+1)+"/"+requiredTickets+")")
 
     terminal.bold.blue("("+utilities.ordinalNumber(ticketIndex+1)+" Ticket) Please insert the name of this ticket option\n")
-    terminal.gray("Recommendation: Clean, short, obvious name, not more than ±30 characters. \n\n")
+    terminal.gray("Recommendation: Clean, short, obvious name, not more than ±30 characters.\n\n> ")
 
     const answer = await terminal.inputField({
         style:terminal.white,
@@ -602,7 +615,7 @@ async function renderQuickSetupCreateTicketDescription(ticketIndex:number,requir
     renderHeader("⏱️ Open Ticket Quick Setup: Ticket Configuration (Ticket "+(ticketIndex+1)+"/"+requiredTickets+")")
 
     terminal.bold.blue("("+utilities.ordinalNumber(ticketIndex+1)+" Ticket) Please insert the description of this ticket option\n")
-    terminal.gray("Recommendation: Use '\\n' (backslash-n) for a newline.\n\n")
+    terminal.gray("Recommendation: Use '\\n' (backslash-n) for a newline.\n\n> ")
 
     const answer = await terminal.inputField({
         style:terminal.white,
@@ -653,7 +666,7 @@ async function renderQuickSetupCreateTicketButtonEmoji(ticketIndex:number,requir
     renderHeader("⏱️ Open Ticket Quick Setup: Ticket Configuration (Ticket "+(ticketIndex+1)+"/"+requiredTickets+")")
 
     terminal.bold.blue("("+utilities.ordinalNumber(ticketIndex+1)+" Ticket) Please insert the button emoji of this ticket option.\n")
-    terminal.gray("Only 1 emoji allowed. Tip: Insert custom emoji's via the following syntax: <:12345678910:emoji_name>\n\n")
+    terminal.gray("Only 1 emoji allowed. Tip: Insert custom emoji's via the following syntax: <:12345678910:emoji_name>\n\n> ")
 
     const answer = await terminal.inputField({
         style:terminal.white,
@@ -709,7 +722,7 @@ async function renderQuickSetupCreateTicketChannelPrefix(ticketIndex:number,requ
     renderHeader("⏱️ Open Ticket Quick Setup: Ticket Configuration (Ticket "+(ticketIndex+1)+"/"+requiredTickets+")")
 
     terminal.bold.blue("("+utilities.ordinalNumber(ticketIndex+1)+" Ticket) Please insert the channel prefix of this ticket option.\n")
-    terminal.gray("Examples: 'ticket-', 'question-', 'test-channel-', ...\n\n")
+    terminal.gray("Examples: 'ticket-', 'question-', 'test-channel-', ...\n\n> ")
 
     const answer = await terminal.inputField({
         style:terminal.white,
@@ -765,7 +778,99 @@ async function renderQuickSetupCreateTicketChannelSuffix(ticketIndex:number,requ
 
         //create next ticket
         if (ticketIndex+1 < requiredTickets) return await renderQuickSetupCreateTicketName(ticketIndex+1,requiredTickets,async () => {await renderQuickSetupCreateTicketChannelSuffix(ticketIndex,requiredTickets,backFn)})
-        else return await renderQuickSetupLOREMIPSUM(async () => {await renderQuickSetupCreateTicketChannelSuffix(ticketIndex,requiredTickets,backFn)})
+        else return await renderQuickSetupAutoclose(async () => {await renderQuickSetupCreateTicketChannelSuffix(ticketIndex,requiredTickets,backFn)})
+    }
+}
+
+async function renderQuickSetupAutoclose(backFn:() => api.ODPromiseVoid){
+    renderHeader("⏱️ Open Ticket Quick Setup: Ticket Autoclose")
+
+    terminal.bold.blue(stepCount(12)+"Would you like to enable autoclosing tickets?\n")
+    terminal.gray("Applies to all created tickets. You can always change/disable autoclose per ticket-option in the config afterwards.\n\n")
+
+    const answer = await terminal.singleColumnMenu([
+        ansis.red("❌ <Disable Autoclose>"),
+        "1 Hour Inactivity",
+        "2 Hours Inactivity",
+        "4 Hours Inactivity",
+        "8 Hours Inactivity",
+        "12 Hours Inactivity",
+        "1 Day Inactivity",
+        "2 Days Inactivity",
+        "3 Days Inactivity",
+    ],{
+        leftPadding:"> ",
+        style:terminal.gray,
+        selectedStyle:terminal.bgDefaultColor.bold,
+        submittedStyle:terminal.bgBlue,
+        extraLines:2,
+        cancelable:true
+    }).promise
+
+    if (answer.canceled) return await backFn()
+    else{
+        if (answer.selectedIndex == 0) quickSetupStorage.autocloseHours = null
+        else quickSetupStorage.autocloseHours = [1,2,4,8,12,24,48,72][answer.selectedIndex-1]
+        return await renderQuickSetupCooldown(async () => {await renderQuickSetupAutoclose(backFn)})
+    }
+}
+
+async function renderQuickSetupCooldown(backFn:() => api.ODPromiseVoid){
+    renderHeader("⏱️ Open Ticket Quick Setup: Ticket Cooldown")
+
+    terminal.bold.blue(stepCount(13)+"Would you like to enable ticket creation cooldown?\n")
+    terminal.gray("Applies to all created tickets. You can always change/disable cooldown per ticket-option in the config afterwards.\n\n")
+
+    const answer = await terminal.singleColumnMenu([
+        ansis.red("❌ <Disable Cooldown>"),
+        "1 Minute Cooldown",
+        "2 Minutes Cooldown",
+        "5 Minutes Cooldown",
+        "10 Minutes Cooldown",
+        "15 Minutes Cooldown",
+        "30 Minutes Cooldown",
+        "1 Hour Cooldown",
+        "2 Hours Cooldown",
+        "3 Hours Cooldown",
+    ],{
+        leftPadding:"> ",
+        style:terminal.gray,
+        selectedStyle:terminal.bgDefaultColor.bold,
+        submittedStyle:terminal.bgBlue,
+        extraLines:2,
+        cancelable:true
+    }).promise
+
+    if (answer.canceled) return await backFn()
+    else{
+        if (answer.selectedIndex == 0) quickSetupStorage.cooldownMinutes = null
+        else quickSetupStorage.cooldownMinutes = [1,2,5,10,15,30,60,120,180][answer.selectedIndex-1]
+        return await renderQuickSetupCloseParticipants(async () => {await renderQuickSetupCooldown(backFn)})
+    }
+}
+
+async function renderQuickSetupCloseParticipants(backFn:() => api.ODPromiseVoid){
+    renderHeader("⏱️ Open Ticket Quick Setup: Ticket Close Configuration")
+
+    terminal.bold.blue(stepCount(14)+"Would you like to remove all ticket participants when closing the ticket?\n")
+    terminal.gray("When a ticket is closed, only admins can read/write in the ticket. Reopen ticket to restore read/write perms.\n\n")
+
+    const answer = await terminal.singleColumnMenu([
+        "❌ No, don't remove ticket participants on close",
+        "✅ Yes, remove ticket participants on close",
+    ],{
+        leftPadding:"> ",
+        style:terminal.gray,
+        selectedStyle:terminal.bgDefaultColor.bold,
+        submittedStyle:terminal.bgBlue,
+        extraLines:2,
+        cancelable:true
+    }).promise
+
+    if (answer.canceled) return await backFn()
+    else{
+        quickSetupStorage.removeParticipantsOnClose = (answer.selectedIndex == 1)
+        return await renderQuickSetupLOREMIPSUM(async () => {await renderQuickSetupCloseParticipants(backFn)})
     }
 }
 
@@ -776,16 +881,17 @@ async function renderQuickSetupLOREMIPSUM(backFn:() => api.ODPromiseVoid){
 }
 
 /** Steps Todo
- * - S12: Enable Autoclose => select to enable autoclose in all tickets
- * - S13: Enable Cooldown => select to enable cooldown in all tickets (with a specific duration from dropdown)
+ * - S15: Enable Reply on ticket creation
+ * - S16: Panel Name
+ * - S17: Panel Description
+ * - S18: Panel Mode => (dropdown/buttons)
+ * - S19: Panel Auto Describe Options => (dropdown: disabled, in text, in embed fields, in embed description)
+ * - S20: Panel Max Tickets Warning
  * 
- * - S15: Panel Name
- * - S16: Panel Description
- * - S17: Panel Mode => (dropdown/buttons)
- * - S18: Panel Auto Describe Options => (dropdown: disabled, in text, in embed fields, in embed description)
- * - S19: Panel Max Tickets Warning
+ * 
  * - S20: TODO!! => extra's in general.json "system" => e.g. removeParticipantsOnClose, reply Ticket creation, ...
  * 
+ * ALREADY FINISHED:
  * - Ticket configuration => per-ticket configuration
  *  - ticket name
  *  - ticket description
