@@ -33,9 +33,9 @@ import { ODRoleUpdateMode } from "../openticket/role"
  */
 export interface ODConfigManagerIds_Default {
     "opendiscord:general":ODJsonConfig_DefaultGeneral,
+    "opendiscord:questions":ODJsonConfig_DefaultQuestions,
     "opendiscord:options":ODJsonConfig_DefaultOptions,
     "opendiscord:panels":ODJsonConfig_DefaultPanels,
-    "opendiscord:questions":ODJsonConfig_DefaultQuestions,
     "opendiscord:transcripts":ODJsonConfig_DefaultTranscripts
 }
 
@@ -239,7 +239,7 @@ export interface ODJsonConfig_DefaultGeneralData {
     tokenFromENV:boolean,
 
     /**The main (hex) color used in almost every embed in the bot. */
-    mainColor:discord.ColorResolvable,
+    mainColor:discord.ColorResolvable|string,
     /**The language to use. Can be the id of the language or the id without the prefix when using `opendiscord:...`. */
     language:string,
     /**The prefix used in all text-commands. */
@@ -315,7 +315,7 @@ export interface ODJsonConfig_DefaultOptionEmbedSettingsType {
     /**The description of this embed. */
     description:string,
     /**A custom color for this embed. (The default bot color is used when empty) */
-    customColor:discord.ColorResolvable,
+    customColor:discord.ColorResolvable|string,
 
     /**A URL to an image displayed in the embed. */
     image:string,
@@ -471,6 +471,11 @@ export interface ODJsonConfig_DefaultOptionRoleType extends ODJsonConfig_Default
     addOnMemberJoin:boolean
 }
 
+/**## ODJsonConfig_DefaultOptionsData `type`
+ * All contents of the `options.json` config file.
+ */
+export type ODJsonConfig_DefaultOptionsData = (ODJsonConfig_DefaultOptionTicketType|ODJsonConfig_DefaultOptionWebsiteType|ODJsonConfig_DefaultOptionRoleType)[]
+
 /**## ODJsonConfig_DefaultOptions `default_class`
  * This is a special class that adds type definitions & typescript to the ODJsonConfig class.
  * It doesn't add any extra features!
@@ -478,11 +483,7 @@ export interface ODJsonConfig_DefaultOptionRoleType extends ODJsonConfig_Default
  * This default class is made for the `options.json` config!
  */
 export class ODJsonConfig_DefaultOptions extends ODJsonConfig {
-    declare data: (
-        ODJsonConfig_DefaultOptionTicketType|
-        ODJsonConfig_DefaultOptionWebsiteType|
-        ODJsonConfig_DefaultOptionRoleType
-    )[]
+    declare data: ODJsonConfig_DefaultOptionsData
 }
 
 /**## ODJsonConfig_DefaultPanelEmbedSettingsType `interface`
@@ -497,7 +498,7 @@ export interface ODJsonConfig_DefaultPanelEmbedSettingsType {
     description:string,
     
     /**A custom color for this embed. (The default bot color is used when empty) */
-    customColor:discord.ColorResolvable,
+    customColor:discord.ColorResolvable|string,
     /**An optional URL used in the title of the embed. */
     url:string,
 
@@ -565,6 +566,11 @@ export interface ODJsonConfig_DefaultPanelType {
     settings:ODJsonConfig_DefaultPanelSettingsType
 }
 
+/**## ODJsonConfig_DefaultPanelsData `type`
+ * All contents of the `panels.json` config file.
+ */
+export type ODJsonConfig_DefaultPanelsData = ODJsonConfig_DefaultPanelType[]
+
 /**## ODJsonConfig_DefaultPanels `default_class`
  * This is a special class that adds type definitions & typescript to the ODJsonConfig class.
  * It doesn't add any extra features!
@@ -572,7 +578,7 @@ export interface ODJsonConfig_DefaultPanelType {
  * This default class is made for the `panels.json` config!
  */
 export class ODJsonConfig_DefaultPanels extends ODJsonConfig {
-    declare data: ODJsonConfig_DefaultPanelType[]
+    declare data: ODJsonConfig_DefaultPanelsData
 }
 
 /**## ODJSonConfig_DefaultQuestionLengthSettings `interface`
@@ -625,6 +631,11 @@ export interface ODJsonConfig_DefaultParagraphQuestionType {
     length:ODJSonConfig_DefaultQuestionLengthSettings
 }
 
+/**## ODJsonConfig_DefaultQuestionsData `type`
+ * All contents of the `questions.json` config file.
+ */
+export type ODJsonConfig_DefaultQuestionsData = (ODJsonConfig_DefaultShortQuestionType|ODJsonConfig_DefaultParagraphQuestionType)[]
+
 /**## ODJsonConfig_DefaultQuestions `default_class`
  * This is a special class that adds type definitions & typescript to the ODJsonConfig class.
  * It doesn't add any extra features!
@@ -632,10 +643,7 @@ export interface ODJsonConfig_DefaultParagraphQuestionType {
  * This default class is made for the `questions.json` config!
  */
 export class ODJsonConfig_DefaultQuestions extends ODJsonConfig {
-    declare data: (
-        ODJsonConfig_DefaultShortQuestionType|
-        ODJsonConfig_DefaultParagraphQuestionType
-    )[]
+    declare data: ODJsonConfig_DefaultQuestionsData
 }
 
 /**## ODJsonConfig_DefaultTranscriptsTextLayout `interface`
@@ -709,6 +717,47 @@ export interface ODJsonConfig_DefaultTranscriptsHtmlLayout {
     }
 }
 
+/**## ODJsonConfig_DefaultTranscriptsData `interface`
+ * All contents of the `transcripts.json` config file.
+ */
+export interface ODJsonConfig_DefaultTranscriptsData {
+    /**All general settings related to transcripts. */
+    general:{
+        /**Are transcripts enabled? */
+        enabled:boolean,
+
+        /**Enable sending the generated transcript in a channel. */
+        enableChannel:boolean,
+        /**Enable sending the generated transcript to the DM of the ticket creator. */
+        enableCreatorDM:boolean,
+        /**Enable sending the generated transcript to the DM of the participants. */
+        enableParticipantDM:boolean,
+        /**Enable sending the generated transcript to the DM of all admins which were active in the ticket. */
+        enableActiveAdminDM:boolean,
+        /**Enable sending the generated transcript to the DM of all admins which were assigned to the ticket. */
+        enableEveryAdminDM:boolean,
+
+        /**A discord channel id for the `"enableChannel"` setting. */
+        channel:string,
+        /**Want to use text or HTML transcripts? */
+        mode:"html"|"text"
+    },
+    /**All settings related to the embed from the transcripts. (UNIMPLEMENTED!!) */
+    embedSettings:{
+        /**Unimplemented feature */
+        customColor:discord.ColorResolvable|string,
+        /**Unimplemented feature */
+        listAllParticipants:boolean,
+        /**Unimplemented feature */
+        includeTicketStats:boolean
+    },
+    /**The layout of the text transcripts. */
+    textTranscriptStyle:ODJsonConfig_DefaultTranscriptsTextLayout,
+    /**The layout of the HTML transcripts. */
+    htmlTranscriptStyle:ODJsonConfig_DefaultTranscriptsHtmlLayout
+}
+
+
 /**## ODJsonConfig_DefaultTranscripts `default_class`
  * This is a special class that adds type definitions & typescript to the ODJsonConfig class.
  * It doesn't add any extra features!
@@ -716,40 +765,5 @@ export interface ODJsonConfig_DefaultTranscriptsHtmlLayout {
  * This default class is made for the `transcripts.json` config!
  */
 export class ODJsonConfig_DefaultTranscripts extends ODJsonConfig {
-    declare data: {
-        /**All general settings related to transcripts. */
-        general:{
-            /**Are transcripts enabled? */
-            enabled:boolean,
-
-            /**Enable sending the generated transcript in a channel. */
-            enableChannel:boolean,
-            /**Enable sending the generated transcript to the DM of the ticket creator. */
-            enableCreatorDM:boolean,
-            /**Enable sending the generated transcript to the DM of the participants. */
-            enableParticipantDM:boolean,
-            /**Enable sending the generated transcript to the DM of all admins which were active in the ticket. */
-            enableActiveAdminDM:boolean,
-            /**Enable sending the generated transcript to the DM of all admins which were assigned to the ticket. */
-            enableEveryAdminDM:boolean,
-    
-            /**A discord channel id for the `"enableChannel"` setting. */
-            channel:string,
-            /**Want to use text or HTML transcripts? */
-            mode:"html"|"text"
-        },
-        /**All settings related to the embed from the transcripts. (UNIMPLEMENTED!!) */
-        embedSettings:{
-            /**Unimplemented feature */
-            customColor:discord.ColorResolvable,
-            /**Unimplemented feature */
-            listAllParticipants:boolean,
-            /**Unimplemented feature */
-            includeTicketStats:boolean
-        },
-        /**The layout of the text transcripts. */
-        textTranscriptStyle:ODJsonConfig_DefaultTranscriptsTextLayout,
-        /**The layout of the HTML transcripts. */
-        htmlTranscriptStyle:ODJsonConfig_DefaultTranscriptsHtmlLayout
-    }
+    declare data: ODJsonConfig_DefaultTranscriptsData
 }

@@ -2,7 +2,15 @@ import {opendiscord, api, utilities} from "../../index"
 import {Terminal, terminal} from "terminal-kit"
 import ansis from "ansis"
 import * as discord from "discord.js"
-import {renderHeader} from "./cli"
+import crypto from "crypto"
+import {renderHeader, terminate} from "./cli"
+
+function generateUniqueIdFromName(name:string){
+    //id only allows a-z, 0-9 & dash characters (& replace spaces with dashes)
+    const filteredChars = name.replaceAll(" ","-").split("").filter((ch) => /^[a-zA-Z0-9-]{1}$/.test(ch))
+    const randomSuffix = "-"+crypto.randomBytes(4).toString("hex")
+    return filteredChars.join("")+randomSuffix
+}
 
 interface ODQuickSetupVariables {
     client?:api.ODClientManager,
@@ -24,6 +32,7 @@ interface ODQuickSetupVariables {
         channelPrefix:string,
         channelSuffix:api.ODJsonConfig_DefaultOptionTicketChannelType["suffix"]
     }|null)[],
+    optionIdStorage:string[],
     autocloseHours?:number|null,
     cooldownMinutes?:number|null,
     globalUserLimit?:number|null,
@@ -39,7 +48,7 @@ interface ODQuickSetupVariables {
 }
 const stepCount = (count:number) => "(Step "+count+"/24) "
 
-const quickSetupStorage: ODQuickSetupVariables = {ticketOptions:[]}
+const quickSetupStorage: ODQuickSetupVariables = {ticketOptions:[],optionIdStorage:[]}
 const autoCompleteMenuOpts: Terminal.SingleLineMenuOptions = {
     style:terminal.white,
     selectedStyle:terminal.bgBlue.white
@@ -1150,11 +1159,372 @@ async function renderQuickSetupReady(backFn:() => api.ODPromiseVoid){
 
     //save configuration
     if (answer.canceled) return await backFn()
-    else if (answer.selectedIndex == 0) return await saveQuickSetupConfig()
+    else if (answer.selectedIndex == 0){
+        await saveQuickSetupConfig()
+        return await renderQuickSetupFinished()
+    }
+}
+
+async function renderQuickSetupFinished(){
+    renderHeader("✅ Open Ticket Quick Setup: Ready")
+
+    terminal.bold.green("The config has been saved succesfully and the bot is now ready for usage!\n")
+    terminal.gray("Press 'Enter' to exit the Quick Setup CLI.\n\n")
+
+    terminal(ansis.gray([
+        "Start the bot using the following command:",
+        ansis.blue("------------------------------"),
+        ansis.magenta.bold("> npm start"),
+        ansis.blue("------------------------------"),
+        "",
+        "Edit the existing config in the CLI or directly in the (./config/) directory:",
+        ansis.blue("------------------------------"),
+        ansis.magenta.bold("> npm run setup"),
+        ansis.blue("------------------------------"),
+        "",
+        ansis.yellow.bold("⭐ Don't forget to star our Github repository when you enjoy using the bot! ⭐"),
+        ansis.gray("Join our discord server "+ansis.hex("#5865F2").bold.underline("https://discord.dj-dj.be")+" when you need help with troubleshooting."),
+    ].join("\n"))+"\n\n")
+
+    await terminal.singleColumnMenu([
+        ansis.green("Press 'Enter' to exit Quick Setup CLI!")
+    ],{
+        leftPadding:"> ",
+        style:terminal.cyan,
+        selectedStyle:terminal.bgDefaultColor.bold,
+        submittedStyle:terminal.bgBlue,
+        extraLines:2,
+        cancelable:true
+    }).promise
+
+    //stop CLI
+    return await terminate()
 }
 
 async function saveQuickSetupConfig(){
-    console.log(quickSetupStorage)
+    //GENERAL CONFIG
+    const generalConfig = opendiscord.configs.get("opendiscord:general")
+    const generalConfigData: api.ODJsonConfig_DefaultGeneralData = {
+        _INFO:{
+            support:"https://otdocs.dj-dj.be",
+            discord:"https://discord.dj-dj.be",
+            version:"open-ticket-v4.0.6"
+        },
+        
+        token:quickSetupStorage.client?.token ?? "<unknown-token>",
+        tokenFromENV:false,
+        
+        mainColor:quickSetupStorage.mainColor ?? "#f8ba00",
+        language:quickSetupStorage.language ?? "english",
+        prefix:"!ticket ",
+        serverId:quickSetupStorage.guild?.id ?? "<unknown-guild>",
+        globalAdmins:quickSetupStorage.globalAdmins ?? [],
+        
+        slashCommands:quickSetupStorage.slashCommands ?? false,
+        textCommands:quickSetupStorage.textCommands ?? false,
+        
+        status:quickSetupStorage.status ?? {enabled:false,status:"online",text:"",type:"custom"},
+        
+        system:{
+            removeParticipantsOnClose:quickSetupStorage.removeParticipantsOnClose ?? false,
+            replyOnTicketCreation:false,
+            replyOnReactionRole:true,
+            useTranslatedConfigChecker:true,
+            preferSlashOverText:quickSetupStorage.slashCommands ?? false,
+            sendErrorOnUnknownCommand:true,
+            questionFieldsInCodeBlock:true,
+            disableVerifyBars:false,
+            useRedErrorEmbeds:true,
+            emojiStyle:quickSetupStorage.emojiStyle ?? "before",
+            
+            enableTicketClaimButtons:true,
+            enableTicketCloseButtons:true,
+            enableTicketPinButtons:true,
+            enableTicketDeleteButtons:true,
+            enableTicketActionWithReason:true,
+            enableDeleteWithoutTranscript:true,
+            
+            logs:{
+                enabled:(typeof quickSetupStorage.logChannel == "string"),
+                channel:quickSetupStorage.logChannel ?? ""
+            },
+            
+            limits:{
+                enabled:(typeof quickSetupStorage.globalUserLimit == "number"),
+                globalMaximum:100,
+                userMaximum:quickSetupStorage.globalUserLimit ?? 3
+            },
+            
+            permissions:{
+                help:"everyone",
+                panel:"admin",
+                ticket:"everyone",
+                close:"admin",
+                delete:"admin",
+                reopen:"admin",
+                claim:"admin",
+                unclaim:"admin",
+                pin:"admin",
+                unpin:"admin",
+                move:"admin",
+                rename:"admin",
+                add:"admin",
+                remove:"admin",
+                blacklist:"admin",
+                stats:"everyone",
+                clear:"admin",
+                autoclose:"admin",
+                autodelete:"admin"
+            },
+            
+            messages:{
+                creation:{dm:true,logs:true},
+                closing:{dm:true,logs:true},
+                deleting:{dm:true,logs:true},
+                reopening:{dm:false,logs:true},
+                claiming:{dm:false,logs:true},
+                pinning:{dm:false,logs:true},
+                adding:{dm:false,logs:true},
+                removing:{dm:false,logs:true},
+                renaming:{dm:false,logs:true},
+                moving:{dm:true,logs:true},
+                blacklisting:{dm:true,logs:true},
+                roleAdding:{dm:false,logs:true},
+                roleRemoving:{dm:false,logs:true}
+            }
+        }
+    }
+    generalConfig.data = generalConfigData
+    await generalConfig.save()
+
+    //QUESTIONS CONFIG => no configuration needed (coming soonTM)
+    const questionsConfig = opendiscord.configs.get("opendiscord:questions")
+    const questionsConfigData: api.ODJsonConfig_DefaultQuestionsData = [
+        {
+            id:"example-question-1",
+            name:"Example Question 1",
+            type:"short",
+            
+            required:true,
+            placeholder:"Insert your short answer here!",
+            length:{
+                enabled:false,
+                min:0,
+                max:1000
+            }
+        },
+        {
+            id:"example-question-2",
+            name:"Example Question 2",
+            type:"paragraph",
+            
+            required:false,
+            placeholder:"Insert your long answer here!",
+            length:{
+                enabled:false,
+                min:0,
+                max:1000
+            }
+        }
+    ]
+    questionsConfig.data = questionsConfigData
+    await questionsConfig.save()
+
+    //OPTIONS CONFIG
+    const optionsConfig = opendiscord.configs.get("opendiscord:options")
+    const optionsConfigData: api.ODJsonConfig_DefaultOptionsData = quickSetupStorage.ticketOptions.filter((ticket) => ticket !== null).map((ticket) => {
+        const id = generateUniqueIdFromName(ticket.name)
+        quickSetupStorage.optionIdStorage.push(id)
+
+        return {
+            id:id,
+            name:ticket.name,
+            description:ticket.description,
+            type:"ticket",
+
+            button:{
+                emoji:(ticket.buttonType == "label") ? "" : (ticket.buttonEmoji ?? ""),
+                label:(ticket.buttonType == "emoji") ? "" : ticket.name,
+                color:ticket.buttonColor ?? "gray"
+            },
+
+            ticketAdmins:[],
+            readonlyAdmins:[],
+            allowCreationByBlacklistedUsers:false,
+            questions:[],
+
+            channel:{
+                prefix:ticket.channelPrefix,
+                suffix:ticket.channelSuffix,
+                category:quickSetupStorage.ticketCategory ?? "",
+                closedCategory:"",
+                backupCategory:"",
+                claimedCategory:[],
+                description:ticket.description
+            },
+            
+            dmMessage:{
+                enabled:false,
+                text:"",
+                embed:{
+                    enabled:false,
+                    title:"",
+                    description:"",
+                    customColor:"",
+
+                    image:"",
+                    thumbnail:"",
+                    fields:[],
+                    timestamp:false
+                }
+            },
+            ticketMessage:{
+                enabled:true,
+                text:"",
+                embed:{
+                    enabled:true,
+                    title:ticket.name,
+                    description:ticket.description,
+                    customColor:"",
+
+                    image:"",
+                    thumbnail:"",
+                    fields:[],
+                    timestamp:true
+                },
+                ping:{
+                    "@here":true,
+                    "@everyone":false,
+                    custom:[]
+                }
+            },
+            autoclose:{
+                enableInactiveHours:(typeof quickSetupStorage.autocloseHours == "number"),
+                inactiveHours:quickSetupStorage.autocloseHours ?? 24,
+                enableUserLeave:true,
+                disableOnClaim:false
+            },
+            autodelete:{
+                enableInactiveDays:false,
+                inactiveDays:7,
+                enableUserLeave:false,
+                disableOnClaim:false
+            },
+            cooldown:{
+                enabled:(typeof quickSetupStorage.cooldownMinutes == "number"),
+                cooldownMinutes:quickSetupStorage.cooldownMinutes ?? 10
+            },
+            limits:{
+                enabled:false,
+                globalMaximum:20,
+                userMaximum:3
+            }
+        }
+    })
+    optionsConfig.data = optionsConfigData
+    await optionsConfig.save()
+
+    //PANELS CONFIG
+    const panelsConfig = opendiscord.configs.get("opendiscord:panels")
+    const panelsConfigData: api.ODJsonConfig_DefaultPanelsData = [
+        {
+            id:generateUniqueIdFromName(quickSetupStorage.panelName ?? "ticket-panel"),
+            name:quickSetupStorage.panelName ?? "Ticket Panel",
+            dropdown:quickSetupStorage.panelDropdown ?? false,
+            options:quickSetupStorage.optionIdStorage,
+
+            text:(quickSetupStorage.panelLayout == "text") ? (quickSetupStorage.panelDescription ?? "") : "",
+            embed:{
+                enabled:true,
+                title:quickSetupStorage.panelName ?? "Ticket Panel",
+                description:(quickSetupStorage.panelLayout == "embed") ? (quickSetupStorage.panelDescription ?? "") : "",
+                
+                customColor:"",
+                url:"",
+
+                image:"",
+                thumbnail:"",
+                
+                footer:quickSetupStorage.guild?.name ?? "",
+                fields:[],
+                timestamp:false
+            },
+            settings:{
+                dropdownPlaceholder:"Open a ticket",
+
+                enableMaxTicketsWarningInText:(quickSetupStorage.panelLayout == "text" && (quickSetupStorage.panelMaxTicketsWarning ?? false)),
+                enableMaxTicketsWarningInEmbed:(quickSetupStorage.panelLayout == "embed" && (quickSetupStorage.panelMaxTicketsWarning ?? false)),
+
+                describeOptionsLayout:quickSetupStorage.panelDescribeOptions ?? "normal",
+                describeOptionsCustomTitle:"",
+                describeOptionsInText:(quickSetupStorage.panelLayout == "text" && typeof quickSetupStorage.panelDescribeOptions == "string"),
+                describeOptionsInEmbedFields:(quickSetupStorage.panelLayout == "embed" && typeof quickSetupStorage.panelDescribeOptions == "string"),
+                describeOptionsInEmbedDescription:false
+            }
+        }
+    ]
+    panelsConfig.data = panelsConfigData
+    await panelsConfig.save()
+
+    //TRANSCRIPTS CONFIG => no configuration needed (coming soonTM)
+    const transcriptsConfig = opendiscord.configs.get("opendiscord:transcripts")
+    const transcriptsConfigData: api.ODJsonConfig_DefaultTranscriptsData = {
+        general:{
+            enabled:(typeof quickSetupStorage.logChannel == "string"),
+
+            enableChannel:true,
+            enableCreatorDM:true,
+            enableParticipantDM:false,
+            enableActiveAdminDM:false,
+            enableEveryAdminDM:false,
+
+            channel:quickSetupStorage.logChannel ?? "",
+            mode:"html"
+        },
+        embedSettings:{
+            customColor:"",
+            listAllParticipants:false,
+            includeTicketStats:false
+        },
+        textTranscriptStyle:{
+            layout:"normal",
+            includeStats:true,
+            includeIds:false,
+            includeEmbeds:true,
+            includeFiles:true,
+            includeBotMessages:true,
+
+            fileMode:"channel-name",
+            customFileName:"transcript"
+        },
+        htmlTranscriptStyle:{
+            background:{
+                enableCustomBackground:false,
+                backgroundColor:"",
+                backgroundImage:"" 
+            },
+            header:{
+                enableCustomHeader:false,
+                backgroundColor:"#202225",
+                decoColor:"#f8ba00",
+                textColor:"#ffffff"
+            },
+            stats:{
+                enableCustomStats:false,
+                backgroundColor:"#202225",
+                keyTextColor:"#737373",
+                valueTextColor:"#ffffff",
+                hideBackgroundColor:"#40444a",
+                hideTextColor:"#ffffff"
+            },
+            favicon:{
+                enableCustomFavicon:false,
+                imageUrl:"https://t.dj-dj.be/favicon.png"
+            }
+        }
+    }
+    transcriptsConfig.data = transcriptsConfigData
+    await transcriptsConfig.save()
 }
 
 /** Steps Todo

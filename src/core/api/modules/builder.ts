@@ -836,7 +836,7 @@ export interface ODEmbedData {
     /**The title of the embed */
     title:string|null,
     /**The color of the embed */
-    color:discord.ColorResolvable|null,
+    color:discord.ColorResolvable|string|null,
     /**The url of the embed */
     url:string|null,
     /**The description of the embed */
@@ -994,7 +994,7 @@ export class ODEmbed<Source extends string,Params> extends ODBuilderImplementati
             //create the discord.js embed
             const embed = new discord.EmbedBuilder()
             if (instance.data.title) embed.setTitle(instance.data.title)
-            if (instance.data.color) embed.setColor(instance.data.color)
+            if (instance.data.color) embed.setColor(instance.data.color as discord.ColorResolvable)
             if (instance.data.url) embed.setURL(instance.data.url)
             if (instance.data.description) embed.setDescription(instance.data.description)
             if (instance.data.authorText) embed.setAuthor({
@@ -1047,7 +1047,7 @@ export class ODQuickEmbed {
             //create the discord.js embed
             const embed = new discord.EmbedBuilder()
             if (this.data.title) embed.setTitle(this.data.title)
-            if (this.data.color) embed.setColor(this.data.color)
+            if (this.data.color) embed.setColor(this.data.color as discord.ColorResolvable)
             if (this.data.url) embed.setURL(this.data.url)
             if (this.data.description) embed.setDescription(this.data.description)
             if (this.data.authorText) embed.setAuthor({
