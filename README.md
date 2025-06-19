@@ -155,18 +155,21 @@ Without our translators, it wouldn't be possible to translate Open Ticket in so 
 |🟢 |🇳🇴 Norwegian          |NoOneNook                  |
 |🟢 |🇸🇪 Swedish            |NoOneNook                  |
 |🟢 |🇮🇷 Persian            |dysashop & zhavis          |
+|🟢 |🇧🇩 Bengali            |HanumeshGupta & dragonblade|
 |🤖 |🇪🇪 Estonian           |iamnotmega                 |
 |🤖 |🇫🇮 Finnish            |iamnotmega                 |
 |🤖 |🇷🇺 Russian            |NoOneNook                  |
 |🤖 |🇱🇻 Latvian            |NoOneNook                  |
 |🤖 |🇻🇳 Vietnamese         |ngocdiep2006               |
-|🔴 |🇯🇵 Japanese           |[⭐ Contribute!](.github/CONTRIBUTING.md)|
-|🔴 |🇰🇷 Korean             |[⭐ Contribute!](.github/CONTRIBUTING.md)|
-|🔴 |🇨🇳 Simplified Chinese |[⭐ Contribute!](.github/CONTRIBUTING.md)|
+|🤖 |🇯🇵 Japanese           |HanumeshGupta & dragonblade|
+|🤖 |🇬🇷 Greek              |HanumeshGupta & dragonblade|
+|🤖 |🇸🇮 Slovenian          |HanumeshGupta & dragonblade|
+|🤖 |🇰🇷 Korean             |HanumeshGupta & dragonblade|
+|🤖 |🇮🇳 Tamil              |HanumeshGupta & dragonblade|
+|🤖 |🇨🇳 Simplified Chinese |HanumeshGupta & dragonblade|
+|🤖 |❓ Kurdish            |HanumeshGupta & dragonblade|
 |🔴 |🇨🇳 Traditional Chinese|[⭐ Contribute!](.github/CONTRIBUTING.md)|
-|🔴 |🇸🇮 Slovenian          |[⭐ Contribute!](.github/CONTRIBUTING.md)|
-|🔴 |🇬🇷 Greek              |[⭐ Contribute!](.github/CONTRIBUTING.md)|
-|🔴 |❓ Kurdish            |[⭐ Contribute!](.github/CONTRIBUTING.md)|
+
 
 ## ⭐️ Star History
 Please give this repository a star if you like it.  
