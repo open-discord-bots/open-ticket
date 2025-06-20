@@ -7,7 +7,7 @@ import {renderHeader, terminate} from "./cli"
 
 function generateUniqueIdFromName(name:string){
     //id only allows a-z, 0-9 & dash characters (& replace spaces with dashes)
-    const filteredChars = name.replaceAll(" ","-").split("").filter((ch) => /^[a-zA-Z0-9-]{1}$/.test(ch))
+    const filteredChars = name.toLowerCase().replaceAll(" ","-").split("").filter((ch) => /^[a-zA-Z0-9-]{1}$/.test(ch))
     const randomSuffix = "-"+crypto.randomBytes(4).toString("hex")
     return filteredChars.join("")+randomSuffix
 }
