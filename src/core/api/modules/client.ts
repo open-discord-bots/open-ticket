@@ -76,12 +76,15 @@ export class ODClientManager {
     slashCommands: ODSlashCommandManager
     /**The text command manager is responsible for all text commands & their events inside the bot. */
     textCommands: ODTextCommandManager
+    /**The context menu manager is responsible for all context menus & their events inside the bot. */
+    contextMenus: ODContextMenuManager
 
     constructor(debug:ODDebugger){
         this.#debug = debug
         this.activity = new ODClientActivityManager(this.#debug,this)
         this.slashCommands = new ODSlashCommandManager(this.#debug,this)
         this.textCommands = new ODTextCommandManager(this.#debug,this)
+        this.contextMenus = new ODContextMenuManager(this.#debug,this)
     }
 
     /**Initiate the `client` variable & add the intents & partials to the bot. */
@@ -145,9 +148,10 @@ export class ODClientManager {
                 this.client.once("ready",async () => {
                     this.ready = true
 
-                    //set slashCommandManager to client applicationCommandManager
-                    if (!this.client.application) throw new ODSystemError("Couldn't get client application! Unable to register slash commands!")
+                    //set slashCommandManager & contextMenuManager to client applicationCommandManager
+                    if (!this.client.application) throw new ODSystemError("Couldn't get client application for slashCommand & contextMenu managers!")
                     this.slashCommands.commandManager = this.client.application.commands
+                    this.contextMenus.commandManager = this.client.application.commands
 
                     if (this.readyListener) await this.readyListener()
                     resolve(true)
@@ -522,6 +526,9 @@ export interface ODSlashCommandBuilder extends discord.ChatInputApplicationComma
     contexts:discord.InteractionContextType[]
 }
 
+/**## ODSlashCommandComparator `class`
+ * A utility class to compare existing slash commands with newly registered ones.
+ */
 export class ODSlashCommandComparator {
     /**Convert a `discord.ApplicationCommandOptionChoiceData<string>` to a universal Open Ticket slash command option choice object for comparison. */
     #convertOptionChoice(choice:discord.ApplicationCommandOptionChoiceData<string>): ODSlashCommandUniversalOptionChoice {
@@ -1787,5 +1794,385 @@ export class ODTextCommandManager extends ODManager<ODTextCommand> {
         if (!checkResult.valid && checkResult.reason == "required_after_optional") throw new ODSystemError("Invalid text command '"+data.id.value+"' => optional options are only allowed at the end of a command!")
         else if (!checkResult.valid && checkResult.reason == "allowspaces_not_last") throw new ODSystemError("Invalid text command '"+data.id.value+"' => string option with 'allowSpaces' is only allowed at the end of a command!")
         else return super.add(data,overwrite)
+    }
+}
+
+/**## ODContextMenuUniversalMenu `interface`
+ * A universal template for a context menu.
+ * 
+ * Why universal? Both **existing context menus** & **unregistered templates** can be converted to this type.
+ */
+export interface ODContextMenuUniversalMenu {
+    /**The type of this context menu. (required => `Message`|`User`) */
+    type:discord.ApplicationCommandType.Message|discord.ApplicationCommandType.User,
+    /**The name of this context menu. */
+    name:string,
+    /**All localized names of this context menu. */
+    nameLocalizations:readonly ODSlashCommandUniversalTranslation[],
+    /**The id of the guild this context menu is registered in. */
+    guildId:string|null,
+    /**Is this context menu for 18+ users only? */
+    nsfw:boolean,
+    /**A bitfield of the user permissions required to use this context menu. */
+    defaultMemberPermissions:bigint,
+    /**Is this context menu available in DM? */
+    dmPermission:boolean,
+    /**A list of contexts where you can install this context menu. */
+    integrationTypes:readonly discord.ApplicationIntegrationType[],
+    /**A list of contexts where you can use this context menu. */
+    contexts:readonly discord.InteractionContextType[]
+}
+
+/**## ODContextMenuBuilderMessage `interface`
+ * The builder for message context menus.
+ */
+export interface ODContextMenuBuilderMessage extends discord.MessageApplicationCommandData {
+    /**This field is required in Open Ticket for future compatibility. */
+    integrationTypes:discord.ApplicationIntegrationType[],
+    /**This field is required in Open Ticket for future compatibility. */
+    contexts:discord.InteractionContextType[]
+}
+
+/**## ODContextMenuBuilderUser `interface`
+ * The builder for user context menus.
+ */
+export interface ODContextMenuBuilderUser extends discord.UserApplicationCommandData {
+    /**This field is required in Open Ticket for future compatibility. */
+    integrationTypes:discord.ApplicationIntegrationType[],
+    /**This field is required in Open Ticket for future compatibility. */
+    contexts:discord.InteractionContextType[]
+}
+
+/**## ODContextMenuBuilderUser `interface`
+ * The builder for context menus.
+ */
+export type ODContextMenuBuilder = (ODContextMenuBuilderMessage|ODContextMenuBuilderUser)
+
+/**## ODContextMenuComparator `class`
+ * A utility class to compare existing context menu's with newly registered ones.
+ */
+export class ODContextMenuComparator {
+    /**Convert a `ODContextMenuBuilder` to a universal Open Ticket context menu object for comparison. */
+    convertBuilder(builder:ODContextMenuBuilder,guildId:string|null): ODContextMenuUniversalMenu|null {
+        if (builder.type != discord.ApplicationCommandType.Message && builder.type != discord.ApplicationCommandType.User) return null
+        const nameLoc = builder.nameLocalizations ?? {}
+        
+        return {
+            type:builder.type,
+            name:builder.name,
+            nameLocalizations:Object.keys(nameLoc).map((key) => {return {language:key as `${discord.Locale}`,value:nameLoc[key]}}),
+            guildId:guildId,
+            nsfw:builder.nsfw ?? false,
+            defaultMemberPermissions:discord.PermissionsBitField.resolve(builder.defaultMemberPermissions ?? ["ViewChannel"]),
+            dmPermission:(builder.contexts && builder.contexts.includes(discord.InteractionContextType.BotDM)) ?? false,
+            integrationTypes:builder.integrationTypes ?? [discord.ApplicationIntegrationType.GuildInstall],
+            contexts:builder.contexts ?? []
+        }
+    }
+    /**Convert a `discord.ApplicationCommand` to a universal Open Ticket context menu object for comparison. */
+    convertMenu(cmd:discord.ApplicationCommand): ODContextMenuUniversalMenu|null {
+        if (cmd.type != discord.ApplicationCommandType.Message && cmd.type != discord.ApplicationCommandType.User) return null
+        const nameLoc = cmd.nameLocalizations ?? {}
+        
+        return {
+            type:cmd.type,
+            name:cmd.name,
+            nameLocalizations:Object.keys(nameLoc).map((key) => {return {language:key as `${discord.Locale}`,value:nameLoc[key]}}),
+            guildId:cmd.guildId,
+            nsfw:cmd.nsfw,
+            defaultMemberPermissions:discord.PermissionsBitField.resolve(cmd.defaultMemberPermissions ?? ["ViewChannel"]),
+            dmPermission:(cmd.contexts && cmd.contexts.includes(discord.InteractionContextType.BotDM)) ? true : false,
+            integrationTypes:cmd.integrationTypes ?? [discord.ApplicationIntegrationType.GuildInstall],
+            contexts:cmd.contexts ?? []
+        }
+    }
+    /**Returns `true` when the 2 context menus are the same. */
+    compare(ctxA:ODContextMenuUniversalMenu,ctxB:ODContextMenuUniversalMenu): boolean {
+        if (ctxA.name != ctxB.name) return false
+        if (ctxA.type != ctxB.type) return false
+        if (ctxA.nsfw != ctxB.nsfw) return false
+        if (ctxA.guildId != ctxB.guildId) return false
+        if (ctxA.dmPermission != ctxB.dmPermission) return false
+        if (ctxA.defaultMemberPermissions != ctxB.defaultMemberPermissions) return false
+
+        //nameLocalizations
+        if (ctxA.nameLocalizations.length != ctxB.nameLocalizations.length) return false
+        if (!ctxA.nameLocalizations.every((nameA) => {
+            const nameB = ctxB.nameLocalizations.find((nameB) => nameB.language == nameA.language)
+            if (!nameB || nameA.value != nameB.value) return false
+            else return true
+        })) return false
+
+        //contexts
+        if (ctxA.contexts.length != ctxB.contexts.length) return false
+        if (!ctxA.contexts.every((contextA) => {
+            return ctxB.contexts.includes(contextA)
+        })) return false
+
+        //integrationTypes
+        if (ctxA.integrationTypes.length != ctxB.integrationTypes.length) return false
+        if (!ctxA.integrationTypes.every((integrationA) => {
+            return ctxB.integrationTypes.includes(integrationA)
+        })) return false
+
+        return true
+    }
+}
+
+/**## ODContextMenuInteractionCallback `type`
+ * Callback for the message context menu interaction listener.
+ */
+export type ODContextMenuInteractionCallback = (interaction:discord.ContextMenuCommandInteraction,cmd:ODContextMenu) => void
+
+/**## ODContextMenuRegisteredResult `type`
+ * The result which will be returned when getting all (un)registered user context menu's from the manager.
+ */
+export type ODContextMenuRegisteredResult = {
+    /**A list of all registered message context menus. */
+    registered:{
+        /**The instance (`ODContextMenu`) from this message context menu. */
+        instance:ODContextMenu,
+        /**The universal object/template/builder of this message context menu. */
+        menu:ODContextMenuUniversalMenu,
+        /**Does this message context menu require an update? */
+        requiresUpdate:boolean
+    }[],
+    /**A list of all unregistered message context menus. */
+    unregistered:{
+        /**The instance (`ODContextMenu`) from this message context menu. */
+        instance:ODContextMenu,
+        /**The universal object/template/builder of this message context menu. */
+        menu:null,
+        /**Does this message context menu require an update? */
+        requiresUpdate:true
+    }[],
+    /**A list of all unused message context menus (not found in `ODContextMenuManager`). */
+    unused:{
+        /**The instance (`ODContextMenu`) from this message context menu. */
+        instance:null,
+        /**The universal object/template/builder of this message context menu. */
+        menu:ODContextMenuUniversalMenu,
+        /**Does this context menu require an update? */
+        requiresUpdate:false
+    }[]
+}
+
+/**## ODContextMenuManager `class`
+ * This is an Open Ticket client message context menu manager.
+ * 
+ * It's responsible for managing all the message context interactions from the client.
+ * 
+ * Here, you can add & remove message context interactions & the bot will do the (de)registering.
+ */
+export class ODContextMenuManager extends ODManager<ODContextMenu> {
+    /**Alias to Open Ticket debugger. */
+    #debug: ODDebugger
+    
+    /**Refrerence to discord.js client. */
+    manager: ODClientManager
+    /**Discord.js application commands manager. */
+    commandManager: discord.ApplicationCommandManager|null
+    /**Collection of all interaction listeners. */
+    #interactionListeners: {name:string|RegExp, callback:ODContextMenuInteractionCallback}[] = []
+    /**Set the soft limit for maximum amount of listeners. A warning will be shown when there are more listeners than this limit. */
+    listenerLimit: number = 100
+    /**A utility class used to compare 2 context menus with each other. */
+    comparator: ODContextMenuComparator = new ODContextMenuComparator()
+    
+    constructor(debug:ODDebugger, manager:ODClientManager){
+        super(debug,"context menu")
+        this.#debug = debug
+        this.manager = manager
+        this.commandManager = (manager.client.application) ? manager.client.application.commands : null
+    }
+
+    /**Get all registered & unregistered message context menu commands. */
+    async getAllRegisteredMenus(guildId?:string): Promise<ODContextMenuRegisteredResult> {
+        if (!this.commandManager) throw new ODSystemError("Couldn't get client application to register message context menus!")
+        
+        const menus = (await this.commandManager.fetch({guildId})).toJSON()
+        const registered: {instance:ODContextMenu, menu:ODContextMenuUniversalMenu, requiresUpdate:boolean}[] = []
+        const unregistered: {instance:ODContextMenu, menu:null, requiresUpdate:true}[] = []
+        const unused: {instance:null, menu:ODContextMenuUniversalMenu, requiresUpdate:false}[] = []
+
+        await this.loopAll((instance) => {
+            if (guildId && instance.guildId != guildId) return
+            
+            const index = menus.findIndex((menu) => menu.name == instance.name)
+            const menu = menus[index]
+            menus.splice(index,1)
+            if (menu){
+                //menu is registered (and may need to be updated)
+                const universalBuilder = this.comparator.convertBuilder(instance.builder,instance.guildId)
+                const universalMenu = this.comparator.convertMenu(menu)
+
+                //menu is not of the type 'message'|'user'
+                if (!universalBuilder || !universalMenu) return
+
+                const didChange = !this.comparator.compare(universalBuilder,universalMenu)
+                const requiresUpdate = didChange || (instance.requiresUpdate ? instance.requiresUpdate(universalMenu) : false)
+                registered.push({instance,menu:universalMenu,requiresUpdate})
+                
+                //menu is not registered
+            }else unregistered.push({instance,menu:null,requiresUpdate:true})
+        })
+
+        menus.forEach((menu) => {
+            //menu does not exist in the manager (only append to unused when type == 'message'|'user')
+            const universalCmd = this.comparator.convertMenu(menu)
+            if (!universalCmd) return
+            unused.push({instance:null,menu:universalCmd,requiresUpdate:false})
+        })
+
+        return {registered,unregistered,unused}
+    }
+    /**Create all context menus that are not registered yet.*/
+    async createNewMenus(instances:ODContextMenu[],progress?:ODManualProgressBar){
+        if (!this.manager.ready) throw new ODSystemError("Client isn't ready yet! Unable to register context menus!")
+        if (instances.length > 0 && progress){
+            progress.max = instances.length
+            progress.start()
+        }
+
+        for (const instance of instances){
+            await this.createMenu(instance)
+            this.#debug.debug("Created new context menu",[
+                {key:"id",value:instance.id.value},
+                {key:"name",value:instance.name},
+                {key:"type",value:(instance.builder.type == discord.ApplicationCommandType.Message) ? "message-context" : "user-context"}
+            ])
+            if (progress) progress.increase(1)
+        }
+    }
+    /**Update all context menus that are already registered. */
+    async updateExistingMenus(instances:ODContextMenu[],progress?:ODManualProgressBar){
+        if (!this.manager.ready) throw new ODSystemError("Client isn't ready yet! Unable to register context menus!")
+        if (instances.length > 0 && progress){
+            progress.max = instances.length
+            progress.start()
+        }
+
+        for (const instance of instances){
+            await this.createMenu(instance)
+            this.#debug.debug("Updated existing context menu",[
+                {key:"id",value:instance.id.value},
+                {key:"name",value:instance.name},
+                {key:"type",value:(instance.builder.type == discord.ApplicationCommandType.Message) ? "message-context" : "user-context"}
+            ])
+            if (progress) progress.increase(1)
+        }
+    }
+    /**Remove all context menus that are registered but unused by Open Ticket. */
+    async removeUnusedMenus(instances:ODContextMenuUniversalMenu[],guildId?:string,progress?:ODManualProgressBar){
+        if (!this.manager.ready) throw new ODSystemError("Client isn't ready yet! Unable to register context menus!")
+        if (!this.commandManager) throw new ODSystemError("Couldn't get client application to register context menus!")
+        if (instances.length > 0 && progress){
+            progress.max = instances.length
+            progress.start()
+        }
+
+        const menus = await this.commandManager.fetch({guildId})
+        
+        for (const instance of instances){
+            const menu = menus.find((menu) => menu.name == instance.name)
+            if (menu){
+                try {
+                    await menu.delete()
+                    this.#debug.debug("Removed existing context menu",[
+                        {key:"name",value:menu.name},
+                        {key:"guildId",value:guildId ?? "/"},
+                        {key:"type",value:(instance.type == discord.ApplicationCommandType.Message) ? "message-context" : "user-context"}
+                    ])
+                }catch(err){
+                    process.emit("uncaughtException",err)
+                    throw new ODSystemError("Failed to delete context menu '"+menu.name+"'!")
+                }
+            }
+            if (progress) progress.increase(1)
+        }
+    }
+    /**Create a context menu. **(SYSTEM ONLY)** => Use `ODContextMenuManager` for registering context menu's the default way! */
+    async createMenu(menu:ODContextMenu){
+        if (!this.commandManager) throw new ODSystemError("Couldn't get client application to register context menu's!")
+        try {
+            await this.commandManager.create(menu.builder,(menu.guildId ?? undefined))
+        }catch(err){
+            process.emit("uncaughtException",err)
+            throw new ODSystemError("Failed to register context menu '"+menu.name+"'!")
+        }
+    }
+    /**Start listening to the discord.js client `interactionCreate` event. */
+    startListeningToInteractions(){
+        this.manager.client.on("interactionCreate",(interaction) => {
+            //return when not in main server or DM
+            if (!this.manager.mainServer || (interaction.guild && interaction.guild.id != this.manager.mainServer.id)) return
+
+            if (!interaction.isContextMenuCommand()) return
+            const menu = this.getFiltered((menu) => menu.name == interaction.commandName)[0]
+            if (!menu) return
+
+            this.#interactionListeners.forEach((listener) => {
+                if (typeof listener.name == "string" && (interaction.commandName != listener.name)) return
+                else if (listener.name instanceof RegExp && !listener.name.test(interaction.commandName)) return
+
+                //this is a valid listener
+                listener.callback(interaction,menu)
+            })
+        })
+    }
+    /**Callback on interaction from one or multiple context menu's. */
+    onInteraction(menuName:string|RegExp, callback:ODContextMenuInteractionCallback){
+        this.#interactionListeners.push({
+            name:menuName,
+            callback
+        })
+
+        if (this.#interactionListeners.length > this.listenerLimit){
+            this.#debug.console.log("Possible context menu interaction memory leak detected!","warning",[
+                {key:"listeners",value:this.#interactionListeners.length.toString()}
+            ])
+        }
+    }
+}
+
+/**## ODContextMenuUpdateFunction `type`
+ * The function responsible for updating context menu's when they already exist.
+ */
+export type ODContextMenuUpdateFunction = (menu:ODContextMenuUniversalMenu) => boolean
+
+/**## ODContextMenu `class`
+ * This is an Open Ticket context menu.
+ * 
+ * When registered, you can listen for this context menu using the `ODContextResponder`. The advantages of using this class for creating a context menu are:
+ * - automatic registration in discord.js
+ * - error reporting to the user when the bot fails to respond
+ * - plugins can extend this context menu
+ * - the bot won't re-register the context menu when it already exists (except when requested)!
+ * 
+ * And more!
+ */
+export class ODContextMenu extends ODManagerData {
+    /**The discord.js builder for this context menu. */
+    builder: ODContextMenuBuilder
+    /**The id of the guild this context menu is for. `null` when not set. */
+    guildId: string|null
+    /**Function to check if the context menu requires to be updated (when it already exists). */
+    requiresUpdate: ODContextMenuUpdateFunction|null = null
+
+    constructor(id:ODValidId, builder:ODContextMenuBuilder, requiresUpdate?:ODContextMenuUpdateFunction, guildId?:string){
+        super(id)
+        if (builder.type != discord.ApplicationCommandType.Message && builder.type != discord.ApplicationCommandType.User) throw new ODSystemError("ApplicationCommandData is required to be the 'Message'|'User' type!")
+        
+        this.builder = builder
+        this.guildId = guildId ?? null
+        this.requiresUpdate = requiresUpdate ?? null
+    }
+
+    /**The name of this context menu. */
+    get name(): string {
+        return this.builder.name
+    }
+    set name(name:string){
+        this.builder.name = name
     }
 }

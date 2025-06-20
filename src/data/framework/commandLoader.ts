@@ -1095,3 +1095,12 @@ export const loadAllTextCommands = async () => {
         ]
     }))
 }
+
+export const loadAllContextMenus = async () => {
+    const menus = opendiscord.client.contextMenus
+    const generalConfig = opendiscord.configs.get("opendiscord:general")
+    if (!generalConfig) return
+
+    const act = discord.ApplicationCommandType
+    if (!generalConfig.data.slashCommands) return
+}

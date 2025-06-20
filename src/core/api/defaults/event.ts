@@ -19,7 +19,7 @@ import { ODFlagManager_Default } from "./flag"
 import { ODSessionManager_Default } from "./session"
 import { ODLanguageManager_Default } from "./language"
 import { ODCheckerFunctionManager_Default, ODCheckerManager_Default, ODCheckerRenderer_Default, ODCheckerTranslationRegister_Default } from "./checker"
-import { ODClientManager_Default, ODSlashCommandManager_Default, ODTextCommandManager_Default } from "./client"
+import { ODClientManager_Default, ODContextMenuManager_Default, ODSlashCommandManager_Default, ODTextCommandManager_Default } from "./client"
 import { ODBuilderManager_Default, ODButtonManager_Default, ODDropdownManager_Default, ODEmbedManager_Default, ODFileManager_Default, ODMessageManager_Default, ODModalManager_Default } from "./builder"
 import { ODButtonResponderManager_Default, ODCommandResponderManager_Default, ODDropdownResponderManager_Default, ODModalResponderManager_Default, ODResponderManager_Default } from "./responder"
 import { ODActionManager_Default } from "./action"
@@ -127,6 +127,12 @@ export interface ODEventIds_Default {
     "afterSlashCommandsLoaded": ODEvent_Default<(slash:ODSlashCommandManager_Default, client:ODClientManager_Default) => ODPromiseVoid>
     "onSlashCommandRegister": ODEvent_Default<(slash:ODSlashCommandManager_Default, client:ODClientManager_Default) => ODPromiseVoid>
     "afterSlashCommandsRegistered": ODEvent_Default<(slash:ODSlashCommandManager_Default, client:ODClientManager_Default) => ODPromiseVoid>
+
+    //client context menus
+    "onContextMenuLoad": ODEvent_Default<(menu:ODContextMenuManager_Default, client:ODClientManager_Default) => ODPromiseVoid>
+    "afterContextMenusLoaded": ODEvent_Default<(menu:ODContextMenuManager_Default, client:ODClientManager_Default) => ODPromiseVoid>
+    "onContextMenuRegister": ODEvent_Default<(menu:ODContextMenuManager_Default, client:ODClientManager_Default) => ODPromiseVoid>
+    "afterContextMenusRegistered": ODEvent_Default<(menu:ODContextMenuManager_Default, client:ODClientManager_Default) => ODPromiseVoid>
 
     //client text commands
     "onTextCommandLoad": ODEvent_Default<(text:ODTextCommandManager_Default, client:ODClientManager_Default,) => ODPromiseVoid>

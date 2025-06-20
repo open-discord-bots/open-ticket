@@ -82,6 +82,12 @@ export const loadAllEvents = () => {
         "onSlashCommandRegister",
         "afterSlashCommandsRegistered",
 
+        //client context menus
+        "onContextMenuLoad",
+        "afterContextMenusLoaded",
+        "onContextMenuRegister",
+        "afterContextMenusRegistered",
+
         //client text commands
         "onTextCommandLoad",
         "afterTextCommandsLoaded",

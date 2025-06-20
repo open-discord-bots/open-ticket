@@ -91,6 +91,14 @@ export interface ODDefaults {
     forceSlashCommandRegistration:boolean,
     /**When enabled, the bot is allowed to unregister all slash commands which aren't used in Open Ticket. Disable this if you don't want to use the Open Ticket `ODSlashCommand` classes. */
     allowSlashCommandRemoval:boolean,
+    /**Load the default Open Ticket context menus. */
+    contextMenuLoading:boolean,
+    /**Load the default Open Ticket context menu registerer (register menus in discord). */
+    contextMenuRegistering:boolean,
+    /**When enabled, the bot is forced to re-register all context menus in the server. This can be used in case of a auto-update malfunction. */
+    forceContextMenuRegistration:boolean,
+    /**When enabled, the bot is allowed to unregister all context menus which aren't used in Open Ticket. Disable this if you don't want to use the Open Ticket `ODContextMenu` classes. */
+    allowContextMenuRemoval:boolean,
     /**Load the default Open Ticket text commands. */
     textCommandLoading:boolean,
 
@@ -277,6 +285,10 @@ export class ODDefaultsManager {
             slashCommandRegistering:true,
             forceSlashCommandRegistration:false,
             allowSlashCommandRemoval:true,
+            contextMenuLoading:true,
+            contextMenuRegistering:true,
+            forceContextMenuRegistration:false,
+            allowContextMenuRemoval:true,
             textCommandLoading:true,
 
             questionLoading:true,

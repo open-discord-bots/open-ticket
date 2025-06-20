@@ -456,6 +456,38 @@ const main = async () => {
                 await opendiscord.events.get("afterSlashCommandsRegistered").emit([opendiscord.client.slashCommands,opendiscord.client])
             }
 
+            //load context menus
+            opendiscord.log("Loading context menus...","system")
+            if (opendiscord.defaults.getDefault("contextMenuLoading")){
+                await (await import("./data/framework/commandLoader.js")).loadAllContextMenus()
+            }
+            await opendiscord.events.get("onContextMenuLoad").emit([opendiscord.client.contextMenus,opendiscord.client])
+            await opendiscord.events.get("afterContextMenusLoaded").emit([opendiscord.client.contextMenus,opendiscord.client])
+            
+            //register context menus (create, update & remove)
+            if (opendiscord.defaults.getDefault("forceContextMenuRegistration")) opendiscord.log("Forcing all context menus to be re-registered...","system")
+            opendiscord.log("Registering context menus... (this can take up to a minute)","system")
+            await opendiscord.events.get("onContextMenuRegister").emit([opendiscord.client.contextMenus,opendiscord.client])
+            if (opendiscord.defaults.getDefault("contextMenuRegistering")){
+                //get all context menus that are already registered in the bot
+                const menus = await opendiscord.client.contextMenus.getAllRegisteredMenus()
+                const removableMenus = menus.unused.map((menu) => menu.menu)
+                const newMenus = menus.unregistered.map((menu) => menu.instance)
+                const updatableMenus = menus.registered.filter((menu) => menu.requiresUpdate || opendiscord.defaults.getDefault("forceContextMenuRegistration")).map((menu) => menu.instance)
+
+                //init progress bars
+                const removeProgress = opendiscord.progressbars.get("opendiscord:context-menu-remove")
+                const createProgress = opendiscord.progressbars.get("opendiscord:context-menu-create")
+                const updateProgress = opendiscord.progressbars.get("opendiscord:context-menu-update")
+
+                //remove unused menus, create new menus & update existing menus
+                if (opendiscord.defaults.getDefault("allowContextMenuRemoval")) await opendiscord.client.contextMenus.removeUnusedMenus(removableMenus,undefined,removeProgress)
+                await opendiscord.client.contextMenus.createNewMenus(newMenus,createProgress)
+                await opendiscord.client.contextMenus.updateExistingMenus(updatableMenus,updateProgress)
+                
+                await opendiscord.events.get("afterContextMenusRegistered").emit([opendiscord.client.contextMenus,opendiscord.client])
+            }
+
             //load text commands
             opendiscord.log("Loading text commands...","system")
             if (opendiscord.defaults.getDefault("allowDumpCommand")){

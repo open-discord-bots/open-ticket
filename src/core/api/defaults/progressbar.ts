@@ -134,6 +134,9 @@ export interface ODProgressBarManagerIds_Default {
     "opendiscord:slash-command-remove":ODManualProgressBar,
     "opendiscord:slash-command-create":ODManualProgressBar,
     "opendiscord:slash-command-update":ODManualProgressBar,
+    "opendiscord:context-menu-remove":ODManualProgressBar,
+    "opendiscord:context-menu-create":ODManualProgressBar,
+    "opendiscord:context-menu-update":ODManualProgressBar,
 }
 
 /**## ODProgressBarManager_Default `default_class`
