@@ -384,7 +384,7 @@ const main = async () => {
             if (!mainServer || !client.checkBotInGuild(mainServer)){
                 console.log("\n")
                 opendiscord.log("The bot isn't a member of the server provided in the config!","error")
-                opendiscord.log("Please invite your bot to the server!","info")
+                opendiscord.log("Please invite your bot to this server!","info")
                 console.log("\n")
                 process.exit(1)
             }
@@ -399,8 +399,8 @@ const main = async () => {
             if (opendiscord.defaults.getDefault("clientMultiGuildWarning")){
                 //warn if bot is in multiple servers
                 if (botServers.length > 1){
-                    opendiscord.log("This bot is part of multiple servers, but Open Ticket doesn't have support for it!","warning")
-                    opendiscord.log("It may result in the bot crashing & glitching when used in these servers!","info")
+                    opendiscord.log("This bot is part of multiple servers, but Open Ticket doesn't provide support for this!","warning")
+                    opendiscord.log("As a result, the bot may crash & glitch when used in the additional servers!","info")
                 }
                 botServers.forEach((server) => {
                     //warn if bot doesn't have permissions in multiple servers

@@ -47,7 +47,10 @@ export const loadVersionMigrationSystem = async () => {
     if (opendiscord.flags.exists("opendiscord:no-plugins") && opendiscord.flags.get("opendiscord:no-plugins").value) opendiscord.defaults.setDefault("pluginLoading",false)
     if (opendiscord.flags.exists("opendiscord:soft-plugins") && opendiscord.flags.get("opendiscord:soft-plugins").value) opendiscord.defaults.setDefault("softPluginLoading",true)
     if (opendiscord.flags.exists("opendiscord:crash") && opendiscord.flags.get("opendiscord:crash").value) opendiscord.defaults.setDefault("crashOnError",true)
-    if (opendiscord.flags.exists("opendiscord:force-slash-update") && opendiscord.flags.get("opendiscord:force-slash-update").value) opendiscord.defaults.setDefault("forceSlashCommandRegistration",true)
+    if (opendiscord.flags.exists("opendiscord:force-slash-update") && opendiscord.flags.get("opendiscord:force-slash-update").value){
+        opendiscord.defaults.setDefault("forceSlashCommandRegistration",true)
+        opendiscord.defaults.setDefault("forceContextMenuRegistration",true)
+    }
     if (opendiscord.flags.exists("opendiscord:silent") && opendiscord.flags.get("opendiscord:silent").value) opendiscord.console.silent = true
     
 

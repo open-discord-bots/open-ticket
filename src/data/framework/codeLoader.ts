@@ -62,6 +62,8 @@ export const loadStartListeningInteractionsCode = async () => {
     opendiscord.code.add(new api.ODCode("opendiscord:start-listening-interactions",13,() => {
         opendiscord.client.slashCommands.startListeningToInteractions()
         opendiscord.client.textCommands.startListeningToInteractions()
+        opendiscord.client.contextMenus.startListeningToInteractions()
+        opendiscord.client.autocompletes.startListeningToInteractions()
     }))
 }
 

@@ -78,6 +78,8 @@ export class ODClientManager {
     textCommands: ODTextCommandManager
     /**The context menu manager is responsible for all context menus & their events inside the bot. */
     contextMenus: ODContextMenuManager
+    /**The autocomplete manager is responsible for all autocomplete events inside the bot. */
+    autocompletes: ODAutocompleteManager
 
     constructor(debug:ODDebugger){
         this.#debug = debug
@@ -85,6 +87,7 @@ export class ODClientManager {
         this.slashCommands = new ODSlashCommandManager(this.#debug,this)
         this.textCommands = new ODTextCommandManager(this.#debug,this)
         this.contextMenus = new ODContextMenuManager(this.#debug,this)
+        this.autocompletes = new ODAutocompleteManager(this.#debug,this)
     }
 
     /**Initiate the `client` variable & add the intents & partials to the bot. */
@@ -152,6 +155,7 @@ export class ODClientManager {
                     if (!this.client.application) throw new ODSystemError("Couldn't get client application for slashCommand & contextMenu managers!")
                     this.slashCommands.commandManager = this.client.application.commands
                     this.contextMenus.commandManager = this.client.application.commands
+                    this.autocompletes.commandManager = this.client.application.commands
 
                     if (this.readyListener) await this.readyListener()
                     resolve(true)
@@ -1920,7 +1924,7 @@ export class ODContextMenuComparator {
 }
 
 /**## ODContextMenuInteractionCallback `type`
- * Callback for the message context menu interaction listener.
+ * Callback for the context menu interaction listener.
  */
 export type ODContextMenuInteractionCallback = (interaction:discord.ContextMenuCommandInteraction,cmd:ODContextMenu) => void
 
@@ -1928,29 +1932,29 @@ export type ODContextMenuInteractionCallback = (interaction:discord.ContextMenuC
  * The result which will be returned when getting all (un)registered user context menu's from the manager.
  */
 export type ODContextMenuRegisteredResult = {
-    /**A list of all registered message context menus. */
+    /**A list of all registered context menus. */
     registered:{
-        /**The instance (`ODContextMenu`) from this message context menu. */
+        /**The instance (`ODContextMenu`) from this context menu. */
         instance:ODContextMenu,
-        /**The universal object/template/builder of this message context menu. */
+        /**The universal object/template/builder of this context menu. */
         menu:ODContextMenuUniversalMenu,
-        /**Does this message context menu require an update? */
+        /**Does this context menu require an update? */
         requiresUpdate:boolean
     }[],
-    /**A list of all unregistered message context menus. */
+    /**A list of all unregistered context menus. */
     unregistered:{
-        /**The instance (`ODContextMenu`) from this message context menu. */
+        /**The instance (`ODContextMenu`) from this context menu. */
         instance:ODContextMenu,
-        /**The universal object/template/builder of this message context menu. */
+        /**The universal object/template/builder of this context menu. */
         menu:null,
-        /**Does this message context menu require an update? */
+        /**Does this context menu require an update? */
         requiresUpdate:true
     }[],
-    /**A list of all unused message context menus (not found in `ODContextMenuManager`). */
+    /**A list of all unused context menus (not found in `ODContextMenuManager`). */
     unused:{
-        /**The instance (`ODContextMenu`) from this message context menu. */
+        /**The instance (`ODContextMenu`) from this context menu. */
         instance:null,
-        /**The universal object/template/builder of this message context menu. */
+        /**The universal object/template/builder of this context menu. */
         menu:ODContextMenuUniversalMenu,
         /**Does this context menu require an update? */
         requiresUpdate:false
@@ -1958,11 +1962,11 @@ export type ODContextMenuRegisteredResult = {
 }
 
 /**## ODContextMenuManager `class`
- * This is an Open Ticket client message context menu manager.
+ * This is an Open Ticket client context menu manager.
  * 
- * It's responsible for managing all the message context interactions from the client.
+ * It's responsible for managing all the context interactions from the client.
  * 
- * Here, you can add & remove message context interactions & the bot will do the (de)registering.
+ * Here, you can add & remove context interactions & the bot will do the (de)registering.
  */
 export class ODContextMenuManager extends ODManager<ODContextMenu> {
     /**Alias to Open Ticket debugger. */
@@ -2174,5 +2178,67 @@ export class ODContextMenu extends ODManagerData {
     }
     set name(name:string){
         this.builder.name = name
+    }
+}
+
+/**## ODAutocompleteInteractionCallback `type`
+ * Callback for the autocomplete interaction listener.
+ */
+export type ODAutocompleteInteractionCallback = (interaction:discord.AutocompleteInteraction) => void
+
+/**## ODAutocompleteManager `class`
+ * This is an Open Ticket client autocomplete interaction manager.
+ * 
+ * It's responsible for managing all the autocomplete interactions from the client.
+ */
+export class ODAutocompleteManager {
+    /**Alias to Open Ticket debugger. */
+    #debug: ODDebugger
+    
+    /**Refrerence to discord.js client. */
+    manager: ODClientManager
+    /**Discord.js application commands manager. */
+    commandManager: discord.ApplicationCommandManager|null
+    /**Collection of all interaction listeners. */
+    #interactionListeners: {cmdName:string|RegExp, optName:string|RegExp, callback:ODAutocompleteInteractionCallback}[] = []
+    /**Set the soft limit for maximum amount of listeners. A warning will be shown when there are more listeners than this limit. */
+    listenerLimit: number = 100
+    
+    constructor(debug:ODDebugger, manager:ODClientManager){
+        this.#debug = debug
+        this.manager = manager
+        this.commandManager = (manager.client.application) ? manager.client.application.commands : null
+    }
+
+    /**Start listening to the discord.js client `interactionCreate` event. */
+    startListeningToInteractions(){
+        this.manager.client.on("interactionCreate",(interaction) => {
+            //return when not in main server or DM
+            if (!this.manager.mainServer || (interaction.guild && interaction.guild.id != this.manager.mainServer.id)) return
+
+            if (!interaction.isAutocomplete()) return
+            this.#interactionListeners.forEach((listener) => {
+                
+                if (typeof listener.cmdName == "string" && (interaction.commandName != listener.cmdName)) return
+                else if (listener.cmdName instanceof RegExp && !listener.cmdName.test(interaction.commandName)) return
+                if (typeof listener.optName == "string" && (interaction.options.getFocused(true).name != listener.optName)) return
+                else if (listener.optName instanceof RegExp && !listener.optName.test(interaction.options.getFocused(true).name)) return
+
+                //this is a valid listener
+                listener.callback(interaction)
+            })
+        })
+    }
+    /**Callback on interaction from one or multiple autocompletes. */
+    onInteraction(cmdName:string|RegExp,optName:string|RegExp,callback:ODAutocompleteInteractionCallback){
+        this.#interactionListeners.push({
+            cmdName,optName,callback
+        })
+
+        if (this.#interactionListeners.length > this.listenerLimit){
+            this.#debug.console.log("Possible autocomplete interaction memory leak detected!","warning",[
+                {key:"listeners",value:this.#interactionListeners.length.toString()}
+            ])
+        }
     }
 }
