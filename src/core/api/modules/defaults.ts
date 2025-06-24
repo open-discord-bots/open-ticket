@@ -140,6 +140,10 @@ export interface ODDefaults {
     dropdownRespondersLoading:boolean,
     /**Load the default Open Ticket modal responders. */
     modalRespondersLoading:boolean,
+    /**Load the default Open Ticket context menu responders. */
+    contextMenuRespondersLoading:boolean,
+    /**Load the default Open Ticket autocomplete responders. */
+    autocompleteRespondersLoading:boolean,
     /**Set the time (in ms) before Open Ticket sends an error message when no reply is sent in a responder. */
     responderTimeoutMs:number,
 
@@ -311,6 +315,8 @@ export class ODDefaultsManager {
             buttonRespondersLoading:true,
             dropdownRespondersLoading:true,
             modalRespondersLoading:true,
+            contextMenuRespondersLoading:true,
+            autocompleteRespondersLoading:true,
             responderTimeoutMs:2500,
 
             actionsLoading:true,

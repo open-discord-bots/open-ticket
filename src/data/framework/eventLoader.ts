@@ -209,6 +209,10 @@ export const loadAllEvents = () => {
         "afterDropdownRespondersLoaded",
         "onModalResponderLoad",
         "afterModalRespondersLoaded",
+        "onContextMenuResponderLoad",
+        "afterContextMenuRespondersLoaded",
+        "onAutocompleteResponderLoad",
+        "afterAutocompleteRespondersLoaded",
 
         //plugin loading before finalizations
         "onPluginBeforeFinalizationLoad",

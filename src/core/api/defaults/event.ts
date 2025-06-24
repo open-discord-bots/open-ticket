@@ -21,7 +21,7 @@ import { ODLanguageManager_Default } from "./language"
 import { ODCheckerFunctionManager_Default, ODCheckerManager_Default, ODCheckerRenderer_Default, ODCheckerTranslationRegister_Default } from "./checker"
 import { ODClientManager_Default, ODContextMenuManager_Default, ODSlashCommandManager_Default, ODTextCommandManager_Default } from "./client"
 import { ODBuilderManager_Default, ODButtonManager_Default, ODDropdownManager_Default, ODEmbedManager_Default, ODFileManager_Default, ODMessageManager_Default, ODModalManager_Default } from "./builder"
-import { ODButtonResponderManager_Default, ODCommandResponderManager_Default, ODDropdownResponderManager_Default, ODModalResponderManager_Default, ODResponderManager_Default } from "./responder"
+import { ODAutocompleteResponderManager_Default, ODButtonResponderManager_Default, ODCommandResponderManager_Default, ODContextMenuResponderManager_Default, ODDropdownResponderManager_Default, ODModalResponderManager_Default, ODResponderManager_Default } from "./responder"
 import { ODActionManager_Default } from "./action"
 import { ODPermissionManager_Default } from "./permission"
 import { ODHelpMenuManager_Default } from "./helpmenu"
@@ -255,6 +255,10 @@ export interface ODEventIds_Default {
     "afterDropdownRespondersLoaded": ODEvent_Default<(dropdowns:ODDropdownResponderManager_Default, responders:ODResponderManager_Default, actions:ODActionManager_Default) => ODPromiseVoid>
     "onModalResponderLoad": ODEvent_Default<(modals:ODModalResponderManager_Default, responders:ODResponderManager_Default, actions:ODActionManager_Default) => ODPromiseVoid>
     "afterModalRespondersLoaded": ODEvent_Default<(modals:ODModalResponderManager_Default, responders:ODResponderManager_Default, actions:ODActionManager_Default) => ODPromiseVoid>
+    "onContextMenuResponderLoad": ODEvent_Default<(menus:ODContextMenuResponderManager_Default, responders:ODResponderManager_Default, actions:ODActionManager_Default) => ODPromiseVoid>
+    "afterContextMenuRespondersLoaded": ODEvent_Default<(menus:ODContextMenuResponderManager_Default, responders:ODResponderManager_Default, actions:ODActionManager_Default) => ODPromiseVoid>
+    "onAutocompleteResponderLoad": ODEvent_Default<(autocomplete:ODAutocompleteResponderManager_Default, responders:ODResponderManager_Default, actions:ODActionManager_Default) => ODPromiseVoid>
+    "afterAutocompleteRespondersLoaded": ODEvent_Default<(autocomplete:ODAutocompleteResponderManager_Default, responders:ODResponderManager_Default, actions:ODActionManager_Default) => ODPromiseVoid>
 
     //plugin loading before finalizations
     "onPluginBeforeFinalizationLoad": ODEvent_Default<() => ODPromiseVoid>,

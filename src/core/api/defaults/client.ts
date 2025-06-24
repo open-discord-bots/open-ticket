@@ -160,7 +160,7 @@ export class ODTextCommandManager_Default extends ODTextCommandManager {
  * It's used to generate typescript declarations for this class.
  */
 export interface ODContextMenuManagerIds_Default {
-    "opendiscord:test-menu":ODContextMenu
+    //"opendiscord:test-menu":ODContextMenu
 }
 
 /**## ODContextMenuManager_Default `default_class`

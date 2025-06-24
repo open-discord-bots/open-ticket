@@ -2,7 +2,7 @@
 //DEFAULT RESPONDER MODULE
 ///////////////////////////////////////
 import { ODValidId } from "../modules/base"
-import { ODButtonResponder, ODButtonResponderInstance, ODButtonResponderManager, ODCommandResponder, ODCommandResponderInstance, ODCommandResponderManager, ODDropdownResponder, ODDropdownResponderInstance, ODDropdownResponderManager, ODModalResponder, ODModalResponderInstance, ODModalResponderManager, ODResponderManager } from "../modules/responder"
+import { ODAutocompleteResponder, ODAutocompleteResponderInstance, ODAutocompleteResponderManager, ODButtonResponder, ODButtonResponderInstance, ODButtonResponderManager, ODCommandResponder, ODCommandResponderInstance, ODCommandResponderManager, ODContextMenuResponder, ODContextMenuResponderInstance, ODContextMenuResponderManager, ODDropdownResponder, ODDropdownResponderInstance, ODDropdownResponderManager, ODModalResponder, ODModalResponderInstance, ODModalResponderManager, ODResponderManager } from "../modules/responder"
 import { ODWorkerManager_Default } from "./worker"
 
 /**## ODResponderManager_Default `default_class`
@@ -16,6 +16,8 @@ export class ODResponderManager_Default extends ODResponderManager {
     declare buttons: ODButtonResponderManager_Default
     declare dropdowns: ODDropdownResponderManager_Default
     declare modals: ODModalResponderManager_Default
+    declare contextMenus: ODContextMenuResponderManager_Default
+    declare autocomplete: ODAutocompleteResponderManager_Default
 }
 
 /**## ODCommandResponderManagerIds_Default `interface`
@@ -252,4 +254,98 @@ export class ODModalResponderManager_Default extends ODModalResponderManager {
  */
 export class ODModalResponder_Default<Source extends string, Params, WorkerIds extends string> extends ODModalResponder<Source,Params> {
     declare workers: ODWorkerManager_Default<ODModalResponderInstance,Source,Params,WorkerIds>
+}
+
+/**## ODContextMenuResponderManagerIds_Default `interface`
+ * This interface is a list of ids available in the `ODContextMenuResponderManager_Default` class.
+ * It's used to generate typescript declarations for this class.
+ */
+export interface ODContextMenuResponderManagerIds_Default {
+    //"opendiscord:example":{source:"context-menu",params:{},workers:"opendiscord:example"},
+}
+
+/**## ODContextMenuResponderManager_Default `default_class`
+ * This is a special class that adds type definitions & typescript to the ODContextMenuResponderManager class.
+ * It doesn't add any extra features!
+ * 
+ * This default class is made for the global variable `opendiscord.responders.contextMenus`!
+ */
+export class ODContextMenuResponderManager_Default extends ODContextMenuResponderManager {
+    get<ModalResponderId extends keyof ODContextMenuResponderManagerIds_Default>(id:ModalResponderId): ODContextMenuResponder_Default<ODContextMenuResponderManagerIds_Default[ModalResponderId]["source"],ODContextMenuResponderManagerIds_Default[ModalResponderId]["params"],ODContextMenuResponderManagerIds_Default[ModalResponderId]["workers"]>
+    get(id:ODValidId): ODContextMenuResponder<"context-menu",any>|null
+    
+    get(id:ODValidId): ODContextMenuResponder<"context-menu",any>|null {
+        return super.get(id)
+    }
+
+    remove<ModalResponderId extends keyof ODContextMenuResponderManagerIds_Default>(id:ModalResponderId): ODContextMenuResponder_Default<ODContextMenuResponderManagerIds_Default[ModalResponderId]["source"],ODContextMenuResponderManagerIds_Default[ModalResponderId]["params"],ODContextMenuResponderManagerIds_Default[ModalResponderId]["workers"]>
+    remove(id:ODValidId): ODContextMenuResponder<"context-menu",any>|null
+    
+    remove(id:ODValidId): ODContextMenuResponder<"context-menu",any>|null {
+        return super.remove(id)
+    }
+
+    exists(id:keyof ODContextMenuResponderManagerIds_Default): boolean
+    exists(id:ODValidId): boolean
+    
+    exists(id:ODValidId): boolean {
+        return super.exists(id)
+    }
+}
+
+/**## ODContextMenuResponder_Default `default_class`
+ * This is a special class that adds type definitions & typescript to the ODContextMenuResponder class.
+ * It doesn't add any extra features!
+ * 
+ * This default class is made for the default `ODContextMenuResponder`'s!
+ */
+export class ODContextMenuResponder_Default<Source extends string, Params, WorkerIds extends string> extends ODContextMenuResponder<Source,Params> {
+    declare workers: ODWorkerManager_Default<ODContextMenuResponderInstance,Source,Params,WorkerIds>
+}
+
+/**## ODAutocompleteResponderManagerIds_Default `interface`
+ * This interface is a list of ids available in the `ODAutocompleteResponderManager_Default` class.
+ * It's used to generate typescript declarations for this class.
+ */
+export interface ODAutocompleteResponderManagerIds_Default {
+    //"opendiscord:example":{source:"autocomplete",params:{},workers:"opendiscord:example"},
+}
+
+/**## ODAutocompleteResponderManager_Default `default_class`
+ * This is a special class that adds type definitions & typescript to the ODAutocompleteResponderManager class.
+ * It doesn't add any extra features!
+ * 
+ * This default class is made for the global variable `opendiscord.responders.autocomplete`!
+ */
+export class ODAutocompleteResponderManager_Default extends ODAutocompleteResponderManager {
+    get<ModalResponderId extends keyof ODAutocompleteResponderManagerIds_Default>(id:ModalResponderId): ODAutocompleteResponder_Default<ODAutocompleteResponderManagerIds_Default[ModalResponderId]["source"],ODAutocompleteResponderManagerIds_Default[ModalResponderId]["params"],ODAutocompleteResponderManagerIds_Default[ModalResponderId]["workers"]>
+    get(id:ODValidId): ODAutocompleteResponder<"autocomplete",any>|null
+    
+    get(id:ODValidId): ODAutocompleteResponder<"autocomplete",any>|null {
+        return super.get(id)
+    }
+
+    remove<ModalResponderId extends keyof ODAutocompleteResponderManagerIds_Default>(id:ModalResponderId): ODAutocompleteResponder_Default<ODAutocompleteResponderManagerIds_Default[ModalResponderId]["source"],ODAutocompleteResponderManagerIds_Default[ModalResponderId]["params"],ODAutocompleteResponderManagerIds_Default[ModalResponderId]["workers"]>
+    remove(id:ODValidId): ODAutocompleteResponder<"autocomplete",any>|null
+    
+    remove(id:ODValidId): ODAutocompleteResponder<"autocomplete",any>|null {
+        return super.remove(id)
+    }
+
+    exists(id:keyof ODAutocompleteResponderManagerIds_Default): boolean
+    exists(id:ODValidId): boolean
+    
+    exists(id:ODValidId): boolean {
+        return super.exists(id)
+    }
+}
+
+/**## ODAutocompleteResponder_Default `default_class`
+ * This is a special class that adds type definitions & typescript to the ODAutocompleteResponder class.
+ * It doesn't add any extra features!
+ * 
+ * This default class is made for the default `ODAutocompleteResponder`'s!
+ */
+export class ODAutocompleteResponder_Default<Source extends string, Params, WorkerIds extends string> extends ODAutocompleteResponder<Source,Params> {
+    declare workers: ODWorkerManager_Default<ODAutocompleteResponderInstance,Source,Params,WorkerIds>
 }

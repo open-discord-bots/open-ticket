@@ -710,6 +710,22 @@ const main = async () => {
     await opendiscord.events.get("onModalResponderLoad").emit([opendiscord.responders.modals,opendiscord.responders,opendiscord.actions])
     await opendiscord.events.get("afterModalRespondersLoaded").emit([opendiscord.responders.modals,opendiscord.responders,opendiscord.actions])
 
+    //load context menu responders
+    opendiscord.log("Loading context menu responders...","system")
+    if (opendiscord.defaults.getDefault("contextMenuRespondersLoading")){
+        //TODO!!
+    }
+    await opendiscord.events.get("onContextMenuResponderLoad").emit([opendiscord.responders.contextMenus,opendiscord.responders,opendiscord.actions])
+    await opendiscord.events.get("afterContextMenuRespondersLoaded").emit([opendiscord.responders.contextMenus,opendiscord.responders,opendiscord.actions])
+
+    //load autocomplete responders
+    opendiscord.log("Loading autocomplete responders...","system")
+    if (opendiscord.defaults.getDefault("autocompleteRespondersLoading")){
+        //TODO!!
+    }
+    await opendiscord.events.get("onAutocompleteResponderLoad").emit([opendiscord.responders.autocomplete,opendiscord.responders,opendiscord.actions])
+    await opendiscord.events.get("afterAutocompleteRespondersLoaded").emit([opendiscord.responders.autocomplete,opendiscord.responders,opendiscord.actions])
+
     //plugin loading before finalizations
     await opendiscord.events.get("onPluginBeforeFinalizationLoad").emit([])
     await opendiscord.events.get("afterPluginBeforeFinalizationLoaded").emit([])
@@ -871,7 +887,7 @@ const main = async () => {
         await opendiscord.startscreen.renderAllComponents()
         if (opendiscord.languages.getLanguageMetadata(false)?.automated){
             console.log("===================")
-            opendiscord.log("You are currently using a language which has been translated by Google Translate!","warning")
+            opendiscord.log("You are using a language which has been translated using Google Translate or AI!","warning")
             opendiscord.log("Please help us improve the translation by contributing to our project!","warning")
             console.log("===================")
         }
