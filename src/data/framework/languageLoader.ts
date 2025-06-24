@@ -40,4 +40,12 @@ export const loadAllLanguages = async () => {
     opendiscord.languages.add(new api.ODJsonLanguage("opendiscord:swedish","swedish.json"))
     opendiscord.languages.add(new api.ODJsonLanguage("opendiscord:vietnamese","vietnamese.json"))
     opendiscord.languages.add(new api.ODJsonLanguage("opendiscord:persian","persian.json"))
+    opendiscord.languages.add(new api.ODJsonLanguage("opendiscord:bengali","bengali.json"))
+    opendiscord.languages.add(new api.ODJsonLanguage("opendiscord:greek","greek.json"))
+    opendiscord.languages.add(new api.ODJsonLanguage("opendiscord:japanese","japanese.json"))
+    opendiscord.languages.add(new api.ODJsonLanguage("opendiscord:korean","korean.json"))
+    opendiscord.languages.add(new api.ODJsonLanguage("opendiscord:kurdish","kurdish.json"))
+    opendiscord.languages.add(new api.ODJsonLanguage("opendiscord:simplified-chinese","simplified-chinese.json"))
+    opendiscord.languages.add(new api.ODJsonLanguage("opendiscord:slovenian","slovenian.json"))
+    opendiscord.languages.add(new api.ODJsonLanguage("opendiscord:tamil","tamil.json"))
 }
