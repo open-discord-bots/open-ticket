@@ -76,10 +76,12 @@ export interface ODJsonConfig_DefaultStatusType {
     enabled:boolean,
     /**The type of status (e.g. playing, listening, custom, ...) */
     type:Exclude<ODClientActivityType,false>,
+    /**The mode/status of the bot (e.g. online, invisible, idle, do not disturb) */
+    mode:ODClientActivityStatus
     /**The text for the status. */
     text:string,
-    /**The status of the bot (e.g. online, invisible, idle, do not disturb) */
-    status:ODClientActivityStatus
+    /**Additional text for the status. (visible below 'text') */
+    state:string,
 }
 
 /**## ODJsonConfig_DefaultMessageSettingsType `interface`
@@ -131,6 +133,30 @@ export interface ODJsonConfig_DefaultSystemLimits {
     userMaximum:number
 }
 
+/**## ODJsonConfig_DefaultSystemChannelTopic `interface`
+ * All global channel topic settings.
+ */
+export interface ODJsonConfig_DefaultSystemChannelTopic {
+    /**Show the option name in the channel topic. */
+    showOptionName:boolean,
+    /**Show the option description in the channel topic. */
+    showOptionDescription:boolean,
+    /**Show the option topic text in the channel topic (configured in the options config). */
+    showOptionTopic:boolean,
+    /**Show the current close/reopen status in the channel topic (auto-updated). */
+    showClosed:boolean,
+    /**Show the current claim status in the channel topic (auto-updated). */
+    showClaimed:boolean,
+    /**Show the current pin status in the channel topic (auto-updated). */
+    showPinned:boolean,
+    /**Show the current priority in the channel topic (auto-updated). */
+    showPriority:boolean,
+    /**Show the creator of the ticket in the channel topic (auto-updated on transfer). */
+    showCreator:boolean,
+    /**Show the first 5 participants of the ticket in the channel topic (auto-updated). */
+    showParticipants:boolean
+}
+
 /**## ODJsonConfig_DefaultSystemPermissions `interface`
  * Configure permissions for all Open Ticket commands & actions.
  */
@@ -153,7 +179,10 @@ export interface ODJsonConfig_DefaultSystemPermissions {
     stats:ODJsonConfig_DefaultCmdPermissionSettingsType,
     clear:ODJsonConfig_DefaultCmdPermissionSettingsType,
     autoclose:ODJsonConfig_DefaultCmdPermissionSettingsType,
-    autodelete:ODJsonConfig_DefaultCmdPermissionSettingsType
+    autodelete:ODJsonConfig_DefaultCmdPermissionSettingsType,
+    transfer:ODJsonConfig_DefaultCmdPermissionSettingsType,
+    topic:ODJsonConfig_DefaultCmdPermissionSettingsType,
+    priority:ODJsonConfig_DefaultCmdPermissionSettingsType,
 }
 
 /**## ODJsonConfig_DefaultSystemMessages `interface`
@@ -171,35 +200,62 @@ export interface ODJsonConfig_DefaultSystemMessages {
     renaming:ODJsonConfig_DefaultMessageSettingsType,
     moving:ODJsonConfig_DefaultMessageSettingsType,
     blacklisting:ODJsonConfig_DefaultMessageSettingsType,
-    roleAdding:ODJsonConfig_DefaultMessageSettingsType,
-    roleRemoving:ODJsonConfig_DefaultMessageSettingsType
+    transferring:ODJsonConfig_DefaultMessageSettingsType,
+    topicChange:ODJsonConfig_DefaultMessageSettingsType,
+    priorityChange:ODJsonConfig_DefaultMessageSettingsType,
+    reactionRole:ODJsonConfig_DefaultMessageSettingsType,
 }
 
 /**## ODJsonConfig_DefaultSystem `interface`
  * All settings related to the ticket system.
  */
 export interface ODJsonConfig_DefaultSystem {
-    /**Remove all participants (except admins) from the ticket when it's closed. */
-    removeParticipantsOnClose:boolean,
-    /**Reply with an ephemeral message when a ticket is created. */
-    replyOnTicketCreation:boolean,
-    /**Reply with an ephemeral message when reaction roles are changed. */
-    replyOnReactionRole:boolean,
-    /**Use a translated config checker in the console. */
-    useTranslatedConfigChecker:boolean,
     /**Prefer slash-commands over text-commands when displaying them in menu's and messages. */
     preferSlashOverText:boolean,
     /**Reply with "unknown command" when the prefix is used without a valid command. */
     sendErrorOnUnknownCommand:boolean,
     /**Display the question fields (in a ticket message) in code blocks. */
     questionFieldsInCodeBlock:boolean,
+    /**Display embed fields together with question fields (in a ticket message). */
+    displayFieldsWithQuestions:boolean,
+    /**Show global admins roles together with ticket admins in panel embeds. */
+    showGlobalAdminsInPanelRoles:boolean,
     /**Disable the (✅❌) buttons and directly run the action. */
     disableVerifyBars:boolean,
     /**Display error embeds/messages with red instead of the default bot color. */
     useRedErrorEmbeds:boolean,
+    /**Always show the reason field in embeds, even when there is no reason provided. */
+    alwaysShowReason:boolean,
     /**The emoji style used in the bot. This will affect all embeds, titles & messages in the bot. */
     emojiStyle:"before"|"after"|"double"|"disabled",
-
+    /**The emoji used when pinning tickets. This is '📌' by default. */
+    pinEmoji:string,
+    
+    /**Reply with an ephemeral message when a ticket is created. */
+    replyOnTicketCreation:boolean,
+    /**Reply with an ephemeral message when reaction roles are changed. */
+    replyOnReactionRole:boolean,
+    /**Show a warning message before the ticket gets autoclosed. This will happen when only 1/4th of the autoclose time remains. */
+    showPreAutocloseWarning:boolean,
+    /**Ask for the priority of this ticket on ticket creation. This will happen in a dropdown in the ticket message. */
+    askPriorityOnTicketCreation:boolean,
+    /**Remove all participants (except admins) from the ticket when it's closed. */
+    removeParticipantsOnClose:boolean,
+    /**Disable autoclose for a ticket when it has been closed and re-opened. */
+    disableAutocloseAfterReopen:boolean,
+    /**Only allow autodelete when the ticket is already closed. */
+    autodeleteRequiresClosedTicket:boolean,
+    /**When enabled, only global admins are able to delete a ticket without transcript. */
+    adminOnlyDeleteWithoutTranscript:boolean,
+    /**Only allow ticket closing when at least 1 message has been sent by the creator. (admins are able to bypass) */
+    allowCloseBeforeMessage:boolean,
+    /**Only allow ticket closing when at least 1 message has been sent by a global or ticket admin. (admins are able to bypass) */
+    allowCloseBeforeAdminMessage:boolean,
+    /**Use a translated config checker in the console. */
+    useTranslatedConfigChecker:boolean,
+    /**Pin the (first) ticket message in the channel. This simulates old behaviour like Open Ticket v1, v2 & v3. */
+    pinFirstTicketMessage:boolean,
+    
     /**Enable/disable the ticket claim & unclaim button in the ticket message. */
     enableTicketClaimButtons:boolean,
     /**Enable/disable the ticket close & re-open button in the ticket message. */
@@ -218,6 +274,9 @@ export interface ODJsonConfig_DefaultSystem {
     
     /**All settings related to global ticket limits. */
     limits:ODJsonConfig_DefaultSystemLimits,
+
+    /**All global channel topic settings. */
+    channelTopic:ODJsonConfig_DefaultSystemChannelTopic,
 
     /**Configure permissions for all Open Ticket commands & actions. */
     permissions:ODJsonConfig_DefaultSystemPermissions,
@@ -366,8 +425,8 @@ export interface ODJsonConfig_DefaultOptionTicketChannelType {
         /**The category to move the ticket to when claimed by this user. */
         category:string
     }[],
-    /**The channel description/topic shown at the top of the channel in discord. */
-    description:string
+    /**The channel topic shown at the top of the channel in discord. */
+    topic:string
 }
 
 /**## ODJsonConfig_DefaultOptionTicketType `interface`
@@ -428,14 +487,14 @@ export interface ODJsonConfig_DefaultOptionTicketType extends ODJsonConfig_Defau
         /**Disable autodeleting when the ticket is claimed by someone. */
         disableOnClaim:boolean
     },
-    /**All settings related to the cooldown of this ticket type */
+    /**All settings related to the cooldown of this ticket type. */
     cooldown:{
         /**Enable cooldown (per user) */
         enabled:boolean,
         /**The amount of minutes a user needs to wait before being able to create a ticket again. */
         cooldownMinutes:number
     },
-    /**All settings related to the limits of this ticket type */
+    /**All settings related to the limits of this ticket type. */
     limits:{
         /**Enable option ticket limits. */
         enabled:boolean,
@@ -443,6 +502,13 @@ export interface ODJsonConfig_DefaultOptionTicketType extends ODJsonConfig_Defau
         globalMaximum:number,
         /**The maximum amount of tickets of this type that a user is allowed to create at the same time. */
         userMaximum:number
+    },
+    /**All settings related to the slow mode of this ticket type. */
+    slowMode:{
+        /**Enable channel slow mode. */
+        enabled:boolean,
+        /**The amount of seconds users need to wait between sending messages. */
+        slowModeSeconds:number
     }
 }
 

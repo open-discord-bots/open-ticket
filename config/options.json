@@ -25,7 +25,7 @@
             "claimedCategory":[
                 {"user":"user id","category":"category id"}
             ],
-            "description":"This is a question ticket (or leave empty)"
+            "topic":"This is the topic of this ticket channel and is visible to everyone! (or leave empty)"
         },
         
         "dmMessage":{
@@ -87,6 +87,10 @@
             "enabled":false,
             "globalMaximum":20,
             "userMaximum":3
+        },
+        "slowMode":{
+            "enabled":false,
+            "slowModeSeconds":20
         }
     },
     {

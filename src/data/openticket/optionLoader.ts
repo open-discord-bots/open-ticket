@@ -74,7 +74,7 @@ export const loadTicketOption = (option:api.ODJsonConfig_DefaultOptionTicketType
         new api.ODOptionData("opendiscord:channel-category-closed",option.channel.closedCategory),
         new api.ODOptionData("opendiscord:channel-category-backup",option.channel.backupCategory),
         new api.ODOptionData("opendiscord:channel-categories-claimed",option.channel.claimedCategory),
-        new api.ODOptionData("opendiscord:channel-description",option.channel.description),
+        new api.ODOptionData("opendiscord:channel-topic",option.channel.topic),
         
         new api.ODOptionData("opendiscord:dm-message-enabled",option.dmMessage.enabled),
         new api.ODOptionData("opendiscord:dm-message-text",option.dmMessage.text),
@@ -100,7 +100,10 @@ export const loadTicketOption = (option:api.ODJsonConfig_DefaultOptionTicketType
 
         new api.ODOptionData("opendiscord:limits-enabled",option.limits.enabled),
         new api.ODOptionData("opendiscord:limits-maximum-global",option.limits.globalMaximum),
-        new api.ODOptionData("opendiscord:limits-maximum-user",option.limits.userMaximum)
+        new api.ODOptionData("opendiscord:limits-maximum-user",option.limits.userMaximum),
+
+        new api.ODOptionData("opendiscord:slowmode-enabled",option.slowMode.enabled),
+        new api.ODOptionData("opendiscord:slowmode-seconds",option.slowMode.slowModeSeconds)
     ])
 }
 

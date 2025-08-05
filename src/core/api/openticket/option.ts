@@ -156,7 +156,7 @@ export interface ODTicketOptionIds {
     "opendiscord:channel-category-closed":ODOptionData<string>,
     "opendiscord:channel-category-backup":ODOptionData<string>,
     "opendiscord:channel-categories-claimed":ODOptionData<{user:string,category:string}[]>,
-    "opendiscord:channel-description":ODOptionData<string>,
+    "opendiscord:channel-topic":ODOptionData<string>,
     
     "opendiscord:dm-message-enabled":ODOptionData<boolean>,
     "opendiscord:dm-message-text":ODOptionData<string>,
@@ -183,6 +183,9 @@ export interface ODTicketOptionIds {
     "opendiscord:limits-enabled":ODOptionData<boolean>,
     "opendiscord:limits-maximum-global":ODOptionData<number>,
     "opendiscord:limits-maximum-user":ODOptionData<number>
+
+    "opendiscord:slowmode-enabled":ODOptionData<boolean>,
+    "opendiscord:slowmode-seconds":ODOptionData<number>,
 }
 
 /**## ODTicketOption `class`

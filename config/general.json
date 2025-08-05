@@ -5,7 +5,7 @@
         "version":"open-ticket-v4.0.7"
     },
     
-    "token":"your bot token here! (or leave empty when using 'tokenFromENV')",
+    "token":"insert your bot token here! (or leave empty when using 'tokenFromENV')",
     "tokenFromENV":false,
 
     "mainColor":"#f8ba00",
@@ -20,21 +20,35 @@
     "status":{
         "enabled":true,
         "type":"listening OR watching OR playing OR custom",
+        "mode":"online OR invisible OR idle OR dnd",
         "text":"/help",
-        "status":"online OR invisible OR idle OR dnd"
+        "state":"(additional text or leave empty)"
     },
 
     "system":{
-        "removeParticipantsOnClose":false,
-        "replyOnTicketCreation":true,
-        "replyOnReactionRole":true,
-        "useTranslatedConfigChecker":true,
         "preferSlashOverText":true,
         "sendErrorOnUnknownCommand":true,
         "questionFieldsInCodeBlock":true,
+        "displayFieldsWithQuestions":false,
+        "showGlobalAdminsInPanelRoles":false,
         "disableVerifyBars":false,
         "useRedErrorEmbeds":true,
+        "alwaysShowReason":false,
         "emojiStyle":"before (OR after OR double OR disabled)",
+        "pinEmoji":"📌",
+        
+        "replyOnTicketCreation":true,
+        "replyOnReactionRole":true,
+        "showPreAutocloseWarning":false,
+        "askPriorityOnTicketCreation":false,
+        "removeParticipantsOnClose":false,
+        "disableAutocloseAfterReopen":true,
+        "autodeleteRequiresClosedTicket":true,
+        "adminOnlyDeleteWithoutTranscript":true,
+        "allowCloseBeforeMessage":false,
+        "allowCloseBeforeAdminMessage":true,
+        "useTranslatedConfigChecker":true,
+        "pinFirstTicketMessage":false,
 
         "enableTicketClaimButtons":true,
         "enableTicketCloseButtons":true,
@@ -52,6 +66,18 @@
             "enabled":true,
             "globalMaximum":50,
             "userMaximum":3
+        },
+
+        "channelTopic":{
+            "showOptionName":true,
+            "showOptionDescription":false,
+            "showOptionTopic":true,
+            "showClosed":true,
+            "showClaimed":false,
+            "showPinned":false,
+            "showPriority":false,
+            "showCreator":false,
+            "showParticipants":false
         },
 
         "permissions":{
@@ -73,23 +99,28 @@
             "stats":"everyone (OR admin OR none OR role id)",
             "clear":"admin (OR everyone OR none OR role id)",
             "autoclose":"admin (OR everyone OR none OR role id)",
-            "autodelete":"admin (OR everyone OR none OR role id)"
+            "autodelete":"admin (OR everyone OR none OR role id)",
+            "transfer":"admin (OR everyone OR none OR role id)",
+            "topic":"admin (OR everyone OR none OR role id)",
+            "priority":"admin (OR everyone OR none OR role id)"
         },
 
         "messages":{
-            "creation":{"dm":false, "logs":true},
-            "closing":{"dm":false, "logs":true},
-            "deleting":{"dm":false, "logs":true},
-            "reopening":{"dm":false, "logs":true},
-            "claiming":{"dm":false, "logs":true},
-            "pinning":{"dm":false, "logs":true},
-            "adding":{"dm":false, "logs":true},
-            "removing":{"dm":false, "logs":true},
-            "renaming":{"dm":false, "logs":true},
-            "moving":{"dm":false, "logs":true},
-            "blacklisting":{"dm":false, "logs":true},
-            "roleAdding":{"dm":false, "logs":true},
-            "roleRemoving":{"dm":false, "logs":true}
+            "creation":{"dm":false,"logs":true},
+            "closing":{"dm":false,"logs":true},
+            "deleting":{"dm":false,"logs":true},
+            "reopening":{"dm":false,"logs":true},
+            "claiming":{"dm":false,"logs":true},
+            "pinning":{"dm":false,"logs":true},
+            "adding":{"dm":false,"logs":true},
+            "removing":{"dm":false,"logs":true},
+            "renaming":{"dm":false,"logs":true},
+            "moving":{"dm":false,"logs":true},
+            "blacklisting":{"dm":false,"logs":true},
+            "transferring":{"dm":false,"logs":true},
+            "topicChange":{"dm":false,"logs":true},
+            "priorityChange":{"dm":false,"logs":true},
+            "reactionRole":{"dm":false,"logs":true}
         }
     }
 }

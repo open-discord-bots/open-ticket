@@ -28,7 +28,7 @@ export const registerActions = async () => {
             const rawClaimCategory = ticket.option.get("opendiscord:channel-categories-claimed").value.find((c) => c.user == user.id)
             const claimCategory = (rawClaimCategory) ? rawClaimCategory.category : null
             const closeCategory = ticket.option.get("opendiscord:channel-category-closed").value
-            const channelDescription = ticket.option.get("opendiscord:channel-description").value
+            const channelTopic = ticket.option.get("opendiscord:channel-topic").value
             const channelName = channelPrefix+channelSuffix
 
             //handle category
@@ -164,7 +164,7 @@ export const registerActions = async () => {
                 await channel.send((await opendiscord.builders.messages.getSafe("opendiscord:error-channel-rename").build("ticket-move",{guild,channel,user,originalName,newName:channelName})).message)
             }
             try{
-                if (channel.type == discord.ChannelType.GuildText) channel.setTopic(channelDescription)
+                if (channel.type == discord.ChannelType.GuildText) channel.setTopic(channelTopic)
             }catch{}
 
             //update ticket message

@@ -1,4 +1,5 @@
 import {opendiscord, api, utilities} from "../../index"
+import fs from "fs"
 
 /**Check if migration is required. Returns the last version used in the database. */
 async function isMigrationRequired(): Promise<false|api.ODVersion> {
@@ -81,6 +82,22 @@ async function unloadMigrationContext(){
     opendiscord.debug.debug("-- MIGRATION CONTEXT END --")
 }
 
+/**Create a backup of the (dev)config & database before migrating. */
+function createMigrationBackup(){
+    if (fs.existsSync("./.backup/")) fs.rmSync("./.backup/",{force:true,recursive:true})
+    fs.mkdirSync("./.backup/")
+
+    const devconfigFlag = opendiscord.flags.get("opendiscord:dev-config")
+    const isDevConfig = devconfigFlag ? devconfigFlag.value : false
+    const devDatabaseFlag = opendiscord.flags.get("opendiscord:dev-database")
+    const isDevDatabase = devDatabaseFlag ? devDatabaseFlag.value : false
+
+    if (isDevConfig) fs.cpSync("./devconfig/","./.backup/devconfig/",{force:true,recursive:true})
+    else fs.cpSync("./config/","./.backup/config/",{force:true,recursive:true})
+    if (isDevDatabase) fs.cpSync("./devdatabase/","./.backup/devdatabase/",{force:true,recursive:true})
+    else fs.cpSync("./database/","./.backup/database/",{force:true,recursive:true})
+}
+
 /**Execute all version migration functions which are handled in the restricted migration context. */
 async function loadAllVersionMigrations(lastVersion:api.ODVersion){
     const migrations = (await import("./migration.js")).migrations
@@ -90,6 +107,11 @@ async function loadAllVersionMigrations(lastVersion:api.ODVersion){
         else if (comparison == "higher") return 1
         else return -1
     })
+    if (migrations.length > 0){
+        //create backup of config & database
+        createMigrationBackup()
+    }
+
     for (const migration of migrations){
         if (migration.version.compare(lastVersion) == "higher"){
             const success = await migration.migrate()
@@ -97,6 +119,7 @@ async function loadAllVersionMigrations(lastVersion:api.ODVersion){
                 {key:"success",value:success ? "true" : "false"},
                 {key:"afterInit",value:"false"}
             ])
+            else throw new api.ODSystemError("Migration Error: Unable to migrate database & config to the new version of the bot.")
         }
     }
 }
@@ -110,6 +133,11 @@ export async function loadAllAfterInitVersionMigrations(lastVersion:api.ODVersio
         else if (comparison == "higher") return 1
         else return -1
     })
+    if (migrations.length > 0){
+        //create backup of config & database
+        createMigrationBackup()
+    }
+
     for (const migration of migrations){
         if (migration.version.compare(lastVersion) == "higher"){
             const success = await migration.migrateAfterInit()
@@ -117,6 +145,7 @@ export async function loadAllAfterInitVersionMigrations(lastVersion:api.ODVersio
                 {key:"success",value:success ? "true" : "false"},
                 {key:"afterInit",value:"true"}
             ])
+            else throw new api.ODSystemError("Migration Error: Unable to migrate database & config to the new version of the bot.")
         }
     }
 }

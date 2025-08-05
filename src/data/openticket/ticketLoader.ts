@@ -27,7 +27,10 @@ export const loadTicket = async (ticket:api.ODTicketJson) => {
 
     //manage backup option (+ sync version of options with latest OT version in database)
     if (configOption) await optionDatabase.set("opendiscord:used-option",configOption.id.value,configOption.toJson(opendiscord.versions.get("opendiscord:version")))
-    else if (backupOption) opendiscord.options.add(backupOption)
+    else if (backupOption){
+        opendiscord.options.add(backupOption)
+        await optionDatabase.set("opendiscord:used-option",backupOption.id.value,backupOption.toJson(opendiscord.versions.get("opendiscord:version")))
+    }
     else throw new api.ODSystemError("Unable to use backup option! Normal option not found in config!")
 
     //load ticket & option

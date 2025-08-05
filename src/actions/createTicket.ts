@@ -19,7 +19,7 @@ export const registerActions = async () => {
             const channelPrefix = option.get("opendiscord:channel-prefix").value
             const channelCategory = option.get("opendiscord:channel-category").value
             const channelBackupCategory = option.get("opendiscord:channel-category-backup").value
-            const channelDescription = option.get("opendiscord:channel-description").value
+            const channelTopic = option.get("opendiscord:channel-topic").value
             const channelSuffix = await opendiscord.options.suffix.getSuffixFromOption(option,user)
             const channelName = channelPrefix+channelSuffix
 
@@ -108,7 +108,7 @@ export const registerActions = async () => {
                 type:discord.ChannelType.GuildText,
                 name:channelName,
                 nsfw:false,
-                topic:channelDescription,
+                topic:channelTopic,
                 parent:category,
                 reason:"Ticket Created By "+user.displayName,
                 permissionOverwrites:permissions
@@ -131,6 +131,7 @@ export const registerActions = async () => {
                 new api.ODTicketData("opendiscord:ticket-message",null),
                 new api.ODTicketData("opendiscord:participants",participants),
                 new api.ODTicketData("opendiscord:channel-suffix",channelSuffix),
+                new api.ODTicketData("opendiscord:previous-creators",[]),
                 
                 new api.ODTicketData("opendiscord:open",true),
                 new api.ODTicketData("opendiscord:opened-by",user.id),
@@ -138,6 +139,9 @@ export const registerActions = async () => {
                 new api.ODTicketData("opendiscord:closed",false),
                 new api.ODTicketData("opendiscord:closed-by",null),
                 new api.ODTicketData("opendiscord:closed-on",null),
+                new api.ODTicketData("opendiscord:reopened",false),
+                new api.ODTicketData("opendiscord:reopened-by",null),
+                new api.ODTicketData("opendiscord:reopened-on",null),
                 new api.ODTicketData("opendiscord:claimed",false),
                 new api.ODTicketData("opendiscord:claimed-by",null),
                 new api.ODTicketData("opendiscord:claimed-on",null),
@@ -155,7 +159,11 @@ export const registerActions = async () => {
                 new api.ODTicketData("opendiscord:autodelete-enabled",option.get("opendiscord:autodelete-enable-days").value),
                 new api.ODTicketData("opendiscord:autodelete-days",(option.get("opendiscord:autodelete-enable-days").value ? option.get("opendiscord:autodelete-days").value : 0)),
 
-                new api.ODTicketData("opendiscord:answers",answers)
+                new api.ODTicketData("opendiscord:answers",answers),
+                new api.ODTicketData("opendiscord:priority",-1),
+                new api.ODTicketData("opendiscord:topic",option.get("opendiscord:channel-topic").value),
+                new api.ODTicketData("opendiscord:message-sent",false),
+                new api.ODTicketData("opendiscord:admin-message-sent",false),
             ])
 
             //manage stats

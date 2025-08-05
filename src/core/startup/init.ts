@@ -147,7 +147,8 @@ export class ODVersionMigration {
         try{
             await this.#func()
             return true
-        }catch{
+        }catch(err){
+            process.emit("uncaughtException",err)
             return false
         }
     }
@@ -156,7 +157,8 @@ export class ODVersionMigration {
         try{
             await this.#afterInitFunc()
             return true
-        }catch{
+        }catch(err){
+            process.emit("uncaughtException",err)
             return false
         }
     }

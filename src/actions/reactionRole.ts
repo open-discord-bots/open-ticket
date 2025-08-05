@@ -88,13 +88,13 @@ export const registerActions = async () => {
             if (!instance.role || !instance.result) return
 
             //to logs
-            if (generalConfig.data.system.logs.enabled && (generalConfig.data.system.messages.roleAdding.logs || generalConfig.data.system.messages.roleRemoving.logs)){
+            if (generalConfig.data.system.logs.enabled && (generalConfig.data.system.messages.reactionRole.logs)){
                 const logChannel = opendiscord.posts.get("opendiscord:logs")
                 if (logChannel) logChannel.send(await opendiscord.builders.messages.getSafe("opendiscord:reaction-role-logs").build(source,{guild,user,role:instance.role,result:instance.result}))
             }
 
             //to dm
-            if (generalConfig.data.system.messages.roleAdding.dm || generalConfig.data.system.messages.roleRemoving.dm) await opendiscord.client.sendUserDm(user,await opendiscord.builders.messages.getSafe("opendiscord:reaction-role-dm").build(source,{guild,user,role:instance.role,result:instance.result}))
+            if (generalConfig.data.system.messages.reactionRole.dm) await opendiscord.client.sendUserDm(user,await opendiscord.builders.messages.getSafe("opendiscord:reaction-role-dm").build(source,{guild,user,role:instance.role,result:instance.result}))
         }),
         new api.ODWorker("opendiscord:logs",0,(instance,params,source,cancel) => {
             const {guild,user,option} = params

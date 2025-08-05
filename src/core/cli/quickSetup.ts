@@ -457,11 +457,11 @@ async function renderQuickSetupStatusType(backFn:() => api.ODPromiseVoid){
     }).promise
 
     if (answer.canceled) return await backFn()
-    else if (answer.selectedIndex == 0) quickSetupStorage.status = {enabled:false,status:"online",type:"custom",text:""}
-    else if (answer.selectedIndex == 1) quickSetupStorage.status = {enabled:true,status:"online",type:"custom",text:""}
-    else if (answer.selectedIndex == 2) quickSetupStorage.status = {enabled:true,status:"online",type:"listening",text:""}
-    else if (answer.selectedIndex == 3) quickSetupStorage.status = {enabled:true,status:"online",type:"watching",text:""}
-    else if (answer.selectedIndex == 4) quickSetupStorage.status = {enabled:true,status:"online",type:"playing",text:""}
+    else if (answer.selectedIndex == 0) quickSetupStorage.status = {enabled:false,mode:"online",type:"custom",text:"",state:""}
+    else if (answer.selectedIndex == 1) quickSetupStorage.status = {enabled:true,mode:"online",type:"custom",text:"",state:""}
+    else if (answer.selectedIndex == 2) quickSetupStorage.status = {enabled:true,mode:"online",type:"listening",text:"",state:""}
+    else if (answer.selectedIndex == 3) quickSetupStorage.status = {enabled:true,mode:"online",type:"watching",text:"",state:""}
+    else if (answer.selectedIndex == 4) quickSetupStorage.status = {enabled:true,mode:"online",type:"playing",text:"",state:""}
     
     if (answer.selectedIndex == 0) return await renderQuickSetupLogs(async () => {await renderQuickSetupStatusType(backFn)})
     else return await renderQuickSetupStatusText(async () => {await renderQuickSetupStatusType(backFn)})
@@ -1223,19 +1223,32 @@ async function saveQuickSetupConfig(){
         slashCommands:quickSetupStorage.slashCommands ?? false,
         textCommands:quickSetupStorage.textCommands ?? false,
         
-        status:quickSetupStorage.status ?? {enabled:false,status:"online",text:"",type:"custom"},
+        status:quickSetupStorage.status ?? {enabled:false,mode:"online",type:"custom",text:"",state:""},
         
         system:{
-            removeParticipantsOnClose:quickSetupStorage.removeParticipantsOnClose ?? false,
-            replyOnTicketCreation:false,
-            replyOnReactionRole:true,
-            useTranslatedConfigChecker:true,
             preferSlashOverText:quickSetupStorage.slashCommands ?? false,
             sendErrorOnUnknownCommand:true,
             questionFieldsInCodeBlock:true,
+            displayFieldsWithQuestions:false,
+            showGlobalAdminsInPanelRoles:false,
             disableVerifyBars:false,
             useRedErrorEmbeds:true,
+            alwaysShowReason:false,
             emojiStyle:quickSetupStorage.emojiStyle ?? "before",
+            pinEmoji:"📌",
+            
+            replyOnTicketCreation:false,
+            replyOnReactionRole:true,
+            showPreAutocloseWarning:false,
+            askPriorityOnTicketCreation:false,
+            removeParticipantsOnClose:quickSetupStorage.removeParticipantsOnClose ?? false,
+            disableAutocloseAfterReopen:true,
+            autodeleteRequiresClosedTicket:true,
+            adminOnlyDeleteWithoutTranscript:true,
+            allowCloseBeforeMessage:false,
+            allowCloseBeforeAdminMessage:true,
+            useTranslatedConfigChecker:true,
+            pinFirstTicketMessage:false,
             
             enableTicketClaimButtons:true,
             enableTicketCloseButtons:true,
@@ -1253,6 +1266,18 @@ async function saveQuickSetupConfig(){
                 enabled:(typeof quickSetupStorage.globalUserLimit == "number"),
                 globalMaximum:100,
                 userMaximum:quickSetupStorage.globalUserLimit ?? 3
+            },
+
+            channelTopic:{
+                showOptionName:true,
+                showOptionDescription:false,
+                showOptionTopic:true,
+                showClosed:true,
+                showClaimed:false,
+                showPinned:false,
+                showPriority:false,
+                showCreator:false,
+                showParticipants:false
             },
             
             permissions:{
@@ -1274,7 +1299,10 @@ async function saveQuickSetupConfig(){
                 stats:"everyone",
                 clear:"admin",
                 autoclose:"admin",
-                autodelete:"admin"
+                autodelete:"admin",
+                transfer:"admin",
+                topic:"admin",
+                priority:"admin",
             },
             
             messages:{
@@ -1289,8 +1317,10 @@ async function saveQuickSetupConfig(){
                 renaming:{dm:false,logs:true},
                 moving:{dm:true,logs:true},
                 blacklisting:{dm:true,logs:true},
-                roleAdding:{dm:false,logs:true},
-                roleRemoving:{dm:false,logs:true}
+                transferring:{dm:true,logs:true},
+                topicChange:{dm:false,logs:true},
+                priorityChange:{dm:false,logs:true},
+                reactionRole:{dm:false,logs:true}
             }
         }
     }
@@ -1360,7 +1390,7 @@ async function saveQuickSetupConfig(){
                 closedCategory:"",
                 backupCategory:"",
                 claimedCategory:[],
-                description:ticket.description
+                topic:ticket.description
             },
             
             dmMessage:{
@@ -1418,6 +1448,10 @@ async function saveQuickSetupConfig(){
                 enabled:false,
                 globalMaximum:20,
                 userMaximum:3
+            },
+            slowMode:{
+                enabled:false,
+                slowModeSeconds:20
             }
         }
     })
