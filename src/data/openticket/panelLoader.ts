@@ -43,6 +43,7 @@ export const loadPanel = (panel:api.ODJsonConfig_DefaultPanelType) => {
 export function describePanelOptions(mode:"fields",panel:api.ODPanel): {name:string,value:string}[]
 export function describePanelOptions(mode:"text",panel:api.ODPanel): string
 export function describePanelOptions(mode:"fields"|"text", panel:api.ODPanel): {name:string,value:string}[]|string {
+    const generalConfig = opendiscord.configs.get("opendiscord:general")
     const layout = panel.get("opendiscord:describe-options-layout").value
     const dropdownMode = panel.get("opendiscord:dropdown").value
     const options: api.ODOption[] = []
@@ -92,8 +93,15 @@ export function describePanelOptions(mode:"fields"|"text", panel:api.ODPanel): {
                 if (opt.exists("opendiscord:limits-enabled") && opt.get("opendiscord:limits-enabled").value) description = description + "\nMax Tickets: `"+opt.get("opendiscord:limits-maximum-user").value+"`"
             }
             if (layout == "detailed"){
+                const optionAdmins = [...opt.get("opendiscord:admins").value]
+                if (generalConfig.data.system.showGlobalAdminsInPanelRoles){
+                    for (const admin of generalConfig.data.globalAdmins){
+                        if (!optionAdmins.includes(admin)) optionAdmins.push(admin)
+                    }
+                }
+
                 //TODO TRANSLATION!!!
-                if (opt.exists("opendiscord:admins")) description = description + "\nAdmins: "+opt.get("opendiscord:admins").value.map((admin) => discord.roleMention(admin)).join(", ")
+                if (opt.exists("opendiscord:admins")) description = description + "\nAdmins: "+optionAdmins.map((admin) => discord.roleMention(admin)).join(", ")
             }
             
             if (description == "") description = "`<no-description>`"
@@ -144,8 +152,15 @@ export function describePanelOptions(mode:"fields"|"text", panel:api.ODPanel): {
                 if (opt.exists("opendiscord:limits-enabled") && opt.get("opendiscord:limits-enabled").value) description = description + "\nMax Tickets: `"+opt.get("opendiscord:limits-maximum-user").value+"`"
             }
             if (layout == "detailed"){
+                const optionAdmins = [...opt.get("opendiscord:admins").value]
+                if (generalConfig.data.system.showGlobalAdminsInPanelRoles){
+                    for (const admin of generalConfig.data.globalAdmins){
+                        if (!optionAdmins.includes(admin)) optionAdmins.push(admin)
+                    }
+                }
+
                 //TODO TRANSLATION!!!
-                if (opt.exists("opendiscord:admins")) description = description + "\nAdmins: "+opt.get("opendiscord:admins").value.map((admin) => discord.roleMention(admin)).join(", ")
+                if (opt.exists("opendiscord:admins")) description = description + "\nAdmins: "+optionAdmins.map((admin) => discord.roleMention(admin)).join(", ")
             }
             
             if (layout == "simple") return "**"+utilities.emojiTitle(emoji,name)+":** "+description
