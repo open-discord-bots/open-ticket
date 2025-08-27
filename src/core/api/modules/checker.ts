@@ -462,7 +462,7 @@ export class ODCheckerStructure {
  */
 export interface ODCheckerObjectStructureOptions extends ODCheckerStructureOptions {
     /**Add a checker for a property in an object (can also be optional) */
-    children:{key:string, priority:number, optional:boolean, cliHideInEditMode?:boolean, checker:ODCheckerStructure}[],
+    children:{key:string, priority?:number, optional?:boolean, cliHideInEditMode?:boolean, checker:ODCheckerStructure}[],
     /**A list of keys to skip when creating this object with the Interactive Setup CLI. The default value of these properties will be used instead. */
     cliInitSkipKeys?:string[],
     /**The key of a (primitive) property in this object to show the value of in the Interactive Setup CLI when listed in an array. */
@@ -496,8 +496,8 @@ export class ODCheckerObjectStructure extends ODCheckerStructure {
         //sort children
         if (typeof this.options.children == "undefined") return super.check(checker,value,locationTrace)
         const sortedChildren = this.options.children.sort((a,b) => {
-            if (a.priority < b.priority) return -1
-            else if (a.priority > b.priority) return 1
+            if ((a.priority ?? 0) < (b.priority ?? 0)) return -1
+            else if ((a.priority ?? 0) > (b.priority ?? 0)) return 1
             else return 0
         })
 
