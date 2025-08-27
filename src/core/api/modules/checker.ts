@@ -624,9 +624,8 @@ export class ODCheckerStringStructure extends ODCheckerStructure {
         }else{
             //warnings
             if ((this.options.capitalLetterWarning == "word" && !value.split(" ").every((word) => word.length == 0 || /^[^a-z].*/.test(word)))) checker.createMessage("opendiscord:string-capital-word","warning",`It's recommended that each word in this string starts with a capital letter!`,lt,null,[],this.id,(this.options.docs ?? null))
-            if ((this.options.capitalLetterWarning == "sentence" && !value.split(/ *[.?!] */).every((sentence) => sentence.length == 0 || /^[^a-z].*/.test(sentence)))) checker.createMessage("opendiscord:string-capital-word","warning",`It looks like some sentences in this string don't start with a capital letter!`,lt,null,[],this.id,(this.options.docs ?? null))
-                
-            //TODO: punctuation!!!
+            if ((this.options.capitalLetterWarning == "sentence" && !value.split(/ *[.?!] */).every((sentence) => sentence.length == 0 || /^[^a-z].*/.test(sentence)))) checker.createMessage("opendiscord:string-capital-sentence","warning",`It looks like some sentences in this string don't start with a capital letter!`,lt,null,[],this.id,(this.options.docs ?? null))
+            if (this.options.punctuationWarning && value.length > 0 && (!value.endsWith(".") && !value.endsWith("?") && !value.endsWith("!") && !value.endsWith("'") && !value.endsWith('"') && !value.endsWith(",") && !value.endsWith(";") && !value.endsWith(":") && !value.endsWith("="))) checker.createMessage("opendiscord:string-punctuation","warning",`It looks like the sentence in this string doesn't end with a punctuation mark!`,lt,null,[],this.id,(this.options.docs ?? null))
             
             return super.check(checker,value,locationTrace)
         }
@@ -637,6 +636,8 @@ export class ODCheckerStringStructure extends ODCheckerStructure {
  * This interface has the options for `ODCheckerNumberStructure`!
  */
 export interface ODCheckerNumberStructureOptions extends ODCheckerStructureOptions {
+    /**Is `NaN` (not a number) allowed? (`false` by default) */
+    nanAllowed?:boolean
     /**The minimum length of this number */
     minLength?:number,
     /**The maximum length of this number */
@@ -659,6 +660,8 @@ export interface ODCheckerNumberStructureOptions extends ODCheckerStructureOptio
     endsWith?:string,
     /**This number needs to contain ... */
     contains?:string,
+    /**This number is not allowed to contain ... */
+    invertedContains?:string,
     /**You need to choose between ... */
     choices?:number[],
     /**Are numbers with a decimal value allowed? */
@@ -693,6 +696,9 @@ export class ODCheckerNumberStructure extends ODCheckerStructure {
         if (typeof value != "number"){
             checker.createMessage("opendiscord:invalid-type","error","This property needs to be the type: number!",lt,null,["number"],this.id,(this.options.docs ?? null))
             return false
+        }else if (!this.options.nanAllowed && isNaN(value)){
+            checker.createMessage("opendiscord:number-nan","error",`This number can't NaN (Not A Number)!`,lt,null,[],this.id,(this.options.docs ?? null))
+            return false
         }else if (typeof this.options.minLength != "undefined" && value.toString().length < this.options.minLength){
             checker.createMessage("opendiscord:number-too-short","error",`This number can't be shorter than ${this.options.minLength} characters!`,lt,null,[this.options.minLength.toString()],this.id,(this.options.docs ?? null))
             return false
@@ -724,19 +730,22 @@ export class ODCheckerNumberStructure extends ODCheckerStructure {
         }else if (typeof this.options.contains != "undefined" && !value.toString().includes(this.options.contains)){
             checker.createMessage("opendiscord:number-contains","error",`This number needs to contain "${this.options.contains}"!`,lt,null,[`"${this.options.contains}"`],this.id,(this.options.docs ?? null))
             return false
+        }else if (typeof this.options.invertedContains != "undefined" && value.toString().includes(this.options.invertedContains)){
+            checker.createMessage("opendiscord:number-inverted-contains","error",`This number is not allowed to contain "${this.options.invertedContains}"!`,lt,null,[`"${this.options.invertedContains}"`],this.id,(this.options.docs ?? null))
+            return false
         }else if (typeof this.options.choices != "undefined" && !this.options.choices.includes(value)){
             checker.createMessage("opendiscord:number-choices","error",`This number can only be one of the following values: "${this.options.choices.join(`", "`)}"!`,lt,null,[`"${this.options.choices.join(`", "`)}"`],this.id,(this.options.docs ?? null))
             return false
         }else if (typeof this.options.floatAllowed != "undefined" && !this.options.floatAllowed && (value % 1) !== 0){
             checker.createMessage("opendiscord:number-float","error","This number can't be a decimal!",lt,null,[],this.id,(this.options.docs ?? null))
             return false
-        }else if (typeof this.options.negativeAllowed != "undefined" && value < 0){
+        }else if (typeof this.options.negativeAllowed != "undefined" && !this.options.negativeAllowed && value < 0){
             checker.createMessage("opendiscord:number-negative","error","This number can't be negative!",lt,null,[],this.id,(this.options.docs ?? null))
             return false
-        }else if (typeof this.options.positiveAllowed != "undefined" && value > 0){
+        }else if (typeof this.options.positiveAllowed != "undefined" && !this.options.positiveAllowed && value > 0){
             checker.createMessage("opendiscord:number-positive","error","This number can't be positive!",lt,null,[],this.id,(this.options.docs ?? null))
             return false
-        }else if (typeof this.options.zeroAllowed != "undefined" && value === 0){
+        }else if (typeof this.options.zeroAllowed != "undefined" && !this.options.zeroAllowed && value === 0){
             checker.createMessage("opendiscord:number-zero","error","This number can't be zero!",lt,null,[],this.id,(this.options.docs ?? null))
             return false
         }else return super.check(checker,value,locationTrace)

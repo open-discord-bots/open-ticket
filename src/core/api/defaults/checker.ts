@@ -241,9 +241,18 @@ export type ODCheckerTranslationRegisterMessageIds_Default = (
     "opendiscord:string-starts-with"|
     "opendiscord:string-ends-with"|
     "opendiscord:string-contains"|
+    "opendiscord:string-inverted-contains"|
     "opendiscord:string-choices"|
+    "opendiscord:string-lowercase"|
+    "opendiscord:string-uppercase"|
+    "opendiscord:string-special-characters"|
+    "opendiscord:string-no-spaces"|
     "opendiscord:string-regex"|
+    "opendiscord:string-capital-word"|
+    "opendiscord:string-capital-sentence"|
+    "opendiscord:string-punctuation"|
 
+    "opendiscord:number-nan"|
     "opendiscord:number-too-short"|
     "opendiscord:number-too-long"|
     "opendiscord:number-length-invalid"|
@@ -255,6 +264,7 @@ export type ODCheckerTranslationRegisterMessageIds_Default = (
     "opendiscord:number-starts-with"|
     "opendiscord:number-ends-with"|
     "opendiscord:number-contains"|
+    "opendiscord:number-inverted-contains"|
     "opendiscord:number-choices"|
     "opendiscord:number-float"|
     "opendiscord:number-negative"|

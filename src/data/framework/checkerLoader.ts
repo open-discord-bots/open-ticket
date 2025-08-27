@@ -78,9 +78,18 @@ export const registerDefaultCheckerMessageTranslations = (tm:api.ODCheckerTransl
     tm.quickTranslate(lm,"checker.messages.stringStartsWith","message","opendiscord:string-starts-with") // This string needs to start with {0}!
     tm.quickTranslate(lm,"checker.messages.stringEndsWith","message","opendiscord:string-ends-with") // This string needs to end with {0}!
     tm.quickTranslate(lm,"checker.messages.stringContains","message","opendiscord:string-contains") // This string needs to contain {0}!
+    tm.quickTranslate(lm,"//TODO TRANSLATION!!!","message","opendiscord:string-inverted-contains") // This string is not allowed to contain {0}!
     tm.quickTranslate(lm,"checker.messages.stringChoices","message","opendiscord:string-choices") // This string can only be one of the following values: {0}!
+    tm.quickTranslate(lm,"//TODO TRANSLATION!!!","message","opendiscord:string-lowercase") // This string must be written in lowercase only!
+    tm.quickTranslate(lm,"//TODO TRANSLATION!!!","message","opendiscord:string-uppercase") // This string must be written in uppercase only!
+    tm.quickTranslate(lm,"//TODO TRANSLATION!!!","message","opendiscord:string-special-characters") // This string is not allowed to contain any special characters! (a-z, 0-9 & space only)
+    tm.quickTranslate(lm,"//TODO TRANSLATION!!!","message","opendiscord:string-no-spaces") // This string is not allowed to contain spaces!
     tm.quickTranslate(lm,"checker.messages.stringRegex","message","opendiscord:string-regex") // This string is invalid!
+    tm.quickTranslate(lm,"//TODO TRANSLATION!!!","message","opendiscord:string-capital-word") // It's recommended that each word in this string starts with a capital letter!
+    tm.quickTranslate(lm,"//TODO TRANSLATION!!!","message","opendiscord:string-capital-sentence") // It looks like some sentences in this string don't start with a capital letter!
+    tm.quickTranslate(lm,"//TODO TRANSLATION!!!","message","opendiscord:string-punctuation") // It looks like the sentence in this string doesn't end with a punctuation mark!
 
+    tm.quickTranslate(lm,"//TODO TRANSLATION!!!","message","opendiscord:number-nan") // This number can't NaN (Not A Number)!
     tm.quickTranslate(lm,"checker.messages.numberTooShort","message","opendiscord:number-too-short") // This number can't be shorter than {0} characters!
     tm.quickTranslate(lm,"checker.messages.numberTooLong","message","opendiscord:number-too-long") // This number can't be longer than {0} characters!
     tm.quickTranslate(lm,"checker.messages.numberLengthInvalid","message","opendiscord:number-length-invalid") // This number needs to be {0} characters long!
@@ -92,6 +101,7 @@ export const registerDefaultCheckerMessageTranslations = (tm:api.ODCheckerTransl
     tm.quickTranslate(lm,"checker.messages.numberStartsWith","message","opendiscord:number-starts-with") // This number needs to start with {0}!
     tm.quickTranslate(lm,"checker.messages.numberEndsWith","message","opendiscord:number-ends-with") // This number needs to end with {0}!
     tm.quickTranslate(lm,"checker.messages.numberContains","message","opendiscord:number-contains") // This number needs to contain {0}!
+    tm.quickTranslate(lm,"//TODO TRANSLATION!!!","message","opendiscord:number-inverted-contains") // This number is not allowed to contain {0}!
     tm.quickTranslate(lm,"checker.messages.numberChoices","message","opendiscord:number-choices") // This number can only be one of the following values: {0}!
     tm.quickTranslate(lm,"checker.messages.numberFloat","message","opendiscord:number-float") // This number can't be a decimal!
     tm.quickTranslate(lm,"checker.messages.numberNegative","message","opendiscord:number-negative") // This number can't be negative!
