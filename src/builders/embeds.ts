@@ -37,12 +37,12 @@ const errorEmbeds = () => {
     embeds.add(new api.ODEmbed("opendiscord:error"))
     embeds.get("opendiscord:error").workers.add(
         new api.ODWorker("opendiscord:error",0,async (instance,params,source) => {
-            const {user,error,layout} = params
+            const {user,error,layout,customTitle} = params
             
             const method = getMethodFromSource(source)
 
             instance.setColor(generalConfig.data.system.useRedErrorEmbeds ? "Red" : generalConfig.data.mainColor)
-            instance.setTitle(utilities.emojiTitle("❌",lang.getTranslation("errors.titles.internalError")))
+            instance.setTitle(utilities.emojiTitle("❌",customTitle ?? lang.getTranslation("errors.titles.internalError")))
             instance.setAuthor(user.displayName,user.displayAvatarURL())
             instance.setDescription(lang.getTranslationWithParams("errors.descriptions.internalError",[method]) + (layout == "simple") ? "\n"+error : "")
             if (layout == "advanced" && error) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+error+"```"})

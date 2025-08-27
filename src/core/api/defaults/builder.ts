@@ -224,7 +224,7 @@ export class ODFile_Default<Source extends string, Params, WorkerIds extends str
  * It's used to generate typescript declarations for this class.
  */
 export interface ODEmbedManagerIds_Default {
-    "opendiscord:error":{source:"slash"|"text"|"button"|"dropdown"|"modal"|"other",params:{guild:discord.Guild|null,channel:discord.TextBasedChannel,user:discord.User,error:string,layout:"simple"|"advanced"},workers:"opendiscord:error"},
+    "opendiscord:error":{source:"slash"|"text"|"button"|"dropdown"|"modal"|"other",params:{guild:discord.Guild|null,channel:discord.TextBasedChannel,user:discord.User,error:string,layout:"simple"|"advanced",customTitle?:string},workers:"opendiscord:error"},
     "opendiscord:error-option-missing":{source:"slash"|"text"|"other",params:{guild:discord.Guild|null,channel:discord.TextBasedChannel,user:discord.User,error:ODTextCommandErrorMissingOption},workers:"opendiscord:error-option-missing"},
     "opendiscord:error-option-invalid":{source:"slash"|"text"|"other",params:{guild:discord.Guild|null,channel:discord.TextBasedChannel,user:discord.User,error:ODTextCommandErrorInvalidOption},workers:"opendiscord:error-option-invalid"},
     "opendiscord:error-unknown-command":{source:"slash"|"text"|"other",params:{guild:discord.Guild|null,channel:discord.TextBasedChannel,user:discord.User,error:ODTextCommandErrorUnknownCommand},workers:"opendiscord:error-unknown-command"},
@@ -356,7 +356,7 @@ export interface ODMessageManagerIds_Default {
     "opendiscord:verifybar-unpin-message":{source:"verifybar",params:{guild:discord.Guild|null,channel:discord.TextBasedChannel,user:discord.User,verifybar:ODVerifyBar,originalMessage:discord.Message<boolean>},workers:"opendiscord:verifybar-unpin-message"}
     "opendiscord:verifybar-autoclose-message":{source:"verifybar",params:{guild:discord.Guild|null,channel:discord.TextBasedChannel,user:discord.User,verifybar:ODVerifyBar,originalMessage:discord.Message<boolean>},workers:"opendiscord:verifybar-autoclose-message"}
     
-    "opendiscord:error":{source:"slash"|"text"|"button"|"dropdown"|"modal"|"other",params:{guild:discord.Guild|null,channel:discord.TextBasedChannel,user:discord.User,error:string,layout:"simple"|"advanced"},workers:"opendiscord:error"},
+    "opendiscord:error":{source:"slash"|"text"|"button"|"dropdown"|"modal"|"other",params:{guild:discord.Guild|null,channel:discord.TextBasedChannel,user:discord.User,error:string,layout:"simple"|"advanced",customTitle?:string},workers:"opendiscord:error"},
     "opendiscord:error-option-missing":{source:"slash"|"text"|"other",params:{guild:discord.Guild|null,channel:discord.TextBasedChannel,user:discord.User,error:ODTextCommandErrorMissingOption},workers:"opendiscord:error-option-missing"},
     "opendiscord:error-option-invalid":{source:"slash"|"text"|"other",params:{guild:discord.Guild|null,channel:discord.TextBasedChannel,user:discord.User,error:ODTextCommandErrorInvalidOption},workers:"opendiscord:error-option-invalid"},
     "opendiscord:error-unknown-command":{source:"slash"|"text"|"other",params:{guild:discord.Guild|null,channel:discord.TextBasedChannel,user:discord.User,error:ODTextCommandErrorUnknownCommand},workers:"opendiscord:error-unknown-command"},

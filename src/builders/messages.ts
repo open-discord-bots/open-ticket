@@ -332,8 +332,8 @@ const errorMessages = () => {
     messages.add(new api.ODMessage("opendiscord:error"))
     messages.get("opendiscord:error").workers.add(
         new api.ODWorker("opendiscord:error",0,async (instance,params,source) => {
-            const {guild,channel,user,error,layout} = params
-            instance.addEmbed(await embeds.getSafe("opendiscord:error").build(source,{guild,channel,user,error,layout}))
+            const {guild,channel,user,error,layout,customTitle} = params
+            instance.addEmbed(await embeds.getSafe("opendiscord:error").build(source,{guild,channel,user,error,layout,customTitle}))
             instance.setEphemeral(true)
         })
     )

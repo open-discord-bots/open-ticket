@@ -19,7 +19,7 @@ export interface ODActionManagerIds_Default {
     "opendiscord:create-ticket-permissions":{
         source:"panel-button"|"panel-dropdown"|"slash"|"text"|"other",
         params:{guild:discord.Guild,user:discord.User,option:ODTicketOption},
-        result:{valid:boolean,reason:"blacklist"|"cooldown"|"global-limit"|"global-user-limit"|"option-limit"|"option-user-limit"|null,cooldownUntil?:Date},
+        result:{valid:boolean,reason:"blacklist"|"cooldown"|"global-limit"|"global-user-limit"|"option-limit"|"option-user-limit"|"custom"|null,cooldownUntil?:Date,customReason?:string},
         workers:"opendiscord:check-blacklist"|"opendiscord:check-cooldown"|"opendiscord:check-global-limits"|"opendiscord:check-option-limits"|"opendiscord:valid"
     },
     "opendiscord:create-transcript":{

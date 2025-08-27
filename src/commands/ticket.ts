@@ -70,6 +70,7 @@ export const registerCommandResponders = async () => {
                 else if (res.reason == "global-user-limit") instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-no-permissions-limits").build(source,{guild:instance.guild,channel:instance.channel,user:instance.user,limit:"global-user"}))
                 else if (res.reason == "option-limit") instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-no-permissions-limits").build(source,{guild:instance.guild,channel:instance.channel,user:instance.user,limit:"option"}))
                 else if (res.reason == "option-user-limit") instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-no-permissions-limits").build(source,{guild:instance.guild,channel:instance.channel,user:instance.user,limit:"option-user"}))
+                else if (res.reason == "custom") instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error").build(source,{guild:instance.guild,channel:instance.channel,user:instance.user,layout:"simple",error:res.customReason ?? "You are unable to create a ticket. `Unknown invalid_permission_reason => no reason specified by plugin`",customTitle:"Permission Error"})) //TODO TRANSLATION!!!
                 else instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error").build(source,{guild:instance.guild,channel:instance.channel,user:instance.user,error:"Unknown invalid_permission reason => calculation failed #1",layout:"advanced"}))
                 return cancel()
             }
@@ -132,6 +133,7 @@ export const registerButtonResponders = async () => {
                 else if (res.reason == "global-user-limit") instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-no-permissions-limits").build(source,{guild:instance.guild,channel:instance.channel,user:instance.user,limit:"global-user"}))
                 else if (res.reason == "option-limit") instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-no-permissions-limits").build(source,{guild:instance.guild,channel:instance.channel,user:instance.user,limit:"option"}))
                 else if (res.reason == "option-user-limit") instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-no-permissions-limits").build(source,{guild:instance.guild,channel:instance.channel,user:instance.user,limit:"option-user"}))
+                else if (res.reason == "custom") instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error").build(source,{guild:instance.guild,channel:instance.channel,user:instance.user,layout:"simple",error:res.customReason ?? "You are unable to create a ticket. `Unknown invalid_permission_reason => no reason specified by plugin`",customTitle:"Permission Error"})) //TODO TRANSLATION!!!
                 else instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error").build(source,{guild:instance.guild,channel:instance.channel,user:instance.user,error:"Unknown invalid_permission reason => calculation failed #1",layout:"advanced"}))
                 return cancel()
             }
@@ -187,6 +189,7 @@ export const registerDropdownResponders = async () => {
                 else if (res.reason == "global-user-limit") instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-no-permissions-limits").build(source,{guild:instance.guild,channel:instance.channel,user:instance.user,limit:"global-user"}))
                 else if (res.reason == "option-limit") instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-no-permissions-limits").build(source,{guild:instance.guild,channel:instance.channel,user:instance.user,limit:"option"}))
                 else if (res.reason == "option-user-limit") instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-no-permissions-limits").build(source,{guild:instance.guild,channel:instance.channel,user:instance.user,limit:"option-user"}))
+                else if (res.reason == "custom") instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error").build(source,{guild:instance.guild,channel:instance.channel,user:instance.user,layout:"simple",error:res.customReason ?? "You are unable to create a ticket. `Unknown invalid_permission_reason => no reason specified by plugin`",customTitle:"Permission Error"})) //TODO TRANSLATION!!!
                 else instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error").build(source,{guild:instance.guild,channel:instance.channel,user:instance.user,error:"Unknown invalid_permission reason => calculation failed #1",layout:"advanced"}))
                 return cancel()
             }
