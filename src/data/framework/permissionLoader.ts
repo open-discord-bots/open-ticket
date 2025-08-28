@@ -20,14 +20,14 @@ export const loadAllPermissions = async () => {
     opendiscord.permissions.add(new api.ODPermission("opendiscord:owner-"+owner.id,"global-user","owner",owner))
 
     //GLOBAL ADMINS
-    generalConfig.data.globalAdmins.forEach(async (admin) => {
-        const role = await mainServer.roles.fetch(admin)
+    for (const admin of generalConfig.data.globalAdmins){
+        const role = await opendiscord.client.fetchGuildRole(mainServer,admin)
         if (!role) return opendiscord.log("Unable to register permission for global admin!","error",[
             {key:"roleid",value:admin}
         ])
 
         opendiscord.permissions.add(new api.ODPermission("opendiscord:global-admin-"+admin,"global-role","admin",role))
-    })
+    }
 
     //TICKET ADMINS
     await opendiscord.tickets.loopAll(async (ticket) => {
@@ -78,8 +78,8 @@ export const removeTicketPermissions = async (ticket:api.ODTicket) => {
     const admins = ticket.option.exists("opendiscord:admins") ? ticket.option.get("opendiscord:admins").value : []
     const readAdmins = ticket.option.exists("opendiscord:admins-readonly") ? ticket.option.get("opendiscord:admins-readonly").value : []
 
-    admins.concat(readAdmins).forEach(async (admin) => {
+    for (const admin of admins.concat(readAdmins)){
         if (!opendiscord.permissions.exists("opendiscord:ticket-admin_"+ticket.id.value+"_"+admin)) return
         opendiscord.permissions.remove("opendiscord:ticket-admin_"+ticket.id.value+"_"+admin)
-    })
+    }
 }
