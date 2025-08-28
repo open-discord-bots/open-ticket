@@ -73,7 +73,7 @@ export const registerActions = async () => {
                 permissions.push({
                     type:discord.OverwriteType.Role,
                     id:admin,
-                    allow:["ViewChannel","SendMessages","AddReactions","AttachFiles","SendPolls","ReadMessageHistory","ManageMessages"],
+                    allow:["ViewChannel","SendMessages","AddReactions","AttachFiles","SendPolls","ReadMessageHistory","ManageMessages","PinMessages","EmbedLinks"],
                     deny:[]
                 })
             })
@@ -82,7 +82,7 @@ export const registerActions = async () => {
                 permissions.push({
                     type:discord.OverwriteType.Role,
                     id:admin,
-                    allow:["ViewChannel","SendMessages","AddReactions","AttachFiles","SendPolls","ReadMessageHistory","ManageMessages"],
+                    allow:["ViewChannel","SendMessages","AddReactions","AttachFiles","SendPolls","ReadMessageHistory","ManageMessages","PinMessages","EmbedLinks"],
                     deny:[]
                 })
             })
@@ -93,15 +93,17 @@ export const registerActions = async () => {
                     type:discord.OverwriteType.Role,
                     id:admin,
                     allow:["ViewChannel","ReadMessageHistory"],
-                    deny:["SendMessages","AddReactions","AttachFiles","SendPolls"]
+                    deny:["SendMessages","AddReactions","AttachFiles","SendPolls","PinMessages"]
                 })
             })
             permissions.push({
                 type:discord.OverwriteType.Member,
                 id:user.id,
-                allow:["ViewChannel","SendMessages","AddReactions","AttachFiles","SendPolls","ReadMessageHistory"],
+                allow:["ViewChannel","SendMessages","AddReactions","AttachFiles","SendPolls","ReadMessageHistory","EmbedLinks","PinMessages"],
                 deny:[]
             })
+
+            const slowMode = option.get("opendiscord:slowmode-enabled").value ? option.get("opendiscord:slowmode-seconds").value : undefined
             
             //create channel
             const channel = await guild.channels.create({
@@ -111,7 +113,8 @@ export const registerActions = async () => {
                 topic:channelTopic,
                 parent:category,
                 reason:"Ticket Created By "+user.displayName,
-                permissionOverwrites:permissions
+                permissionOverwrites:permissions,
+                rateLimitPerUser:slowMode
             })
 
             await opendiscord.events.get("afterTicketChannelCreated").emit([option,channel,user])

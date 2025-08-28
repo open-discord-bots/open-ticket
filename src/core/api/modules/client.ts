@@ -148,7 +148,7 @@ export class ODClientManager {
             if (!this.token) reject("Client doesn't have a token!")
             
             try {
-                this.client.once("ready",async () => {
+                this.client.once("clientReady",async () => {
                     this.ready = true
 
                     //set slashCommandManager & contextMenuManager to client applicationCommandManager

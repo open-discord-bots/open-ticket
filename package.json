@@ -28,7 +28,7 @@
         "@types/node": "^22.5.0",
         "@types/terminal-kit": "^2.5.7",
         "ansis": "^2.3.0",
-        "discord.js": "^14.19.3",
+        "discord.js": "^14.22.1",
         "formatted-json-stringify": "^1.2.1",
         "terminal-kit": "^3.1.2",
         "typescript": "^5.5.4"
