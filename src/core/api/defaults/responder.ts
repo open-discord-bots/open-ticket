@@ -308,7 +308,8 @@ export class ODContextMenuResponder_Default<Source extends string, Params, Worke
  * It's used to generate typescript declarations for this class.
  */
 export interface ODAutocompleteResponderManagerIds_Default {
-    //"opendiscord:example":{source:"autocomplete",params:{},workers:"opendiscord:example"},
+    "opendiscord:panel-id":{source:"autocomplete",params:{},workers:"opendiscord:panel-id"},
+    "opendiscord:option-id":{source:"autocomplete",params:{},workers:"opendiscord:option-id"}
 }
 
 /**## ODAutocompleteResponderManager_Default `default_class`

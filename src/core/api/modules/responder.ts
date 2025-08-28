@@ -1333,8 +1333,8 @@ export class ODAutocompleteResponderManager extends ODManager<ODAutocompleteResp
 export class ODAutocompleteResponderInstance {
     /**The interaction which is the source of this instance. */
     interaction: discord.AutocompleteInteraction
-    /**Did a worker already reply to this instance/interaction? */
-    didReply: boolean = false
+    /**Did a worker already respond to this instance/interaction? */
+    didRespond: boolean = false
     /**The user who triggered this autocomplete. */
     user: discord.User
     /**The guild member who triggered this autocomplete. */
@@ -1356,7 +1356,7 @@ export class ODAutocompleteResponderInstance {
         this.target = interaction.options.getFocused(true)
         
         setTimeout(async () => {
-            if (!this.didReply){
+            if (!this.didRespond){
                 process.emit("uncaughtException",new ODSystemError("Autocomplete responder instance failed to respond widthin 2.5sec!"))
             }
         },timeoutMs ?? 2500)
@@ -1374,6 +1374,7 @@ export class ODAutocompleteResponderInstance {
                 return {success:false}
             }else{
                 await this.interaction.respond(newChoices)
+                this.didRespond = true
                 return {success:true}
             }
         }catch(err){

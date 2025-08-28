@@ -721,7 +721,7 @@ const main = async () => {
     //load autocomplete responders
     opendiscord.log("Loading autocomplete responders...","system")
     if (opendiscord.defaults.getDefault("autocompleteRespondersLoading")){
-        //TODO!!
+        await (await import("./commands/autocomplete.js")).registerAutocompleteResponders()
     }
     await opendiscord.events.get("onAutocompleteResponderLoad").emit([opendiscord.responders.autocomplete,opendiscord.responders,opendiscord.actions])
     await opendiscord.events.get("afterAutocompleteRespondersLoaded").emit([opendiscord.responders.autocomplete,opendiscord.responders,opendiscord.actions])

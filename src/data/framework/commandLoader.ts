@@ -23,19 +23,6 @@ export const loadAllSlashCommands = async () => {
 
     if (!generalConfig.data.slashCommands) return
 
-    //create panel choices
-    const panelChoices : {name:string, value:string}[] = []
-    opendiscord.configs.get("opendiscord:panels").data.forEach((panel) => {
-        panelChoices.push({name:panel.name, value:panel.id})
-    })
-
-    //create ticket choices
-    const ticketChoices : {name:string, value:string}[] = []
-    opendiscord.configs.get("opendiscord:options").data.forEach((option) => {
-        if (option.type != "ticket") return
-        ticketChoices.push({name:option.name, value:option.id})
-    })
-
     const allowedCommands: string[] = []
     for (const key in generalConfig.data.system.permissions){
         if (generalConfig.data.system.permissions[key] != "none") allowedCommands.push(key)
@@ -63,7 +50,7 @@ export const loadAllSlashCommands = async () => {
                 description:lang.getTranslation("commands.panelId"),
                 type:acot.String,
                 required:true,
-                choices:panelChoices
+                autocomplete:true
             },
             {
                 name:"auto-update",
@@ -72,14 +59,6 @@ export const loadAllSlashCommands = async () => {
                 required:false
             }
         ]
-    },(current) => {
-        //check if this slash command needs to be updated
-        const idOption = current.options.find((opt) => opt.name == "id" && opt.type == acot.String)
-        if (!idOption || idOption.choices.length != panelChoices.length) return true
-        if (!panelChoices.every((panel) => {
-            return (idOption.choices.find((c) => c.value == panel.value && c.name == panel.name)) ? true : false
-        })) return true
-        return false
     }))
 
     //TICKET (when enabled)
@@ -95,17 +74,9 @@ export const loadAllSlashCommands = async () => {
                 description:lang.getTranslation("commands.ticketId"),
                 type:acot.String,
                 required:true,
-                choices:ticketChoices
+                autocomplete:true
             }
         ]
-    },(current) => {
-        //check if this slash command needs to be updated
-        const idOption = current.options.find((opt) => opt.name == "id" && opt.type == acot.String)
-        if (!idOption || idOption.choices.length != ticketChoices.length) return true
-        if (!ticketChoices.every((ticket) => {
-            return (idOption.choices.find((c) => c.value == ticket.value && c.name == ticket.name)) ? true : false
-        })) return true
-        return false
     }))
 
     //CLOSE
@@ -267,7 +238,7 @@ export const loadAllSlashCommands = async () => {
                 description:lang.getTranslation("commands.moveId"),
                 type:acot.String,
                 required:true,
-                choices:ticketChoices
+                autocomplete:true
             },
             {
                 name:"reason",
@@ -276,14 +247,6 @@ export const loadAllSlashCommands = async () => {
                 required:false
             }
         ]
-    },(current) => {
-        //check if this slash command needs to be updated
-        const idOption = current.options.find((opt) => opt.name == "id" && opt.type == acot.String)
-        if (!idOption || idOption.choices.length != ticketChoices.length) return true
-        if (!ticketChoices.every((ticket) => {
-            return (idOption.choices.find((c) => c.value == ticket.value && c.name == ticket.name)) ? true : false
-        })) return true
-        return false
     }))
 
     //RENAME
