@@ -17,10 +17,15 @@ export const registerActions = async () => {
             
             //update ticket
             ticket.get("opendiscord:closed").value = true
-            if (source == "autoclose") ticket.get("opendiscord:autoclosed").value = true
-            ticket.get("opendiscord:open").value = false
             ticket.get("opendiscord:closed-by").value = user.id
             ticket.get("opendiscord:closed-on").value = new Date().getTime()
+            
+            ticket.get("opendiscord:reopened").value = false
+            ticket.get("opendiscord:reopened-by").value = null
+            ticket.get("opendiscord:reopened-on").value = null
+
+            if (source == "autoclose") ticket.get("opendiscord:autoclosed").value = true
+            ticket.get("opendiscord:open").value = false
             ticket.get("opendiscord:busy").value = true
 
             //update stats

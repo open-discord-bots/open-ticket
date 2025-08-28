@@ -16,11 +16,16 @@ export const registerActions = async () => {
             await opendiscord.events.get("onTicketReopen").emit([ticket,user,channel,reason])
 
             //update ticket
+            ticket.get("opendiscord:reopened").value = true
+            ticket.get("opendiscord:reopened-by").value = user.id
+            ticket.get("opendiscord:reopened-on").value = new Date().getTime()
+            
             ticket.get("opendiscord:closed").value = false
-            ticket.get("opendiscord:open").value = true
-            ticket.get("opendiscord:autoclosed").value = false
             ticket.get("opendiscord:closed-by").value = null
             ticket.get("opendiscord:closed-on").value = null
+            
+            ticket.get("opendiscord:autoclosed").value = false
+            ticket.get("opendiscord:open").value = true
             ticket.get("opendiscord:busy").value = true
 
             //update stats
