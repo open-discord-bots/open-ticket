@@ -412,14 +412,17 @@ const statsEmbeds = () => {
             
             const scope = opendiscord.stats.get("opendiscord:ticket")
             const participantsScope = opendiscord.stats.get("opendiscord:participants")
-            if (!scope || !participantsScope) return
+            const messagesScope = opendiscord.stats.get("opendiscord:messages")
+            if (!scope || !participantsScope || !messagesScope) return
             const data = await scope.render(scopeData.id.value,guild,channel,user)
             const participantsData = await participantsScope.render(scopeData.id.value,guild,channel,user)
+            const messagesData = await messagesScope.render(scopeData.id.value,guild,channel,user)
             
             instance.setColor(generalConfig.data.mainColor)
             instance.setTitle(scope.name)
             instance.setDescription(data)
-            instance.addFields({name:participantsScope.name,value:participantsData,inline:false})
+            instance.addFields({name:participantsScope.name,value:participantsData,inline:true})
+            instance.addFields({name:messagesScope.name,value:messagesData,inline:true})
         })
     )
 

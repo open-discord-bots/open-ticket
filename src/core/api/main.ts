@@ -132,7 +132,7 @@ export class ODMain {
         this.versions = new ODVersionManager_Default()
         this.versions.add(ODVersion.fromString("opendiscord:version","v4.1.0"))
         this.versions.add(ODVersion.fromString("opendiscord:api","v1.0.0"))
-        this.versions.add(ODVersion.fromString("opendiscord:transcripts","v2.0.0"))
+        this.versions.add(ODVersion.fromString("opendiscord:transcripts","v2.1.0"))
         this.versions.add(ODVersion.fromString("opendiscord:livestatus","v2.0.0"))
 
         this.debugfile = new ODDebugFileManager("./","otdebug.txt",5000,this.versions.get("opendiscord:version"))
