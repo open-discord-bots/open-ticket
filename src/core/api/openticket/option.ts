@@ -151,7 +151,7 @@ export interface ODTicketOptionIds {
     "opendiscord:questions":ODOptionData<string[]>,
     
     "opendiscord:channel-prefix":ODOptionData<string>,
-    "opendiscord:channel-suffix":ODOptionData<"user-name"|"user-id"|"random-number"|"random-hex"|"counter-dynamic"|"counter-fixed">,
+    "opendiscord:channel-suffix":ODOptionData<"user-name"|"user-nickname"|"user-id"|"random-number"|"random-hex"|"counter-dynamic"|"counter-fixed">,
     "opendiscord:channel-category":ODOptionData<string>,
     "opendiscord:channel-category-closed":ODOptionData<string>,
     "opendiscord:channel-category-backup":ODOptionData<string>,
@@ -353,10 +353,11 @@ export class ODOptionSuffixManager extends ODManager<ODOptionSuffix> {
     }
 
     /**Instantly get the suffix from an `ODTicketOption`. */
-    async getSuffixFromOption(option:ODTicketOption,user:discord.User): Promise<string|null> {
+    async getSuffixFromOption(option:ODTicketOption,user:discord.User, guild: discord.Guild): Promise<string|null> {
         const suffix = this.getAll().find((suffix) => suffix.option.id.value == option.id.value)
         if (!suffix) return null
-        return await suffix.getSuffix(user)
+        const member = await guild.members.fetch(user.id);
+        return await suffix.getSuffix(member)
     }
 }
 
@@ -377,7 +378,7 @@ export class ODOptionSuffix extends ODManagerData {
     }
 
     /**Get the suffix for a new ticket. */
-    async getSuffix(user:discord.User): Promise<string> {
+    async getSuffix(member:discord.GuildMember): Promise<string> {
         throw new ODSystemError("Tried to use an unimplemented ODOptionSuffix!")
     }
 }
@@ -390,8 +391,21 @@ export class ODOptionSuffix extends ODManagerData {
  * Use `getSuffix()` to get the new suffix!
  */
 export class ODOptionUserNameSuffix extends ODOptionSuffix {
-    async getSuffix(user:discord.User): Promise<string> {
-        return user.username
+    async getSuffix(member:discord.GuildMember): Promise<string> {
+        return member.user.username
+    }
+}
+
+/**## ODOptionUserNicknameSuffix `class`
+ * This is an Open Ticket user-nickname option suffix.
+ * 
+ * This class can generate a user-nickname suffix for a discord channel name from a specific option.
+ * 
+ * Use `getSuffix()` to get the new suffix!
+ */
+export class ODOptionUserNicknameSuffix extends ODOptionSuffix {
+    async getSuffix(member:discord.GuildMember): Promise<string> {
+        return member.displayName
     }
 }
 
@@ -403,8 +417,8 @@ export class ODOptionUserNameSuffix extends ODOptionSuffix {
  * Use `getSuffix()` to get the new suffix!
  */
 export class ODOptionUserIdSuffix extends ODOptionSuffix {
-    async getSuffix(user:discord.User): Promise<string> {
-        return user.id
+    async getSuffix(member:discord.GuildMember): Promise<string> {
+        return member.id
     }
 }
 
@@ -429,7 +443,7 @@ export class ODOptionCounterDynamicSuffix extends ODOptionSuffix {
     async #init(){
         if (!await this.database.exists("opendiscord:option-suffix-counter",this.option.id.value)) await this.database.set("opendiscord:option-suffix-counter",this.option.id.value,0)
     }
-    async getSuffix(user:discord.User): Promise<string> {
+    async getSuffix(member:discord.GuildMember): Promise<string> {
         const rawCurrentValue = await this.database.get("opendiscord:option-suffix-counter",this.option.id.value)
         const currentValue = (typeof rawCurrentValue != "number") ? 0 : rawCurrentValue
         const newValue = currentValue+1
@@ -459,7 +473,7 @@ export class ODOptionCounterFixedSuffix extends ODOptionSuffix {
     async #init(){
         if (!await this.database.exists("opendiscord:option-suffix-counter",this.option.id.value)) await this.database.set("opendiscord:option-suffix-counter",this.option.id.value,0)
     }
-    async getSuffix(user:discord.User): Promise<string> {
+    async getSuffix(member:discord.GuildMember): Promise<string> {
         const rawCurrentValue = await this.database.get("opendiscord:option-suffix-counter",this.option.id.value)
         const currentValue = (typeof rawCurrentValue != "number") ? 0 : rawCurrentValue
         const newValue = (currentValue >= 9999) ? 0 : currentValue+1
@@ -504,7 +518,7 @@ export class ODOptionRandomNumberSuffix extends ODOptionSuffix {
         if (history.includes(number)) return this.#generateUniqueValue(history)
         else return number
     }
-    async getSuffix(user:discord.User): Promise<string> {
+    async getSuffix(member:discord.GuildMember): Promise<string> {
         const rawCurrentValues = await this.database.get("opendiscord:option-suffix-history",this.option.id.value)
         const currentValues = ((Array.isArray(rawCurrentValues)) ? rawCurrentValues : []) as string[]
         const newValue = this.#generateUniqueValue(currentValues)
@@ -542,7 +556,7 @@ export class ODOptionRandomHexSuffix extends ODOptionSuffix {
         if (history.includes(hex)) return this.#generateUniqueValue(history)
         else return hex
     }
-    async getSuffix(user:discord.User): Promise<string> {
+    async getSuffix(member:discord.GuildMember): Promise<string> {
         const rawCurrentValues = await this.database.get("opendiscord:option-suffix-history",this.option.id.value)
         const currentValues = ((Array.isArray(rawCurrentValues)) ? rawCurrentValues : []) as string[]
         const newValue = this.#generateUniqueValue(currentValues)

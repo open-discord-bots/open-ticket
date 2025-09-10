@@ -20,7 +20,7 @@ export const registerActions = async () => {
             const channelCategory = option.get("opendiscord:channel-category").value
             const channelBackupCategory = option.get("opendiscord:channel-category-backup").value
             const channelTopic = option.get("opendiscord:channel-topic").value
-            const channelSuffix = await opendiscord.options.suffix.getSuffixFromOption(option,user)
+            const channelSuffix = await opendiscord.options.suffix.getSuffixFromOption(option,user,guild)
             const channelName = channelPrefix+channelSuffix
 
             //handle category

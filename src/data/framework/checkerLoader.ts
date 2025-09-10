@@ -402,7 +402,7 @@ export const defaultOptionsStructure = new api.ODCheckerArrayStructure("opendisc
         //TICKET CHANNEL
         {key:"channel",checker:new api.ODCheckerObjectStructure("opendiscord:ticket-channel",{cliInitSkipKeys:["backupCategory","claimedCategory"],children:[
             {key:"prefix",checker:new api.ODCheckerStringStructure("opendiscord:ticket-channel-prefix",{maxLength:25,regex:/^[^\s]*$/,cliDisplayName:"Prefix",cliDisplayDescription:"The prefix of the name of the ticket channel. (e.g. 'question-')"})},
-            {key:"suffix",checker:new api.ODCheckerStringStructure("opendiscord:ticket-channel-suffix",{choices:["user-name","user-id","random-number","random-hex","counter-dynamic","counter-fixed"],cliDisplayName:"Suffix",cliDisplayDescription:"The suffix mode to use. The number/text will be appended after the prefix."})},
+            {key:"suffix",checker:new api.ODCheckerStringStructure("opendiscord:ticket-channel-suffix",{choices:["user-name","user-nickname","user-id","random-number","random-hex","counter-dynamic","counter-fixed"],cliDisplayName:"Suffix",cliDisplayDescription:"The suffix mode to use. The number/text will be appended after the prefix."})},
             
             {key:"category",checker:new api.ODCheckerCustomStructure_DiscordId("opendiscord:ticket-channel-category","category",true,[],{cliDisplayName:"Category",cliDisplayDescription:"The category the ticket will be created in. Leave empty for no category."})},
             {key:"closedCategory",checker:new api.ODCheckerCustomStructure_DiscordId("opendiscord:ticket-channel-closed-category","category",true,[],{cliDisplayName:"Closed Category",cliDisplayDescription:"An additional category where the ticket will be moved to when closed."})},
