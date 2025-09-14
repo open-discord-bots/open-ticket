@@ -555,6 +555,42 @@ export const loadAllSlashCommands = async () => {
             }
         ]
     }))
+    //PRIORITY
+    if (allowedCommands.includes("priority")) commands.add(new api.ODSlashCommand("opendiscord:priority",{
+        type:act.ChatInput,
+        name:"priority",
+        description:"Set the priority of the ticket.", //TODO TRANSLATION!!!
+        contexts:[discord.InteractionContextType.Guild],
+        integrationTypes:[discord.ApplicationIntegrationType.GuildInstall],
+        options:[
+            {
+                name:"set",
+                description:"Set the priority of the ticket.", //TODO TRANSLATION!!!
+                type:acot.Subcommand,
+                options:[
+                    {
+                        name:"priority",
+                        description:"The priority of the channel.",
+                        type:acot.String,
+                        required:true,
+                        choices:opendiscord.priorities.getAll().sort((a,b) => b.priority-a.priority).map((prio) => ({value:prio.rawName,name:prio.renderDisplayName()}))
+                    },
+                    {
+                        name:"reason",
+                        description:lang.getTranslation("commands.reason"),
+                        type:acot.String,
+                        required:false
+                    }
+                ]
+            },
+            {
+                name:"get",
+                description:"Get the priority of the ticket.", //TODO TRANSLATION!!!
+                type:acot.Subcommand
+            },
+            //TODO: list (v4.2)
+        ]
+    }))
 }
 
 export const loadAllTextCommands = async () => {
@@ -1056,6 +1092,37 @@ export const loadAllTextCommands = async () => {
                 allowSpaces:true
             }
         ]
+    }))
+    //PRIORITY
+    //TODO: priority list (v4.2)
+    if (allowedCommands.includes("priority")) commands.add(new api.ODTextCommand("opendiscord:priority-set",{
+        name:"priority set",
+        prefix,
+        dmPermission:false,
+        guildPermission:true,
+        allowBots:false,
+        options:[
+            {
+                name:"priority",
+                type:"string",
+                required:true,
+                allowSpaces:false,
+                choices:opendiscord.priorities.getAll().sort((a,b) => b.priority-a.priority).map((prio) => prio.rawName)
+            },
+            {
+                name:"reason",
+                type:"string",
+                required:false,
+                allowSpaces:true
+            }
+        ]
+    }))
+    if (allowedCommands.includes("priority")) commands.add(new api.ODTextCommand("opendiscord:priority-get",{
+        name:"priority get",
+        prefix,
+        dmPermission:false,
+        guildPermission:true,
+        allowBots:false,
     }))
 }
 

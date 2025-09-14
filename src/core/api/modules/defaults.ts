@@ -83,6 +83,9 @@ export interface ODDefaults {
     /**Load the default Open Ticket client activity initialization (& status refresh). */
     clientActivityInitiating:boolean,
 
+    /**Load the default Open Ticket priority levels. */
+    priorityLoading:boolean,
+
     /**Load the default Open Ticket slash commands. */
     slashCommandLoading:boolean,
     /**Load the default Open Ticket slash command registerer (register slash cmds in discord). */
@@ -284,6 +287,8 @@ export class ODDefaultsManager {
             clientMultiGuildWarning:true,
             clientActivityLoading:true,
             clientActivityInitiating:true,
+
+            priorityLoading:true,
             
             slashCommandLoading:true,
             slashCommandRegistering:true,

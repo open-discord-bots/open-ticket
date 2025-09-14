@@ -37,6 +37,7 @@ import { ODQuestionManager } from "./openticket/question"
 import { ODBlacklistManager } from "./openticket/blacklist"
 import { ODTranscriptManager_Default } from "./openticket/transcript"
 import { ODRoleManager } from "./openticket/role"
+import { ODPriorityManager_Default } from "./openticket/priority"
 
 /**## ODMain `class`
  * This is the main Open Ticket class.
@@ -127,6 +128,8 @@ export class ODMain {
     transcripts: ODTranscriptManager_Default
     /**The manager that manages all reaction roles in the bot. (here, you can add additional data to roles) */
     roles: ODRoleManager
+    /**The manager that manages all priority levels in the bot. (register/edit ticket priority levels) */
+    priorities: ODPriorityManager_Default
 
     constructor(){
         this.versions = new ODVersionManager_Default()
@@ -175,6 +178,7 @@ export class ODMain {
         this.blacklist = new ODBlacklistManager(this.debug)
         this.transcripts = new ODTranscriptManager_Default(this.debug,this.tickets,this.client)
         this.roles = new ODRoleManager(this.debug)
+        this.priorities = new ODPriorityManager_Default(this.debug)
     }
     
     /**Log a message to the console. But in the Open Ticket style :) */

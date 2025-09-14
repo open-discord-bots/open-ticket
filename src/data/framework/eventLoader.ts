@@ -75,6 +75,10 @@ export const loadAllEvents = () => {
         "afterClientActivityLoaded",
         "onClientActivityInit",
         "afterClientActivityInitiated",
+
+        //priority levels
+        "onPriorityLoad",
+        "afterPrioritiesLoaded",
         
         //client slash commands
         "onSlashCommandLoad",

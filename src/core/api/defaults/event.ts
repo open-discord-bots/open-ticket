@@ -42,6 +42,7 @@ import { ODQuestionManager } from "../openticket/question"
 import { ODBlacklistManager } from "../openticket/blacklist"
 import { ODTranscriptManager_Default } from "../openticket/transcript"
 import { ODRole, ODRoleManager } from "../openticket/role"
+import { ODPriorityManager_Default } from "../openticket/priority"
 
 /**## ODEventIds_Default `interface`
  * This interface is a list of ids available in the `ODEvent_Default` class.
@@ -122,6 +123,10 @@ export interface ODEventIds_Default {
     "onClientActivityInit": ODEvent_Default<(activity:ODClientActivityManager, client:ODClientManager_Default) => ODPromiseVoid>
     "afterClientActivityInitiated": ODEvent_Default<(activity:ODClientActivityManager, client:ODClientManager_Default) => ODPromiseVoid>
     
+    //priority levels
+    "onPriorityLoad": ODEvent_Default<(priorities:ODPriorityManager_Default) => ODPromiseVoid>
+    "afterPrioritiesLoaded": ODEvent_Default<(priorities:ODPriorityManager_Default) => ODPromiseVoid>
+
     //client slash commands
     "onSlashCommandLoad": ODEvent_Default<(slash:ODSlashCommandManager_Default, client:ODClientManager_Default) => ODPromiseVoid>
     "afterSlashCommandsLoaded": ODEvent_Default<(slash:ODSlashCommandManager_Default, client:ODClientManager_Default) => ODPromiseVoid>

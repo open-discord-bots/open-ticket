@@ -20,6 +20,7 @@ export const registerAllEmbeds = async () => {
     roleEmbeds()
     clearEmbeds()
     autoEmbeds()
+    extraEmbeds()
 }
 
 /**Utility function to get the translated "method" from the source. Mostly used in error embeds. */
@@ -1166,8 +1167,6 @@ const roleEmbeds = () => {
     )
 }
 
-export default roleEmbeds
-
 const clearEmbeds = () => {
     //CLEAR VERIFY MESSAGE
     embeds.add(new api.ODEmbed("opendiscord:clear-verify-message"))
@@ -1309,6 +1308,35 @@ const autoEmbeds = () => {
             instance.setTitle(utilities.emojiTitle("⏱️",lang.getTranslation("actions.titles.autodeleteDisabled")))
             instance.setDescription(lang.getTranslation("actions.descriptions.autodeleteDisabled"))
             if (reason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+reason+"```"})
+        })
+    )
+}
+
+const extraEmbeds = () => {
+    //PRIORITY SET
+    embeds.add(new api.ODEmbed("opendiscord:priority-set"))
+    embeds.get("opendiscord:priority-set").workers.add(
+        new api.ODWorker("opendiscord:priority-set",0,async (instance,params,source) => {
+            const {user,priority,reason} = params
+
+            instance.setAuthor(user.displayName,user.displayAvatarURL())
+            instance.setColor(generalConfig.data.mainColor)
+            instance.setTitle(utilities.emojiTitle("🚨","Priority Changed")) //TODO TRANSLATION!!!
+            instance.setDescription("The ticket priority has been changed to **"+priority.renderDisplayName()+"** by "+discord.userMention(user.id)+" successfully!") //TODO TRANSLATION!!!
+            if (reason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+reason+"```"})
+        })
+    )
+
+    //PRIORITY GET
+    embeds.add(new api.ODEmbed("opendiscord:priority-get"))
+    embeds.get("opendiscord:priority-get").workers.add(
+        new api.ODWorker("opendiscord:priority-get",0,async (instance,params,source) => {
+            const {user,priority} = params
+
+            instance.setAuthor(user.displayName,user.displayAvatarURL())
+            instance.setColor(generalConfig.data.mainColor)
+            instance.setTitle(utilities.emojiTitle("🚨","Priority Changed")) //TODO TRANSLATION!!!
+            instance.setDescription("The current priority of this ticket is **"+priority.renderDisplayName()+"**!") //TODO TRANSLATION!!!
         })
     )
 }

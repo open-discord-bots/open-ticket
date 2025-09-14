@@ -269,5 +269,13 @@ export const loadAllHelpMenuComponents = async () => {
             textOptions:[{name:"time",optional:false},{name:"reason",optional:true}],
             slashOptions:[{name:"time",optional:false},{name:"reason",optional:true}]
         }))
+        if (allowedCommands.includes("priority")) advanced.add(new api.ODHelpMenuCommandComponent("opendiscord:priority-set",0,{
+            textName:prefix+"priority set",
+            textDescription:"Set the priority of the ticket channel.", //TODO TRANSLATION!!!
+            slashName:"/priority set",
+            slashDescription:"Set the priority of the ticket channel.", //TODO TRANSLATION!!!
+            textOptions:[{name:"priority",optional:false}],
+            slashOptions:[{name:"priority",optional:false}]
+        }))
     }
 }
