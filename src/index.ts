@@ -427,7 +427,7 @@ const main = async () => {
             //load priority levels
             opendiscord.log("Loading prioritiy levels...","system")
             if (opendiscord.defaults.getDefault("priorityLoading")){
-                await (await import("./data/openticket/priorityLoader.js")).loadAllPriorities()
+                await (await import("./data/openticket/priorityLoader.js")).loadAllPriorityLevels()
             }
             await opendiscord.events.get("onPriorityLoad").emit([opendiscord.priorities])
             await opendiscord.events.get("afterPrioritiesLoaded").emit([opendiscord.priorities])

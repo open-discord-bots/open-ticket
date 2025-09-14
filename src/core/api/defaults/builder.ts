@@ -13,7 +13,7 @@ import { ODVerifyBar } from "../modules/verifybar"
 import * as discord from "discord.js"
 import { ODTranscriptCompiler, ODTranscriptCompilerCompileResult } from "../openticket/transcript"
 import { ODRole, ODRoleUpdateResult } from "../openticket/role"
-import { ODPriority } from "../openticket/priority"
+import { ODPriorityLevel } from "../openticket/priority"
 
 /**## ODBuilderManager_Default `default_class`
  * This is a special class that adds type definitions & typescript to the ODBuilderManager class.
@@ -297,8 +297,8 @@ export interface ODEmbedManagerIds_Default {
     "opendiscord:autodelete-disable":{source:"slash"|"text"|"other",params:{guild:discord.Guild,channel:discord.GuildTextBasedChannel,user:discord.User,ticket:ODTicket,reason:string|null},workers:"opendiscord:autodelete-disable"},
 
     "opendiscord:topic-set":{source:"slash"|"text"|"other",params:{guild:discord.Guild,channel:discord.GuildTextBasedChannel,user:discord.User,ticket:ODTicket,topic:string},workers:"opendiscord:topic-set"},
-    "opendiscord:priority-set":{source:"slash"|"text"|"other",params:{guild:discord.Guild,channel:discord.GuildTextBasedChannel,user:discord.User,ticket:ODTicket,priority:ODPriority,reason:string|null},workers:"opendiscord:priority-set"},
-    "opendiscord:priority-get":{source:"slash"|"text"|"other",params:{guild:discord.Guild,channel:discord.GuildTextBasedChannel,user:discord.User,ticket:ODTicket,priority:ODPriority},workers:"opendiscord:priority-get"},
+    "opendiscord:priority-set":{source:"slash"|"text"|"other",params:{guild:discord.Guild,channel:discord.GuildTextBasedChannel,user:discord.User,ticket:ODTicket,priority:ODPriorityLevel,reason:string|null},workers:"opendiscord:priority-set"},
+    "opendiscord:priority-get":{source:"slash"|"text"|"other",params:{guild:discord.Guild,channel:discord.GuildTextBasedChannel,user:discord.User,ticket:ODTicket,priority:ODPriorityLevel},workers:"opendiscord:priority-get"},
 }
 
 /**## ODEmbedManager_Default `default_class`
@@ -435,8 +435,8 @@ export interface ODMessageManagerIds_Default {
     "opendiscord:autodelete-disable":{source:"slash"|"text"|"other",params:{guild:discord.Guild,channel:discord.GuildTextBasedChannel,user:discord.User,ticket:ODTicket,reason:string|null},workers:"opendiscord:autodelete-disable"},
 
     "opendiscord:topic-set":{source:"slash"|"text"|"other",params:{guild:discord.Guild,channel:discord.GuildTextBasedChannel,user:discord.User,ticket:ODTicket,topic:string},workers:"opendiscord:topic-set"},
-    "opendiscord:priority-set":{source:"slash"|"text"|"other",params:{guild:discord.Guild,channel:discord.GuildTextBasedChannel,user:discord.User,ticket:ODTicket,priority:ODPriority,reason:string|null},workers:"opendiscord:priority-set"},
-    "opendiscord:priority-get":{source:"slash"|"text"|"other",params:{guild:discord.Guild,channel:discord.GuildTextBasedChannel,user:discord.User,ticket:ODTicket,priority:ODPriority},workers:"opendiscord:priority-get"},
+    "opendiscord:priority-set":{source:"slash"|"text"|"other",params:{guild:discord.Guild,channel:discord.GuildTextBasedChannel,user:discord.User,ticket:ODTicket,priority:ODPriorityLevel,reason:string|null},workers:"opendiscord:priority-set"},
+    "opendiscord:priority-get":{source:"slash"|"text"|"other",params:{guild:discord.Guild,channel:discord.GuildTextBasedChannel,user:discord.User,ticket:ODTicket,priority:ODPriorityLevel},workers:"opendiscord:priority-get"},
 }
 
 /**## ODMessageManager_Default `default_class`

@@ -12,7 +12,7 @@ import * as discord from "discord.js"
  * 
  * Priorities levels can be changed/updated/translated by plugins to allow for more customisability.
  */
-export class ODPriorityManager extends ODManager<ODPriority> {
+export class ODPriorityManager extends ODManager<ODPriorityLevel> {
     /**A reference to the Open Ticket debugger. */
     #debug: ODDebugger
 
@@ -22,18 +22,18 @@ export class ODPriorityManager extends ODManager<ODPriority> {
     }
 }
 
-/**## ODPriorityIds `type`
+/**## ODPriorityManagerIds `type`
  * This interface is a list of ids available in the `ODPriorityManager` class.
  * It's used to generate typescript declarations for this class.
  */
-export interface ODPriorityIds {
-    "opendiscord:urgent":ODPriority,
-    "opendiscord:very-high":ODPriority,
-    "opendiscord:high":ODPriority,
-    "opendiscord:normal":ODPriority,
-    "opendiscord:low":ODPriority,
-    "opendiscord:very-low":ODPriority,
-    "opendiscord:none":ODPriority,
+export interface ODPriorityManagerIds {
+    "opendiscord:urgent":ODPriorityLevel,
+    "opendiscord:very-high":ODPriorityLevel,
+    "opendiscord:high":ODPriorityLevel,
+    "opendiscord:normal":ODPriorityLevel,
+    "opendiscord:low":ODPriorityLevel,
+    "opendiscord:very-low":ODPriorityLevel,
+    "opendiscord:none":ODPriorityLevel,
 }
 
 /**## ODPriorityManager_Default `default_class`
@@ -43,21 +43,21 @@ export interface ODPriorityIds {
  * This default class is made for the global variable `opendiscord.priorities`!
  */
 export class ODPriorityManager_Default extends ODPriorityManager {
-    get<PriorityId extends keyof ODPriorityIds>(id:PriorityId): ODPriorityIds[PriorityId]
-    get(id:ODValidId): ODPriority|null
+    get<PriorityId extends keyof ODPriorityManagerIds>(id:PriorityId): ODPriorityManagerIds[PriorityId]
+    get(id:ODValidId): ODPriorityLevel|null
     
-    get(id:ODValidId): ODPriority|null {
+    get(id:ODValidId): ODPriorityLevel|null {
         return super.get(id)
     }
 
-    remove<PriorityId extends keyof ODPriorityIds>(id:PriorityId): ODPriorityIds[PriorityId]
-    remove(id:ODValidId): ODPriority|null
+    remove<PriorityId extends keyof ODPriorityManagerIds>(id:PriorityId): ODPriorityManagerIds[PriorityId]
+    remove(id:ODValidId): ODPriorityLevel|null
     
-    remove(id:ODValidId): ODPriority|null {
+    remove(id:ODValidId): ODPriorityLevel|null {
         return super.remove(id)
     }
 
-    exists(id:keyof ODPriorityIds): boolean
+    exists(id:keyof ODPriorityManagerIds): boolean
     exists(id:ODValidId): boolean
     
     exists(id:ODValidId): boolean {
@@ -65,7 +65,7 @@ export class ODPriorityManager_Default extends ODPriorityManager {
     }
 }
 
-/**## ODPriority `class`
+/**## ODPriorityLevel `class`
  * This is an Open Ticket priority level.
  * 
  * Using this class, you can register or edit a priority level for the ticket priority system.
@@ -74,7 +74,7 @@ export class ODPriorityManager_Default extends ODPriorityManager {
  * 
  * #### 🚨 Negative priorities are treated as `disabled/no-priority`!
  */
-export class ODPriority extends ODManagerData {
+export class ODPriorityLevel extends ODManagerData {
     /**The priority level itself. A negative number (e.g. `-1`) is treated as `disabled/no-priority`. */
     priority:number
     /**The raw name of the level (used in text/slash command inputs). */
