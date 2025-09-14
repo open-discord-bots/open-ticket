@@ -353,11 +353,16 @@ export class ODOptionSuffixManager extends ODManager<ODOptionSuffix> {
     }
 
     /**Instantly get the suffix from an `ODTicketOption`. */
-    async getSuffixFromOption(option:ODTicketOption,user:discord.User, guild: discord.Guild): Promise<string|null> {
+    async getSuffixFromOption(option:ODTicketOption,user:discord.User,guild:discord.Guild): Promise<string|null> {
         const suffix = this.getAll().find((suffix) => suffix.option.id.value == option.id.value)
         if (!suffix) return null
-        const member = await guild.members.fetch(user.id);
-        return await suffix.getSuffix(member)
+        try{
+            const member = await guild.members.fetch(user.id)
+            return await suffix.getSuffix(member)
+        }catch(err){
+            process.emit("uncaughtException",err)
+            return null
+        }
     }
 }
 
