@@ -411,7 +411,7 @@ export interface ODJsonConfig_DefaultOptionTicketChannelType {
     /**The prefix used in the name of this ticket channel. */
     prefix:string,
     /**The type of suffix used in the name of this ticket channel. */
-    suffix:"user-name"|"user-id"|"random-number"|"random-hex"|"counter-dynamic"|"counter-fixed",
+    suffix:"user-name"|"user-nickname"|"user-id"|"random-number"|"random-hex"|"counter-dynamic"|"counter-fixed",
     /**An optional discord category id to create this ticket in. */
     category:string,
     /**An optional discord category id to move this ticket to when closed. */
