@@ -37,7 +37,7 @@ export interface ODRoleDataJson {
     value:ODValidJsonType
 }
 
-/**## ODRoleDataJson `interface`
+/**## ODRoleJson `interface`
  * The JSON representatation from a single role.
  */
 export interface ODRoleJson {

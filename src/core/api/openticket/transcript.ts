@@ -132,14 +132,14 @@ export interface ODTranscriptCompilerIds {
  * This default class is made for the global variable `opendiscord.transcripts`!
  */
 export class ODTranscriptManager_Default extends ODTranscriptManager {
-    get<QuestionId extends keyof ODTranscriptCompilerIds>(id:QuestionId): ODTranscriptCompilerIds[QuestionId]
+    get<CompilerId extends keyof ODTranscriptCompilerIds>(id:CompilerId): ODTranscriptCompilerIds[CompilerId]
     get(id:ODValidId): ODTranscriptCompiler<any,null|object>|null
     
     get(id:ODValidId): ODTranscriptCompiler<any,null|object>|null {
         return super.get(id)
     }
 
-    remove<QuestionId extends keyof ODTranscriptCompilerIds>(id:QuestionId): ODTranscriptCompilerIds[QuestionId]
+    remove<CompilerId extends keyof ODTranscriptCompilerIds>(id:CompilerId): ODTranscriptCompilerIds[CompilerId]
     remove(id:ODValidId): ODTranscriptCompiler<any,null|object>|null
     
     remove(id:ODValidId): ODTranscriptCompiler<any,null|object>|null {
