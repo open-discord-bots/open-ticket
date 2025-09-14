@@ -207,13 +207,13 @@ export const loadAllHelpMenuComponents = async () => {
 
     const advanced = helpmenu.get("opendiscord:advanced")
     if (advanced){
-        if (allowedCommands.includes("stats")) advanced.add(new api.ODHelpMenuCommandComponent("opendiscord:stats-global",5,{
+        if (allowedCommands.includes("stats")) advanced.add(new api.ODHelpMenuCommandComponent("opendiscord:stats-global",9,{
             textName:prefix+"stats global",
             textDescription:lang.getTranslation("commands.statsGlobal"),
             slashName:"/stats global",
             slashDescription:lang.getTranslation("commands.statsGlobal")
         }))
-        if (allowedCommands.includes("stats")) advanced.add(new api.ODHelpMenuCommandComponent("opendiscord:stats-ticket",4,{
+        if (allowedCommands.includes("stats")) advanced.add(new api.ODHelpMenuCommandComponent("opendiscord:stats-ticket",8,{
             textName:prefix+"stats ticket",
             textDescription:lang.getTranslation("commands.statsTicket"),
             slashName:"/stats ticket",
@@ -221,7 +221,7 @@ export const loadAllHelpMenuComponents = async () => {
             textOptions:[{name:"ticket",optional:false}],
             slashOptions:[{name:"ticket",optional:false}]
         }))
-        if (allowedCommands.includes("stats")) advanced.add(new api.ODHelpMenuCommandComponent("opendiscord:stats-user",2,{
+        if (allowedCommands.includes("stats")) advanced.add(new api.ODHelpMenuCommandComponent("opendiscord:stats-user",7,{
             textName:prefix+"stats user",
             textDescription:lang.getTranslation("commands.statsUser"),
             slashName:"/stats user",
@@ -229,7 +229,7 @@ export const loadAllHelpMenuComponents = async () => {
             textOptions:[{name:"user",optional:false}],
             slashOptions:[{name:"user",optional:false}]
         }))
-        if (allowedCommands.includes("stats")) advanced.add(new api.ODHelpMenuCommandComponent("opendiscord:stats-reset",2,{
+        if (allowedCommands.includes("stats")) advanced.add(new api.ODHelpMenuCommandComponent("opendiscord:stats-reset",6,{
             textName:prefix+"stats reset",
             textDescription:lang.getTranslation("commands.statsReset"),
             slashName:"/stats reset",
@@ -237,7 +237,7 @@ export const loadAllHelpMenuComponents = async () => {
             textOptions:[{name:"reason",optional:true}],
             slashOptions:[{name:"reason",optional:true}]
         }))
-        if (allowedCommands.includes("autoclose")) advanced.add(new api.ODHelpMenuCommandComponent("opendiscord:autoclose-disable",1,{
+        if (allowedCommands.includes("autoclose")) advanced.add(new api.ODHelpMenuCommandComponent("opendiscord:autoclose-disable",5,{
             textName:prefix+"autoclose disable",
             textDescription:lang.getTranslation("commands.autocloseDisable"),
             slashName:"/autoclose disable",
@@ -245,7 +245,7 @@ export const loadAllHelpMenuComponents = async () => {
             textOptions:[{name:"reason",optional:true}],
             slashOptions:[{name:"reason",optional:true}]
         }))
-        if (allowedCommands.includes("autoclose")) advanced.add(new api.ODHelpMenuCommandComponent("opendiscord:autoclose-enable",0,{
+        if (allowedCommands.includes("autoclose")) advanced.add(new api.ODHelpMenuCommandComponent("opendiscord:autoclose-enable",4,{
             textName:prefix+"autoclose enable",
             textDescription:lang.getTranslation("commands.autocloseEnable"),
             slashName:"/autoclose enable",
@@ -253,7 +253,7 @@ export const loadAllHelpMenuComponents = async () => {
             textOptions:[{name:"time",optional:false},{name:"reason",optional:true}],
             slashOptions:[{name:"time",optional:false},{name:"reason",optional:true}]
         }))
-        if (allowedCommands.includes("autodelete")) advanced.add(new api.ODHelpMenuCommandComponent("opendiscord:autodelete-disable",1,{
+        if (allowedCommands.includes("autodelete")) advanced.add(new api.ODHelpMenuCommandComponent("opendiscord:autodelete-disable",3,{
             textName:prefix+"autodelete disable",
             textDescription:lang.getTranslation("commands.autodeleteDisable"),
             slashName:"/autodelete disable",
@@ -261,13 +261,21 @@ export const loadAllHelpMenuComponents = async () => {
             textOptions:[{name:"reason",optional:true}],
             slashOptions:[{name:"reason",optional:true}]
         }))
-        if (allowedCommands.includes("autodelete")) advanced.add(new api.ODHelpMenuCommandComponent("opendiscord:autodelete-enable",0,{
+        if (allowedCommands.includes("autodelete")) advanced.add(new api.ODHelpMenuCommandComponent("opendiscord:autodelete-enable",2,{
             textName:prefix+"autodelete enable",
             textDescription:lang.getTranslation("commands.autodeleteEnable"),
             slashName:"/autodelete enable",
             slashDescription:lang.getTranslation("commands.autodeleteEnable"),
             textOptions:[{name:"time",optional:false},{name:"reason",optional:true}],
             slashOptions:[{name:"time",optional:false},{name:"reason",optional:true}]
+        }))
+        if (allowedCommands.includes("topic")) advanced.add(new api.ODHelpMenuCommandComponent("opendiscord:topic-set",1,{
+            textName:prefix+"topic set",
+            textDescription:"Change the topic of the ticket channel.", //TODO TRANSLATION!!!
+            slashName:"/topic set",
+            slashDescription:"Change the topic of the ticket channel.", //TODO TRANSLATION!!!
+            textOptions:[{name:"topic",optional:false}],
+            slashOptions:[{name:"topic",optional:false}]
         }))
         if (allowedCommands.includes("priority")) advanced.add(new api.ODHelpMenuCommandComponent("opendiscord:priority-set",0,{
             textName:prefix+"priority set",

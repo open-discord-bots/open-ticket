@@ -50,6 +50,7 @@ export interface ODSlashCommandManagerIds_Default {
     "opendiscord:clear":ODSlashCommand,
     "opendiscord:autoclose":ODSlashCommand,
     "opendiscord:autodelete":ODSlashCommand,
+    "opendiscord:topic":ODSlashCommand,
     "opendiscord:priority":ODSlashCommand,
 }
 
@@ -121,6 +122,7 @@ export interface ODTextCommandManagerIds_Default {
     "opendiscord:autoclose-enable":ODTextCommand,
     "opendiscord:autodelete-disable":ODTextCommand,
     "opendiscord:autodelete-enable":ODTextCommand,
+    "opendiscord:topic-set":ODTextCommand,
     "opendiscord:priority-set":ODTextCommand,
     "opendiscord:priority-get":ODTextCommand,
 }

@@ -555,6 +555,32 @@ export const loadAllSlashCommands = async () => {
             }
         ]
     }))
+
+    //TOPIC
+    if (allowedCommands.includes("topic")) commands.add(new api.ODSlashCommand("opendiscord:topic",{
+        type:act.ChatInput,
+        name:"topic",
+        description:"Change the topic of the ticket channel.", //TODO TRANSLATION!!!
+        contexts:[discord.InteractionContextType.Guild],
+        integrationTypes:[discord.ApplicationIntegrationType.GuildInstall],
+        options:[
+            {
+                name:"set",
+                description:"Set the topic of the ticket channel to a specific value.", //TODO TRANSLATION!!!
+                type:acot.Subcommand,
+                options:[
+                    {
+                        name:"topic",
+                        description:"The new topic of the channel.",
+                        type:acot.String,
+                        required:true
+                    }
+                ]
+            },
+            //TODO: list (v4.2)
+        ]
+    }))
+
     //PRIORITY
     if (allowedCommands.includes("priority")) commands.add(new api.ODSlashCommand("opendiscord:priority",{
         type:act.ChatInput,
@@ -1093,6 +1119,25 @@ export const loadAllTextCommands = async () => {
             }
         ]
     }))
+
+    //TOPIC
+    //TODO: topic list (v4.2)
+    if (allowedCommands.includes("topic")) commands.add(new api.ODTextCommand("opendiscord:topic-set",{
+        name:"topic set",
+        prefix,
+        dmPermission:false,
+        guildPermission:true,
+        allowBots:false,
+        options:[
+            {
+                name:"topic",
+                type:"string",
+                required:true,
+                allowSpaces:true
+            }
+        ]
+    }))
+
     //PRIORITY
     //TODO: priority list (v4.2)
     if (allowedCommands.includes("priority")) commands.add(new api.ODTextCommand("opendiscord:priority-set",{

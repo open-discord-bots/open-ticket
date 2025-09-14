@@ -1313,6 +1313,20 @@ const autoEmbeds = () => {
 }
 
 const extraEmbeds = () => {
+    //TOPIC SET
+    embeds.add(new api.ODEmbed("opendiscord:topic-set"))
+    embeds.get("opendiscord:topic-set").workers.add(
+        new api.ODWorker("opendiscord:topic-set",0,async (instance,params,source) => {
+            const {user,topic} = params
+            
+            instance.setAuthor(user.displayName,user.displayAvatarURL())
+            instance.setColor(generalConfig.data.mainColor)
+            instance.setTitle(utilities.emojiTitle("ℹ️","Topic Changed")) //TODO TRANSLATION!!!
+            instance.setDescription("The channel topic has been changed by "+discord.userMention(user.id)+" successfully!") //TODO TRANSLATION!!!
+            if (topic) instance.addFields({name:"Topic"+":",value:"```"+topic+"```"}) //TODO TRANSLATION!!!
+        })
+    )
+
     //PRIORITY SET
     embeds.add(new api.ODEmbed("opendiscord:priority-set"))
     embeds.get("opendiscord:priority-set").workers.add(

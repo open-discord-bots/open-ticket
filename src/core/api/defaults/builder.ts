@@ -295,6 +295,8 @@ export interface ODEmbedManagerIds_Default {
     "opendiscord:autodelete-enable":{source:"slash"|"text"|"other",params:{guild:discord.Guild,channel:discord.GuildTextBasedChannel,user:discord.User,ticket:ODTicket,time:number,reason:string|null},workers:"opendiscord:autodelete-enable"},
     "opendiscord:autoclose-disable":{source:"slash"|"text"|"other",params:{guild:discord.Guild,channel:discord.GuildTextBasedChannel,user:discord.User,ticket:ODTicket,reason:string|null},workers:"opendiscord:autoclose-disable"},
     "opendiscord:autodelete-disable":{source:"slash"|"text"|"other",params:{guild:discord.Guild,channel:discord.GuildTextBasedChannel,user:discord.User,ticket:ODTicket,reason:string|null},workers:"opendiscord:autodelete-disable"},
+
+    "opendiscord:topic-set":{source:"slash"|"text"|"other",params:{guild:discord.Guild,channel:discord.GuildTextBasedChannel,user:discord.User,ticket:ODTicket,topic:string},workers:"opendiscord:topic-set"},
     "opendiscord:priority-set":{source:"slash"|"text"|"other",params:{guild:discord.Guild,channel:discord.GuildTextBasedChannel,user:discord.User,ticket:ODTicket,priority:ODPriority,reason:string|null},workers:"opendiscord:priority-set"},
     "opendiscord:priority-get":{source:"slash"|"text"|"other",params:{guild:discord.Guild,channel:discord.GuildTextBasedChannel,user:discord.User,ticket:ODTicket,priority:ODPriority},workers:"opendiscord:priority-get"},
 }
@@ -431,6 +433,8 @@ export interface ODMessageManagerIds_Default {
     "opendiscord:autodelete-enable":{source:"slash"|"text"|"other",params:{guild:discord.Guild,channel:discord.GuildTextBasedChannel,user:discord.User,ticket:ODTicket,time:number,reason:string|null},workers:"opendiscord:autodelete-enable"},
     "opendiscord:autoclose-disable":{source:"slash"|"text"|"other",params:{guild:discord.Guild,channel:discord.GuildTextBasedChannel,user:discord.User,ticket:ODTicket,reason:string|null},workers:"opendiscord:autoclose-disable"},
     "opendiscord:autodelete-disable":{source:"slash"|"text"|"other",params:{guild:discord.Guild,channel:discord.GuildTextBasedChannel,user:discord.User,ticket:ODTicket,reason:string|null},workers:"opendiscord:autodelete-disable"},
+
+    "opendiscord:topic-set":{source:"slash"|"text"|"other",params:{guild:discord.Guild,channel:discord.GuildTextBasedChannel,user:discord.User,ticket:ODTicket,topic:string},workers:"opendiscord:topic-set"},
     "opendiscord:priority-set":{source:"slash"|"text"|"other",params:{guild:discord.Guild,channel:discord.GuildTextBasedChannel,user:discord.User,ticket:ODTicket,priority:ODPriority,reason:string|null},workers:"opendiscord:priority-set"},
     "opendiscord:priority-get":{source:"slash"|"text"|"other",params:{guild:discord.Guild,channel:discord.GuildTextBasedChannel,user:discord.User,ticket:ODTicket,priority:ODPriority},workers:"opendiscord:priority-get"},
 }
