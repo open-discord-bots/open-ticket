@@ -19,7 +19,7 @@ export const registerActions = async () => {
             const channelPrefix = option.get("opendiscord:channel-prefix").value
             const channelCategory = option.get("opendiscord:channel-category").value
             const channelBackupCategory = option.get("opendiscord:channel-category-backup").value
-            const channelTopic = option.get("opendiscord:channel-topic").value
+            const channelTopicText = option.get("opendiscord:channel-topic").value
             const channelSuffix = await opendiscord.options.suffix.getSuffixFromOption(option,user,guild)
             const channelName = channelPrefix+channelSuffix
 
@@ -57,6 +57,12 @@ export const registerActions = async () => {
                     }
                 }
             }
+
+            //handle channel topic
+            const channelTopics: string[] = []
+            if (generalConfig.data.system.channelTopic.showOptionTopic) channelTopics.push(channelTopicText)
+            if (generalConfig.data.system.channelTopic.showCreator) channelTopics.push(discord.userMention(user.id))
+            //if (generalConfig.data.system.channelTopic.showClaimed) TODO TODO TODO
 
             //handle permissions
             const permissions: discord.OverwriteResolvable[] = [{
@@ -110,7 +116,7 @@ export const registerActions = async () => {
                 type:discord.ChannelType.GuildText,
                 name:channelName,
                 nsfw:false,
-                topic:channelTopic,
+                topic:(channelTopics.length > 0) ? channelTopics.join(" | ") : undefined,
                 parent:category,
                 reason:"Ticket Created By "+user.displayName,
                 permissionOverwrites:permissions,
