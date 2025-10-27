@@ -757,6 +757,7 @@ const main = async () => {
         await (await import("./actions/removeTicketUser.js")).registerActions()
         await (await import("./actions/reactionRole.js")).registerActions()
         await (await import("./actions/clearTickets.js")).registerActions()
+        await (await import("./actions/updateTicketTopic.js")).registerActions()
     }
     await opendiscord.events.get("onActionLoad").emit([opendiscord.actions])
     await opendiscord.events.get("afterActionsLoaded").emit([opendiscord.actions])

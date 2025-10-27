@@ -111,7 +111,13 @@ export interface ODActionManagerIds_Default {
         params:{guild:discord.Guild,channel:discord.GuildTextBasedChannel,user:discord.User,filter:ODTicketClearFilter,list:ODTicket[]},
         result:{list:string[]},
         workers:"opendiscord:clear-tickets"|"opendiscord:discord-logs"|"opendiscord:logs"
-    }
+    },
+    "opendiscord:update-ticket-topic":{
+        source:"slash"|"text"|"ticket-action"|"other",
+        params:{guild:discord.Guild,channel:discord.GuildTextBasedChannel,user:discord.User,ticket:ODTicket,newTopic:string|null,sendMessage:boolean},
+        result:{},
+        workers:"opendiscord:update-ticket-topic"|"opendiscord:discord-logs"|"opendiscord:logs"
+    },
 }
 
 /**## ODActionManager_Default `default_class`
