@@ -143,14 +143,14 @@ export interface ODJsonConfig_DefaultSystemChannelTopic {
     showOptionDescription:boolean,
     /**Show the option topic text in the channel topic (configured in the options config). */
     showOptionTopic:boolean,
+    /**Show the current priority in the channel topic (auto-updated). */
+    showPriority:boolean,
     /**Show the current close/reopen status in the channel topic (auto-updated). */
     showClosed:boolean,
     /**Show the current claim status in the channel topic (auto-updated). */
     showClaimed:boolean,
     /**Show the current pin status in the channel topic (auto-updated). */
     showPinned:boolean,
-    /**Show the current priority in the channel topic (auto-updated). */
-    showPriority:boolean,
     /**Show the creator of the ticket in the channel topic (auto-updated on transfer). */
     showCreator:boolean,
     /**Show the first 5 participants of the ticket in the channel topic (auto-updated). */

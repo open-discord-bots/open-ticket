@@ -58,12 +58,6 @@ export const registerActions = async () => {
                 }
             }
 
-            //handle channel topic
-            const channelTopics: string[] = []
-            if (generalConfig.data.system.channelTopic.showOptionTopic) channelTopics.push(channelTopicText)
-            if (generalConfig.data.system.channelTopic.showCreator) channelTopics.push(discord.userMention(user.id))
-            //if (generalConfig.data.system.channelTopic.showClaimed) TODO TODO TODO
-
             //handle permissions
             const permissions: discord.OverwriteResolvable[] = [{
                 type:discord.OverwriteType.Role,
@@ -109,22 +103,6 @@ export const registerActions = async () => {
                 deny:[]
             })
 
-            const slowMode = option.get("opendiscord:slowmode-enabled").value ? option.get("opendiscord:slowmode-seconds").value : undefined
-            
-            //create channel
-            const channel = await guild.channels.create({
-                type:discord.ChannelType.GuildText,
-                name:channelName,
-                nsfw:false,
-                topic:(channelTopics.length > 0) ? channelTopics.join(" | ") : undefined,
-                parent:category,
-                reason:"Ticket Created By "+user.displayName,
-                permissionOverwrites:permissions,
-                rateLimitPerUser:slowMode
-            })
-
-            await opendiscord.events.get("afterTicketChannelCreated").emit([option,channel,user])
-
             //create participants
             const participants: {type:"role"|"user",id:string}[] = []
             permissions.forEach((permission,index) => {
@@ -133,6 +111,35 @@ export const registerActions = async () => {
                 const id = permission.id as string
                 participants.push({type,id})
             })
+
+            //manage slowmode
+            const slowMode = option.get("opendiscord:slowmode-enabled").value ? option.get("opendiscord:slowmode-seconds").value : undefined
+            
+            //handle channel topic
+            const channelTopics: string[] = []
+            if (generalConfig.data.system.channelTopic.showOptionName) channelTopics.push(option.get("opendiscord:name").value)
+            if (generalConfig.data.system.channelTopic.showOptionDescription) channelTopics.push(option.get("opendiscord:description").value)
+            if (generalConfig.data.system.channelTopic.showOptionTopic) channelTopics.push(channelTopicText)
+            if (generalConfig.data.system.channelTopic.showPriority) channelTopics.push("**Priority:** "+opendiscord.priorities.get("opendiscord:none").renderDisplayName()) //TODO TRANSLATION!!!
+            if (generalConfig.data.system.channelTopic.showClosed) channelTopics.push("**Status:** Opened") //TODO TRANSLATION!!!
+            if (generalConfig.data.system.channelTopic.showClaimed) channelTopics.push("**Claimed By:** No-one") //TODO TRANSLATION!!!
+            if (generalConfig.data.system.channelTopic.showPinned) channelTopics.push("**Pinned:** No") //TODO TRANSLATION!!!
+            if (generalConfig.data.system.channelTopic.showCreator) channelTopics.push("**Creator:** "+discord.userMention(user.id)) //TODO TRANSLATION!!!
+            if (generalConfig.data.system.channelTopic.showParticipants) channelTopics.push("**Participants:** "+participants.map((p) => (p.type == "user") ? discord.userMention(p.id) : discord.roleMention(p.id)).join(", ")) //TODO TRANSLATION!!!
+
+            //create channel
+            const channel = await guild.channels.create({
+                type:discord.ChannelType.GuildText,
+                name:channelName,
+                nsfw:false,
+                topic:(channelTopics.length > 0) ? channelTopics.join(" • ") : undefined,
+                parent:category,
+                reason:"Ticket Created By "+user.displayName,
+                permissionOverwrites:permissions,
+                rateLimitPerUser:slowMode
+            })
+
+            await opendiscord.events.get("afterTicketChannelCreated").emit([option,channel,user])
 
             //create ticket
             const ticket = new api.ODTicket(channel.id,option,[

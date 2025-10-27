@@ -1272,10 +1272,10 @@ async function saveQuickSetupConfig(){
                 showOptionName:true,
                 showOptionDescription:false,
                 showOptionTopic:true,
+                showPriority:false,
                 showClosed:true,
                 showClaimed:false,
                 showPinned:false,
-                showPriority:false,
                 showCreator:false,
                 showParticipants:false
             },
