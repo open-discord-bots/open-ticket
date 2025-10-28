@@ -45,6 +45,9 @@ export const registerActions = async () => {
             if (params.sendMessage) await channel.send((await opendiscord.builders.messages.getSafe("opendiscord:rename-message").build(source,{guild,channel,user,ticket,reason,data})).message)
             ticket.get("opendiscord:busy").value = false
             await opendiscord.events.get("afterTicketRenamed").emit([ticket,user,channel,reason])
+
+            //update channel topic
+            await opendiscord.actions.get("opendiscord:update-ticket-topic").run("ticket-action",{guild,channel,user,ticket,sendMessage:false,newTopic:null})
         }),
         new api.ODWorker("opendiscord:discord-logs",1,async (instance,params,source,cancel) => {
             const {guild,channel,user,ticket,reason,data} = params

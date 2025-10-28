@@ -17,15 +17,20 @@ export const registerActions = async () => {
             ticket.get("opendiscord:busy").value = true
             if (newTopic) ticket.get("opendiscord:topic").value = newTopic
 
+            //get ticket data
+            const closed = ticket.get("opendiscord:closed").value
+            const claimedBy = ticket.get("opendiscord:claimed-by").value
+            const pinned = ticket.get("opendiscord:pinned").value
+
             //handle channel topic
             const channelTopics: string[] = []
             if (generalConfig.data.system.channelTopic.showOptionName) channelTopics.push(ticket.option.get("opendiscord:name").value)
             if (generalConfig.data.system.channelTopic.showOptionDescription) channelTopics.push(ticket.option.get("opendiscord:description").value)
             if (generalConfig.data.system.channelTopic.showOptionTopic) channelTopics.push(ticket.get("opendiscord:topic").value)
             if (generalConfig.data.system.channelTopic.showPriority) channelTopics.push("**Priority:** "+opendiscord.priorities.get("opendiscord:none").renderDisplayName()) //TODO TRANSLATION!!!
-            if (generalConfig.data.system.channelTopic.showClosed) channelTopics.push("**Status:** Opened") //TODO TRANSLATION!!!
-            if (generalConfig.data.system.channelTopic.showClaimed) channelTopics.push("**Claimed By:** No-one") //TODO TRANSLATION!!!
-            if (generalConfig.data.system.channelTopic.showPinned) channelTopics.push("**Pinned:** No") //TODO TRANSLATION!!!
+            if (generalConfig.data.system.channelTopic.showClosed) channelTopics.push("**Status:** "+(closed ? "Closed" : "Opened")) //TODO TRANSLATION!!!
+            if (generalConfig.data.system.channelTopic.showClaimed) channelTopics.push("**Claimed By:** "+(claimedBy ? discord.userMention(claimedBy) : "No-one")) //TODO TRANSLATION!!!
+            if (generalConfig.data.system.channelTopic.showPinned) channelTopics.push("**Pinned:** "+(pinned ? "Yes" : "No")) //TODO TRANSLATION!!!
             if (generalConfig.data.system.channelTopic.showCreator) channelTopics.push("**Creator:** "+discord.userMention(user.id)) //TODO TRANSLATION!!!
             if (generalConfig.data.system.channelTopic.showParticipants) channelTopics.push("**Participants:** "+ticket.get("opendiscord:participants").value.map((p) => (p.type == "user") ? discord.userMention(p.id) : discord.roleMention(p.id)).join(", ")) //TODO TRANSLATION!!!
 
