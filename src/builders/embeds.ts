@@ -330,7 +330,7 @@ const errorEmbeds = () => {
         new api.ODWorker("opendiscord:error-channel-rename",0,async (instance,params,source) => {
             const {channel,user,originalName,newName} = params
             
-            const method = (source == "ticket-move" || source == "ticket-pin" || source == "ticket-rename" || source == "ticket-unpin") ? source : getMethodFromSource(source)
+            const method = (source == "ticket-move" || source == "ticket-pin" || source == "ticket-rename" || source == "ticket-unpin" || source == "ticket-priority") ? source : getMethodFromSource(source)
 
             instance.setColor(generalConfig.data.system.useRedErrorEmbeds ? "Red" : generalConfig.data.mainColor)
             instance.setTitle(utilities.emojiTitle("❌",lang.getTranslation("errors.titles.channelRename")))
@@ -1349,7 +1349,7 @@ const extraEmbeds = () => {
 
             instance.setAuthor(user.displayName,user.displayAvatarURL())
             instance.setColor(generalConfig.data.mainColor)
-            instance.setTitle(utilities.emojiTitle("🚨","Priority Changed")) //TODO TRANSLATION!!!
+            instance.setTitle(utilities.emojiTitle("🚨","Ticket Priority")) //TODO TRANSLATION!!!
             instance.setDescription("The current priority of this ticket is **"+priority.renderDisplayName()+"**!") //TODO TRANSLATION!!!
         })
     )

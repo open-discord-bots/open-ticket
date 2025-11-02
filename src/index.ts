@@ -672,6 +672,7 @@ const main = async () => {
         await (await import("./commands/autoclose.js")).registerCommandResponders()
         await (await import("./commands/autodelete.js")).registerCommandResponders()
         await (await import("./commands/topic.js")).registerCommandResponders()
+        await (await import("./commands/priority.js")).registerCommandResponders()
     }
     await opendiscord.events.get("onCommandResponderLoad").emit([opendiscord.responders.commands,opendiscord.responders,opendiscord.actions])
     await opendiscord.events.get("afterCommandRespondersLoaded").emit([opendiscord.responders.commands,opendiscord.responders,opendiscord.actions])
@@ -759,6 +760,7 @@ const main = async () => {
         await (await import("./actions/reactionRole.js")).registerActions()
         await (await import("./actions/clearTickets.js")).registerActions()
         await (await import("./actions/updateTicketTopic.js")).registerActions()
+        await (await import("./actions/updateTicketPriority.js")).registerActions()
     }
     await opendiscord.events.get("onActionLoad").emit([opendiscord.actions])
     await opendiscord.events.get("afterActionsLoaded").emit([opendiscord.actions])

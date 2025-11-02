@@ -239,7 +239,7 @@ export interface ODEmbedManagerIds_Default {
     "opendiscord:error-option-unknown":{source:"slash"|"text"|"button"|"dropdown"|"modal"|"other",params:{guild:discord.Guild|null,channel:discord.TextBasedChannel,user:discord.User},workers:"opendiscord:error-option-unknown"},
     "opendiscord:error-panel-unknown":{source:"slash"|"text"|"button"|"dropdown"|"modal"|"other",params:{guild:discord.Guild|null,channel:discord.TextBasedChannel,user:discord.User},workers:"opendiscord:error-panel-unknown"},
     "opendiscord:error-not-in-guild":{source:"slash"|"text"|"button"|"dropdown"|"modal"|"other",params:{channel:discord.TextBasedChannel,user:discord.User},workers:"opendiscord:error-not-in-guild"},
-    "opendiscord:error-channel-rename":{source:"slash"|"text"|"button"|"dropdown"|"modal"|"ticket-pin"|"ticket-unpin"|"ticket-rename"|"ticket-move"|"other",params:{guild:discord.Guild|null,channel:discord.TextBasedChannel,user:discord.User,originalName:string,newName:string},workers:"opendiscord:error-channel-rename"},
+    "opendiscord:error-channel-rename":{source:"slash"|"text"|"button"|"dropdown"|"modal"|"ticket-pin"|"ticket-unpin"|"ticket-rename"|"ticket-move"|"ticket-priority"|"other",params:{guild:discord.Guild|null,channel:discord.TextBasedChannel,user:discord.User,originalName:string,newName:string},workers:"opendiscord:error-channel-rename"},
     "opendiscord:error-ticket-busy":{source:"slash"|"text"|"button"|"dropdown"|"modal"|"other",params:{guild:discord.Guild|null,channel:discord.TextBasedChannel,user:discord.User},workers:"opendiscord:error-ticket-busy"},
 
     "opendiscord:help-menu":{source:"text"|"slash"|"button"|"other",params:{mode:"slash"|"text",page:number},workers:"opendiscord:help-menu"},
@@ -375,7 +375,7 @@ export interface ODMessageManagerIds_Default {
     "opendiscord:error-option-unknown":{source:"slash"|"text"|"button"|"dropdown"|"modal"|"other",params:{guild:discord.Guild|null,channel:discord.TextBasedChannel,user:discord.User},workers:"opendiscord:error-option-unknown"},
     "opendiscord:error-panel-unknown":{source:"slash"|"text"|"button"|"dropdown"|"modal"|"other",params:{guild:discord.Guild|null,channel:discord.TextBasedChannel,user:discord.User},workers:"opendiscord:error-panel-unknown"},
     "opendiscord:error-not-in-guild":{source:"slash"|"text"|"button"|"dropdown"|"modal"|"other",params:{channel:discord.TextBasedChannel,user:discord.User},workers:"opendiscord:error-not-in-guild"},
-    "opendiscord:error-channel-rename":{source:"slash"|"text"|"button"|"dropdown"|"modal"|"ticket-pin"|"ticket-unpin"|"ticket-rename"|"ticket-move"|"other",params:{guild:discord.Guild|null,channel:discord.TextBasedChannel,user:discord.User,originalName:string,newName:string},workers:"opendiscord:error-channel-rename"},
+    "opendiscord:error-channel-rename":{source:"slash"|"text"|"button"|"dropdown"|"modal"|"ticket-pin"|"ticket-unpin"|"ticket-rename"|"ticket-move"|"ticket-priority"|"other",params:{guild:discord.Guild|null,channel:discord.TextBasedChannel,user:discord.User,originalName:string,newName:string},workers:"opendiscord:error-channel-rename"},
     "opendiscord:error-ticket-busy":{source:"slash"|"text"|"button"|"dropdown"|"modal"|"other",params:{guild:discord.Guild|null,channel:discord.TextBasedChannel,user:discord.User},workers:"opendiscord:error-ticket-busy"},
     
     "opendiscord:help-menu":{source:"slash"|"text"|"button"|"other",params:{mode:"slash"|"text",page:number},workers:"opendiscord:help-menu"},

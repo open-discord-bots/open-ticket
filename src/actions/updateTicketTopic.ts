@@ -13,6 +13,9 @@ export const registerActions = async () => {
             const {guild,channel,user,ticket,newTopic} = params
             if (channel.isThread() || !(channel instanceof discord.TextChannel)) throw new api.ODSystemError("Unable to set topic of ticket! Open Ticket doesn't support threads!")
 
+            const oldTopic = ticket.get("opendiscord:topic").value
+            if (newTopic) await opendiscord.events.get("onTicketTopicChange").emit([ticket,user,channel,oldTopic,newTopic])
+
             //update ticket
             ticket.get("opendiscord:busy").value = true
             if (newTopic) ticket.get("opendiscord:topic").value = newTopic
@@ -27,7 +30,7 @@ export const registerActions = async () => {
             if (generalConfig.data.system.channelTopic.showOptionName) channelTopics.push(ticket.option.get("opendiscord:name").value)
             if (generalConfig.data.system.channelTopic.showOptionDescription) channelTopics.push(ticket.option.get("opendiscord:description").value)
             if (generalConfig.data.system.channelTopic.showOptionTopic) channelTopics.push(ticket.get("opendiscord:topic").value)
-            if (generalConfig.data.system.channelTopic.showPriority) channelTopics.push("**Priority:** "+opendiscord.priorities.get("opendiscord:none").renderDisplayName()) //TODO TRANSLATION!!!
+            if (generalConfig.data.system.channelTopic.showPriority) channelTopics.push("**Priority:** "+opendiscord.priorities.getFromPriorityLevel(ticket.get("opendiscord:priority").value).renderDisplayName()) //TODO TRANSLATION!!!
             if (generalConfig.data.system.channelTopic.showClosed) channelTopics.push("**Status:** "+(closed ? "Closed" : "Opened")) //TODO TRANSLATION!!!
             if (generalConfig.data.system.channelTopic.showClaimed) channelTopics.push("**Claimed By:** "+(claimedBy ? discord.userMention(claimedBy) : "No-one")) //TODO TRANSLATION!!!
             if (generalConfig.data.system.channelTopic.showPinned) channelTopics.push("**Pinned:** "+(pinned ? "Yes" : "No")) //TODO TRANSLATION!!!
@@ -40,6 +43,7 @@ export const registerActions = async () => {
             //reply with new message
             if (params.sendMessage && newTopic) await channel.send((await opendiscord.builders.messages.getSafe("opendiscord:topic-set").build(source,{guild,channel,user,ticket,topic:newTopic})).message)
             ticket.get("opendiscord:busy").value = false
+            if (newTopic) await opendiscord.events.get("afterTicketTopicChanged").emit([ticket,user,channel,oldTopic,newTopic])
         }),
         new api.ODWorker("opendiscord:discord-logs",1,async (instance,params,source,cancel) => {
             const {guild,channel,user,ticket} = params

@@ -42,7 +42,7 @@ import { ODQuestionManager } from "../openticket/question"
 import { ODBlacklistManager } from "../openticket/blacklist"
 import { ODTranscriptManager_Default } from "../openticket/transcript"
 import { ODRole, ODRoleManager } from "../openticket/role"
-import { ODPriorityManager_Default } from "../openticket/priority"
+import { ODPriorityLevel, ODPriorityManager_Default } from "../openticket/priority"
 
 /**## ODEventIds_Default `interface`
  * This interface is a list of ids available in the `ODEvent_Default` class.
@@ -202,7 +202,11 @@ export interface ODEventIds_Default {
     "afterTicketRenamed": ODEvent_Default<(ticket:ODTicket, renamer:discord.User, channel:discord.GuildTextBasedChannel, reason:string|null) => ODPromiseVoid>
     "onTicketsClear": ODEvent_Default<(tickets:ODTicket[], clearer:discord.User, channel:discord.GuildTextBasedChannel, filter:ODTicketClearFilter) => ODPromiseVoid>
     "afterTicketsCleared": ODEvent_Default<(tickets:ODTicket[], clearer:discord.User, channel:discord.GuildTextBasedChannel, filter:ODTicketClearFilter) => ODPromiseVoid>
-
+    "onTicketTopicChange": ODEvent_Default<(ticket:ODTicket, changer:discord.User, channel:discord.GuildTextBasedChannel, oldTopic:string, newTopic:string) => ODPromiseVoid>
+    "afterTicketTopicChanged": ODEvent_Default<(ticket:ODTicket, changer:discord.User, channel:discord.GuildTextBasedChannel, oldTopic:string, newTopic:string) => ODPromiseVoid>
+    "onTicketPriorityChange": ODEvent_Default<(ticket:ODTicket, changer:discord.User, channel:discord.GuildTextBasedChannel, oldPriority:ODPriorityLevel, newPriority:ODPriorityLevel) => ODPromiseVoid>
+    "afterTicketPriorityChanged": ODEvent_Default<(ticket:ODTicket, changer:discord.User, channel:discord.GuildTextBasedChannel, oldPriority:ODPriorityLevel, newPriority:ODPriorityLevel) => ODPromiseVoid>
+    
     //roles
     "onRoleLoad": ODEvent_Default<(roles:ODRoleManager) => ODPromiseVoid>
     "afterRolesLoaded": ODEvent_Default<(roles:ODRoleManager) => ODPromiseVoid>

@@ -122,6 +122,10 @@ export interface ODUtilities {
      * Get a human readable ordinal number (e.g. 1st, 2nd, 3rd, 4th, ...) from a Javascript number.
      */
     ordinalNumber(num:number): string,
+    /**## trimEmojis `utility function`
+     * Trim/remove all emoji's from a Javascript string.
+     */
+    trimEmojis(text:string): string,
 }
 
 /**## ODVersionMigration `utility class`
@@ -268,5 +272,8 @@ export const utilities: ODUtilities = {
         if (dec === 2) return i+'nd'
         if (dec === 3) return i+'rd'
         return i+'th'
-    }
+    },
+    trimEmojis(text){
+        return text.replace(/(\p{Extended_Pictographic}(?:\uFE0F|\uFE0E)?(?:\u200D\p{Extended_Pictographic}(?:\uFE0F|\uFE0E)?)*)/gu,"")
+    },
 }

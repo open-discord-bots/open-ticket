@@ -31,8 +31,11 @@ export const registerActions = async () => {
             }
 
             //rename channel (and give error when crashed)
+            const pinEmoji = ticket.get("opendiscord:pinned").value ? generalConfig.data.system.pinEmoji : ""
+            const priorityEmoji = opendiscord.priorities.getFromPriorityLevel(ticket.get("opendiscord:priority").value).channelEmoji ?? ""
+
             const originalName = channel.name
-            const newName = "📌"+channel.name
+            const newName = pinEmoji+priorityEmoji+utilities.trimEmojis(channel.name)
             try{
                 await utilities.timedAwait(channel.setName(newName),2500,(err) => {
                     opendiscord.log("Failed to rename channel on ticket pin","error")

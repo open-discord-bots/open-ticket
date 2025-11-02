@@ -10,6 +10,7 @@ import { ODTicket, ODTicketClearFilter } from "../openticket/ticket"
 import { ODTranscriptCompiler, ODTranscriptCompilerCompileResult } from "../openticket/transcript"
 import { ODMessageBuildSentResult } from "../modules/builder"
 import { ODRole, ODRoleUpdateMode, ODRoleUpdateResult } from "../openticket/role"
+import { ODPriorityLevel } from "../openticket/priority"
 
 /**## ODActionManagerIds_Default `interface`
  * This interface is a list of ids available in the `ODActionManager_Default` class.
@@ -117,6 +118,12 @@ export interface ODActionManagerIds_Default {
         params:{guild:discord.Guild,channel:discord.GuildTextBasedChannel,user:discord.User,ticket:ODTicket,newTopic:string|null,sendMessage:boolean},
         result:{},
         workers:"opendiscord:update-ticket-topic"|"opendiscord:discord-logs"|"opendiscord:logs"
+    },
+    "opendiscord:update-ticket-priority":{
+        source:"slash"|"text"|"other",
+        params:{guild:discord.Guild,channel:discord.GuildTextBasedChannel,user:discord.User,ticket:ODTicket,newPriority:ODPriorityLevel,reason:string|null,sendMessage:boolean},
+        result:{},
+        workers:"opendiscord:update-ticket-priority"|"opendiscord:discord-logs"|"opendiscord:logs"
     },
 }
 
