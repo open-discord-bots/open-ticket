@@ -617,6 +617,29 @@ export const loadAllSlashCommands = async () => {
             //TODO: list (v4.2)
         ]
     }))
+
+    //TRANSFER
+    if (allowedCommands.includes("transfer")) commands.add(new api.ODSlashCommand("opendiscord:transfer",{
+        type:act.ChatInput,
+        name:"transfer",
+        description:"Transfer the ticket ownership from one user to another.", //TODO TRANSLATION!!!
+        contexts:[discord.InteractionContextType.Guild],
+        integrationTypes:[discord.ApplicationIntegrationType.GuildInstall],
+        options:[
+            {
+                name:"user",
+                description:"The user to transfer to.", //TODO TRANSLATION!!!
+                type:acot.User,
+                required:true
+            },
+            {
+                name:"reason",
+                description:lang.getTranslation("commands.reason"),
+                type:acot.String,
+                required:false
+            }
+        ]
+    }))
 }
 
 export const loadAllTextCommands = async () => {
@@ -1168,6 +1191,28 @@ export const loadAllTextCommands = async () => {
         dmPermission:false,
         guildPermission:true,
         allowBots:false,
+    }))
+
+    //TRANSFER
+    if (allowedCommands.includes("transfer")) commands.add(new api.ODTextCommand("opendiscord:transfer",{
+        name:"transfer",
+        prefix,
+        dmPermission:false,
+        guildPermission:true,
+        allowBots:false,
+        options:[
+            {
+                name:"user",
+                type:"user",
+                required:true
+            },
+            {
+                name:"reason",
+                type:"string",
+                required:false,
+                allowSpaces:true
+            }
+        ]
     }))
 }
 

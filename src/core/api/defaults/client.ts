@@ -52,6 +52,7 @@ export interface ODSlashCommandManagerIds_Default {
     "opendiscord:autodelete":ODSlashCommand,
     "opendiscord:topic":ODSlashCommand,
     "opendiscord:priority":ODSlashCommand,
+    "opendiscord:transfer":ODSlashCommand,
 }
 
 /**## ODSlashCommandManager_Default `default_class`
@@ -125,6 +126,7 @@ export interface ODTextCommandManagerIds_Default {
     "opendiscord:topic-set":ODTextCommand,
     "opendiscord:priority-set":ODTextCommand,
     "opendiscord:priority-get":ODTextCommand,
+    "opendiscord:transfer":ODTextCommand,
 }
 
 /**## ODTextCommandManager_Default `default_class`

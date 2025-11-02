@@ -204,8 +204,10 @@ export interface ODEventIds_Default {
     "afterTicketsCleared": ODEvent_Default<(tickets:ODTicket[], clearer:discord.User, channel:discord.GuildTextBasedChannel, filter:ODTicketClearFilter) => ODPromiseVoid>
     "onTicketTopicChange": ODEvent_Default<(ticket:ODTicket, changer:discord.User, channel:discord.GuildTextBasedChannel, oldTopic:string, newTopic:string) => ODPromiseVoid>
     "afterTicketTopicChanged": ODEvent_Default<(ticket:ODTicket, changer:discord.User, channel:discord.GuildTextBasedChannel, oldTopic:string, newTopic:string) => ODPromiseVoid>
-    "onTicketPriorityChange": ODEvent_Default<(ticket:ODTicket, changer:discord.User, channel:discord.GuildTextBasedChannel, oldPriority:ODPriorityLevel, newPriority:ODPriorityLevel) => ODPromiseVoid>
-    "afterTicketPriorityChanged": ODEvent_Default<(ticket:ODTicket, changer:discord.User, channel:discord.GuildTextBasedChannel, oldPriority:ODPriorityLevel, newPriority:ODPriorityLevel) => ODPromiseVoid>
+    "onTicketPriorityChange": ODEvent_Default<(ticket:ODTicket, changer:discord.User, channel:discord.GuildTextBasedChannel, oldPriority:ODPriorityLevel, newPriority:ODPriorityLevel, reason:string|null) => ODPromiseVoid>
+    "afterTicketPriorityChanged": ODEvent_Default<(ticket:ODTicket, changer:discord.User, channel:discord.GuildTextBasedChannel, oldPriority:ODPriorityLevel, newPriority:ODPriorityLevel, reason:string|null) => ODPromiseVoid>
+    "onTicketTransfer": ODEvent_Default<(ticket:ODTicket, changer:discord.User, channel:discord.GuildTextBasedChannel, oldCreator:discord.User, newCreator:discord.User, reason:string|null) => ODPromiseVoid>
+    "afterTicketTransferred": ODEvent_Default<(ticket:ODTicket, changer:discord.User, channel:discord.GuildTextBasedChannel, oldCreator:discord.User, newCreator:discord.User, reason:string|null) => ODPromiseVoid>
     
     //roles
     "onRoleLoad": ODEvent_Default<(roles:ODRoleManager) => ODPromiseVoid>

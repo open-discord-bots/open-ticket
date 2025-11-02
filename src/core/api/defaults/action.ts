@@ -125,6 +125,12 @@ export interface ODActionManagerIds_Default {
         result:{},
         workers:"opendiscord:update-ticket-priority"|"opendiscord:discord-logs"|"opendiscord:logs"
     },
+    "opendiscord:transfer-ticket":{
+        source:"slash"|"text"|"other",
+        params:{guild:discord.Guild,channel:discord.GuildTextBasedChannel,user:discord.User,ticket:ODTicket,newCreator:discord.User,reason:string|null,sendMessage:boolean},
+        result:{},
+        workers:"opendiscord:transfer-ticket"|"opendiscord:discord-logs"|"opendiscord:logs"
+    },
 }
 
 /**## ODActionManager_Default `default_class`

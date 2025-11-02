@@ -1102,4 +1102,13 @@ const extraMessages = () => {
             instance.addEmbed(await embeds.getSafe("opendiscord:priority-get").build(source,{guild,channel,user,ticket,priority}))
         })
     )
+
+    //TRANSFER MESSAGE
+    messages.add(new api.ODMessage("opendiscord:transfer-message"))
+    messages.get("opendiscord:transfer-message").workers.add(
+        new api.ODWorker("opendiscord:transfer-message",0,async (instance,params,source) => {
+            const {guild,channel,user,ticket,oldCreator,newCreator,reason} = params
+            instance.addEmbed(await embeds.getSafe("opendiscord:transfer-message").build(source,{guild,channel,user,ticket,oldCreator,newCreator,reason}))
+        })
+    )
 }

@@ -330,7 +330,7 @@ const errorEmbeds = () => {
         new api.ODWorker("opendiscord:error-channel-rename",0,async (instance,params,source) => {
             const {channel,user,originalName,newName} = params
             
-            const method = (source == "ticket-move" || source == "ticket-pin" || source == "ticket-rename" || source == "ticket-unpin" || source == "ticket-priority") ? source : getMethodFromSource(source)
+            const method = (source == "ticket-move" || source == "ticket-pin" || source == "ticket-rename" || source == "ticket-unpin" || source == "ticket-priority" || source == "ticket-transfer") ? source : getMethodFromSource(source)
 
             instance.setColor(generalConfig.data.system.useRedErrorEmbeds ? "Red" : generalConfig.data.mainColor)
             instance.setTitle(utilities.emojiTitle("❌",lang.getTranslation("errors.titles.channelRename")))
@@ -1351,6 +1351,20 @@ const extraEmbeds = () => {
             instance.setColor(generalConfig.data.mainColor)
             instance.setTitle(utilities.emojiTitle("🚨","Ticket Priority")) //TODO TRANSLATION!!!
             instance.setDescription("The current priority of this ticket is **"+priority.renderDisplayName()+"**!") //TODO TRANSLATION!!!
+        })
+    )
+
+    //TRANSFER MESSAGE
+    embeds.add(new api.ODEmbed("opendiscord:transfer-message"))
+    embeds.get("opendiscord:transfer-message").workers.add(
+        new api.ODWorker("opendiscord:transfer-message",0,async (instance,params,source) => {
+            const {user,oldCreator,newCreator,reason} = params
+
+            instance.setAuthor(user.displayName,user.displayAvatarURL())
+            instance.setColor(generalConfig.data.mainColor)
+            instance.setTitle(utilities.emojiTitle("🔀","Ticket Transferred")) //TODO TRANSLATION!!!
+            instance.setDescription("The ticket ownership has been transferred from "+discord.userMention(oldCreator.id)+" to "+discord.userMention(newCreator.id)+" by "+discord.userMention(user.id)+" successfully!") //TODO TRANSLATION!!!
+            if (reason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+reason+"```"})
         })
     )
 }

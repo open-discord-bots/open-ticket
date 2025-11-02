@@ -19,15 +19,16 @@ export const loadAllStats = async () => {
 
     const global = stats.get("opendiscord:global")
     if (global){
-        global.add(new api.ODBasicStat("opendiscord:tickets-created",12,lang.getTranslation("stats.properties.ticketsCreated"),0))
-        global.add(new api.ODBasicStat("opendiscord:tickets-closed",11,lang.getTranslation("stats.properties.ticketsClosed"),0))
-        global.add(new api.ODBasicStat("opendiscord:tickets-deleted",10,lang.getTranslation("stats.properties.ticketsDeleted"),0))
-        global.add(new api.ODBasicStat("opendiscord:tickets-reopened",9,lang.getTranslation("stats.properties.ticketsReopened"),0))
-        global.add(new api.ODBasicStat("opendiscord:tickets-autoclosed",8,lang.getTranslation("stats.properties.ticketsAutoclosed"),0))
-        global.add(new api.ODBasicStat("opendiscord:tickets-autodeleted",7,"Tickets Autodeleted",0)) //TODO TRANSLATION!!!
-        global.add(new api.ODBasicStat("opendiscord:tickets-claimed",6,lang.getTranslation("stats.properties.ticketsClaimed"),0))
-        global.add(new api.ODBasicStat("opendiscord:tickets-pinned",5,lang.getTranslation("stats.properties.ticketsPinned"),0))
-        global.add(new api.ODBasicStat("opendiscord:tickets-moved",4,lang.getTranslation("stats.properties.ticketsMoved"),0))
+        global.add(new api.ODBasicStat("opendiscord:tickets-created",13,lang.getTranslation("stats.properties.ticketsCreated"),0))
+        global.add(new api.ODBasicStat("opendiscord:tickets-closed",12,lang.getTranslation("stats.properties.ticketsClosed"),0))
+        global.add(new api.ODBasicStat("opendiscord:tickets-deleted",11,lang.getTranslation("stats.properties.ticketsDeleted"),0))
+        global.add(new api.ODBasicStat("opendiscord:tickets-reopened",10,lang.getTranslation("stats.properties.ticketsReopened"),0))
+        global.add(new api.ODBasicStat("opendiscord:tickets-autoclosed",9,lang.getTranslation("stats.properties.ticketsAutoclosed"),0))
+        global.add(new api.ODBasicStat("opendiscord:tickets-autodeleted",8,"Tickets Autodeleted",0)) //TODO TRANSLATION!!!
+        global.add(new api.ODBasicStat("opendiscord:tickets-claimed",7,lang.getTranslation("stats.properties.ticketsClaimed"),0))
+        global.add(new api.ODBasicStat("opendiscord:tickets-pinned",6,lang.getTranslation("stats.properties.ticketsPinned"),0))
+        global.add(new api.ODBasicStat("opendiscord:tickets-moved",5,lang.getTranslation("stats.properties.ticketsMoved"),0))
+        global.add(new api.ODBasicStat("opendiscord:tickets-transferred",4,"Tickets Transferred",0)) //TODO TRANSLATION!!!
         global.add(new api.ODBasicStat("opendiscord:users-blacklisted",3,lang.getTranslation("stats.properties.usersBlacklisted"),0))
         global.add(new api.ODBasicStat("opendiscord:transcripts-created",2,lang.getTranslation("stats.properties.transcriptsCreated"),0))
         global.add(new api.ODDynamicStat("opendiscord:ticket-volume",1,() => {
@@ -71,13 +72,14 @@ export const loadAllStats = async () => {
             if (permissions.type == "support") return lang.getTranslation("params.uppercase.role")+": 💬 `Support Team`" //TODO TRANSLATION!!!
             else return lang.getTranslation("params.uppercase.role")+": 👤 `Member`" //TODO TRANSLATION!!!
         }))
-        user.add(new api.ODBasicStat("opendiscord:tickets-created",9,lang.getTranslation("stats.properties.ticketsCreated"),0))
-        user.add(new api.ODBasicStat("opendiscord:tickets-closed",8,lang.getTranslation("stats.properties.ticketsClosed"),0))
-        user.add(new api.ODBasicStat("opendiscord:tickets-deleted",7,lang.getTranslation("stats.properties.ticketsDeleted"),0))
-        user.add(new api.ODBasicStat("opendiscord:tickets-reopened",6,lang.getTranslation("stats.properties.ticketsReopened"),0))
-        user.add(new api.ODBasicStat("opendiscord:tickets-claimed",5,lang.getTranslation("stats.properties.ticketsClaimed"),0))
-        user.add(new api.ODBasicStat("opendiscord:tickets-pinned",4,lang.getTranslation("stats.properties.ticketsPinned"),0))
-        user.add(new api.ODBasicStat("opendiscord:tickets-moved",3,lang.getTranslation("stats.properties.ticketsMoved"),0))
+        user.add(new api.ODBasicStat("opendiscord:tickets-created",10,lang.getTranslation("stats.properties.ticketsCreated"),0))
+        user.add(new api.ODBasicStat("opendiscord:tickets-closed",9,lang.getTranslation("stats.properties.ticketsClosed"),0))
+        user.add(new api.ODBasicStat("opendiscord:tickets-deleted",8,lang.getTranslation("stats.properties.ticketsDeleted"),0))
+        user.add(new api.ODBasicStat("opendiscord:tickets-reopened",7,lang.getTranslation("stats.properties.ticketsReopened"),0))
+        user.add(new api.ODBasicStat("opendiscord:tickets-claimed",6,lang.getTranslation("stats.properties.ticketsClaimed"),0))
+        user.add(new api.ODBasicStat("opendiscord:tickets-pinned",5,lang.getTranslation("stats.properties.ticketsPinned"),0))
+        user.add(new api.ODBasicStat("opendiscord:tickets-moved",4,lang.getTranslation("stats.properties.ticketsMoved"),0))
+        user.add(new api.ODBasicStat("opendiscord:tickets-transferred",3,"Tickets Transferred",0)) //TODO TRANSLATION!!!
         user.add(new api.ODBasicStat("opendiscord:users-blacklisted",2,lang.getTranslation("stats.properties.usersBlacklisted"),0))
         user.add(new api.ODBasicStat("opendiscord:transcripts-created",1,lang.getTranslation("stats.properties.transcriptsCreated"),0))
         user.add(new api.ODDynamicStat("opendiscord:current-tickets",0,async (scopeId,guild,channel,user) => {

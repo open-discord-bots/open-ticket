@@ -159,6 +159,8 @@ export const loadAllEvents = () => {
         "afterTicketTopicChanged",
         "onTicketPriorityChange",
         "afterTicketPriorityChanged",
+        "onTicketTransfer",
+        "afterTicketTransferred",
 
         //roles
         "onRoleLoad",
