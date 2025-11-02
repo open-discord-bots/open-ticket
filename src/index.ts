@@ -671,6 +671,7 @@ const main = async () => {
         await (await import("./commands/clear.js")).registerCommandResponders()
         await (await import("./commands/autoclose.js")).registerCommandResponders()
         await (await import("./commands/autodelete.js")).registerCommandResponders()
+        await (await import("./commands/topic.js")).registerCommandResponders()
     }
     await opendiscord.events.get("onCommandResponderLoad").emit([opendiscord.responders.commands,opendiscord.responders,opendiscord.actions])
     await opendiscord.events.get("afterCommandRespondersLoaded").emit([opendiscord.responders.commands,opendiscord.responders,opendiscord.actions])

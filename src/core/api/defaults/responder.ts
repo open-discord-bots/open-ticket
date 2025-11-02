@@ -44,6 +44,7 @@ export interface ODCommandResponderManagerIds_Default {
     "opendiscord:add":{source:"slash"|"text",params:{},workers:"opendiscord:permissions"|"opendiscord:add"|"opendiscord:logs"},
     "opendiscord:remove":{source:"slash"|"text",params:{},workers:"opendiscord:permissions"|"opendiscord:remove"|"opendiscord:logs"},
     "opendiscord:clear":{source:"slash"|"text",params:{},workers:"opendiscord:permissions"|"opendiscord:clear"|"opendiscord:logs"},
+    "opendiscord:topic":{source:"slash"|"text",params:{},workers:"opendiscord:permissions"|"opendiscord:topic"|"opendiscord:logs"},
 
     "opendiscord:autoclose":{source:"slash"|"text",params:{},workers:"opendiscord:permissions"|"opendiscord:autoclose"|"opendiscord:logs"},
     "opendiscord:autodelete":{source:"slash"|"text",params:{},workers:"opendiscord:permissions"|"opendiscord:autodelete"|"opendiscord:logs"},

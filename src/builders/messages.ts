@@ -24,6 +24,7 @@ export const registerAllMessages = async () => {
     roleMessages()
     clearMessages()
     autoMessages()
+    extraMessages()
 }
 
 const verifyBarMessages = () => {
@@ -1070,6 +1071,35 @@ const autoMessages = () => {
         new api.ODWorker("opendiscord:autodelete-disable",0,async (instance,params,source) => {
             const {guild,channel,user,ticket,reason} = params
             instance.addEmbed(await embeds.getSafe("opendiscord:autodelete-disable").build(source,{guild,channel,user,ticket,reason}))
+        })
+    )
+}
+
+const extraMessages = () => {
+    //TOPIC SET
+    messages.add(new api.ODMessage("opendiscord:topic-set"))
+    messages.get("opendiscord:topic-set").workers.add(
+        new api.ODWorker("opendiscord:topic-set",0,async (instance,params,source) => {
+            const {guild,channel,user,ticket,topic} = params
+            instance.addEmbed(await embeds.getSafe("opendiscord:topic-set").build(source,{guild,channel,user,ticket,topic}))
+        })
+    )
+
+    //PRIORITY SET
+    messages.add(new api.ODMessage("opendiscord:priority-set"))
+    messages.get("opendiscord:priority-set").workers.add(
+        new api.ODWorker("opendiscord:priority-set",0,async (instance,params,source) => {
+            const {guild,channel,user,ticket,priority,reason} = params
+            instance.addEmbed(await embeds.getSafe("opendiscord:priority-set").build(source,{guild,channel,user,ticket,priority,reason}))
+        })
+    )
+
+    //PRIORITY GET
+    messages.add(new api.ODMessage("opendiscord:priority-get"))
+    messages.get("opendiscord:priority-get").workers.add(
+        new api.ODWorker("opendiscord:priority-get",0,async (instance,params,source) => {
+            const {guild,channel,user,ticket,priority} = params
+            instance.addEmbed(await embeds.getSafe("opendiscord:priority-get").build(source,{guild,channel,user,ticket,priority}))
         })
     )
 }
