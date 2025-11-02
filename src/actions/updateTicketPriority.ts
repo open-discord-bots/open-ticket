@@ -14,7 +14,7 @@ export const registerActions = async () => {
             if (channel.isThread() || !(channel instanceof discord.TextChannel)) throw new api.ODSystemError("Unable to set priority of ticket! Open Ticket doesn't support threads!")
 
             const oldPriority = opendiscord.priorities.getFromPriorityLevel(ticket.get("opendiscord:priority").value)
-            await opendiscord.events.get("onTicketPriorityChange").emit([ticket,user,channel,oldPriority,newPriority])
+            await opendiscord.events.get("onTicketPriorityChange").emit([ticket,user,channel,oldPriority,newPriority,reason])
 
             //update ticket
             ticket.get("opendiscord:busy").value = true
@@ -37,7 +37,7 @@ export const registerActions = async () => {
             //reply with new message
             if (params.sendMessage) await channel.send((await opendiscord.builders.messages.getSafe("opendiscord:priority-set").build(source,{guild,channel,user,ticket,priority:newPriority,reason})).message)
             ticket.get("opendiscord:busy").value = false
-            await opendiscord.events.get("afterTicketPriorityChanged").emit([ticket,user,channel,oldPriority,newPriority])
+            await opendiscord.events.get("afterTicketPriorityChanged").emit([ticket,user,channel,oldPriority,newPriority,reason])
 
             //update channel topic
             await opendiscord.actions.get("opendiscord:update-ticket-topic").run("ticket-action",{guild,channel,user,ticket,sendMessage:false,newTopic:null})
@@ -58,4 +58,8 @@ export const registerActions = async () => {
             ])
         })
     ])
+    opendiscord.actions.get("opendiscord:update-ticket-priority").workers.backupWorker = new api.ODWorker("opendiscord:cancel-busy",0,(instance,params) => {
+        //set busy to false in case of crash or cancel
+        params.ticket.get("opendiscord:busy").value = false
+    })
 }

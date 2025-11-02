@@ -24,6 +24,7 @@ export const registerActions = async () => {
             const closed = ticket.get("opendiscord:closed").value
             const claimedBy = ticket.get("opendiscord:claimed-by").value
             const pinned = ticket.get("opendiscord:pinned").value
+            const creator = ticket.get("opendiscord:opened-by").value ?? opendiscord.client.client.user.id
 
             //handle channel topic
             const channelTopics: string[] = []
@@ -34,7 +35,7 @@ export const registerActions = async () => {
             if (generalConfig.data.system.channelTopic.showClosed) channelTopics.push("**Status:** "+(closed ? "Closed" : "Opened")) //TODO TRANSLATION!!!
             if (generalConfig.data.system.channelTopic.showClaimed) channelTopics.push("**Claimed By:** "+(claimedBy ? discord.userMention(claimedBy) : "No-one")) //TODO TRANSLATION!!!
             if (generalConfig.data.system.channelTopic.showPinned) channelTopics.push("**Pinned:** "+(pinned ? "Yes" : "No")) //TODO TRANSLATION!!!
-            if (generalConfig.data.system.channelTopic.showCreator) channelTopics.push("**Creator:** "+discord.userMention(user.id)) //TODO TRANSLATION!!!
+            if (generalConfig.data.system.channelTopic.showCreator) channelTopics.push("**Creator:** "+discord.userMention(creator)) //TODO TRANSLATION!!!
             if (generalConfig.data.system.channelTopic.showParticipants) channelTopics.push("**Participants:** "+ticket.get("opendiscord:participants").value.map((p) => (p.type == "user") ? discord.userMention(p.id) : discord.roleMention(p.id)).join(", ")) //TODO TRANSLATION!!!
 
             //update channel
@@ -61,4 +62,8 @@ export const registerActions = async () => {
             ])
         })
     ])
+    opendiscord.actions.get("opendiscord:update-ticket-topic").workers.backupWorker = new api.ODWorker("opendiscord:cancel-busy",0,(instance,params) => {
+        //set busy to false in case of crash or cancel
+        params.ticket.get("opendiscord:busy").value = false
+    })
 }

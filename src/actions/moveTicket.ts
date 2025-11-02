@@ -29,7 +29,6 @@ export const registerActions = async () => {
             const claimCategory = (rawClaimCategory) ? rawClaimCategory.category : null
             const closeCategory = ticket.option.get("opendiscord:channel-category-closed").value
             const channelTopic = ticket.option.get("opendiscord:channel-topic").value
-            const channelName = channelPrefix+channelSuffix
 
             //handle category
             let category: string|null = null
@@ -155,17 +154,18 @@ export const registerActions = async () => {
             ticket.get("opendiscord:participants").refreshDatabase()
 
             //rename channel (and give error when crashed)
+            const pinEmoji = ticket.get("opendiscord:pinned").value ? generalConfig.data.system.pinEmoji : ""
+            const priorityEmoji = opendiscord.priorities.getFromPriorityLevel(ticket.get("opendiscord:priority").value).channelEmoji ?? ""
+            
             const originalName = channel.name
+            const newName = pinEmoji+priorityEmoji+utilities.trimEmojis(channelPrefix+channelSuffix)
             try{
-                await utilities.timedAwait(channel.setName(channelName),2500,(err) => {
+                await utilities.timedAwait(channel.setName(newName),2500,(err) => {
                     opendiscord.log("Failed to rename channel on ticket move","error")
                 })
             }catch(err){
-                await channel.send((await opendiscord.builders.messages.getSafe("opendiscord:error-channel-rename").build("ticket-move",{guild,channel,user,originalName,newName:channelName})).message)
+                await channel.send((await opendiscord.builders.messages.getSafe("opendiscord:error-channel-rename").build("ticket-move",{guild,channel,user,originalName,newName:newName})).message)
             }
-            try{
-                if (channel.type == discord.ChannelType.GuildText) channel.setTopic(channelTopic)
-            }catch{}
 
             //update ticket message
             const ticketMessage = await opendiscord.tickets.getTicketMessage(ticket)
@@ -173,7 +173,7 @@ export const registerActions = async () => {
                 try{
                     ticketMessage.edit((await opendiscord.builders.messages.getSafe("opendiscord:ticket-message").build("other",{guild,channel,user,ticket})).message)
                 }catch(e){
-                    opendiscord.log("Unable to edit ticket message on ticket renaming!","error",[
+                    opendiscord.log("Unable to edit ticket message on ticket moving!","error",[
                         {key:"channel",value:"#"+channel.name},
                         {key:"channelid",value:channel.id,hidden:true},
                         {key:"messageid",value:ticketMessage.id},
