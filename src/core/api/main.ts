@@ -176,7 +176,7 @@ export class ODMain {
         this.panels = new ODPanelManager(this.debug)
         this.tickets = new ODTicketManager(this.debug,this.client)
         this.blacklist = new ODBlacklistManager(this.debug)
-        this.transcripts = new ODTranscriptManager_Default(this.debug,this.tickets,this.client)
+        this.transcripts = new ODTranscriptManager_Default(this.debug,this.tickets,this.client,this.permissions)
         this.roles = new ODRoleManager(this.debug)
         this.priorities = new ODPriorityManager_Default(this.debug)
     }

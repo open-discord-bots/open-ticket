@@ -412,7 +412,7 @@ const main = async () => {
             opendiscord.log("Loading client activity...","system")
             if (opendiscord.defaults.getDefault("clientActivityLoading")){
                 //load config status
-                if (generalConfig.data.status && generalConfig.data.status.enabled) opendiscord.client.activity.setStatus(generalConfig.data.status.type,generalConfig.data.status.text,generalConfig.data.status.mode)
+                if (generalConfig.data.status && generalConfig.data.status.enabled) opendiscord.client.activity.setStatus(generalConfig.data.status.type,generalConfig.data.status.text,generalConfig.data.status.mode,generalConfig.data.status.state)
             }
             await opendiscord.events.get("onClientActivityLoad").emit([opendiscord.client.activity,opendiscord.client])
             await opendiscord.events.get("afterClientActivityLoaded").emit([opendiscord.client.activity,opendiscord.client])

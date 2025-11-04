@@ -335,10 +335,10 @@ export class ODClientManager {
  * Possible activity types for the bot.
  */
 export type ODClientActivityType = ("playing"|"listening"|"watching"|"custom"|false)
-/**## ODClientPermissions `type`
+/**## ODClientActivityMode `type`
  * Possible activity statuses for the bot.
  */
-export type ODClientActivityStatus = ("online"|"invisible"|"idle"|"dnd")
+export type ODClientActivityMode = ("online"|"invisible"|"idle"|"dnd")
 
 
 /**## ODClientActivityManager `class`
@@ -358,8 +358,10 @@ export class ODClientActivityManager {
     type: ODClientActivityType = false
     /**The current status text */
     text: string = ""
-    /**The current status status */
-    status: ODClientActivityStatus = "online"
+    /**The current status mode */
+    mode: ODClientActivityMode = "online"
+    /**Additional state text */
+    state: string = ""
 
     /**The timer responsible for refreshing the status. Stop it using `clearInterval(interval)` */
     interval?: NodeJS.Timeout
@@ -374,10 +376,11 @@ export class ODClientActivityManager {
     }
 
     /**Update the status. When already initiated, it can take up to 10min to see the updated status in discord. */
-    setStatus(type:ODClientActivityType, text:string, status:ODClientActivityStatus, forceUpdate?:boolean){
+    setStatus(type:ODClientActivityType, text:string, mode:ODClientActivityMode, state:string, forceUpdate?:boolean){
         this.type = type
         this.text = text
-        this.status = status
+        this.mode = mode
+        this.state = state
         if (forceUpdate) this.#updateClientActivity(this.type,this.text)
     }
 
@@ -404,10 +407,10 @@ export class ODClientActivityManager {
         this.manager.client.user.setPresence({
             activities:[{
                 type:this.#getStatusTypeEnum(type),
-                state:undefined,
+                state:this.state ? this.state : undefined,
                 name:text,
             }],
-            status:this.status
+            status:this.mode
         })
     }
     /**Get the enum that links to the correct type */

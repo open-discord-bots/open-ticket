@@ -4,7 +4,7 @@
 import { ODValidButtonColor, ODValidId } from "../modules/base"
 import * as discord from "discord.js"
 import { ODConfigManager, ODConfig, ODJsonConfig } from "../modules/config"
-import { ODClientActivityStatus, ODClientActivityType } from "../modules/client"
+import { ODClientActivityMode, ODClientActivityType } from "../modules/client"
 import { ODRoleUpdateMode } from "../openticket/role"
 
 /** (CONTRIBUTOR GUIDE) HOW TO ADD NEW CONFIG VARIABLES?
@@ -77,7 +77,7 @@ export interface ODJsonConfig_DefaultStatusType {
     /**The type of status (e.g. playing, listening, custom, ...) */
     type:Exclude<ODClientActivityType,false>,
     /**The mode/status of the bot (e.g. online, invisible, idle, do not disturb) */
-    mode:ODClientActivityStatus
+    mode:ODClientActivityMode
     /**The text for the status. */
     text:string,
     /**Additional text for the status. (visible below 'text') */

@@ -226,7 +226,7 @@ async function quickSetupLogin(token:string): Promise<api.ODClientManager|null> 
     return new Promise(async (resolve) => {
         try{
             client.readyListener = async () => {
-                client.activity.setStatus("custom","Configuring Open Ticket...","idle",true)
+                client.activity.setStatus("custom","Configuring Open Ticket...","idle","",true)
                 resolve(client)
             }
             const success = await client.login(true)

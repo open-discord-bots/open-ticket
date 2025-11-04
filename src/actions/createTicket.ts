@@ -209,6 +209,9 @@ export const registerActions = async () => {
                 const msg = await channel.send((await opendiscord.builders.messages.getSafe("opendiscord:ticket-message").build(source,{guild,channel,user,ticket})).message)
                 
                 ticket.get("opendiscord:ticket-message").value = msg.id
+
+                //pin ticket message (if required)
+                if (generalConfig.data.system.pinFirstTicketMessage && msg.pinnable) await msg.pin("Ticket Message")
                 
                 //manage stats
                 await opendiscord.stats.get("opendiscord:ticket").setStat("opendiscord:messages-sent",ticket.id.value,1,"increase")
