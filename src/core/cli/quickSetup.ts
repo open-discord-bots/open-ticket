@@ -1239,7 +1239,6 @@ async function saveQuickSetupConfig(){
             
             replyOnTicketCreation:false,
             replyOnReactionRole:true,
-            showPreAutocloseWarning:false,
             askPriorityOnTicketCreation:false,
             removeParticipantsOnClose:quickSetupStorage.removeParticipantsOnClose ?? false,
             disableAutocloseAfterReopen:true,

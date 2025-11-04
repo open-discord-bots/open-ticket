@@ -446,7 +446,9 @@ const loadAutoCode = () => {
                 if (lastMessage){
                     //ticket has last message
                     const disableOnClaim = ticket.option.get("opendiscord:autodelete-disable-claim").value && ticket.get("opendiscord:claimed").value
-                    const enabled = (disableOnClaim) ? false : ticket.get("opendiscord:autodelete-enabled").value
+                    const disableWhenNotClosed = generalConfig.data.system.autodeleteRequiresClosedTicket && !ticket.get("opendiscord:closed").value
+                    
+                    const enabled = (disableOnClaim || disableWhenNotClosed) ? false : ticket.get("opendiscord:autodelete-enabled").value
                     const days = ticket.get("opendiscord:autodelete-days").value
 
                     const time = days*24*60*60*1000 //days in milliseconds
@@ -475,7 +477,8 @@ const loadAutoCode = () => {
                     if (!channel) return
                     //ticket has been created by this user
                     const disableOnClaim = ticket.option.get("opendiscord:autodelete-disable-claim").value && ticket.get("opendiscord:claimed").value
-                    const enabled = (disableOnClaim || !ticket.get("opendiscord:autodelete-enabled").value) ? false : ticket.option.get("opendiscord:autodelete-enable-leave")
+                    const disableWhenNotClosed = generalConfig.data.system.autodeleteRequiresClosedTicket && !ticket.get("opendiscord:closed").value
+                    const enabled = (disableOnClaim || disableWhenNotClosed || !ticket.get("opendiscord:autodelete-enabled").value) ? false : ticket.option.get("opendiscord:autodelete-enable-leave")
 
                     if (enabled){
                         //autodelete ticket

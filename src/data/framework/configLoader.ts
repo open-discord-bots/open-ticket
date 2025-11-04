@@ -74,7 +74,6 @@ export const defaultGeneralFormatter = new fjs.ObjectFormatter(null,true,[
         new fjs.TextFormatter(""),
         new fjs.PropertyFormatter("replyOnTicketCreation"),
         new fjs.PropertyFormatter("replyOnReactionRole"),
-        new fjs.PropertyFormatter("showPreAutocloseWarning"),
         new fjs.PropertyFormatter("askPriorityOnTicketCreation"),
         new fjs.PropertyFormatter("removeParticipantsOnClose"),
         new fjs.PropertyFormatter("disableAutocloseAfterReopen"),

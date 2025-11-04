@@ -235,8 +235,6 @@ export interface ODJsonConfig_DefaultSystem {
     replyOnTicketCreation:boolean,
     /**Reply with an ephemeral message when reaction roles are changed. */
     replyOnReactionRole:boolean,
-    /**Show a warning message before the ticket gets autoclosed. This will happen when only 1/4th of the autoclose time remains. */
-    showPreAutocloseWarning:boolean,
     /**Ask for the priority of this ticket on ticket creation. This will happen in a dropdown in the ticket message. */
     askPriorityOnTicketCreation:boolean,
     /**Remove all participants (except admins) from the ticket when it's closed. */

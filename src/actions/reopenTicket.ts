@@ -28,6 +28,12 @@ export const registerActions = async () => {
             ticket.get("opendiscord:open").value = true
             ticket.get("opendiscord:busy").value = true
 
+            if (generalConfig.data.system.disableAutocloseAfterReopen){
+                //disable autoclose after reopen
+                ticket.get("opendiscord:autoclose-enabled").value = false
+                ticket.get("opendiscord:autoclose-hours").value = 0
+            }
+
             //update stats
             await opendiscord.stats.get("opendiscord:global").setStat("opendiscord:tickets-reopened",1,"increase")
             await opendiscord.stats.get("opendiscord:user").setStat("opendiscord:tickets-reopened",user.id,1,"increase")

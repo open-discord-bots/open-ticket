@@ -39,7 +39,6 @@
         
         "replyOnTicketCreation":true,
         "replyOnReactionRole":true,
-        "showPreAutocloseWarning":false,
         "askPriorityOnTicketCreation":false,
         "removeParticipantsOnClose":false,
         "disableAutocloseAfterReopen":true,

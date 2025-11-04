@@ -57,7 +57,6 @@ export const migrations = [
             generalConfig.data.system.showGlobalAdminsInPanelRoles = false
             generalConfig.data.system.alwaysShowReason = false
             generalConfig.data.system.pinEmoji = "📌"
-            generalConfig.data.system.showPreAutocloseWarning = false
             generalConfig.data.system.askPriorityOnTicketCreation = false
             generalConfig.data.system.disableAutocloseAfterReopen = true
             generalConfig.data.system.autodeleteRequiresClosedTicket = true
