@@ -128,7 +128,7 @@ export const loadAllStats = async () => {
             const creator = ticket.get("opendiscord:opened-by").value
             return lang.getTranslation("params.uppercase.creator")+": "+ (creator ? discord.userMention(creator) : "`unknown`")
         }))
-        ticket.add(new api.ODDynamicStat("opendiscord:ticket-age",1,async (scopeId,guild,channel,user) => {
+        ticket.add(new api.ODDynamicStat("opendiscord:ticket-age",-1,async (scopeId,guild,channel,user) => {
             const ticket = opendiscord.tickets.get(scopeId)
             if (!ticket) return ""
             
