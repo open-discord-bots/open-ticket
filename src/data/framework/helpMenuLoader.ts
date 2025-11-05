@@ -127,7 +127,7 @@ export const loadAllHelpMenuComponents = async () => {
         }))
     }
 
-    const ticketUser = helpmenu.get("opendiscord:ticket-channel")
+    const ticketUser = helpmenu.get("opendiscord:ticket-user")
     if (ticketUser){
         if (allowedCommands.includes("claim")) ticketUser.add(new api.ODHelpMenuCommandComponent("opendiscord:claim",7,{
             textName:prefix+"claim",
@@ -158,6 +158,14 @@ export const loadAllHelpMenuComponents = async () => {
             textDescription:lang.getTranslation("helpMenu.remove"),
             slashName:"/remove",
             slashDescription:lang.getTranslation("helpMenu.remove"),
+            textOptions:[{name:"user",optional:false},{name:"reason",optional:true}],
+            slashOptions:[{name:"user",optional:false},{name:"reason",optional:true}]
+        }))
+        if (allowedCommands.includes("transfer")) ticketUser.add(new api.ODHelpMenuCommandComponent("opendiscord:transfer",-1,{
+            textName:prefix+"transfer",
+            textDescription:"Transfer the ticket ownership from one user to another.", //TODO TRANSLATION!!!
+            slashName:"/transfer",
+            slashDescription:"Transfer the ticket ownership from one user to another.", //TODO TRANSLATION!!!
             textOptions:[{name:"user",optional:false},{name:"reason",optional:true}],
             slashOptions:[{name:"user",optional:false},{name:"reason",optional:true}]
         }))
@@ -271,19 +279,19 @@ export const loadAllHelpMenuComponents = async () => {
         }))
         if (allowedCommands.includes("topic")) advanced.add(new api.ODHelpMenuCommandComponent("opendiscord:topic-set",1,{
             textName:prefix+"topic set",
-            textDescription:"Change the topic of the ticket channel.", //TODO TRANSLATION!!!
+            textDescription:"Set the topic of the ticket channel.", //TODO TRANSLATION!!!
             slashName:"/topic set",
-            slashDescription:"Change the topic of the ticket channel.", //TODO TRANSLATION!!!
+            slashDescription:"Manage the topic of the ticket channel.", //TODO TRANSLATION!!!
             textOptions:[{name:"topic",optional:false}],
             slashOptions:[{name:"topic",optional:false}]
         }))
         if (allowedCommands.includes("priority")) advanced.add(new api.ODHelpMenuCommandComponent("opendiscord:priority-set",0,{
             textName:prefix+"priority set",
-            textDescription:"Set the priority of the ticket channel.", //TODO TRANSLATION!!!
+            textDescription:"Set the priority of the ticket.", //TODO TRANSLATION!!!
             slashName:"/priority set",
-            slashDescription:"Set the priority of the ticket channel.", //TODO TRANSLATION!!!
-            textOptions:[{name:"priority",optional:false}],
-            slashOptions:[{name:"priority",optional:false}]
+            slashDescription:"Manage the priority of the ticket.", //TODO TRANSLATION!!!
+            textOptions:[{name:"priority",optional:false},{name:"reason",optional:true}],
+            slashOptions:[{name:"priority",optional:false},{name:"reason",optional:true}]
         }))
     }
 }

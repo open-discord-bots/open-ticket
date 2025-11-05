@@ -89,7 +89,7 @@ export const registerDefaultCheckerMessageTranslations = (tm:api.ODCheckerTransl
     tm.quickTranslate(lm,"//TODO TRANSLATION!!!","message","opendiscord:string-capital-sentence") // It looks like some sentences in this string don't start with a capital letter!
     tm.quickTranslate(lm,"//TODO TRANSLATION!!!","message","opendiscord:string-punctuation") // It looks like the sentence in this string doesn't end with a punctuation mark!
 
-    tm.quickTranslate(lm,"//TODO TRANSLATION!!!","message","opendiscord:number-nan") // This number can't NaN (Not A Number)!
+    tm.quickTranslate(lm,"//TODO TRANSLATION!!!","message","opendiscord:number-nan") // This number can't be NaN (Not A Number)!
     tm.quickTranslate(lm,"checker.messages.numberTooShort","message","opendiscord:number-too-short") // This number can't be shorter than {0} characters!
     tm.quickTranslate(lm,"checker.messages.numberTooLong","message","opendiscord:number-too-long") // This number can't be longer than {0} characters!
     tm.quickTranslate(lm,"checker.messages.numberLengthInvalid","message","opendiscord:number-length-invalid") // This number needs to be {0} characters long!

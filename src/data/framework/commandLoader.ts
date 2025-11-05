@@ -560,7 +560,7 @@ export const loadAllSlashCommands = async () => {
     if (allowedCommands.includes("topic")) commands.add(new api.ODSlashCommand("opendiscord:topic",{
         type:act.ChatInput,
         name:"topic",
-        description:"Change the topic of the ticket channel.", //TODO TRANSLATION!!!
+        description:"Manage the topic of the ticket channel.", //TODO TRANSLATION!!!
         contexts:[discord.InteractionContextType.Guild],
         integrationTypes:[discord.ApplicationIntegrationType.GuildInstall],
         options:[
@@ -585,7 +585,7 @@ export const loadAllSlashCommands = async () => {
     if (allowedCommands.includes("priority")) commands.add(new api.ODSlashCommand("opendiscord:priority",{
         type:act.ChatInput,
         name:"priority",
-        description:"Set the priority of the ticket.", //TODO TRANSLATION!!!
+        description:"Manage the priority of the ticket.", //TODO TRANSLATION!!!
         contexts:[discord.InteractionContextType.Guild],
         integrationTypes:[discord.ApplicationIntegrationType.GuildInstall],
         options:[

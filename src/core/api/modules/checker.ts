@@ -697,7 +697,7 @@ export class ODCheckerNumberStructure extends ODCheckerStructure {
             checker.createMessage("opendiscord:invalid-type","error","This property needs to be the type: number!",lt,null,["number"],this.id,(this.options.docs ?? null))
             return false
         }else if (!this.options.nanAllowed && isNaN(value)){
-            checker.createMessage("opendiscord:number-nan","error",`This number can't NaN (Not A Number)!`,lt,null,[],this.id,(this.options.docs ?? null))
+            checker.createMessage("opendiscord:number-nan","error",`This number can't be NaN (Not A Number)!`,lt,null,[],this.id,(this.options.docs ?? null))
             return false
         }else if (typeof this.options.minLength != "undefined" && value.toString().length < this.options.minLength){
             checker.createMessage("opendiscord:number-too-short","error",`This number can't be shorter than ${this.options.minLength} characters!`,lt,null,[this.options.minLength.toString()],this.id,(this.options.docs ?? null))

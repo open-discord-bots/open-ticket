@@ -182,7 +182,8 @@ export interface ODHelpMenuManagerCategoryIds_DefaultTicketUser {
     "opendiscord:claim":ODHelpMenuCommandComponent,
     "opendiscord:unclaim":ODHelpMenuCommandComponent,
     "opendiscord:add":ODHelpMenuCommandComponent,
-    "opendiscord:remove":ODHelpMenuCommandComponent
+    "opendiscord:remove":ODHelpMenuCommandComponent,
+    "opendiscord:transfer":ODHelpMenuCommandComponent,
 }
 
 /**## ODHelpMenuCategory_DefaultTicketUser `default_class`
@@ -265,7 +266,11 @@ export interface ODHelpMenuManagerCategoryIds_DefaultAdvanced {
     "opendiscord:stats-ticket":ODHelpMenuCommandComponent,
     "opendiscord:stats-user":ODHelpMenuCommandComponent,
     "opendiscord:autoclose-disable":ODHelpMenuCommandComponent,
-    "opendiscord:autoclose-enable":ODHelpMenuCommandComponent
+    "opendiscord:autoclose-enable":ODHelpMenuCommandComponent,
+    "opendiscord:autodelete-disable":ODHelpMenuCommandComponent,
+    "opendiscord:autodelete-enable":ODHelpMenuCommandComponent,
+    "opendiscord:topic-set":ODHelpMenuCommandComponent,
+    "opendiscord:priority-set":ODHelpMenuCommandComponent,
 }
 
 /**## ODHelpMenuCategory_DefaultAdvanced `default_class`
