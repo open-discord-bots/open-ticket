@@ -158,6 +158,7 @@ export interface ODTicketIds {
     "opendiscord:ticket-message":ODTicketData<string|null>,
     "opendiscord:participants":ODTicketData<{type:"role"|"user",id:string}[]>,
     "opendiscord:channel-suffix":ODTicketData<string>,
+    "opendiscord:previous-creators":ODTicketData<string[]>,
     
     "opendiscord:open":ODTicketData<boolean>,
     "opendiscord:opened-by":ODTicketData<string|null>,
@@ -165,6 +166,9 @@ export interface ODTicketIds {
     "opendiscord:closed":ODTicketData<boolean>,
     "opendiscord:closed-by":ODTicketData<string|null>,
     "opendiscord:closed-on":ODTicketData<number|null>,
+    "opendiscord:reopened":ODTicketData<boolean>,
+    "opendiscord:reopened-by":ODTicketData<string|null>,
+    "opendiscord:reopened-on":ODTicketData<number|null>,
     "opendiscord:claimed":ODTicketData<boolean>,
     "opendiscord:claimed-by":ODTicketData<string|null>,
     "opendiscord:claimed-on":ODTicketData<number|null>,
@@ -183,6 +187,10 @@ export interface ODTicketIds {
     "opendiscord:autodelete-days":ODTicketData<number>,
 
     "opendiscord:answers":ODTicketData<{id:string,name:string,type:"short"|"paragraph",value:string|null}[]>,
+    "opendiscord:priority":ODTicketData<number>,
+    "opendiscord:topic":ODTicketData<string>,
+    "opendiscord:message-sent":ODTicketData<boolean>,
+    "opendiscord:admin-message-sent":ODTicketData<boolean>,
 }
 
 /**## ODTicket `class`

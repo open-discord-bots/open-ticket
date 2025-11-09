@@ -241,6 +241,8 @@ export class ODConsoleManager {
     historylength = 100
     /**An alias to the debugfile manager. (`otdebug.txt`) */
     debugfile: ODDebugFileManager
+    /**Is silent mode enabled? */
+    silent: boolean = false
 
     constructor(historylength:number, debugfile:ODDebugFileManager){
         this.historylength = historylength
@@ -253,12 +255,12 @@ export class ODConsoleManager {
     log(message:string, type?:ODConsoleMessageTypes, params?:ODConsoleMessageParam[]): void
     log(message:ODConsoleMessage|ODError|string, type?:ODConsoleMessageTypes, params?:ODConsoleMessageParam[]){
         if (message instanceof ODConsoleMessage){
-            message.render()
+            if (!this.silent) message.render()
             if (this.debugfile) this.debugfile.writeConsoleMessage(message)
             this.history.push(message)
 
         }else if (message instanceof ODError){
-            message.render()
+            if (!this.silent) message.render()
             if (this.debugfile) this.debugfile.writeErrorMessage(message)
             this.history.push(message)
             
@@ -272,7 +274,7 @@ export class ODConsoleManager {
             else if (type == "error") newMessage = new ODConsoleErrorMessage(message,params)
             else newMessage = new ODConsoleSystemMessage(message,params)
 
-            newMessage.render()
+            if (!this.silent) newMessage.render()
             if (this.debugfile) this.debugfile.writeConsoleMessage(newMessage)
             this.history.push(newMessage)
         }

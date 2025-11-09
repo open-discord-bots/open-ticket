@@ -13,6 +13,8 @@ export interface ODDefaults {
     crashOnError:boolean,
     /**Enable the system responsible for the `--debug` flag. */
     debugLoading:boolean,
+    /**Enable the system responsible for the `--silent` flag. */
+    silentLoading:boolean,
     /**When enabled, you're able to use the "!OPENTICKET:dump" command to send the OT debug file. This is only possible when you're the owner of the bot. */
     allowDumpCommand:boolean,
     /**Enable loading all Open Ticket plugins, sadly enough is only useful for the system :) */
@@ -81,6 +83,9 @@ export interface ODDefaults {
     /**Load the default Open Ticket client activity initialization (& status refresh). */
     clientActivityInitiating:boolean,
 
+    /**Load the default Open Ticket priority levels. */
+    priorityLoading:boolean,
+
     /**Load the default Open Ticket slash commands. */
     slashCommandLoading:boolean,
     /**Load the default Open Ticket slash command registerer (register slash cmds in discord). */
@@ -89,6 +94,14 @@ export interface ODDefaults {
     forceSlashCommandRegistration:boolean,
     /**When enabled, the bot is allowed to unregister all slash commands which aren't used in Open Ticket. Disable this if you don't want to use the Open Ticket `ODSlashCommand` classes. */
     allowSlashCommandRemoval:boolean,
+    /**Load the default Open Ticket context menus. */
+    contextMenuLoading:boolean,
+    /**Load the default Open Ticket context menu registerer (register menus in discord). */
+    contextMenuRegistering:boolean,
+    /**When enabled, the bot is forced to re-register all context menus in the server. This can be used in case of a auto-update malfunction. */
+    forceContextMenuRegistration:boolean,
+    /**When enabled, the bot is allowed to unregister all context menus which aren't used in Open Ticket. Disable this if you don't want to use the Open Ticket `ODContextMenu` classes. */
+    allowContextMenuRemoval:boolean,
     /**Load the default Open Ticket text commands. */
     textCommandLoading:boolean,
 
@@ -130,6 +143,10 @@ export interface ODDefaults {
     dropdownRespondersLoading:boolean,
     /**Load the default Open Ticket modal responders. */
     modalRespondersLoading:boolean,
+    /**Load the default Open Ticket context menu responders. */
+    contextMenuRespondersLoading:boolean,
+    /**Load the default Open Ticket autocomplete responders. */
+    autocompleteRespondersLoading:boolean,
     /**Set the time (in ms) before Open Ticket sends an error message when no reply is sent in a responder. */
     responderTimeoutMs:number,
 
@@ -233,6 +250,7 @@ export class ODDefaultsManager {
             errorHandling:true,
             crashOnError:false,
             debugLoading:true,
+            silentLoading:true,
             allowDumpCommand:true,
             pluginLoading:true,
             softPluginLoading:false,
@@ -269,11 +287,17 @@ export class ODDefaultsManager {
             clientMultiGuildWarning:true,
             clientActivityLoading:true,
             clientActivityInitiating:true,
+
+            priorityLoading:true,
             
             slashCommandLoading:true,
             slashCommandRegistering:true,
             forceSlashCommandRegistration:false,
             allowSlashCommandRemoval:true,
+            contextMenuLoading:true,
+            contextMenuRegistering:true,
+            forceContextMenuRegistration:false,
+            allowContextMenuRemoval:true,
             textCommandLoading:true,
 
             questionLoading:true,
@@ -296,6 +320,8 @@ export class ODDefaultsManager {
             buttonRespondersLoading:true,
             dropdownRespondersLoading:true,
             modalRespondersLoading:true,
+            contextMenuRespondersLoading:true,
+            autocompleteRespondersLoading:true,
             responderTimeoutMs:2500,
 
             actionsLoading:true,

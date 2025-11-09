@@ -269,13 +269,19 @@ export class ODStartScreenPluginsCategoryComponent extends ODStartScreenCategory
 
     constructor(id:ODValidId, priority:number, plugins:ODPlugin[], unknownCrashedPlugins:ODUnknownCrashedPlugin[]){
         super(id,priority,"plugins",() => {
-            const renderedPlugins = this.plugins.sort((a,b) => b.priority-a.priority).map((plugin) => {
-                if (plugin.enabled && plugin.executed) return ansis.green("✅ ["+plugin.name+"] "+plugin.details.shortDescription)
-                else if (plugin.enabled && plugin.crashed) return ansis.red("❌ ["+plugin.name+"] "+plugin.details.shortDescription)
-                else return ansis.gray("💤 ["+plugin.name+"] "+plugin.details.shortDescription)
-            })
+            const disabledPlugins = this.plugins.filter((plugin) => !plugin.enabled)
+
+            const renderedActivePlugins = this.plugins.filter((plugin) => plugin.enabled && plugin.executed).sort((a,b) => b.priority-a.priority).map((plugin) => ansis.green("✅ ["+plugin.name+"] "+plugin.details.shortDescription))
+            const renderedCrashedPlugins = this.plugins.filter((plugin) => plugin.enabled && plugin.crashed).sort((a,b) => b.priority-a.priority).map((plugin) => ansis.red("❌ ["+plugin.name+"] "+plugin.details.shortDescription))
+            const renderedDisabledPlugins = (disabledPlugins.length > 4) ? [ansis.gray("💤 (+"+disabledPlugins.length+" disabled plugins)")] : disabledPlugins.sort((a,b) => b.priority-a.priority).map((plugin) => ansis.gray("💤 ["+plugin.name+"] "+plugin.details.shortDescription))
             const renderedUnknownPlugins = unknownCrashedPlugins.map((plugin) => ansis.red("❌ ["+plugin.name+"] "+plugin.description))
-            return [...renderedPlugins,...renderedUnknownPlugins].join("\n")
+
+            return [
+                ...renderedActivePlugins,
+                ...renderedDisabledPlugins,
+                ...renderedCrashedPlugins,
+                ...renderedUnknownPlugins
+            ].join("\n")
         },false)
         this.plugins = plugins
         this.unknownCrashedPlugins = unknownCrashedPlugins

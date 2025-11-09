@@ -5,7 +5,7 @@ import { ODId, ODManager, ODValidId, ODSystemError, ODManagerData } from "./base
 import * as discord from "discord.js"
 import { ODWorkerManager, ODWorkerCallback, ODWorker } from "./worker"
 import { ODDebugger } from "./console"
-import { ODClientManager, ODSlashCommand, ODTextCommand, ODTextCommandInteractionOption } from "./client"
+import { ODClientManager, ODContextMenu, ODSlashCommand, ODTextCommand, ODTextCommandInteractionOption } from "./client"
 import { ODDropdownData, ODMessageBuildResult, ODMessageBuildSentResult, ODModalBuildResult } from "./builder"
 
 /**## ODResponderImplementation `class`
@@ -36,7 +36,7 @@ export class ODResponderImplementation<Instance,Source extends string,Params> ex
 /**## ODResponderTimeoutErrorCallback `type`
  * This is the callback for the responder timeout function. It will be executed when something went wrong or the action takes too much time.
  */
-export type ODResponderTimeoutErrorCallback<Instance, Source extends "slash"|"text"|"button"|"dropdown"|"modal"|"other"> = (instance:Instance, source:Source) => void|Promise<void>
+export type ODResponderTimeoutErrorCallback<Instance, Source extends "slash"|"text"|"button"|"dropdown"|"modal"|"other"|"context-menu"|"autocomplete"> = (instance:Instance, source:Source) => void|Promise<void>
 
 /**## ODResponderManager `class`
  * This is an Open Ticket responder manager.
@@ -61,12 +61,18 @@ export class ODResponderManager {
     dropdowns: ODDropdownResponderManager
     /**A manager for all modal responders. */
     modals: ODModalResponderManager
+    /**A manager for all context menu responders. */
+    contextMenus: ODContextMenuResponderManager
+    /**A manager for all autocomplete responders. */
+    autocomplete: ODAutocompleteResponderManager
 
     constructor(debug:ODDebugger, client:ODClientManager){
         this.commands = new ODCommandResponderManager(debug,"command responder",client)
         this.buttons = new ODButtonResponderManager(debug,"button responder",client)
         this.dropdowns = new ODDropdownResponderManager(debug,"dropdown responder",client)
         this.modals = new ODModalResponderManager(debug,"modal responder",client)
+        this.contextMenus = new ODContextMenuResponderManager(debug,"context menu responder",client)
+        this.autocomplete = new ODAutocompleteResponderManager(debug,"autocomplete responder",client)
     }
 }
 
@@ -1083,7 +1089,7 @@ export class ODModalResponderInstance {
                 const sent = await this.interaction.editReply(Object.assign(msg.message,{flags:msgFlags}))
                 this.didReply = true
                 return {success:true,message:await sent.fetch()}
-            }else throw new ODSystemError()
+            }else throw new ODSystemError("Unable to update modal interaction!")
         }catch{
             return {success:false,message:null}
         }
@@ -1110,6 +1116,300 @@ export class ODModalResponderInstance {
 export class ODModalResponder<Source extends string,Params> extends ODResponderImplementation<ODModalResponderInstance,Source,Params> {
     /**Respond to this modal */
     async respond(instance:ODModalResponderInstance, source:Source, params:Params){
+        //wait for workers to finish
+        await this.workers.executeWorkers(instance,source,params)
+    }
+}
+
+/**## ODContextMenuResponderManager `class`
+ * This is an Open Ticket context menu responder manager.
+ * 
+ * It contains all Open Ticket context menu responders. These can respond to user/message context menu interactions.
+ * 
+ * Using the Open Ticket responder system has a few advantages compared to vanilla discord.js:
+ * - plugins can extend/edit replies
+ * - automatically reply on error
+ * - independent workers (with priority)
+ * - fail-safe design using try-catch
+ * - know where the request came from!
+ * - And so much more!
+ */
+export class ODContextMenuResponderManager extends ODManager<ODContextMenuResponder<"context-menu",any>> {
+    /**An alias to the Open Ticket client manager. */
+    #client: ODClientManager
+    /**The callback executed when the default workers take too much time to reply. */
+    #timeoutErrorCallback: ODResponderTimeoutErrorCallback<ODContextMenuResponderInstance,"context-menu">|null = null
+    /**The amount of milliseconds before the timeout error callback is executed. */
+    #timeoutMs: number|null = null
+
+    constructor(debug:ODDebugger, debugname:string, client:ODClientManager){
+        super(debug,debugname)
+        this.#client = client
+    }
+
+    /**Set the message to send when the response times out! */
+    setTimeoutErrorCallback(callback:ODResponderTimeoutErrorCallback<ODContextMenuResponderInstance,"context-menu">|null, ms:number|null){
+        this.#timeoutErrorCallback = callback
+        this.#timeoutMs = ms
+    }
+
+    add(data:ODContextMenuResponder<"context-menu",any>, overwrite?:boolean){
+        const res = super.add(data,overwrite)
+        
+        this.#client.contextMenus.onInteraction(data.match,(interaction,cmd) => {
+            const newData = this.get(data.id)
+            if (!newData) return
+            newData.respond(new ODContextMenuResponderInstance(interaction,cmd,this.#timeoutErrorCallback,this.#timeoutMs),"context-menu",{})
+        })
+
+        return res
+    }
+}
+
+/**## ODContextMenuResponderInstance `class`
+ * This is an Open Ticket context menu responder instance.
+ * 
+ * An instance is an active context menu interaction. You can reply to the context menu using `reply()`.
+ */
+export class ODContextMenuResponderInstance {
+    /**The interaction which is the source of this instance. */
+    interaction: discord.ContextMenuCommandInteraction
+    /**Did a worker already reply to this instance/interaction? */
+    didReply: boolean = false
+    /**The context menu wich is the source of this instance. */
+    menu:ODContextMenu
+    /**The user who triggered this context menu. */
+    user: discord.User
+    /**The guild member who triggered this context menu. */
+    member: discord.GuildMember|null
+    /**The guild where this context menu was triggered. */
+    guild: discord.Guild|null
+    /**The channel where this context menu was triggered. */
+    channel: discord.TextBasedChannel
+    /**The target of this context menu (user or message). */
+    target: discord.Message|discord.User
+
+    constructor(interaction:discord.ContextMenuCommandInteraction, menu:ODContextMenu, errorCallback:ODResponderTimeoutErrorCallback<ODContextMenuResponderInstance,"context-menu">|null, timeoutMs:number|null){
+        if (!interaction.channel) throw new ODSystemError("ODContextMenuResponderInstance: Unable to find interaction channel!")
+        this.interaction = interaction
+        this.menu = menu
+        this.user = interaction.user
+        this.member = (interaction.member instanceof discord.GuildMember) ? interaction.member : null
+        this.guild = interaction.guild
+        this.channel = interaction.channel
+        if (interaction.isMessageContextMenuCommand()) this.target = interaction.targetMessage
+        else if (interaction.isUserContextMenuCommand()) this.target = interaction.targetUser
+        else throw new ODSystemError("ODContextMenuResponderInstance: Invalid context menu type. Should be of the type User/Message!")
+        
+        setTimeout(async () => {
+            if (!this.didReply){
+                try {
+                    if (!errorCallback){
+                        this.reply({id:new ODId("looks-like-we-got-an-error-here"), ephemeral:true, message:{
+                            content:":x: **Something went wrong while replying to this context menu!**"
+                        }})
+                    }else{
+                        await errorCallback(this,"context-menu")
+                    }
+                    
+                }catch(err){
+                    process.emit("uncaughtException",err)
+                }
+            }
+        },timeoutMs ?? 2500)
+    }
+
+    /**Reply to this context menu. */
+    async reply(msg:ODMessageBuildResult): Promise<ODMessageBuildSentResult<boolean>> {
+        try{
+            const msgFlags: number[] = msg.ephemeral ? [discord.MessageFlags.Ephemeral] : []
+            if (this.interaction.replied || this.interaction.deferred){
+                const sent = await this.interaction.editReply(Object.assign(msg.message,{flags:msgFlags}))
+                this.didReply = true
+                return {success:true,message:sent}
+            }else{
+                const sent = await this.interaction.reply(Object.assign(msg.message,{flags:msgFlags}))
+                this.didReply = true
+                return {success:true,message:await sent.fetch()}
+            }
+        }catch{
+            return {success:false,message:null}
+        }
+    }
+    /**Update the message of this context menu. */
+    async update(msg:ODMessageBuildResult): Promise<ODMessageBuildSentResult<boolean>> {
+        try{
+            const msgFlags: number[] = msg.ephemeral ? [discord.MessageFlags.Ephemeral] : []
+            if (this.interaction.replied || this.interaction.deferred){
+                const sent = await this.interaction.editReply(Object.assign(msg.message,{flags:msgFlags}))
+                this.didReply = true
+                return {success:true,message:await sent.fetch()}
+            }else throw new ODSystemError("Unable to update context menu interaction!")
+        }catch{
+            return {success:false,message:null}
+        }
+    }
+    /**Defer this context menu. */
+    async defer(type:"reply", ephemeral:boolean){
+        if (this.interaction.deferred) return false
+        if (type == "reply"){
+            const msgFlags: number[] = ephemeral ? [discord.MessageFlags.Ephemeral] : []
+            await this.interaction.deferReply({flags:msgFlags})
+        }
+        this.didReply = true
+        return true
+    }
+    /**Show a modal as reply to this context menu. */
+    async modal(modal:ODModalBuildResult){
+        this.interaction.showModal(modal.modal)
+        this.didReply = true
+        return true
+    }
+}
+
+/**## ODContextMenuResponder `class`
+ * This is an Open Ticket context menu responder.
+ * 
+ * This class manages all workers which are executed when the related context menu is triggered.
+ */
+export class ODContextMenuResponder<Source extends string,Params> extends ODResponderImplementation<ODContextMenuResponderInstance,Source,Params> {
+    /**Respond to this button */
+    async respond(instance:ODContextMenuResponderInstance, source:Source, params:Params){
+        //wait for workers to finish
+        await this.workers.executeWorkers(instance,source,params)
+    }
+}
+
+/**## ODAutocompleteResponderManager `class`
+ * This is an Open Ticket autocomplete responder manager.
+ * 
+ * It contains all Open Ticket autocomplete responders. These can respond to autocomplete interactions.
+ * 
+ * Using the Open Ticket responder system has a few advantages compared to vanilla discord.js:
+ * - plugins can extend/edit replies
+ * - automatically reply on error
+ * - independent workers (with priority)
+ * - fail-safe design using try-catch
+ * - know where the request came from!
+ * - And so much more!
+ */
+export class ODAutocompleteResponderManager extends ODManager<ODAutocompleteResponder<"autocomplete",any>> {
+    /**An alias to the Open Ticket client manager. */
+    #client: ODClientManager
+    /**The callback executed when the default workers take too much time to reply. */
+    #timeoutErrorCallback: ODResponderTimeoutErrorCallback<ODAutocompleteResponderInstance,"autocomplete">|null = null
+    /**The amount of milliseconds before the timeout error callback is executed. */
+    #timeoutMs: number|null = null
+
+    constructor(debug:ODDebugger, debugname:string, client:ODClientManager){
+        super(debug,debugname)
+        this.#client = client
+    }
+
+    /**Set the message to send when the response times out! */
+    setTimeoutErrorCallback(callback:ODResponderTimeoutErrorCallback<ODAutocompleteResponderInstance,"autocomplete">|null, ms:number|null){
+        this.#timeoutErrorCallback = callback
+        this.#timeoutMs = ms
+    }
+
+    add(data:ODAutocompleteResponder<"autocomplete",any>, overwrite?:boolean){
+        const res = super.add(data,overwrite)
+        
+        this.#client.autocompletes.onInteraction(data.cmdMatch,data.match,(interaction) => {
+            const newData = this.get(data.id)
+            if (!newData) return
+            newData.respond(new ODAutocompleteResponderInstance(interaction,this.#timeoutErrorCallback,this.#timeoutMs),"autocomplete",{})
+        })
+
+        return res
+    }
+}
+
+/**## ODAutocompleteResponderInstance `class`
+ * This is an Open Ticket autocomplete responder instance.
+ * 
+ * An instance is an active autocomplete interaction. You can reply to the autocomplete using `reply()`.
+ */
+export class ODAutocompleteResponderInstance {
+    /**The interaction which is the source of this instance. */
+    interaction: discord.AutocompleteInteraction
+    /**Did a worker already respond to this instance/interaction? */
+    didRespond: boolean = false
+    /**The user who triggered this autocomplete. */
+    user: discord.User
+    /**The guild member who triggered this autocomplete. */
+    member: discord.GuildMember|null
+    /**The guild where this autocomplete was triggered. */
+    guild: discord.Guild|null
+    /**The channel where this autocomplete was triggered. */
+    channel: discord.TextBasedChannel
+    /**The target slash command option of this autocomplete. */
+    target: discord.AutocompleteFocusedOption
+
+    constructor(interaction:discord.AutocompleteInteraction, errorCallback:ODResponderTimeoutErrorCallback<ODAutocompleteResponderInstance,"autocomplete">|null, timeoutMs:number|null){
+        if (!interaction.channel) throw new ODSystemError("ODAutocompleteResponderInstance: Unable to find interaction channel!")
+        this.interaction = interaction
+        this.user = interaction.user
+        this.member = (interaction.member instanceof discord.GuildMember) ? interaction.member : null
+        this.guild = interaction.guild
+        this.channel = interaction.channel
+        this.target = interaction.options.getFocused(true)
+        
+        setTimeout(async () => {
+            if (!this.didRespond){
+                process.emit("uncaughtException",new ODSystemError("Autocomplete responder instance failed to respond widthin 2.5sec!"))
+            }
+        },timeoutMs ?? 2500)
+    }
+
+    /**Reply to this autocomplete. */
+    async autocomplete(choices:(string|discord.ApplicationCommandOptionChoiceData)[]): Promise<{success:boolean}> {
+        const newChoices: (discord.ApplicationCommandOptionChoiceData)[] = choices.map((raw) => {
+            if (typeof raw == "string") return {name:raw,value:raw}
+            else return raw
+        })
+        
+        try{
+            if (this.interaction.responded){
+                return {success:false}
+            }else{
+                await this.interaction.respond(newChoices)
+                this.didRespond = true
+                return {success:true}
+            }
+        }catch(err){
+            process.emit("uncaughtException",err)
+            return {success:false}
+        }
+    }
+    /**Reply to this autocomplete, but filter choices based on the input of the user. */
+    async filteredAutocomplete(choices:(string|discord.ApplicationCommandOptionChoiceData)[]): Promise<{success:boolean}> {
+        const newChoices: (discord.ApplicationCommandOptionChoiceData)[] = choices.map((raw) => {
+            if (typeof raw == "string") return {name:raw,value:raw}
+            else return raw
+        })
+
+        const filteredChoices = newChoices.filter((choice) => choice.name.startsWith(this.target.value) || choice.value.toString().startsWith(this.target.value))
+        return await this.autocomplete(filteredChoices)
+    }
+}
+
+/**## ODAutocompleteResponder `class`
+ * This is an Open Ticket autocomplete responder.
+ * 
+ * This class manages all workers which are executed when the related autocomplete is triggered.
+ */
+export class ODAutocompleteResponder<Source extends string,Params> extends ODResponderImplementation<ODAutocompleteResponderInstance,Source,Params> {
+    /**The slash command of the autocomplete should match the following regex. */
+    cmdMatch: string|RegExp
+    
+    constructor(id:ODValidId,cmdMatch:string|RegExp,match:string|RegExp,callback?:ODWorkerCallback<ODAutocompleteResponderInstance,Source,Params>,priority?:number,callbackId?:ODValidId){
+        super(id,match,callback,priority,callbackId)
+        this.cmdMatch = cmdMatch
+    }
+    
+    /**Respond to this autocomplete interaction. */
+    async respond(instance:ODAutocompleteResponderInstance, source:Source, params:Params){
         //wait for workers to finish
         await this.workers.executeWorkers(instance,source,params)
     }

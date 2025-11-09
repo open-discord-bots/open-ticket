@@ -82,6 +82,10 @@ export class ODCheckerManager extends ODManager<ODChecker> {
             messages:final
         }
     }
+    /**Create temporary and unlisted `ODConfig`, `ODChecker` & `ODCheckerStorage` classes. This will help you use a `ODCheckerStructure` validator without officially registering it in `opendiscord.checkers`. */
+    createTemporaryCheckerEnvironment(){
+        return new ODChecker("opendiscord:temporary-environment",new ODCheckerStorage(),0,new ODConfig("opendiscord:temporary-environment",{}),new ODCheckerStructure("opendiscord:temporary-environment",{}))
+    }
 }
 
 /**## ODCheckerStorage `class`
@@ -289,6 +293,16 @@ export class ODCheckerFunctionManager extends ODManager<ODCheckerFunction> {
  */
 export type ODCheckerLocationTrace = (string|number)[]
 
+/**## ODCheckerOptions `interface`
+ * This interface contains all optional properties to customise in the `ODChecker` class.
+ */
+export interface ODCheckerOptions {
+    /**The name of this config in the Interactive Setup CLI. */
+    cliDisplayName?:string
+    /**The description of this config in the Interactive Setup CLI. */
+    cliDisplayDescription?:string
+} 
+
 /**## ODChecker `class`
  * This is an Open Ticket config checker.
  * 
@@ -310,15 +324,29 @@ export class ODChecker extends ODManagerData {
     messages: ODCheckerMessage[] = []
     /**Temporary storage for the quit status from the check() method (not recommended to use) */
     quit: boolean = false
+    /**All additional properties of this config checker. */
+    options: ODCheckerOptions
 
-    constructor(id:ODValidId, storage: ODCheckerStorage, priority:number, config:ODConfig, structure: ODCheckerStructure){
+    constructor(id:ODValidId, storage: ODCheckerStorage, priority:number, config:ODConfig, structure:ODCheckerStructure, options?:ODCheckerOptions){
         super(id)
         this.storage = storage
         this.priority = priority
         this.config = config
         this.structure = structure
+        this.options = options ?? {}
     }
 
+    /**Get a human-readable number string. */
+    #ordinalNumber(num:number){
+        const i = Math.abs(Math.round(num))
+        const cent = i % 100
+        if (cent >= 10 && cent <= 20) return i+'th'
+        const dec = i % 10
+        if (dec === 1) return i+'st'
+        if (dec === 2) return i+'nd'
+        if (dec === 3) return i+'rd'
+        return i+'th'
+    }
     /**Run this checker. Returns all errors*/
     check(): ODCheckerResult {
         this.messages = []
@@ -330,12 +358,12 @@ export class ODChecker extends ODManagerData {
             messages:this.messages
         }
     }
-    /**Create a string from the location trace (path)*/
+    /**Create a string from the location trace/path in a human readable format. */
     locationTraceToString(trace:ODCheckerLocationTrace){
         const final: ODCheckerLocationTrace = []
         trace.forEach((t) => {
             if (typeof t == "number"){
-                final.push(`:${t}`)
+                final.push(`:(${this.#ordinalNumber(t+1)})`)
             }else{
                 final.push(`."${t}"`)
             }
@@ -391,7 +419,15 @@ export interface ODCheckerStructureOptions {
     /**Add a custom checker function. Returns `true` when valid. */
     custom?:(checker:ODChecker, value:ODValidJsonType, locationTrace:ODCheckerLocationTrace, locationId:ODId, locationDocs:string|null) => boolean,
     /**Set the url to the documentation of this variable. */
-    docs?:string
+    docs?:string,
+    /**The name of this config in the Interactive Setup CLI. */
+    cliDisplayName?:string
+    /**The description of this config in the Interactive Setup CLI. */
+    cliDisplayDescription?:string
+    /**Hide the description of this config in the Interactive Setup CLI parent view/list. */
+    cliHideDescriptionInParent?:boolean
+    /**The default value of this variable when creating it in the Interactive Setup CLI. When not specified, the user will be asked to insert a value. */
+    cliInitDefaultValue?:ODValidJsonType
 }
 
 /**## ODCheckerStructure `class`
@@ -426,7 +462,13 @@ export class ODCheckerStructure {
  */
 export interface ODCheckerObjectStructureOptions extends ODCheckerStructureOptions {
     /**Add a checker for a property in an object (can also be optional) */
-    children?:{key:string, checker:ODCheckerStructure, priority:number, optional:boolean}[]
+    children:{key:string, priority?:number, optional?:boolean, cliHideInEditMode?:boolean, checker:ODCheckerStructure}[],
+    /**A list of keys to skip when creating this object with the Interactive Setup CLI. The default value of these properties will be used instead. */
+    cliInitSkipKeys?:string[],
+    /**The key of a (primitive) property in this object to show the value of in the Interactive Setup CLI when listed in an array. */
+    cliDisplayKeyInParentArray?:string,
+    /**A list of additional (primitive) property keys in this object to show the value of in the Interactive Setup CLI when listed in an array. */
+    cliDisplayAdditionalKeysInParentArray?:string[]
 }
 
 /**## ODCheckerObjectStructure `class`
@@ -454,8 +496,8 @@ export class ODCheckerObjectStructure extends ODCheckerStructure {
         //sort children
         if (typeof this.options.children == "undefined") return super.check(checker,value,locationTrace)
         const sortedChildren = this.options.children.sort((a,b) => {
-            if (a.priority < b.priority) return -1
-            else if (a.priority > b.priority) return 1
+            if ((a.priority ?? 0) < (b.priority ?? 0)) return -1
+            else if ((a.priority ?? 0) > (b.priority ?? 0)) return 1
             else return 0
         })
 
@@ -497,10 +539,28 @@ export interface ODCheckerStringStructureOptions extends ODCheckerStructureOptio
     endsWith?:string,
     /**This string needs to contain ... */
     contains?:string,
+    /**This string is not allowed to contain ... */
+    invertedContains?:string,
     /**You need to choose between ... */
     choices?:string[],
+    /**This string needs to be in lowercase. */
+    lowercaseOnly?:boolean,
+    /**This string needs to be in uppercase. */
+    uppercaseOnly?:boolean,
+    /**This string shouldn't contain any special characters (allowed: A-Z, a-z, 0-9, space, a few punctuation marks, ...). */
+    noSpecialCharacters?:boolean,
+    /**Do not allow any spaces in this string. */
+    withoutSpaces?:boolean,
+    /**Give a warning when a sentence doesn't start with a capital letter. Or require every word to start with a capital letter. (Ignores numbers, unicode characters, ...) */
+    capitalLetterWarning?:false|"sentence"|"word"
+    /**Give a warning when a sentence doesn't end with a punctuation letter (.,?!) */
+    punctuationWarning?:boolean
     /**The string needs to match this regex */
-    regex?:RegExp
+    regex?:RegExp,
+    /**Provide an optional list for autocomplete when using the Interactive Setup CLI. Defaults to the `choices` option. */
+    cliAutocompleteList?:string[],
+    /**Dynamically provide a list for autocomplete items when using the Interactive Setup CLI. */
+    cliAutocompleteFunc?:() => Promise<string[]|null>
 }
 
 /**## ODCheckerStringStructure `class`
@@ -540,13 +600,35 @@ export class ODCheckerStringStructure extends ODCheckerStructure {
         }else if (typeof this.options.contains != "undefined" && !value.includes(this.options.contains)){
             checker.createMessage("opendiscord:string-contains","error",`This string needs to contain "${this.options.contains}"!`,lt,null,[`"${this.options.contains}"`],this.id,(this.options.docs ?? null))
             return false
+        }else if (typeof this.options.invertedContains != "undefined" && value.includes(this.options.invertedContains)){
+            checker.createMessage("opendiscord:string-inverted-contains","error",`This string is not allowed to contain "${this.options.invertedContains}"!`,lt,null,[`"${this.options.invertedContains}"`],this.id,(this.options.docs ?? null))
+            return false
         }else if (typeof this.options.choices != "undefined" && !this.options.choices.includes(value)){
             checker.createMessage("opendiscord:string-choices","error",`This string can only be one of the following values: "${this.options.choices.join(`", "`)}"!`,lt,null,[`"${this.options.choices.join(`", "`)}"`],this.id,(this.options.docs ?? null))
+            return false
+        }else if (this.options.lowercaseOnly && value !== value.toLowerCase()){
+            checker.createMessage("opendiscord:string-lowercase","error",`This string must be written in lowercase only!`,lt,null,[],this.id,(this.options.docs ?? null))
+            return false
+        }else if (this.options.uppercaseOnly && value !== value.toUpperCase()){
+            checker.createMessage("opendiscord:string-uppercase","error",`This string must be written in uppercase only!`,lt,null,[],this.id,(this.options.docs ?? null))
+            return false
+        }else if (this.options.noSpecialCharacters && !/^[A-Za-z0-9 ]*$/.test(value)){
+            checker.createMessage("opendiscord:string-special-characters","error",`This string is not allowed to contain any special characters! (a-z, 0-9 & space only)`,lt,null,[],this.id,(this.options.docs ?? null))
+            return false
+        }else if (this.options.withoutSpaces && value.includes(" ")){
+            checker.createMessage("opendiscord:string-no-spaces","error",`This string is not allowed to contain spaces!`,lt,null,[],this.id,(this.options.docs ?? null))
             return false
         }else if (typeof this.options.regex != "undefined" && !this.options.regex.test(value)){
             checker.createMessage("opendiscord:string-regex","error","This string is invalid!",lt,null,[],this.id,(this.options.docs ?? null))
             return false
-        }else return super.check(checker,value,locationTrace)
+        }else{
+            //warnings
+            if ((this.options.capitalLetterWarning == "word" && !value.split(" ").every((word) => word.length == 0 || /^[^a-z].*/.test(word)))) checker.createMessage("opendiscord:string-capital-word","warning",`It's recommended that each word in this string starts with a capital letter!`,lt,null,[],this.id,(this.options.docs ?? null))
+            if ((this.options.capitalLetterWarning == "sentence" && !value.split(/ *[.?!] */).every((sentence) => sentence.length == 0 || /^[^a-z].*/.test(sentence)))) checker.createMessage("opendiscord:string-capital-sentence","warning",`It looks like some sentences in this string don't start with a capital letter!`,lt,null,[],this.id,(this.options.docs ?? null))
+            if (this.options.punctuationWarning && value.length > 0 && (!value.endsWith(".") && !value.endsWith("?") && !value.endsWith("!") && !value.endsWith("'") && !value.endsWith('"') && !value.endsWith(",") && !value.endsWith(";") && !value.endsWith(":") && !value.endsWith("="))) checker.createMessage("opendiscord:string-punctuation","warning",`It looks like the sentence in this string doesn't end with a punctuation mark!`,lt,null,[],this.id,(this.options.docs ?? null))
+            
+            return super.check(checker,value,locationTrace)
+        }
     }
 }
 
@@ -554,6 +636,8 @@ export class ODCheckerStringStructure extends ODCheckerStructure {
  * This interface has the options for `ODCheckerNumberStructure`!
  */
 export interface ODCheckerNumberStructureOptions extends ODCheckerStructureOptions {
+    /**Is `NaN` (not a number) allowed? (`false` by default) */
+    nanAllowed?:boolean
     /**The minimum length of this number */
     minLength?:number,
     /**The maximum length of this number */
@@ -576,6 +660,8 @@ export interface ODCheckerNumberStructureOptions extends ODCheckerStructureOptio
     endsWith?:string,
     /**This number needs to contain ... */
     contains?:string,
+    /**This number is not allowed to contain ... */
+    invertedContains?:string,
     /**You need to choose between ... */
     choices?:number[],
     /**Are numbers with a decimal value allowed? */
@@ -610,6 +696,9 @@ export class ODCheckerNumberStructure extends ODCheckerStructure {
         if (typeof value != "number"){
             checker.createMessage("opendiscord:invalid-type","error","This property needs to be the type: number!",lt,null,["number"],this.id,(this.options.docs ?? null))
             return false
+        }else if (!this.options.nanAllowed && isNaN(value)){
+            checker.createMessage("opendiscord:number-nan","error",`This number can't be NaN (Not A Number)!`,lt,null,[],this.id,(this.options.docs ?? null))
+            return false
         }else if (typeof this.options.minLength != "undefined" && value.toString().length < this.options.minLength){
             checker.createMessage("opendiscord:number-too-short","error",`This number can't be shorter than ${this.options.minLength} characters!`,lt,null,[this.options.minLength.toString()],this.id,(this.options.docs ?? null))
             return false
@@ -641,19 +730,22 @@ export class ODCheckerNumberStructure extends ODCheckerStructure {
         }else if (typeof this.options.contains != "undefined" && !value.toString().includes(this.options.contains)){
             checker.createMessage("opendiscord:number-contains","error",`This number needs to contain "${this.options.contains}"!`,lt,null,[`"${this.options.contains}"`],this.id,(this.options.docs ?? null))
             return false
+        }else if (typeof this.options.invertedContains != "undefined" && value.toString().includes(this.options.invertedContains)){
+            checker.createMessage("opendiscord:number-inverted-contains","error",`This number is not allowed to contain "${this.options.invertedContains}"!`,lt,null,[`"${this.options.invertedContains}"`],this.id,(this.options.docs ?? null))
+            return false
         }else if (typeof this.options.choices != "undefined" && !this.options.choices.includes(value)){
             checker.createMessage("opendiscord:number-choices","error",`This number can only be one of the following values: "${this.options.choices.join(`", "`)}"!`,lt,null,[`"${this.options.choices.join(`", "`)}"`],this.id,(this.options.docs ?? null))
             return false
         }else if (typeof this.options.floatAllowed != "undefined" && !this.options.floatAllowed && (value % 1) !== 0){
             checker.createMessage("opendiscord:number-float","error","This number can't be a decimal!",lt,null,[],this.id,(this.options.docs ?? null))
             return false
-        }else if (typeof this.options.negativeAllowed != "undefined" && value < 0){
+        }else if (typeof this.options.negativeAllowed != "undefined" && !this.options.negativeAllowed && value < 0){
             checker.createMessage("opendiscord:number-negative","error","This number can't be negative!",lt,null,[],this.id,(this.options.docs ?? null))
             return false
-        }else if (typeof this.options.positiveAllowed != "undefined" && value > 0){
+        }else if (typeof this.options.positiveAllowed != "undefined" && !this.options.positiveAllowed && value > 0){
             checker.createMessage("opendiscord:number-positive","error","This number can't be positive!",lt,null,[],this.id,(this.options.docs ?? null))
             return false
-        }else if (typeof this.options.zeroAllowed != "undefined" && value === 0){
+        }else if (typeof this.options.zeroAllowed != "undefined" && !this.options.zeroAllowed && value === 0){
             checker.createMessage("opendiscord:number-zero","error","This number can't be zero!",lt,null,[],this.id,(this.options.docs ?? null))
             return false
         }else return super.check(checker,value,locationTrace)
@@ -718,7 +810,9 @@ export interface ODCheckerArrayStructureOptions extends ODCheckerStructureOption
     /**Allow double values (only for `string`, `number` & `boolean`) */
     allowDoubles?:boolean
     /**Only allow these types in the array (for multi-type propertyCheckers) */
-    allowedTypes?:("string"|"number"|"boolean"|"null"|"array"|"object"|"other")[]
+    allowedTypes?:("string"|"number"|"boolean"|"null"|"array"|"object"|"other")[],
+    /**The name of the properties inside this array. Used in the GUI of the Interactive Setup CLI. */
+    cliDisplayPropertyName?:string
 }
 
 /**## ODCheckerArrayStructure `class`
@@ -863,15 +957,15 @@ export interface ODCheckerTypeSwitchStructureOptions extends ODCheckerStructureO
     /**A checker when the property is a boolean */
     boolean?:ODCheckerBooleanStructure,
     /**A checker when the property is null */
-    null?:ODCheckerStructure,
+    null?:ODCheckerNullStructure,
     /**A checker when the property is an array */
-    array?:ODCheckerStructure,
+    array?:ODCheckerArrayStructure,
     /**A checker when the property is an object */
     object?:ODCheckerObjectStructure,
     /**A checker when the property is something else */
     other?:ODCheckerStructure,
     /**A list of allowed types */
-    allowedTypes?:("string"|"number"|"boolean"|"null"|"array"|"object"|"other")[]
+    allowedTypes:("string"|"number"|"boolean"|"null"|"array"|"object"|"other")[]
 }
 
 /**## ODCheckerTypeSwitchStructure `class`
@@ -925,9 +1019,9 @@ export class ODCheckerTypeSwitchStructure extends ODCheckerStructure {
  */
 export interface ODCheckerObjectSwitchStructureOptions extends ODCheckerStructureOptions {
     /**An array of object checkers with their name, properties & priority. */
-    objects?:{
+    objects:{
         /**The properties to match for this checker to be used. */
-        properties:{key:string, value:any}[],
+        properties:{key:string, value:boolean|string|number}[],
         /**The name for this object type (used in rendering) */
         name:string,
         /**The higher the priority, the earlier this checker will be tested. */
@@ -993,11 +1087,11 @@ export class ODCheckerObjectSwitchStructure extends ODCheckerStructure {
  */
 export interface ODCheckerEnabledObjectStructureOptions extends ODCheckerStructureOptions {
     /**The name of the property to match the `enabledValue`. */
-    property?:string,
-    /**The value of the property to be enabled. Defaults to `true` */
-    enabledValue?:any,
+    property:string,
+    /**The value of the property to be enabled. (e.g. `true`) */
+    enabledValue:boolean|string|number,
     /**The object checker to use once the property has been matched. */
-    checker?:ODCheckerObjectStructure
+    checker:ODCheckerObjectStructure
 }
 
 /**## ODCheckerEnabledObjectStructure `class`
@@ -1387,38 +1481,29 @@ export class ODCheckerCustomStructure_UniqueIdArray extends ODCheckerArrayStruct
     /**The scope to push unique ids when used in this array! */
     readonly usedScope: string|null
 
-    constructor(id:ODValidId, source:string, scope:string, usedScope?:string, options?:ODCheckerArrayStructureOptions){
+    constructor(id:ODValidId, source:string, scope:string, usedScope?:string, options?:ODCheckerArrayStructureOptions, idOptions?:Omit<ODCheckerStringStructureOptions,"minLength"|"custom">){
         //add premade custom structure checker
         const newOptions = options ?? {}
-        newOptions.custom = (checker,value,locationTrace,locationId,locationDocs) => {
-            const lt = checker.locationTraceDeref(locationTrace)
+        newOptions.propertyChecker = new ODCheckerStringStructure("opendiscord:unique-id",{...(idOptions ?? {}),minLength:1,custom:(checker,value,locationTrace,locationId,locationDocs) => {
+            if (typeof value != "string") return false
+            const localLt = checker.locationTraceDeref(locationTrace)
+            localLt.pop()
 
-            if (!Array.isArray(value)) return false
-            const uniqueArray: string[] = (checker.storage.get(source,scope) === null) ? [] : checker.storage.get(source,scope)
-
-            let localQuit = false
-            value.forEach((id,index) => {
-                const localLt = checker.locationTraceDeref(lt)
-                localLt.push(index)
-                if (typeof id != "string") {
-                    //id isn't a string
-                    checker.createMessage("opendiscord:id-invalid-type", "error", "This id needs to be a string!", localLt, null, [], this.id, (this.options.docs ?? null))
-                    localQuit = true
-                }else if (uniqueArray.includes(id)) {
-                    //exists
-                    if (usedScope){
-                        const current: string[] = checker.storage.get(source,usedScope) ?? []
-                        current.push(id)
-                        checker.storage.set(source,usedScope,current)
-                    }
-                }else{
-                    //doesn't exist
-                    checker.createMessage("opendiscord:id-non-existent","error",`The id "${id}" doesn't exist!`,localLt,null,[`"${id}"`],this.id,(this.options.docs ?? null))
-                    localQuit = true
+            const uniqueArray: string[] = checker.storage.get(source,scope) ?? []
+            if (uniqueArray.includes(value)){
+                //exists
+                if (usedScope){
+                    const current: string[] = checker.storage.get(source,usedScope) ?? []
+                    current.push(value)
+                    checker.storage.set(source,usedScope,current)
                 }
-            })
-            return !localQuit
-        }
+                return true
+            }else{
+                //doesn't exist
+                checker.createMessage("opendiscord:id-non-existent","error",`The id "${value}" doesn't exist!`,localLt,null,[`"${value}"`],locationId,locationDocs)
+                return false
+            }
+        }})
         super(id,newOptions)
         this.source = source
         this.scope = scope

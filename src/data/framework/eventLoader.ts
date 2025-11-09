@@ -75,12 +75,22 @@ export const loadAllEvents = () => {
         "afterClientActivityLoaded",
         "onClientActivityInit",
         "afterClientActivityInitiated",
+
+        //priority levels
+        "onPriorityLoad",
+        "afterPrioritiesLoaded",
         
         //client slash commands
         "onSlashCommandLoad",
         "afterSlashCommandsLoaded",
         "onSlashCommandRegister",
         "afterSlashCommandsRegistered",
+
+        //client context menus
+        "onContextMenuLoad",
+        "afterContextMenusLoaded",
+        "onContextMenuRegister",
+        "afterContextMenusRegistered",
 
         //client text commands
         "onTextCommandLoad",
@@ -145,6 +155,12 @@ export const loadAllEvents = () => {
         "afterTicketRenamed",
         "onTicketsClear",
         "afterTicketsCleared",
+        "onTicketTopicChange",
+        "afterTicketTopicChanged",
+        "onTicketPriorityChange",
+        "afterTicketPriorityChanged",
+        "onTicketTransfer",
+        "afterTicketTransferred",
 
         //roles
         "onRoleLoad",
@@ -203,6 +219,10 @@ export const loadAllEvents = () => {
         "afterDropdownRespondersLoaded",
         "onModalResponderLoad",
         "afterModalRespondersLoaded",
+        "onContextMenuResponderLoad",
+        "afterContextMenuRespondersLoaded",
+        "onAutocompleteResponderLoad",
+        "afterAutocompleteRespondersLoaded",
 
         //plugin loading before finalizations
         "onPluginBeforeFinalizationLoad",

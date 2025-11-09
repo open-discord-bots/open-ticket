@@ -19,9 +19,9 @@ import { ODFlagManager_Default } from "./flag"
 import { ODSessionManager_Default } from "./session"
 import { ODLanguageManager_Default } from "./language"
 import { ODCheckerFunctionManager_Default, ODCheckerManager_Default, ODCheckerRenderer_Default, ODCheckerTranslationRegister_Default } from "./checker"
-import { ODClientManager_Default, ODSlashCommandManager_Default, ODTextCommandManager_Default } from "./client"
+import { ODClientManager_Default, ODContextMenuManager_Default, ODSlashCommandManager_Default, ODTextCommandManager_Default } from "./client"
 import { ODBuilderManager_Default, ODButtonManager_Default, ODDropdownManager_Default, ODEmbedManager_Default, ODFileManager_Default, ODMessageManager_Default, ODModalManager_Default } from "./builder"
-import { ODButtonResponderManager_Default, ODCommandResponderManager_Default, ODDropdownResponderManager_Default, ODModalResponderManager_Default, ODResponderManager_Default } from "./responder"
+import { ODAutocompleteResponderManager_Default, ODButtonResponderManager_Default, ODCommandResponderManager_Default, ODContextMenuResponderManager_Default, ODDropdownResponderManager_Default, ODModalResponderManager_Default, ODResponderManager_Default } from "./responder"
 import { ODActionManager_Default } from "./action"
 import { ODPermissionManager_Default } from "./permission"
 import { ODHelpMenuManager_Default } from "./helpmenu"
@@ -42,6 +42,7 @@ import { ODQuestionManager } from "../openticket/question"
 import { ODBlacklistManager } from "../openticket/blacklist"
 import { ODTranscriptManager_Default } from "../openticket/transcript"
 import { ODRole, ODRoleManager } from "../openticket/role"
+import { ODPriorityLevel, ODPriorityManager_Default } from "../openticket/priority"
 
 /**## ODEventIds_Default `interface`
  * This interface is a list of ids available in the `ODEvent_Default` class.
@@ -122,11 +123,21 @@ export interface ODEventIds_Default {
     "onClientActivityInit": ODEvent_Default<(activity:ODClientActivityManager, client:ODClientManager_Default) => ODPromiseVoid>
     "afterClientActivityInitiated": ODEvent_Default<(activity:ODClientActivityManager, client:ODClientManager_Default) => ODPromiseVoid>
     
+    //priority levels
+    "onPriorityLoad": ODEvent_Default<(priorities:ODPriorityManager_Default) => ODPromiseVoid>
+    "afterPrioritiesLoaded": ODEvent_Default<(priorities:ODPriorityManager_Default) => ODPromiseVoid>
+
     //client slash commands
     "onSlashCommandLoad": ODEvent_Default<(slash:ODSlashCommandManager_Default, client:ODClientManager_Default) => ODPromiseVoid>
     "afterSlashCommandsLoaded": ODEvent_Default<(slash:ODSlashCommandManager_Default, client:ODClientManager_Default) => ODPromiseVoid>
     "onSlashCommandRegister": ODEvent_Default<(slash:ODSlashCommandManager_Default, client:ODClientManager_Default) => ODPromiseVoid>
     "afterSlashCommandsRegistered": ODEvent_Default<(slash:ODSlashCommandManager_Default, client:ODClientManager_Default) => ODPromiseVoid>
+
+    //client context menus
+    "onContextMenuLoad": ODEvent_Default<(menu:ODContextMenuManager_Default, client:ODClientManager_Default) => ODPromiseVoid>
+    "afterContextMenusLoaded": ODEvent_Default<(menu:ODContextMenuManager_Default, client:ODClientManager_Default) => ODPromiseVoid>
+    "onContextMenuRegister": ODEvent_Default<(menu:ODContextMenuManager_Default, client:ODClientManager_Default) => ODPromiseVoid>
+    "afterContextMenusRegistered": ODEvent_Default<(menu:ODContextMenuManager_Default, client:ODClientManager_Default) => ODPromiseVoid>
 
     //client text commands
     "onTextCommandLoad": ODEvent_Default<(text:ODTextCommandManager_Default, client:ODClientManager_Default,) => ODPromiseVoid>
@@ -191,7 +202,13 @@ export interface ODEventIds_Default {
     "afterTicketRenamed": ODEvent_Default<(ticket:ODTicket, renamer:discord.User, channel:discord.GuildTextBasedChannel, reason:string|null) => ODPromiseVoid>
     "onTicketsClear": ODEvent_Default<(tickets:ODTicket[], clearer:discord.User, channel:discord.GuildTextBasedChannel, filter:ODTicketClearFilter) => ODPromiseVoid>
     "afterTicketsCleared": ODEvent_Default<(tickets:ODTicket[], clearer:discord.User, channel:discord.GuildTextBasedChannel, filter:ODTicketClearFilter) => ODPromiseVoid>
-
+    "onTicketTopicChange": ODEvent_Default<(ticket:ODTicket, changer:discord.User, channel:discord.GuildTextBasedChannel, oldTopic:string, newTopic:string) => ODPromiseVoid>
+    "afterTicketTopicChanged": ODEvent_Default<(ticket:ODTicket, changer:discord.User, channel:discord.GuildTextBasedChannel, oldTopic:string, newTopic:string) => ODPromiseVoid>
+    "onTicketPriorityChange": ODEvent_Default<(ticket:ODTicket, changer:discord.User, channel:discord.GuildTextBasedChannel, oldPriority:ODPriorityLevel, newPriority:ODPriorityLevel, reason:string|null) => ODPromiseVoid>
+    "afterTicketPriorityChanged": ODEvent_Default<(ticket:ODTicket, changer:discord.User, channel:discord.GuildTextBasedChannel, oldPriority:ODPriorityLevel, newPriority:ODPriorityLevel, reason:string|null) => ODPromiseVoid>
+    "onTicketTransfer": ODEvent_Default<(ticket:ODTicket, changer:discord.User, channel:discord.GuildTextBasedChannel, oldCreator:discord.User, newCreator:discord.User, reason:string|null) => ODPromiseVoid>
+    "afterTicketTransferred": ODEvent_Default<(ticket:ODTicket, changer:discord.User, channel:discord.GuildTextBasedChannel, oldCreator:discord.User, newCreator:discord.User, reason:string|null) => ODPromiseVoid>
+    
     //roles
     "onRoleLoad": ODEvent_Default<(roles:ODRoleManager) => ODPromiseVoid>
     "afterRolesLoaded": ODEvent_Default<(roles:ODRoleManager) => ODPromiseVoid>
@@ -249,6 +266,10 @@ export interface ODEventIds_Default {
     "afterDropdownRespondersLoaded": ODEvent_Default<(dropdowns:ODDropdownResponderManager_Default, responders:ODResponderManager_Default, actions:ODActionManager_Default) => ODPromiseVoid>
     "onModalResponderLoad": ODEvent_Default<(modals:ODModalResponderManager_Default, responders:ODResponderManager_Default, actions:ODActionManager_Default) => ODPromiseVoid>
     "afterModalRespondersLoaded": ODEvent_Default<(modals:ODModalResponderManager_Default, responders:ODResponderManager_Default, actions:ODActionManager_Default) => ODPromiseVoid>
+    "onContextMenuResponderLoad": ODEvent_Default<(menus:ODContextMenuResponderManager_Default, responders:ODResponderManager_Default, actions:ODActionManager_Default) => ODPromiseVoid>
+    "afterContextMenuRespondersLoaded": ODEvent_Default<(menus:ODContextMenuResponderManager_Default, responders:ODResponderManager_Default, actions:ODActionManager_Default) => ODPromiseVoid>
+    "onAutocompleteResponderLoad": ODEvent_Default<(autocomplete:ODAutocompleteResponderManager_Default, responders:ODResponderManager_Default, actions:ODActionManager_Default) => ODPromiseVoid>
+    "afterAutocompleteRespondersLoaded": ODEvent_Default<(autocomplete:ODAutocompleteResponderManager_Default, responders:ODResponderManager_Default, actions:ODActionManager_Default) => ODPromiseVoid>
 
     //plugin loading before finalizations
     "onPluginBeforeFinalizationLoad": ODEvent_Default<() => ODPromiseVoid>,

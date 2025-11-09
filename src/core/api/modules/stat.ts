@@ -140,6 +140,23 @@ export class ODStatScope extends ODManager<ODStat> {
         //return null on error
         return null
     }
+    /**Get the value of a statistic for all `scopeId`'s. The `scopeId` is the unique id of the user, channel, role, etc that the stats are related to. */
+    async getAllStats(id:ODValidId): Promise<{id:string,value:ODValidStatValue}[]> {
+        if (!this.database) return []
+        const newId = new ODId(id)
+        const data = await this.database.getCategory(this.id.value+"_"+newId.value) ?? []
+        const output: {id:string,value:ODValidStatValue}[] = []
+
+        for (const stat of data){
+            if (typeof stat.value == "string" || typeof stat.value == "boolean" || typeof stat.value == "number"){
+                //return value received from database
+                output.push({id:stat.key,value:stat.value})
+            }
+        }
+        
+        //return null on error
+        return output
+    }
     /**Set, increase or decrease the value of a statistic. The `scopeId` is the unique id of the user, channel, role, etc that the stats are related to. */
     async setStat(id:ODValidId, scopeId:string, value:ODValidStatValue, mode:ODStatScopeSetMode): Promise<boolean> {
         if (!this.database) return false
@@ -212,6 +229,9 @@ export class ODStatScope extends ODManager<ODStat> {
 export class ODStatGlobalScope extends ODStatScope {
     getStat(id:ODValidId): Promise<ODValidStatValue|null> {
         return super.getStat(id,"GLOBAL")
+    }
+    getAllStats(id:ODValidId): Promise<{id:string,value:ODValidStatValue}[]> {
+        return super.getAllStats(id)
     }
     setStat(id:ODValidId, value:ODValidStatValue, mode:ODStatScopeSetMode): Promise<boolean> {
         return super.setStat(id,"GLOBAL",value,mode)

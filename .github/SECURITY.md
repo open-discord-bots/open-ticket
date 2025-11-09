@@ -17,18 +17,17 @@ This list will be updated on every release.
 - 🟧 Deprecated **(docs)**
 - ❌ Fully Deprecated
 
-| Version    | Supported | Notes                                    |
-|------------|-----------|------------------------------------------|
-| 4.1.0      | 🟦        |                                          |
-| 4.0.7      | ✅        |                                          |
-| 4.0.6      | ✅        |                                          |
-| 4.0.5      | ✅        |                                          |
-| 4.0.4      | ✅        | Supported until July 2025 (LTS)          |
-| 4.0.3      | 🚧        | Transcripts v2.0 (Offline August 2025)   |
-| 4.0.2      | 🟧        | Documentation Only (discord.js bug)      |
-| 4.0.1      | 🟧        | Documentation Only                       |
-| 4.0.0      | 🟧        | Documentation Only                       |
-| < 4.0.0    | ❌        |                                          |
+| Version    | Supported | Notes                                                         |
+|------------|-----------|---------------------------------------------------------------|
+| 4.2.0      | 🟦        | Transcripts v2.0 will be taken offline when v4.2 is released. |
+| 4.1.1      | 🟦        |                                                               |
+| 4.1.0      | ✅        |                                                               |
+| 4.0.7      | ✅        | Supported Until October 2025 (LTS)                            |
+| 4.0.6      | 🚧        |                                                               |
+| 4.0.5      | 🚧        |                                                               |
+| 4.0.4      | 🚧        |                                                               |
+| < 4.0.4    | 🟧        | Deprecated Transcripts v2.0, Documentation Only               |
+| < 4.0.0    | ❌        |                                                               |
 
 ### 🕷️ Reporting Vulnerabilities
 You can report vulnerabilities, errors & bugs using one of the following methods:
@@ -48,6 +47,6 @@ If possible, try to provide screenshots!
 <img src="https://apis.dj-dj.be/cdn/openticket/logo.png" alt="Open Ticket Logo" width="170px">
 
 **Security Policy**<br>
-[changelog](https://otgithub.dj-dj.be/releases) - [documentation](https://otdocs.dj-dj.be) - [tutorial](https://www.youtube.com/watch?v=2jK9kAf6ASU) - [website](https://openticket.dj-dj.be) - [discord](https://discord.dj-dj.be)<br>
+[Changelog](https://otgithub.dj-dj.be/releases) - [Documentation](https://otdocs.dj-dj.be) - [Website](https://openticket.dj-dj.be) - [Support Server](https://discord.dj-dj.be) - [License](./LICENSE.md)<br>
 
-© 2025 - [DJdj Development](https://www.dj-dj.be) - [Terms](https://www.dj-dj.be/terms#terms) - [Privacy Policy](https://www.dj-dj.be/terms#privacy)
+© 2025 - [DJdj Development](https://www.dj-dj.be) - [Terms](https://www.dj-dj.be/terms) - [Privacy Policy](https://www.dj-dj.be/privacy) - [Support Us](https://github.com/sponsors/DJj123dj)

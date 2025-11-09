@@ -16,12 +16,23 @@ export const registerActions = async () => {
             await opendiscord.events.get("onTicketReopen").emit([ticket,user,channel,reason])
 
             //update ticket
+            ticket.get("opendiscord:reopened").value = true
+            ticket.get("opendiscord:reopened-by").value = user.id
+            ticket.get("opendiscord:reopened-on").value = new Date().getTime()
+            
             ticket.get("opendiscord:closed").value = false
-            ticket.get("opendiscord:open").value = true
-            ticket.get("opendiscord:autoclosed").value = false
             ticket.get("opendiscord:closed-by").value = null
             ticket.get("opendiscord:closed-on").value = null
+            
+            ticket.get("opendiscord:autoclosed").value = false
+            ticket.get("opendiscord:open").value = true
             ticket.get("opendiscord:busy").value = true
+
+            if (generalConfig.data.system.disableAutocloseAfterReopen){
+                //disable autoclose after reopen
+                ticket.get("opendiscord:autoclose-enabled").value = false
+                ticket.get("opendiscord:autoclose-hours").value = 0
+            }
 
             //update stats
             await opendiscord.stats.get("opendiscord:global").setStat("opendiscord:tickets-reopened",1,"increase")
@@ -149,6 +160,9 @@ export const registerActions = async () => {
             if (params.sendMessage) await channel.send((await opendiscord.builders.messages.getSafe("opendiscord:reopen-message").build(source,{guild,channel,user,ticket,reason})).message)
             ticket.get("opendiscord:busy").value = false
             await opendiscord.events.get("afterTicketReopened").emit([ticket,user,channel,reason])
+
+            //update channel topic
+            await opendiscord.actions.get("opendiscord:update-ticket-topic").run("ticket-action",{guild,channel,user,ticket,sendMessage:false,newTopic:null})
         }),
         new api.ODWorker("opendiscord:discord-logs",1,async (instance,params,source,cancel) => {
             const {guild,channel,user,ticket,reason} = params

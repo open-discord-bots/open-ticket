@@ -20,6 +20,7 @@ export const registerAllEmbeds = async () => {
     roleEmbeds()
     clearEmbeds()
     autoEmbeds()
+    extraEmbeds()
 }
 
 /**Utility function to get the translated "method" from the source. Mostly used in error embeds. */
@@ -37,12 +38,12 @@ const errorEmbeds = () => {
     embeds.add(new api.ODEmbed("opendiscord:error"))
     embeds.get("opendiscord:error").workers.add(
         new api.ODWorker("opendiscord:error",0,async (instance,params,source) => {
-            const {user,error,layout} = params
+            const {user,error,layout,customTitle} = params
             
             const method = getMethodFromSource(source)
 
             instance.setColor(generalConfig.data.system.useRedErrorEmbeds ? "Red" : generalConfig.data.mainColor)
-            instance.setTitle(utilities.emojiTitle("❌",lang.getTranslation("errors.titles.internalError")))
+            instance.setTitle(utilities.emojiTitle("❌",customTitle ?? lang.getTranslation("errors.titles.internalError")))
             instance.setAuthor(user.displayName,user.displayAvatarURL())
             instance.setDescription(lang.getTranslationWithParams("errors.descriptions.internalError",[method]) + (layout == "simple") ? "\n"+error : "")
             if (layout == "advanced" && error) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+error+"```"})
@@ -329,7 +330,7 @@ const errorEmbeds = () => {
         new api.ODWorker("opendiscord:error-channel-rename",0,async (instance,params,source) => {
             const {channel,user,originalName,newName} = params
             
-            const method = (source == "ticket-move" || source == "ticket-pin" || source == "ticket-rename" || source == "ticket-unpin") ? source : getMethodFromSource(source)
+            const method = (source == "ticket-move" || source == "ticket-pin" || source == "ticket-rename" || source == "ticket-unpin" || source == "ticket-priority" || source == "ticket-transfer") ? source : getMethodFromSource(source)
 
             instance.setColor(generalConfig.data.system.useRedErrorEmbeds ? "Red" : generalConfig.data.mainColor)
             instance.setTitle(utilities.emojiTitle("❌",lang.getTranslation("errors.titles.channelRename")))
@@ -412,14 +413,17 @@ const statsEmbeds = () => {
             
             const scope = opendiscord.stats.get("opendiscord:ticket")
             const participantsScope = opendiscord.stats.get("opendiscord:participants")
-            if (!scope || !participantsScope) return
+            const messagesScope = opendiscord.stats.get("opendiscord:messages")
+            if (!scope || !participantsScope || !messagesScope) return
             const data = await scope.render(scopeData.id.value,guild,channel,user)
             const participantsData = await participantsScope.render(scopeData.id.value,guild,channel,user)
+            const messagesData = await messagesScope.render(scopeData.id.value,guild,channel,user)
             
             instance.setColor(generalConfig.data.mainColor)
             instance.setTitle(scope.name)
             instance.setDescription(data)
-            instance.addFields({name:participantsScope.name,value:participantsData,inline:false})
+            instance.addFields({name:participantsScope.name,value:participantsData,inline:true})
+            instance.addFields({name:messagesScope.name,value:messagesData,inline:true})
         })
     )
 
@@ -592,8 +596,11 @@ const ticketEmbeds = () => {
             if (embedOptions.image) instance.setImage(embedOptions.image)
             if (embedOptions.timestamp) instance.setTimestamp(new Date())
             if (embedOptions.description) instance.setDescription(embedOptions.description)
-            
+
             if (ticket.option.get("opendiscord:questions").value.length > 0){
+                //show config fields if mixing is allowed
+                if (generalConfig.data.system.displayFieldsWithQuestions) instance.addFields(...embedOptions.fields)
+                
                 const answers = ticket.get("opendiscord:answers").value
                 answers.forEach((answer) => {
                     if (!answer.value || answer.value.length == 0) return
@@ -610,7 +617,7 @@ const ticketEmbeds = () => {
             if (ticket.get("opendiscord:claimed").value){
                 const claimUser = await opendiscord.tickets.getTicketUser(ticket,"claimer")
                 if (!claimUser) return
-                instance.setAuthor(lang.getTranslationWithParams("params.uppercase.claimedBy",[claimUser.displayName]),claimUser.displayAvatarURL())
+                instance.setAuthor(lang.getTranslation("stats.properties.claimedBy")+" "+claimUser.displayName,claimUser.displayAvatarURL())
             }
         })
     )
@@ -625,7 +632,7 @@ const ticketEmbeds = () => {
             instance.setColor(generalConfig.data.mainColor)
             instance.setTitle(utilities.emojiTitle("🔒",lang.getTranslation("actions.titles.close")))
             instance.setDescription(lang.getTranslation("actions.descriptions.close"))
-            if (reason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+reason+"```"})
+            if (reason || generalConfig.data.system.alwaysShowReason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+(reason ?? "/")+"```"})
         })
     )
 
@@ -639,7 +646,7 @@ const ticketEmbeds = () => {
             instance.setColor(generalConfig.data.mainColor)
             instance.setTitle(utilities.emojiTitle("🔓",lang.getTranslation("actions.titles.reopen")))
             instance.setDescription(lang.getTranslation("actions.descriptions.reopen"))
-            if (reason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+reason+"```"})
+            if (reason || generalConfig.data.system.alwaysShowReason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+(reason ?? "/")+"```"})
         })
     )
 
@@ -653,7 +660,7 @@ const ticketEmbeds = () => {
             instance.setColor(generalConfig.data.mainColor)
             instance.setTitle(utilities.emojiTitle("🗑️",lang.getTranslation("actions.titles.delete")))
             instance.setDescription(lang.getTranslation("actions.descriptions.delete"))
-            if (reason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+reason+"```"})
+            if (reason || generalConfig.data.system.alwaysShowReason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+(reason ?? "/")+"```"})
         })
     )
 
@@ -667,7 +674,7 @@ const ticketEmbeds = () => {
             instance.setColor(generalConfig.data.mainColor)
             instance.setTitle(utilities.emojiTitle("👋",lang.getTranslation("actions.titles.claim")))
             instance.setDescription(lang.getTranslation("actions.descriptions.claim"))
-            if (reason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+reason+"```"})
+            if (reason || generalConfig.data.system.alwaysShowReason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+(reason ?? "/")+"```"})
         })
     )
 
@@ -681,7 +688,7 @@ const ticketEmbeds = () => {
             instance.setColor(generalConfig.data.mainColor)
             instance.setTitle(utilities.emojiTitle("↩️",lang.getTranslation("actions.titles.unclaim")))
             instance.setDescription(lang.getTranslation("actions.descriptions.unclaim"))
-            if (reason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+reason+"```"})
+            if (reason || generalConfig.data.system.alwaysShowReason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+(reason ?? "/")+"```"})
         })
     )
 
@@ -693,9 +700,9 @@ const ticketEmbeds = () => {
 
             instance.setAuthor(user.displayName,user.displayAvatarURL())
             instance.setColor(generalConfig.data.mainColor)
-            instance.setTitle(utilities.emojiTitle("📌",lang.getTranslation("actions.titles.pin")))
+            instance.setTitle(utilities.emojiTitle(generalConfig.data.system.pinEmoji,lang.getTranslation("actions.titles.pin")))
             instance.setDescription(lang.getTranslation("actions.descriptions.pin"))
-            if (reason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+reason+"```"})
+            if (reason || generalConfig.data.system.alwaysShowReason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+(reason ?? "/")+"```"})
         })
     )
 
@@ -707,9 +714,9 @@ const ticketEmbeds = () => {
 
             instance.setAuthor(user.displayName,user.displayAvatarURL())
             instance.setColor(generalConfig.data.mainColor)
-            instance.setTitle(utilities.emojiTitle("📌",lang.getTranslation("actions.titles.unpin")))
+            instance.setTitle(utilities.emojiTitle(generalConfig.data.system.pinEmoji,lang.getTranslation("actions.titles.unpin")))
             instance.setDescription(lang.getTranslation("actions.descriptions.unpin"))
-            if (reason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+reason+"```"})
+            if (reason || generalConfig.data.system.alwaysShowReason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+(reason ?? "/")+"```"})
         })
     )
 
@@ -723,7 +730,7 @@ const ticketEmbeds = () => {
             instance.setColor(generalConfig.data.mainColor)
             instance.setTitle(utilities.emojiTitle("🔄",lang.getTranslation("actions.titles.rename")))
             instance.setDescription(lang.getTranslationWithParams("actions.descriptions.rename",["`#"+data+"`"]))
-            if (reason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+reason+"```"})
+            if (reason || generalConfig.data.system.alwaysShowReason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+(reason ?? "/")+"```"})
         })
     )
 
@@ -737,7 +744,7 @@ const ticketEmbeds = () => {
             instance.setColor(generalConfig.data.mainColor)
             instance.setTitle(utilities.emojiTitle("🔀",lang.getTranslation("actions.titles.move")))
             instance.setDescription(lang.getTranslationWithParams("actions.descriptions.move",["`"+data.get("opendiscord:name").value+"`"]))
-            if (reason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+reason+"```"})
+            if (reason || generalConfig.data.system.alwaysShowReason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+(reason ?? "/")+"```"})
         })
     )
 
@@ -751,7 +758,7 @@ const ticketEmbeds = () => {
             instance.setColor(generalConfig.data.mainColor)
             instance.setTitle(utilities.emojiTitle("👤",lang.getTranslation("actions.titles.add")))
             instance.setDescription(lang.getTranslationWithParams("actions.descriptions.add",[discord.userMention(data.id)]))
-            if (reason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+reason+"```"})
+            if (reason || generalConfig.data.system.alwaysShowReason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+(reason ?? "/")+"```"})
         })
     )
 
@@ -765,7 +772,7 @@ const ticketEmbeds = () => {
             instance.setColor(generalConfig.data.mainColor)
             instance.setTitle(utilities.emojiTitle("👤",lang.getTranslation("actions.titles.remove")))
             instance.setDescription(lang.getTranslationWithParams("actions.descriptions.remove",[discord.userMention(data.id)]))
-            if (reason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+reason+"```"})
+            if (reason || generalConfig.data.system.alwaysShowReason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+(reason ?? "/")+"```"})
         })
     )
     
@@ -797,10 +804,10 @@ const ticketEmbeds = () => {
                 instance.setTitle(utilities.emojiTitle("↩️",lang.getTranslation("actions.titles.unclaim")))
                 instance.setDescription(lang.getTranslation("actions.logs.unclaimDm"))
             }else if (mode == "pin"){
-                instance.setTitle(utilities.emojiTitle("📌",lang.getTranslation("actions.titles.pin")))
+                instance.setTitle(utilities.emojiTitle(generalConfig.data.system.pinEmoji,lang.getTranslation("actions.titles.pin")))
                 instance.setDescription(lang.getTranslation("actions.logs.pinDm"))
             }else if (mode == "unpin"){
-                instance.setTitle(utilities.emojiTitle("📌",lang.getTranslation("actions.titles.unpin")))
+                instance.setTitle(utilities.emojiTitle(generalConfig.data.system.pinEmoji,lang.getTranslation("actions.titles.unpin")))
                 instance.setDescription(lang.getTranslation("actions.logs.unpinDm"))
             }else if (mode == "rename"){
                 instance.setTitle(utilities.emojiTitle("🔄",lang.getTranslation("actions.titles.rename")))
@@ -831,10 +838,9 @@ const ticketEmbeds = () => {
             instance.setTimestamp(new Date())
             instance.addFields(
                 {name:lang.getTranslation("params.uppercase.ticket")+":",value:"```#"+(channel ? channel.name : "<unknown>")+"```",inline:false},
-                //TODO TRANSLATION!!!
-                {name:"Option"+":",value:"```"+(ticket.option.get("opendiscord:name").value)+"```",inline:false},
+                {name:lang.getTranslation("params.uppercase.option")+":",value:"```"+(ticket.option.get("opendiscord:name").value)+"```",inline:false},
             )
-            if (reason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+reason+"```",inline:false})
+            if (reason || generalConfig.data.system.alwaysShowReason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+(reason ?? "/")+"```",inline:false})
 
             if (mode == "close"){
                 instance.setTitle(utilities.emojiTitle("🔒",lang.getTranslation("actions.titles.close")))
@@ -852,10 +858,10 @@ const ticketEmbeds = () => {
                 instance.setTitle(utilities.emojiTitle("↩️",lang.getTranslation("actions.titles.unclaim")))
                 instance.setDescription(lang.getTranslationWithParams("actions.logs.unclaimLog",[discord.userMention(user.id)]))
             }else if (mode == "pin"){
-                instance.setTitle(utilities.emojiTitle("📌",lang.getTranslation("actions.titles.pin")))
+                instance.setTitle(utilities.emojiTitle(generalConfig.data.system.pinEmoji,lang.getTranslation("actions.titles.pin")))
                 instance.setDescription(lang.getTranslationWithParams("actions.logs.pinLog",[discord.userMention(user.id)]))
             }else if (mode == "unpin"){
-                instance.setTitle(utilities.emojiTitle("📌",lang.getTranslation("actions.titles.unpin")))
+                instance.setTitle(utilities.emojiTitle(generalConfig.data.system.pinEmoji,lang.getTranslation("actions.titles.unpin")))
                 instance.setDescription(lang.getTranslationWithParams("actions.logs.unpinLog",[discord.userMention(user.id)]))
             }else if (mode == "rename"){
                 instance.setTitle(utilities.emojiTitle("🔄",lang.getTranslation("actions.titles.rename")))
@@ -908,7 +914,7 @@ const blacklistEmbeds = () => {
 
             if (blacklist){
                 instance.setDescription(lang.getTranslationWithParams("actions.descriptions.blacklistGetSuccess",[discord.userMention(data.id)]))
-                if (blacklist.reason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+blacklist.reason+"```"})
+                if (blacklist.reason || generalConfig.data.system.alwaysShowReason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+(blacklist.reason ?? "/")+"```"})
                 
             }else instance.setDescription("*"+lang.getTranslationWithParams("actions.descriptions.blacklistGetEmpty",[discord.userMention(data.id)])+"*")
         })
@@ -924,7 +930,7 @@ const blacklistEmbeds = () => {
             instance.setColor(generalConfig.data.mainColor)
             instance.setTitle(utilities.emojiTitle("🚫",lang.getTranslation("actions.titles.blacklistAdd")))
             instance.setDescription(lang.getTranslationWithParams("actions.descriptions.blacklistAdd",[discord.userMention(data.id)]))
-            if (reason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+reason+"```"})
+            if (reason || generalConfig.data.system.alwaysShowReason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+(reason ?? "/")+"```"})
         })
     )
 
@@ -938,7 +944,7 @@ const blacklistEmbeds = () => {
             instance.setColor(generalConfig.data.mainColor)
             instance.setTitle(utilities.emojiTitle("🆓",lang.getTranslation("actions.titles.blacklistRemove")))
             instance.setDescription(lang.getTranslationWithParams("actions.descriptions.blacklistRemove",[discord.userMention(data.id)]))
-            if (reason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+reason+"```"})
+            if (reason || generalConfig.data.system.alwaysShowReason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+(reason ?? "/")+"```"})
         })
     )
 
@@ -955,7 +961,7 @@ const blacklistEmbeds = () => {
             instance.setTitle(utilities.emojiTitle((mode == "add") ? "🚫" : "🆓",title))
             instance.setTimestamp(new Date())
             instance.setDescription(text)
-            if (reason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+reason+"```",inline:false})
+            if (reason || generalConfig.data.system.alwaysShowReason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+(reason ?? "/")+"```"})
         })
     )
 
@@ -974,7 +980,7 @@ const blacklistEmbeds = () => {
             instance.setAuthor(user.displayName,user.displayAvatarURL())
             instance.setTimestamp(new Date())
             instance.setDescription(text)
-            if (reason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+reason+"```",inline:false})
+            if (reason || generalConfig.data.system.alwaysShowReason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+(reason ?? "/")+"```"})
         })
     )
 }
@@ -1074,11 +1080,11 @@ const transcriptEmbeds = () => {
             const {guild,channel,user,ticket,compiler,reason} = params
             
             instance.setColor(generalConfig.data.system.useRedErrorEmbeds ? "Red" : generalConfig.data.mainColor)
-            instance.setTitle(utilities.emojiTitle("❌","Transcript Error")) //TODO TRANSLATION!!!
+            instance.setTitle(utilities.emojiTitle("❌",lang.getTranslation("transcripts.errors.title")))
             instance.setTimestamp(new Date())
             instance.setDescription(lang.getTranslation("transcripts.errors.error"))
             instance.setFooter(lang.getTranslation("errors.descriptions.askForInfo"))
-            if (reason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+reason+"```",inline:false})
+            if (reason || generalConfig.data.system.alwaysShowReason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+(reason ?? "/")+"```"})
         })
     )
 }
@@ -1107,6 +1113,58 @@ const roleEmbeds = () => {
             else instance.setDescription(lang.getTranslation("actions.descriptions.rolesEmpty"))
         })
     )
+
+    //REACTION ROLE DM
+    embeds.add(new api.ODEmbed("opendiscord:reaction-role-dm"))
+    embeds.get("opendiscord:reaction-role-dm").workers.add(
+        new api.ODWorker("opendiscord:reaction-role-dm",0,async (instance,params,source) => {
+            const {guild,user,role,result} = params
+
+            instance.setColor(generalConfig.data.mainColor)
+            instance.setTitle(utilities.emojiTitle("🎨",lang.getTranslation("actions.titles.roles")))
+            instance.setAuthor(user.displayName,user.displayAvatarURL())
+            instance.setTimestamp(new Date())
+
+            const newResult = result.filter((r) => r.action != null).sort((a,b) => {
+                if (a.action == "added" && b.action == "removed") return -1
+                else if (a.action == "removed" && b.action == "added") return 1
+                else return 0
+            }).map((r) => {
+                return (r.action == "added") ? "🟢 "+lang.getTranslation("params.uppercase.added")+" @"+r.role.name : "🔴 "+lang.getTranslation("params.uppercase.removed")+" @"+r.role.name
+            })
+            
+            const baseDescription = lang.getTranslation("actions.logs.roleUpdateDm")
+
+            if (newResult.length > 0) instance.setDescription(baseDescription+"\n\n"+newResult.join("\n"))
+            else instance.setDescription(baseDescription+"\n"+lang.getTranslation("actions.descriptions.rolesEmpty"))
+        })
+    )
+
+    //REACTION ROLE LOGS
+    embeds.add(new api.ODEmbed("opendiscord:reaction-role-logs"))
+    embeds.get("opendiscord:reaction-role-logs").workers.add(
+        new api.ODWorker("opendiscord:reaction-role-logs",0,async (instance,params,source) => {
+            const {guild,user,role,result} = params
+
+            instance.setColor(generalConfig.data.mainColor)
+            instance.setTitle(utilities.emojiTitle("🎨",lang.getTranslation("actions.titles.roles")))
+            instance.setAuthor(user.displayName,user.displayAvatarURL())
+            instance.setTimestamp(new Date())
+
+            const newResult = result.filter((r) => r.action != null).sort((a,b) => {
+                if (a.action == "added" && b.action == "removed") return -1
+                else if (a.action == "removed" && b.action == "added") return 1
+                else return 0
+            }).map((r) => {
+                return (r.action == "added") ? "🟢 "+lang.getTranslation("params.uppercase.added")+" "+discord.roleMention(r.role.id) : "🔴 "+lang.getTranslation("params.uppercase.removed")+" "+discord.roleMention(r.role.id)
+            })
+            
+            const baseDescription = lang.getTranslationWithParams("actions.logs.roleUpdateLog",[discord.userMention(user.id)])
+
+            if (newResult.length > 0) instance.setDescription(baseDescription+"\n\n"+newResult.join("\n"))
+            else instance.setDescription(baseDescription+"\n"+lang.getTranslation("actions.descriptions.rolesEmpty"))
+        })
+    )
 }
 
 const clearEmbeds = () => {
@@ -1117,7 +1175,7 @@ const clearEmbeds = () => {
             const {guild,channel,user,filter,list} = params
             
             instance.setColor(generalConfig.data.mainColor)
-            instance.setTitle(utilities.emojiTitle("⚠️","Clear Tickets")) //TODO TRANSLATION!!!
+            instance.setTitle(utilities.emojiTitle("⚠️",lang.getTranslation("actions.titles.clearTickets")))
             instance.setAuthor(user.displayName,user.displayAvatarURL())
             instance.setTimestamp(new Date())
             instance.setDescription(lang.getTranslation("actions.descriptions.clearVerify"))
@@ -1207,7 +1265,7 @@ const autoEmbeds = () => {
             instance.setColor(generalConfig.data.mainColor)
             instance.setTitle(utilities.emojiTitle("⏱️",lang.getTranslation("actions.titles.autocloseEnabled")))
             instance.setDescription(lang.getTranslationWithParams("actions.descriptions.autocloseEnabled",[time.toString()]))
-            if (reason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+reason+"```"})
+            if (reason || generalConfig.data.system.alwaysShowReason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+(reason ?? "/")+"```"})
         })
     )
 
@@ -1221,7 +1279,7 @@ const autoEmbeds = () => {
             instance.setColor(generalConfig.data.mainColor)
             instance.setTitle(utilities.emojiTitle("⏱️",lang.getTranslation("actions.titles.autodeleteEnabled")))
             instance.setDescription(lang.getTranslationWithParams("actions.descriptions.autodeleteEnabled",[time.toString()]))
-            if (reason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+reason+"```"})
+            if (reason || generalConfig.data.system.alwaysShowReason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+(reason ?? "/")+"```"})
         })
     )
 
@@ -1235,7 +1293,7 @@ const autoEmbeds = () => {
             instance.setColor(generalConfig.data.mainColor)
             instance.setTitle(utilities.emojiTitle("⏱️",lang.getTranslation("actions.titles.autocloseDisabled")))
             instance.setDescription(lang.getTranslation("actions.descriptions.autocloseDisabled"))
-            if (reason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+reason+"```"})
+            if (reason || generalConfig.data.system.alwaysShowReason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+(reason ?? "/")+"```"})
         })
     )
 
@@ -1249,7 +1307,64 @@ const autoEmbeds = () => {
             instance.setColor(generalConfig.data.mainColor)
             instance.setTitle(utilities.emojiTitle("⏱️",lang.getTranslation("actions.titles.autodeleteDisabled")))
             instance.setDescription(lang.getTranslation("actions.descriptions.autodeleteDisabled"))
-            if (reason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+reason+"```"})
+            if (reason || generalConfig.data.system.alwaysShowReason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+(reason ?? "/")+"```"})
+        })
+    )
+}
+
+const extraEmbeds = () => {
+    //TOPIC SET
+    embeds.add(new api.ODEmbed("opendiscord:topic-set"))
+    embeds.get("opendiscord:topic-set").workers.add(
+        new api.ODWorker("opendiscord:topic-set",0,async (instance,params,source) => {
+            const {user,topic} = params
+            
+            instance.setAuthor(user.displayName,user.displayAvatarURL())
+            instance.setColor(generalConfig.data.mainColor)
+            instance.setTitle(utilities.emojiTitle("ℹ️",lang.getTranslation("actions.titles.topicSet")))
+            instance.setDescription(lang.getTranslationWithParams("actions.descriptions.topicSet",[discord.userMention(user.id)]))
+            if (topic) instance.addFields({name:lang.getTranslation("params.uppercase.topic")+":",value:"```"+topic+"```"})
+        })
+    )
+
+    //PRIORITY SET
+    embeds.add(new api.ODEmbed("opendiscord:priority-set"))
+    embeds.get("opendiscord:priority-set").workers.add(
+        new api.ODWorker("opendiscord:priority-set",0,async (instance,params,source) => {
+            const {user,priority,reason} = params
+
+            instance.setAuthor(user.displayName,user.displayAvatarURL())
+            instance.setColor(generalConfig.data.mainColor)
+            instance.setTitle(utilities.emojiTitle("🚨",lang.getTranslation("actions.titles.prioritySet")))
+            instance.setDescription(lang.getTranslationWithParams("actions.descriptions.prioritySet",["**"+priority.renderDisplayName()+"**",discord.userMention(user.id)]))
+            if (reason || generalConfig.data.system.alwaysShowReason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+(reason ?? "/")+"```"})
+        })
+    )
+
+    //PRIORITY GET
+    embeds.add(new api.ODEmbed("opendiscord:priority-get"))
+    embeds.get("opendiscord:priority-get").workers.add(
+        new api.ODWorker("opendiscord:priority-get",0,async (instance,params,source) => {
+            const {user,priority} = params
+
+            instance.setAuthor(user.displayName,user.displayAvatarURL())
+            instance.setColor(generalConfig.data.mainColor)
+            instance.setTitle(utilities.emojiTitle("🚨",lang.getTranslation("actions.titles.priorityGet")))
+            instance.setDescription(lang.getTranslationWithParams("actions.descriptions.priorityGet",["**"+priority.renderDisplayName()+"**"]))
+        })
+    )
+
+    //TRANSFER MESSAGE
+    embeds.add(new api.ODEmbed("opendiscord:transfer-message"))
+    embeds.get("opendiscord:transfer-message").workers.add(
+        new api.ODWorker("opendiscord:transfer-message",0,async (instance,params,source) => {
+            const {user,oldCreator,newCreator,reason} = params
+
+            instance.setAuthor(user.displayName,user.displayAvatarURL())
+            instance.setColor(generalConfig.data.mainColor)
+            instance.setTitle(utilities.emojiTitle("🔀",lang.getTranslation("actions.titles.transfer")))
+            instance.setDescription(lang.getTranslationWithParams("actions.descriptions.transfer",[discord.userMention(oldCreator.id),discord.userMention(newCreator.id),discord.userMention(user.id)]))
+            if (reason || generalConfig.data.system.alwaysShowReason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+(reason ?? "/")+"```"})
         })
     )
 }

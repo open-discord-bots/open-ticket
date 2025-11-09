@@ -1,4 +1,24 @@
 import {opendiscord, api, utilities} from "../../index"
+import fs from "fs"
+
+/**Check if migration is required. Returns the last version used in the database. */
+async function isMigrationRequired(): Promise<false|api.ODVersion> {
+    const rawVersion = await opendiscord.databases.get("opendiscord:global").get("opendiscord:last-version","opendiscord:version")
+    if (!rawVersion) return false
+    const version = api.ODVersion.fromString("opendiscord:last-version",rawVersion)
+    if (opendiscord.versions.get("opendiscord:version").compare(version) == "higher"){
+        return version
+    }else return false
+}
+
+/**Save all versions in `opendiscord.versions` to the global database. */
+async function saveAllVersionsToDatabase(){
+    const globalDatabase = opendiscord.databases.get("opendiscord:global")
+
+    await opendiscord.versions.loopAll(async (version,id) => {
+        await globalDatabase.set("opendiscord:last-version",id.value,version.toString())    
+    })
+}
 
 export const loadVersionMigrationSystem = async () => {
     //ENTER MIGRATION CONTEXT
@@ -28,7 +48,12 @@ export const loadVersionMigrationSystem = async () => {
     if (opendiscord.flags.exists("opendiscord:no-plugins") && opendiscord.flags.get("opendiscord:no-plugins").value) opendiscord.defaults.setDefault("pluginLoading",false)
     if (opendiscord.flags.exists("opendiscord:soft-plugins") && opendiscord.flags.get("opendiscord:soft-plugins").value) opendiscord.defaults.setDefault("softPluginLoading",true)
     if (opendiscord.flags.exists("opendiscord:crash") && opendiscord.flags.get("opendiscord:crash").value) opendiscord.defaults.setDefault("crashOnError",true)
-    if (opendiscord.flags.exists("opendiscord:force-slash-update") && opendiscord.flags.get("opendiscord:force-slash-update").value) opendiscord.defaults.setDefault("forceSlashCommandRegistration",true)
+    if (opendiscord.flags.exists("opendiscord:force-slash-update") && opendiscord.flags.get("opendiscord:force-slash-update").value){
+        opendiscord.defaults.setDefault("forceSlashCommandRegistration",true)
+        opendiscord.defaults.setDefault("forceContextMenuRegistration",true)
+    }
+    if (opendiscord.flags.exists("opendiscord:silent") && opendiscord.flags.get("opendiscord:silent").value) opendiscord.console.silent = true
+    
 
     //LEAVE MIGRATION CONTEXT
     await unloadMigrationContext()
@@ -36,7 +61,8 @@ export const loadVersionMigrationSystem = async () => {
     return lastVersion
 }
 
-const preloadMigrationContext = async () => {
+/**Initialize the migration context by loading the built-in flags, configs & databases. */
+async function preloadMigrationContext(){
     opendiscord.debug.debug("-- MIGRATION CONTEXT START --")
     await (await import("../../data/framework/flagLoader.js")).loadAllFlags()
     await opendiscord.flags.init()
@@ -47,7 +73,8 @@ const preloadMigrationContext = async () => {
     opendiscord.debug.visible = true
 }
 
-const unloadMigrationContext = async () => {
+/**Unload the migration context to start the bot normally. */
+async function unloadMigrationContext(){
     opendiscord.debug.visible = false
     await opendiscord.databases.loopAll((database,id) => {opendiscord.databases.remove(id)})
     await opendiscord.configs.loopAll((config,id) => {opendiscord.configs.remove(id)})
@@ -55,16 +82,24 @@ const unloadMigrationContext = async () => {
     opendiscord.debug.debug("-- MIGRATION CONTEXT END --")
 }
 
-const isMigrationRequired = async (): Promise<false|api.ODVersion> => {
-    const rawVersion = await opendiscord.databases.get("opendiscord:global").get("opendiscord:last-version","opendiscord:version")
-    if (!rawVersion) return false
-    const version = api.ODVersion.fromString("opendiscord:last-version",rawVersion)
-    if (opendiscord.versions.get("opendiscord:version").compare(version) == "higher"){
-        return version
-    }else return false
+/**Create a backup of the (dev)config & database before migrating. */
+function createMigrationBackup(){
+    if (fs.existsSync("./.backup/")) fs.rmSync("./.backup/",{force:true,recursive:true})
+    fs.mkdirSync("./.backup/")
+
+    const devconfigFlag = opendiscord.flags.get("opendiscord:dev-config")
+    const isDevConfig = devconfigFlag ? devconfigFlag.value : false
+    const devDatabaseFlag = opendiscord.flags.get("opendiscord:dev-database")
+    const isDevDatabase = devDatabaseFlag ? devDatabaseFlag.value : false
+
+    if (isDevConfig) fs.cpSync("./devconfig/","./.backup/devconfig/",{force:true,recursive:true})
+    else fs.cpSync("./config/","./.backup/config/",{force:true,recursive:true})
+    if (isDevDatabase) fs.cpSync("./devdatabase/","./.backup/devdatabase/",{force:true,recursive:true})
+    else fs.cpSync("./database/","./.backup/database/",{force:true,recursive:true})
 }
 
-const loadAllVersionMigrations = async (lastVersion:api.ODVersion) => {
+/**Execute all version migration functions which are handled in the restricted migration context. */
+async function loadAllVersionMigrations(lastVersion:api.ODVersion){
     const migrations = (await import("./migration.js")).migrations
     migrations.sort((a,b) => {
         const comparison = a.version.compare(b.version)
@@ -72,6 +107,11 @@ const loadAllVersionMigrations = async (lastVersion:api.ODVersion) => {
         else if (comparison == "higher") return 1
         else return -1
     })
+    if (migrations.length > 0){
+        //create backup of config & database
+        createMigrationBackup()
+    }
+
     for (const migration of migrations){
         if (migration.version.compare(lastVersion) == "higher"){
             const success = await migration.migrate()
@@ -79,11 +119,13 @@ const loadAllVersionMigrations = async (lastVersion:api.ODVersion) => {
                 {key:"success",value:success ? "true" : "false"},
                 {key:"afterInit",value:"false"}
             ])
+            else throw new api.ODSystemError("Migration Error: Unable to migrate database & config to the new version of the bot.")
         }
     }
 }
 
-export const loadAllAfterInitVersionMigrations = async (lastVersion:api.ODVersion) => {
+/**Execute all version migration functions which are handled in the normal startup sequence. */
+export async function loadAllAfterInitVersionMigrations(lastVersion:api.ODVersion){
     const migrations = (await import("./migration.js")).migrations
     migrations.sort((a,b) => {
         const comparison = a.version.compare(b.version)
@@ -91,6 +133,11 @@ export const loadAllAfterInitVersionMigrations = async (lastVersion:api.ODVersio
         else if (comparison == "higher") return 1
         else return -1
     })
+    if (migrations.length > 0){
+        //create backup of config & database
+        createMigrationBackup()
+    }
+
     for (const migration of migrations){
         if (migration.version.compare(lastVersion) == "higher"){
             const success = await migration.migrateAfterInit()
@@ -98,14 +145,7 @@ export const loadAllAfterInitVersionMigrations = async (lastVersion:api.ODVersio
                 {key:"success",value:success ? "true" : "false"},
                 {key:"afterInit",value:"true"}
             ])
+            else throw new api.ODSystemError("Migration Error: Unable to migrate database & config to the new version of the bot.")
         }
     }
-}
-
-const saveAllVersionsToDatabase = async () => {
-    const globalDatabase = opendiscord.databases.get("opendiscord:global")
-
-    await opendiscord.versions.loopAll(async (version,id) => {
-        await globalDatabase.set("opendiscord:last-version",id.value,version.toString())    
-    })
 }

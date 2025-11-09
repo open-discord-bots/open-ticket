@@ -1,6 +1,12 @@
+<!-- omit from toc -->
 # Open Ticket (License)
 © 2025 - DJj123dj & Contributors
 
+#### Table Of Contents
+- [General License](#general-license)
+- [Additional Terms for Open Ticket](#additional-terms-for-open-ticket)
+
+### General License
 ```
                     GNU GENERAL PUBLIC LICENSE
                        Version 3, 29 June 2007
@@ -679,11 +685,28 @@ Public License instead of this License.  But first, please read
 ```
 
 ### Additional Terms for Open Ticket
+#### Terminology:
+1. **“Software”**
+Refers to the Open Ticket source code, documentation, and any associated files distributed under this license, including any modifications or derivative works thereof.
+
+1. **“Public Discord Bot**
+A Discord bot that is made publicly available for use by multiple, unrelated Discord servers or users, where the bot’s functionality is provided as a service rather than for private or personal use.
+
+1. **“Monetized Service”**
+Refers to any service or deployment that generates direct or indirect revenue through the use of the Software. This includes, but is not limited to, subscriptions, premium features, paid hosting, advertisements.
+
+1. **“For-Profit Discord Server”**
+Means a Discord server that generates income, revenue, or other material benefits, whether through memberships, donations, or other monetization strategies.
+
+1. **“Private Use”**
+Refers to using the Software on a limited number of Discord servers controlled or operated by a single individual or organization, not made available as a public service to multiple unrelated users.
+
+#### Additional Terms:
 The following additional terms apply to the use of this software:
 
-1. This software may not be used as part of a public Discord bot service that is monetized (e.g., generating revenue through subscriptions, donations, or other forms of payment) without the prior written permission of the original author.
+1. This software may not be used as (or part of) a public Discord bot that is monetized (e.g., generating revenue through subscriptions, donations, or other forms of payment) without the prior written permission of the original author.
 
-2. This software may not be used as part of a public Discord bot service on multiple Discord servers without attribution to the original author.
+2. This software may not be used as (or part of) a public Discord bot on multiple Discord servers without attribution to the original author.
 
 3. You are allowed to use this bot in a Discord server that makes money or is for-profit, provided that the income is not generated directly from the ticket bot or its functionality.
 

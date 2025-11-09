@@ -22,16 +22,17 @@ export const registerActions = async () => {
             ticket.get("opendiscord:busy").value = true
 
             //rename channel (and give error when crashed)
+            const pinEmoji = ticket.get("opendiscord:pinned").value ? generalConfig.data.system.pinEmoji : ""
+            const priorityEmoji = opendiscord.priorities.getFromPriorityLevel(ticket.get("opendiscord:priority").value).channelEmoji ?? ""
+
             const originalName = channel.name
-            if (originalName.startsWith("📌")){
-                const newName = originalName.replace("📌","");
-                try{
-                    await utilities.timedAwait(channel.setName(newName),2500,(err) => {
-                        opendiscord.log("Failed to rename channel on ticket unpin","error")
-                    })
-                }catch(err){
-                    await channel.send((await opendiscord.builders.messages.getSafe("opendiscord:error-channel-rename").build("ticket-unpin",{guild,channel,user,originalName,newName})).message)
-                }
+            const newName = pinEmoji+priorityEmoji+utilities.trimEmojis(channel.name)
+            try{
+                await utilities.timedAwait(channel.setName(newName),2500,(err) => {
+                    opendiscord.log("Failed to rename channel on ticket unpin","error")
+                })
+            }catch(err){
+                await channel.send((await opendiscord.builders.messages.getSafe("opendiscord:error-channel-rename").build("ticket-unpin",{guild,channel,user,originalName,newName})).message)
             }
 
             //update ticket message
@@ -54,6 +55,9 @@ export const registerActions = async () => {
             if (params.sendMessage) await channel.send((await opendiscord.builders.messages.getSafe("opendiscord:unpin-message").build(source,{guild,channel,user,ticket,reason})).message)
             ticket.get("opendiscord:busy").value = false
             await opendiscord.events.get("afterTicketUnpinned").emit([ticket,user,channel,reason])
+
+            //update channel topic
+            await opendiscord.actions.get("opendiscord:update-ticket-topic").run("ticket-action",{guild,channel,user,ticket,sendMessage:false,newTopic:null})
         }),
         new api.ODWorker("opendiscord:discord-logs",1,async (instance,params,source,cancel) => {
             const {guild,channel,user,ticket,reason} = params

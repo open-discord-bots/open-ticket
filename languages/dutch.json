@@ -1,8 +1,8 @@
 {
     "_TRANSLATION":{
-        "otversion":"v4.0.7",
+        "otversion":"v4.1.0",
         "translators":["DJj123dj"],
-        "lastedited":"21/08/2024",
+        "lastedited":"09/11/2025",
         "language":"Dutch",
         "automated":false
     },
@@ -31,7 +31,15 @@
             "stringContains":"Deze tekst moet {0} bevatten!",
             "stringChoices":"Deze tekst kan alleen de volgende waardes bevatten: {0}!",
             "stringRegex":"Deze tekst is ongeldig!",
-
+            "stringInvertedContains":"Deze tekst mag niet {0} bevatten!",
+            "stringLowercase":"Deze tekst moet in kleine letters geschreven zijn!",
+            "stringUppercase":"Deze tekst moet in hoofdletters geschreven zijn!",
+            "stringSpecialCharacters":"Deze tekst mag geen speciale karakters bevatten! (enkel a-z, 0-9 & spatie)",
+            "stringNoSpaces":"Deze tekst mag geen spaties bevatten!",
+            "stringCapitalWord":"Het is aangeraden om ieder woord in de zin te laten starten met een hoofdletter!",
+            "stringCapitalSentence":"Het ziet er naar uit dat sommige zinnen in deze tekst niet met een hoofdletter beginnen!",
+            "stringPunctuation":"Het ziet er naar uit dat de zin in deze tekst niet met een leesteken eindigt!",
+            
             "numberTooShort":"Dit nummer kan niet korter dan {0} karakters zijn!",
             "numberTooLong":"Dit nummer kan niet langer dan {0} karakters zijn!",
             "numberLengthInvalid":"Dit nummer moet {0} karakters lang zijn!",
@@ -48,10 +56,12 @@
             "numberNegative":"Dit nummer kan niet negatief zijn!",
             "numberPositive":"Dit nummer kan niet positief zijn!",
             "numberZero":"Dit nummer kan niet nul zijn!",
-
+            "numberNan":"Dit nummer kan geen NaN (Not A Number) zijn!",
+            "numberInvertedContains":"Dit nummer mag niet {0} bevatten!",
+            
             "booleanTrue":"Deze boolean kan niet true zijn!",
             "booleanFalse":"Deze boolean kan niet false zijn!",
-
+            
             "arrayEmptyDisabled":"Deze array mag niet leeg zijn!",
             "arrayEmptyRequired":"Deze array moet leeg zijn!",
             "arrayTooShort":"Deze array moet een minimum lengte hebben van {0}!",
@@ -59,7 +69,7 @@
             "arrayLengthInvalid":"Deze array moet een lengte hebben van {0}!",
             "arrayInvalidTypes":"Deze array kan alleen de volgende waardes bevatten: {0}!",
             "arrayDouble":"Deze array staat dubbele waardes niet toe!",
-
+            
             "discordInvalidId":"Dit is een ongeldig discord {0} id!",
             "discordInvalidIdOptions":"Dit is an ongeldig discord {0} id! Je kan ook een van deze gebruiken: {1}!",
             "discordInvalidToken":"Dit is een ongeldig discord token (syntactisch)!",
@@ -76,7 +86,7 @@
             "urlInvalidPath":"Deze url heeft een ongeldig pad!",
             "idNotUnique":"Dit id is niet uniek, gebruik een andere in de plaats!",
             "idNonExistent":"Het id {0} bestaat niet!",
-
+            
             "invalidType":"Het type van deze property moet gelijk zijn aan: {0}!",
             "propertyMissing":"De property {0} mist in dit object!",
             "propertyOptional":"De property {0} is optioneel in dit object!",
@@ -84,12 +94,13 @@
             "nullInvalid":"Deze property kan niet null zijn!",
             "switchInvalidType":"Dit moet een van de volgende types zijn: {0}!",
             "objectSwitchInvalid":"Dit object moet een van de volgende types zijn: {0}!",
-
+            
             "invalidLanguage":"Dit is een ongeldige taal!",
             "invalidButton":"Deze knop moet een {0} of {1} hebben!",
             "unusedOption":"De optie {0} wordt nergens gebruikt!",
             "unusedQuestion":"The vraag {0} wordt nergens gebruikt!",
-            "dropdownOption":"Een paneel met dropdown mag alleen opties bevaten van het 'ticket' type!"
+            "dropdownOption":"Een paneel met dropdown mag alleen opties bevaten van het 'ticket' type!",
+            "customInvalidVersion":"De versie gespecificeerd in u configbestand komt niet overeen! Zorg dat u het configbestand geüpdatet heeft naar de laatste versie!"
         }
     },
     "actions":{
@@ -132,6 +143,7 @@
             "blacklistAddDm":"Toegevoegd Aan Blacklist",
             "blacklistRemoveDm":"Verwijderd Van Blacklist",
             "clear":"Tickets Opgeruimd",
+            "clearTickets":"Tickets Opruimen",
             "roles":"Rollen Bijgewerkt",
             
             "autoclose":"Ticket Automatisch Gesloten",
@@ -139,7 +151,12 @@
             "autocloseDisabled":"Autoclose Uitgeschakeld",
             "autodelete":"Ticket Automatisch Verwijderd",
             "autodeleteEnabled":"Autodelete Ingeschakeld",
-            "autodeleteDisabled":"Autodelete Uitgeschakeld"
+            "autodeleteDisabled":"Autodelete Uitgeschakeld",
+            
+            "topicSet":"Onderwerp Veranderd",
+            "prioritySet":"Prioriteit Veranderd",
+            "priorityGet":"Ticket Prioriteit",
+            "transfer":"Ticket Overgedragen"
         },
         "descriptions":{
             "create":"Je ticket is aangemaakt. Klik op de knop hier onder om er naar toe te gaan!",
@@ -154,7 +171,7 @@
             "move":"Het ticket is succesvol verplaatst naar {0}!",
             "add":"{0} is succesvol toegevoegd aan het ticket!",
             "remove":"{0} is succesvol verwijderd van het ticket!",
-
+            
             "helpExplanation":"`<naam>` => verplichte parameter\n`[naam]` => optionele parameter",
             "statsReset":"De bot stats zijn succesvol gereset!",
             "statsError":"Kan ticket stats niet bekijken!\n{0} is geen ticket!",
@@ -167,20 +184,25 @@
             "clearVerify":"Weet je zeker dat je meerdere tickets wilt verwijderen? Deze actie kan niet teruggedraaid worden!",
             "clearReady":"{0} tickets zijn succesvol verwijderd!",
             "rolesEmpty":"Geen enkele rollen zijn bijgewerkt!",
-
+            
             "autocloseLeave":"Dit ticket is automatisch gesloten omdat de maker de server verlaten is!",
-            "autocloseTimeout":"Dit ticket is automatisch gesloten omdat het inactief was voor meer dan `{0} uur`!",
+            "autocloseTimeout":"Dit ticket is automatisch gesloten omdat het meer dan `{0} uur` inactief was!",
             "autodeleteLeave":"Dit ticket is automatisch verwijderd omdat de maker de server verlaten is!",
-            "autodeleteTimeout":"Dit ticket is automatisch verwijderd omdat het inactief was voor meer dan `{0} dagen`!",
-            "autocloseEnabled":"Autoclose is ingeschakeld in dit ticket!\nHet wordt gesloten wanneer het inactief is voor meer dan `{0} uur`!",
+            "autodeleteTimeout":"Dit ticket is automatisch verwijderd omdat het meer dan `{0} dagen` inactief was!",
+            "autocloseEnabled":"Autoclose is ingeschakeld in dit ticket!\nHet wordt gesloten na `{0} uur` inactiviteit!",
             "autocloseDisabled":"Autoclose is uitgeschakeld in dit ticket!\nHet wordt niet meer automatisch gesloten!",
-            "autodeleteEnabled":"Autodelete is ingeschakeld in dit ticket!\nHet wordt verwijderd wanneer het inactief is voor meer dan `{0} dagen`!",
+            "autodeleteEnabled":"Autodelete is ingeschakeld in dit ticket!\nHet wordt verwijderd na `{0} dagen` inactiviteit!",
             "autodeleteDisabled":"Autodelete is uitgeschakeld in dit ticket!\nHet wordt niet meer automatisch verwijderd!",
-
+            
             "ticketMessageLimit":"Je kan maar {0} ticket(s) op het zelfde moment aanmaken!",
             "ticketMessageAutoclose":"Dit ticket wordt automatisch gesloten wanneer het inactief is voor {0} uur!",
             "ticketMessageAutodelete":"Dit ticket wordt automatisch verwijderd wanneer het inactief is voor {0} dagen!",
-            "panelReady":"Je kan het paneel hier onder vinden!\nDit bericht kan nu verwijderd worden!"
+            "panelReady":"Het paneel is beschikbaar in het volgende bericht!\nDit bericht kan verwijderd worden!",
+            
+            "topicSet":"Het kanaalsonderwerp is succesvol veranderd naar {0}!",
+            "prioritySet":"De ticket prioriteit is succesvol veranderd naar {0} door {1}!",
+            "priorityGet":"De huidige prioriteit van dit ticket is {0}.",
+            "transfer":"Het ticket is succesvol overgedragen van {0} naar {1} door {2}!"
         },
         "modal":{
             "closePlaceholder":"Waarom heb je dit ticket gesloten?",
@@ -215,12 +237,19 @@
             "addDm":"{0} is toegevoegd aan jouw ticket in onze server!",
             "removeLog":"{0} is verwijderd van dit ticket door {1}!",
             "removeDm":"{0} is verwijderd van jouw ticket in onze server!",
-
+            
             "blacklistAddLog":"{0} is geblacklist door {1}!",
             "blacklistRemoveLog":"{0} is verwijderd van de blacklist door {1}!",
             "blacklistAddDm":"Je bent geblacklist in onze server!\nVanaf nu kan je geen tickets meer aanmaken!",
             "blacklistRemoveDm":"Je bent verwijderd van de blacklist in onze server!\nNormaal zou je nu terug tickets kunnen aanmaken!",
-            "clearLog":"{0} tickets zijn verwijderd door by {1}!"
+            "clearLog":"{0} tickets zijn verwijderd door by {1}!",
+            
+            "transferLog":"Het ticket is overgedragen van {0} naar {1} door {2}!",
+            "transferDm":"U ticket is overgedragen van {0} naar {1} in onze server!",
+            "prioritySetLog":"De prioriteit van dit ticket is veranderd naar {0} door {1}!",
+            "prioritySetDm":"De prioriteit van u ticket is veranderd naar {0} in onze server!",
+            "roleUpdateLog":"{0} heeft zijn/haar rollen bewerkt!",
+            "roleUpdateDm":"U rollen in onze server zijn veranderd!"
         }
     },
     "transcripts":{
@@ -229,7 +258,7 @@
             "ready":"Transcript Aangemaakt",
             "textFileDescription":"Dit is een tekst transcript van een verwijderd ticket!",
             "htmlProgress":"Gelieve te wachten terwijl dit html transcript verwerkt wordt...",
-
+            
             "createdChannel":"Een nieuw {0} transcript is aangemaakt in de server!",
             "createdCreator":"Een nieuw {0} transcript is aangemaakt voor een van jouw tickets!",
             "createdParticipant":"Een nieuw {0} transcript is aangemaakt in een van de tickets waar jij lid van was!",
@@ -241,7 +270,19 @@
             "retry":"Herprobeer",
             "continue":"Verwijder Zonder Transcript",
             "backup":"Maak Backup Transcript",
-            "error":"Er is iets misgegaan bij het maken van het transcript.\nWat wil je doen?\n\nDit ticket wordt niet meer verwijderd to je een van de onderstaande knoppen gebruikt."
+            "error":"Er is iets misgegaan bij het maken van het transcript.\nWat wil je doen?\n\nDit ticket wordt niet meer verwijderd to je een van de onderstaande knoppen gebruikt.",
+            "title":"Transcript Error"
+        },
+        "text":{
+            "messagesTitle":"BERICHTEN",
+            "embedTitle":"EMBED",
+            "fileTitle":"BESTAND",
+            "fieldsTitle":"VELDEN",
+            "reactionsTitle":"REACTIES",
+            "statsTitle":"STATS",
+            "emptyContent":"<inhoud is leeg>",
+            "noTitle":"<geen-titel>",
+            "noDesc":"<geen-beschrijving>"
         }
     },
     "errors":{
@@ -257,7 +298,8 @@
             "unknownPanel":"Onbekend Paneel",
             "notInGuild":"Niet In Server",
             "channelRename":"Kan Kanaal Niet Hernoemen",
-            "busy":"Ticket Is Bezig"
+            "busy":"Ticket Is Bezig",
+            "permissionError":"Permission Error"
         },
         "descriptions":{
             "askForInfo":"Contacteer the eigenaar van deze bot voor meer info!",
@@ -280,7 +322,10 @@
             "notInGuild":"Deze {0} werkt niet in DM! Probeer het opnieuw in een server!",
             "channelRename":"Door discord ratelimits is het op dit moment onmogelijk voor de bot om het kanaal te hernoemen. Het kanaal zal automatisch hernoemd worden over 10 min als de bot niet herstart wordt.",
             "channelRenameSource":"De bron van deze error is: {0}",
-            "busy":"Kan deze {0} niet gebruiken!\nHet ticket wordt op dit moment verwerkt door de bot.\n\nProbeer het opnieuw binnen een paar seconden!"
+            "busy":"Kan deze {0} niet gebruiken!\nHet ticket wordt op dit moment verwerkt door de bot.\n\nProbeer het opnieuw binnen een paar seconden!",
+            "closeBeforeMessage":"Dit ticket kan niet gesloten/verwijderd worden vooraleer er een bericht door een gebruiker verstuurd is.",
+            "closeBeforeAdminMessage":"Dit ticket kan niet gesloten/verwijderd worden vooraleer er een bericht door een ticket admin of supportlid verstuurd is.",
+            "unableToCreateTicket":"U kunt geen ticket aanmaken."
         },
         "optionInvalidReasons":{
             "stringRegex":"Waarde is niet gelijk aan het patroon!",
@@ -331,7 +376,6 @@
             "added":"Toegevoegd",
             "removed":"Verwijderd",
             "filter":"Filter",
-            "claimedBy":"Geclaimd Door {0}",
             "method":"Methode",
             "type":"Type",
             "blacklisted":"Geblacklist",
@@ -355,7 +399,27 @@
             "status":"Status",
             "claimed":"Geclaimd",
             "pinned":"Gepind",
-            "creationDate":"Aanmaakdatum"
+            "creationDate":"Aanmaakdatum",
+            
+            "noone":"Niemand",
+            "open":"Open",
+            "closed":"Gesloten",
+            "priority":"Prioriteit",
+            "participants":"Deelnemers",
+            "yes":"Ja",
+            "no":"Nee",
+            "option":"Optie",
+            "topic":"Onderwerp",
+            "uptime":"Systeem Uptime",
+            "messages":"Berichten",
+            "embeds":"Embeds",
+            "files":"Bestanden",
+            "components":"Componenten",
+            "cooldown":"Cooldown",
+            "maxTickets":"Max Tickets",
+            "admins":"Admins",
+            "roles":"Rollen",
+            "size":"Grootte"
         },
         "lowercase":{
             "text":"tekst",
@@ -384,6 +448,7 @@
         "unclaim":"Ontclaim dit ticket.",
         "pin":"Pin dit ticket.",
         "unpin":"Maak dit ticket los.",
+        
         "move":"Verplaats een ticket.",
         "moveId":"Het id van de optie waarnaar je wilt verplaatsen.",
         "rename":"Hernoem een ticket.",
@@ -392,6 +457,7 @@
         "addUser":"De gebruiker om toe te voegen.",
         "remove":"Verwijder een user van dit ticket.",
         "removeUser":"De gebruiker om te verwijderen.",
+        
         "blacklist":"Beheer de ticket blacklist.",
         "blacklistView":"Bekijk de huidige blacklist.",
         "blacklistAdd":"Voeg een gebruiker toe aan de blacklist.",
@@ -405,6 +471,7 @@
         "statsUserUser":"De gebruiker om te bekijken.",
         "statsTicket":"Bekijk de stats van een ticket in de server.",
         "statsTicketTicket":"Het ticket om te bekijken.",
+        
         "clear":"Verwijder meerdere tickets tegelijkertijd.",
         "clearFilter":"De filter om tickets op te ruimen.",
         "clearFilters":{
@@ -417,6 +484,7 @@
             "unpin":"Losgemaakt (niet gepind)",
             "autoclose":"Automatisch Gesloten"
         },
+        
         "autoclose":"Beheer autoclose in een ticket.",
         "autocloseDisable":"Schakel autoclose in dit ticket uit.",
         "autocloseEnable":"Schakel autoclose in dit ticket in.",
@@ -424,7 +492,19 @@
         "autodelete":"Beheer autodelete in een ticket.",
         "autodeleteDisable":"Schakel autodelete in dit ticket aan.",
         "autodeleteEnable":"Schakel autodelete in dit ticket aan.",
-        "autodeleteEnableTime":"De hoeveelheid dagen dat dit ticket inactief moet zijn voor het te verwijderen."
+        "autodeleteEnableTime":"De hoeveelheid dagen dat dit ticket inactief moet zijn voor het te verwijderen.",
+        
+        "topic":"Beheer het onderwerp van een ticket kanaal.",
+        "topicSet":"Verander het onderwerp van een ticket kanaal.",
+        "topicValue":"Het nieuwe onderwerp van het kanaal.",
+        "topicList":"Bekijk een lijst van alle tickets met hun onderwerp en stats.",
+        "priority":"Beheer de prioriteit van een ticket.",
+        "prioritySet":"Verander de prioriteit van een ticket.",
+        "priorityValue":"De prioriteit van het kanaal.",
+        "priorityGet":"Bekijk de prioriteit van een ticket.",
+        "priorityList":"Bekijk een lijst van alle tickets met hun prioriteit.",
+        "transfer":"Draag het ticket eigendom over van de ene naar de andere gebruiker.",
+        "transferUser":"De user om naar over te dragen."
     },
     "helpMenu":{
         "help":"Krijg een lijst van alle beschikbare commands.",
@@ -452,7 +532,16 @@
         "autocloseDisable":"Zet autoclose uit in dit ticket.",
         "autocloseEnable":"Zet autoclose in aan dit ticket.",
         "autodeleteDisable":"Zet autodelete uit in dit ticket.",
-        "autodeleteEnable":"Zet autodelete aan in dit ticket."
+        "autodeleteEnable":"Zet autodelete aan in dit ticket.",
+        "categories":{
+            "general":"Algemene Commands",
+            "basicTicket":"Basis Ticket Commands",
+            "advancedTicket":"Geavanceerde Ticket Commands",
+            "userTicket":"Gebruiker Ticket Commands",
+            "admin":"Admin Commands",
+            "advanced":"Geavanceerde Commands",
+            "extra":"Extra Commands"
+        }
     },
     "stats":{
         "scopes":{
@@ -460,7 +549,8 @@
             "system":"Systeem Stats",
             "user":"User Stats",
             "ticket":"Ticket Stats",
-            "participants":"Deelnemers"
+            "participants":"Deelnemers",
+            "messages":"Berichten"
         },
         "properties":{
             "ticketsCreated":"Tickets Aangemaakt",
@@ -472,7 +562,47 @@
             "ticketsPinned":"Tickets Gepind",
             "ticketsMoved":"Tickets Verplaatst",
             "usersBlacklisted":"Users Geblacklist",
-            "transcriptsCreated":"Transcripts Aangemaakt"
+            "transcriptsCreated":"Transcripts Aangemaakt",
+            "ticketsAutodeleted":"Tickets Autodeleted",
+            "ticketsTransferred":"Tickets Overgedragen",
+            "ticketVolume":"Ticket Volume",
+            "averageTickets":"Gemiddelde Tickets/Gebruiker",
+            "currentTickets":"Huidige Tickets",
+            "age":"Ticket Leeftijd",
+            "responseTime":"Antwoordtijd",
+            "resolutionTime":"Oplostijd",
+            "createdOn":"Gemaakt Op",
+            "createdBy":"Gemaakt Door",
+            "closedOn":"Gesloten Op",
+            "closedBy":"Gesloten Door",
+            "claimedOn":"Geclaimed Op",
+            "claimedBy":"Geclaimed Door",
+            "pinnedOn":"Gepint Op",
+            "pinnedBy":"Gepint Door",
+            "deletedOn":"Verwijderd Op",
+            "deletedBy":"Verwijderd Door"
+        },
+        "roles":{
+            "developer":"Developer",
+            "serverOwner":"Server Eigenaar",
+            "serverAdmin":"Server Admin",
+            "moderator":"Moderator Team",
+            "support":"Support Team",
+            "member":"Serverlid"
         }
+    },
+    "panel":{
+        "selectTicket":"Selecteer u ticket",
+        "selectRole":"Selecteer u rol",
+        "selectOption":"Selecteer u optie"
+    },
+    "priorities":{
+        "urgent":"Urgent",
+        "veryHigh":"Zeer Hoog",
+        "high":"Hoog",
+        "normal":"Normaal",
+        "low":"Laag",
+        "veryLow":"Zeer Laag",
+        "none":"Geen"
     }
 }

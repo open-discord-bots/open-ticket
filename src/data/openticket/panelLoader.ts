@@ -1,6 +1,8 @@
 import {opendiscord, api, utilities} from "../../index"
 import * as discord from "discord.js"
 
+const lang = opendiscord.languages
+
 export const loadAllPanels = async () => {
     const panelConfig = opendiscord.configs.get("opendiscord:panels")
     if (!panelConfig) return
@@ -43,6 +45,7 @@ export const loadPanel = (panel:api.ODJsonConfig_DefaultPanelType) => {
 export function describePanelOptions(mode:"fields",panel:api.ODPanel): {name:string,value:string}[]
 export function describePanelOptions(mode:"text",panel:api.ODPanel): string
 export function describePanelOptions(mode:"fields"|"text", panel:api.ODPanel): {name:string,value:string}[]|string {
+    const generalConfig = opendiscord.configs.get("opendiscord:general")
     const layout = panel.get("opendiscord:describe-options-layout").value
     const dropdownMode = panel.get("opendiscord:dropdown").value
     const options: api.ODOption[] = []
@@ -74,8 +77,7 @@ export function describePanelOptions(mode:"fields"|"text", panel:api.ODPanel): {
         }
     })
 
-    //TODO TRANSLATION!!!
-    const autotitle = (hasTicket && ticketOnly) ? "Select your ticket:" : ((hasRole && roleOnly) ? "Select your role:" : "Select your option:")
+    const autotitle = (hasTicket && ticketOnly) ? lang.getTranslation("panel.selectTicket")+":" : ((hasRole && roleOnly) ? lang.getTranslation("panel.selectRole")+":" : lang.getTranslation("panel.selectOption")+":")
     const title = (panel.get("opendiscord:describe-options-custom-title").value.length < 1) ? "__"+autotitle+"__\n" : "__"+panel.get("opendiscord:describe-options-custom-title").value+"__\n"
 
     if (mode == "fields") return options.map((opt) => {
@@ -86,14 +88,17 @@ export function describePanelOptions(mode:"fields"|"text", panel:api.ODPanel): {
             let description = opt.exists("opendiscord:description") ? opt.get("opendiscord:description").value : "`<no-description>`"
             
             if (layout == "normal" || layout == "detailed"){
-                //TODO TRANSLATION!!!
-                if (opt.exists("opendiscord:cooldown-enabled") && opt.get("opendiscord:cooldown-enabled").value) description = description + "\nCooldown: `"+opt.get("opendiscord:cooldown-minutes").value+" min`"
-                //TODO TRANSLATION!!!
-                if (opt.exists("opendiscord:limits-enabled") && opt.get("opendiscord:limits-enabled").value) description = description + "\nMax Tickets: `"+opt.get("opendiscord:limits-maximum-user").value+"`"
+                if (opt.exists("opendiscord:cooldown-enabled") && opt.get("opendiscord:cooldown-enabled").value) description = description + "\n"+lang.getTranslation("params.uppercase.cooldown")+": `"+opt.get("opendiscord:cooldown-minutes").value+" min`"
+                if (opt.exists("opendiscord:limits-enabled") && opt.get("opendiscord:limits-enabled").value) description = description + "\n"+lang.getTranslation("params.uppercase.maxTickets")+": `"+opt.get("opendiscord:limits-maximum-user").value+"`"
             }
             if (layout == "detailed"){
-                //TODO TRANSLATION!!!
-                if (opt.exists("opendiscord:admins")) description = description + "\nAdmins: "+opt.get("opendiscord:admins").value.map((admin) => discord.roleMention(admin)).join(", ")
+                const optionAdmins = [...opt.get("opendiscord:admins").value]
+                if (generalConfig.data.system.showGlobalAdminsInPanelRoles){
+                    for (const admin of generalConfig.data.globalAdmins){
+                        if (!optionAdmins.includes(admin)) optionAdmins.push(admin)
+                    }
+                }
+                if (opt.exists("opendiscord:admins")) description = description + "\n"+lang.getTranslation("params.uppercase.admins")+": "+optionAdmins.map((admin) => discord.roleMention(admin)).join(", ")
             }
             
             if (description == "") description = "`<no-description>`"
@@ -115,8 +120,7 @@ export function describePanelOptions(mode:"fields"|"text", panel:api.ODPanel): {
             let description = opt.exists("opendiscord:description") ? opt.get("opendiscord:description").value : "`<no-description>`"
             
             if (layout == "normal" || layout == "detailed"){
-                //TODO TRANSLATION!!!
-                if (opt.exists("opendiscord:roles")) description = description + "\nRoles: "+opt.get("opendiscord:roles").value.map((admin) => discord.roleMention(admin)).join(", ")
+                if (opt.exists("opendiscord:roles")) description = description + "\n"+lang.getTranslation("params.uppercase.roles")+": "+opt.get("opendiscord:roles").value.map((admin) => discord.roleMention(admin)).join(", ")
             }
             
             if (description == "") description = "`<no-description>`"
@@ -138,14 +142,17 @@ export function describePanelOptions(mode:"fields"|"text", panel:api.ODPanel): {
             let description = opt.exists("opendiscord:description") ? opt.get("opendiscord:description").value : "`<no-description>`"
             
             if (layout == "normal" || layout == "detailed"){
-                //TODO TRANSLATION!!!
-                if (opt.exists("opendiscord:cooldown-enabled") && opt.get("opendiscord:cooldown-enabled").value) description = description + "\nCooldown: `"+opt.get("opendiscord:cooldown-minutes").value+" min`"
-                //TODO TRANSLATION!!!
-                if (opt.exists("opendiscord:limits-enabled") && opt.get("opendiscord:limits-enabled").value) description = description + "\nMax Tickets: `"+opt.get("opendiscord:limits-maximum-user").value+"`"
+                if (opt.exists("opendiscord:cooldown-enabled") && opt.get("opendiscord:cooldown-enabled").value) description = description + "\n"+lang.getTranslation("params.uppercase.cooldown")+": `"+opt.get("opendiscord:cooldown-minutes").value+" min`"
+                if (opt.exists("opendiscord:limits-enabled") && opt.get("opendiscord:limits-enabled").value) description = description + "\n"+lang.getTranslation("params.uppercase.maxTickets")+": `"+opt.get("opendiscord:limits-maximum-user").value+"`"
             }
             if (layout == "detailed"){
-                //TODO TRANSLATION!!!
-                if (opt.exists("opendiscord:admins")) description = description + "\nAdmins: "+opt.get("opendiscord:admins").value.map((admin) => discord.roleMention(admin)).join(", ")
+                const optionAdmins = [...opt.get("opendiscord:admins").value]
+                if (generalConfig.data.system.showGlobalAdminsInPanelRoles){
+                    for (const admin of generalConfig.data.globalAdmins){
+                        if (!optionAdmins.includes(admin)) optionAdmins.push(admin)
+                    }
+                }
+                if (opt.exists("opendiscord:admins")) description = description + "\n"+lang.getTranslation("params.uppercase.admins")+": "+optionAdmins.map((admin) => discord.roleMention(admin)).join(", ")
             }
             
             if (layout == "simple") return "**"+utilities.emojiTitle(emoji,name)+":** "+description
@@ -167,8 +174,7 @@ export function describePanelOptions(mode:"fields"|"text", panel:api.ODPanel): {
             let description = opt.exists("opendiscord:description") ? opt.get("opendiscord:description").value : "`<no-description>`"
             
             if (layout == "normal" || layout == "detailed"){
-                //TODO TRANSLATION!!!
-                if (opt.exists("opendiscord:roles")) description = description + "\nRoles: "+opt.get("opendiscord:roles").value.map((admin) => discord.roleMention(admin)).join(", ")
+                if (opt.exists("opendiscord:roles")) description = description + "\n"+lang.getTranslation("params.uppercase.roles")+": "+opt.get("opendiscord:roles").value.map((admin) => discord.roleMention(admin)).join(", ")
             }
             
             if (layout == "simple") return "**"+utilities.emojiTitle(emoji,name)+":** "+description

@@ -31,12 +31,13 @@ moduleInstalled("discord.js",true)
 moduleInstalled("ansis",true)
 moduleInstalled("formatted-json-stringify",true)
 moduleInstalled("typescript",true)
+moduleInstalled("terminal-kit",true)
 tempError()
 
 //init API
 import * as api from "../api/api" //import for local use
 export * as api from "../api/api" //export to other parts of bot
-
+import ansis from "ansis" //import ansis for usage in initialization
 
 export const opendiscord = new api.ODMain()
 console.log("\n--------------------------- OPEN TICKET STARTUP ---------------------------")
@@ -103,6 +104,10 @@ export interface ODUtilities {
      * Same as `string.replace(search, value)` but with async compatibility
      */
     asyncReplace(text:string, regex:RegExp, func:(value:string,...args:any[]) => Promise<string>): Promise<string>
+    /**## getLongestLength `utility function`
+     * Get the length of the longest string in the array.
+     */
+    getLongestLength(text:string[]): number
     /**## easterEggs `utility object`
      * Object containing data for Open Ticket easter eggs.
      */
@@ -112,7 +117,15 @@ export interface ODUtilities {
      * 
      * It shouldn't be used by plugins because this is an internal API feature!
      */
-    ODVersionMigration:new (version:api.ODVersion,func:() => void|Promise<void>,afterInitFunc:() => void|Promise<void>) => ODVersionMigration
+    ODVersionMigration:new (version:api.ODVersion,func:() => void|Promise<void>,afterInitFunc:() => void|Promise<void>) => ODVersionMigration,
+    /**## ordinalNumber `utility function`
+     * Get a human readable ordinal number (e.g. 1st, 2nd, 3rd, 4th, ...) from a Javascript number.
+     */
+    ordinalNumber(num:number): string,
+    /**## trimEmojis `utility function`
+     * Trim/remove all emoji's from a Javascript string.
+     */
+    trimEmojis(text:string): string,
 }
 
 /**## ODVersionMigration `utility class`
@@ -138,7 +151,8 @@ export class ODVersionMigration {
         try{
             await this.#func()
             return true
-        }catch{
+        }catch(err){
+            process.emit("uncaughtException",err)
             return false
         }
     }
@@ -147,7 +161,8 @@ export class ODVersionMigration {
         try{
             await this.#afterInitFunc()
             return true
-        }catch{
+        }catch(err){
+            process.emit("uncaughtException",err)
             return false
         }
     }
@@ -208,6 +223,9 @@ export const utilities: ODUtilities = {
         })
         return result
     },
+    getLongestLength(texts:string[]): number {
+        return Math.max(...texts.map((t) => ansis.strip(t).length))
+    },
     easterEggs:{
         /* THANK YOU TO ALL OUR CONTRIBUTORS!!! */
         creator:"779742674932072469", //DJj123dj
@@ -244,5 +262,18 @@ export const utilities: ODUtilities = {
             "LOREMIPSUM", //TODO
         ]
     },
-    ODVersionMigration
+    ODVersionMigration,
+    ordinalNumber(num:number){
+        const i = Math.abs(Math.round(num))
+        const cent = i % 100
+        if (cent >= 10 && cent <= 20) return i+'th'
+        const dec = i % 10
+        if (dec === 1) return i+'st'
+        if (dec === 2) return i+'nd'
+        if (dec === 3) return i+'rd'
+        return i+'th'
+    },
+    trimEmojis(text){
+        return text.replace(/(\p{Extended_Pictographic}(?:\uFE0F|\uFE0E)?(?:\u200D\p{Extended_Pictographic}(?:\uFE0F|\uFE0E)?)*)/gu,"")
+    },
 }

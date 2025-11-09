@@ -2,7 +2,17 @@
 //DEFAULT CLIENT MODULE
 ///////////////////////////////////////
 import { ODValidId } from "../modules/base"
-import { ODClientManager, ODSlashCommand, ODTextCommand, ODSlashCommandManager, ODTextCommandManager, ODSlashCommandInteractionCallback, ODTextCommandInteractionCallback } from "../modules/client"
+import { ODClientManager, ODSlashCommand, ODTextCommand, ODSlashCommandManager, ODTextCommandManager, ODSlashCommandInteractionCallback, ODTextCommandInteractionCallback, ODContextMenu, ODContextMenuManager, ODContextMenuInteractionCallback } from "../modules/client"
+
+/** (CONTRIBUTOR GUIDE) HOW TO ADD NEW COMMANDS?
+ * - Register the command in loadAllSlashCommands() & loadAllTextCommands() in (./src/data/framework/commandLoader.ts)
+ * - Add autocomplete for the command in OD(Slash/Text)CommandManagerIds_Default in (./src/core/api/defaults/client.ts)
+ * - Add the command to the help menu in (./src/data/framework/helpMenuLoader.ts)
+ * - If required, new config variables should be added (incl. logs, dm-logs & permissions).
+ * - Update the Open Ticket Documentation.
+ * - If the command contains complex logic or can be executed from a button/dropdown, it should be placed inside an `ODAction`.
+ * - Check all files, test the bot carefully & try a lot of different scenario's with different settings.
+ */
 
 /**## ODClientManager_Default `default_class`
  * This is a special class that adds type definitions & typescript to the ODClientManager class.
@@ -13,6 +23,7 @@ import { ODClientManager, ODSlashCommand, ODTextCommand, ODSlashCommandManager, 
 export class ODClientManager_Default extends ODClientManager {
     declare slashCommands: ODSlashCommandManager_Default
     declare textCommands: ODTextCommandManager_Default
+    declare contextMenus: ODContextMenuManager_Default
 }
 
 /**## ODSlashCommandManagerIds_Default `interface`
@@ -39,6 +50,9 @@ export interface ODSlashCommandManagerIds_Default {
     "opendiscord:clear":ODSlashCommand,
     "opendiscord:autoclose":ODSlashCommand,
     "opendiscord:autodelete":ODSlashCommand,
+    "opendiscord:topic":ODSlashCommand,
+    "opendiscord:priority":ODSlashCommand,
+    "opendiscord:transfer":ODSlashCommand,
 }
 
 /**## ODSlashCommandManager_Default `default_class`
@@ -108,7 +122,11 @@ export interface ODTextCommandManagerIds_Default {
     "opendiscord:autoclose-disable":ODTextCommand,
     "opendiscord:autoclose-enable":ODTextCommand,
     "opendiscord:autodelete-disable":ODTextCommand,
-    "opendiscord:autodelete-enable":ODTextCommand
+    "opendiscord:autodelete-enable":ODTextCommand,
+    "opendiscord:topic-set":ODTextCommand,
+    "opendiscord:priority-set":ODTextCommand,
+    "opendiscord:priority-get":ODTextCommand,
+    "opendiscord:transfer":ODTextCommand,
 }
 
 /**## ODTextCommandManager_Default `default_class`
@@ -141,5 +159,49 @@ export class ODTextCommandManager_Default extends ODTextCommandManager {
 
     onInteraction(commandPrefix:string, commandName:string|RegExp, callback:ODTextCommandInteractionCallback): void {
         return super.onInteraction(commandPrefix,commandName,callback)
+    }
+}
+
+/**## ODContextMenuManagerIds_Default `interface`
+ * This interface is a list of ids available in the `ODContextMenuManager_Default` class.
+ * It's used to generate typescript declarations for this class.
+ */
+export interface ODContextMenuManagerIds_Default {
+    //"opendiscord:test-menu":ODContextMenu
+}
+
+/**## ODContextMenuManager_Default `default_class`
+ * This is a special class that adds type definitions & typescript to the ODContextMenuManager class.
+ * It doesn't add any extra features!
+ * 
+ * This default class is made for the global variable `opendiscord.client.contextMenus`!
+ */
+export class ODContextMenuManager_Default extends ODContextMenuManager {
+    get<ContextMenuId extends keyof ODContextMenuManagerIds_Default>(id:ContextMenuId): ODContextMenuManagerIds_Default[ContextMenuId]
+    get(id:ODValidId): ODContextMenu|null
+    
+    get(id:ODValidId): ODContextMenu|null {
+        return super.get(id)
+    }
+    
+    remove<ContextMenuId extends keyof ODContextMenuManagerIds_Default>(id:ContextMenuId): ODContextMenuManagerIds_Default[ContextMenuId]
+    remove(id:ODValidId): ODContextMenu|null
+    
+    remove(id:ODValidId): ODContextMenu|null {
+        return super.remove(id)
+    }
+
+    exists(id:keyof ODContextMenuManagerIds_Default): boolean
+    exists(id:ODValidId): boolean
+    
+    exists(id:ODValidId): boolean {
+        return super.exists(id)
+    }
+
+    onInteraction(menuName:keyof ODContextMenuManagerIds_Default, callback:ODContextMenuInteractionCallback): void
+    onInteraction(menuName:string|RegExp, callback:ODContextMenuInteractionCallback): void
+
+    onInteraction(menuName:string|RegExp, callback:ODContextMenuInteractionCallback): void {
+        return super.onInteraction(menuName,callback)
     }
 }

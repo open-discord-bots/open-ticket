@@ -5,6 +5,7 @@ import {opendiscord, api, utilities} from "../index"
 import * as discord from "discord.js"
 
 const generalConfig = opendiscord.configs.get("opendiscord:general")
+const lang = opendiscord.languages
 
 export const registerActions = async () => {
     opendiscord.actions.add(new api.ODAction("opendiscord:close-ticket"))
@@ -17,10 +18,15 @@ export const registerActions = async () => {
             
             //update ticket
             ticket.get("opendiscord:closed").value = true
-            if (source == "autoclose") ticket.get("opendiscord:autoclosed").value = true
-            ticket.get("opendiscord:open").value = false
             ticket.get("opendiscord:closed-by").value = user.id
             ticket.get("opendiscord:closed-on").value = new Date().getTime()
+            
+            ticket.get("opendiscord:reopened").value = false
+            ticket.get("opendiscord:reopened-by").value = null
+            ticket.get("opendiscord:reopened-on").value = null
+
+            if (source == "autoclose") ticket.get("opendiscord:autoclosed").value = true
+            ticket.get("opendiscord:open").value = false
             ticket.get("opendiscord:busy").value = true
 
             //update stats
@@ -123,6 +129,9 @@ export const registerActions = async () => {
             if (params.sendMessage) await channel.send((await opendiscord.builders.messages.getSafe("opendiscord:close-message").build(source,{guild,channel,user,ticket,reason})).message)
             ticket.get("opendiscord:busy").value = false
             await opendiscord.events.get("afterTicketClosed").emit([ticket,user,channel,reason])
+
+            //update channel topic
+            await opendiscord.actions.get("opendiscord:update-ticket-topic").run("ticket-action",{guild,channel,user,ticket,sendMessage:false,newTopic:null})
         }),
         new api.ODWorker("opendiscord:discord-logs",1,async (instance,params,source,cancel) => {
             const {guild,channel,user,ticket,reason} = params
@@ -206,13 +215,25 @@ export const registerVerifyBars = async () => {
             }
             //return when already closed
             if (ticket.get("opendiscord:closed").value){
-                instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error").build("button",{guild,channel,user,error:opendiscord.languages.getTranslation("errors.actionInvalid.close"),layout:"simple"}))
+                instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error").build("button",{guild,channel,user,error:lang.getTranslation("errors.actionInvalid.close"),layout:"simple"}))
                 return cancel()
             }
             //return when busy
             if (ticket.get("opendiscord:busy").value){
                 instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-ticket-busy").build("button",{guild,channel,user}))
                 return cancel()
+            }
+            //return when not allowed because of missing messages
+            if (!generalConfig.data.system.allowCloseBeforeMessage || !generalConfig.data.system.allowCloseBeforeAdminMessage){
+                const analysis = await opendiscord.transcripts.collector.ticketUserMessagesAnalysis(ticket,guild,channel)
+                if (analysis && !generalConfig.data.system.allowCloseBeforeMessage && analysis.totalMessages < 1){
+                    instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error").build("button",{guild,channel,user,layout:"simple",error:lang.getTranslation("errors.descriptions.closeBeforeMessage"),customTitle:lang.getTranslation("errors.titles.noPermissions")}))
+                    return cancel()
+                }
+                if (analysis && !generalConfig.data.system.allowCloseBeforeAdminMessage && analysis.adminMessages < 1){
+                    instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error").build("button",{guild,channel,user,layout:"simple",error:lang.getTranslation("errors.descriptions.closeBeforeAdminMessage"),customTitle:lang.getTranslation("errors.titles.noPermissions")}))
+                    return cancel()
+                }
             }
 
             //start closing ticket
@@ -293,13 +314,25 @@ export const registerVerifyBars = async () => {
             }
             //return when already closed
             if (ticket.get("opendiscord:closed").value){
-                instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error").build("button",{guild,channel,user,error:opendiscord.languages.getTranslation("errors.actionInvalid.close"),layout:"simple"}))
+                instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error").build("button",{guild,channel,user,error:lang.getTranslation("errors.actionInvalid.close"),layout:"simple"}))
                 return cancel()
             }
             //return when busy
             if (ticket.get("opendiscord:busy").value){
                 instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-ticket-busy").build("button",{guild,channel,user}))
                 return cancel()
+            }
+            //return when not allowed because of missing messages
+            if (!generalConfig.data.system.allowCloseBeforeMessage || !generalConfig.data.system.allowCloseBeforeAdminMessage){
+                const analysis = await opendiscord.transcripts.collector.ticketUserMessagesAnalysis(ticket,guild,channel)
+                if (analysis && !generalConfig.data.system.allowCloseBeforeMessage && analysis.totalMessages < 1){
+                    instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error").build("button",{guild,channel,user,layout:"simple",error:lang.getTranslation("errors.descriptions.closeBeforeMessage"),customTitle:lang.getTranslation("errors.titles.noPermissions")}))
+                    return cancel()
+                }
+                if (analysis && !generalConfig.data.system.allowCloseBeforeAdminMessage && analysis.adminMessages < 1){
+                    instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error").build("button",{guild,channel,user,layout:"simple",error:lang.getTranslation("errors.descriptions.closeBeforeAdminMessage"),customTitle:lang.getTranslation("errors.titles.noPermissions")}))
+                    return cancel()
+                }
             }
 
             //start closing ticket

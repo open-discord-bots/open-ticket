@@ -13,6 +13,7 @@ import { ODVerifyBar } from "../modules/verifybar"
 import * as discord from "discord.js"
 import { ODTranscriptCompiler, ODTranscriptCompilerCompileResult } from "../openticket/transcript"
 import { ODRole, ODRoleUpdateResult } from "../openticket/role"
+import { ODPriorityLevel } from "../openticket/priority"
 
 /**## ODBuilderManager_Default `default_class`
  * This is a special class that adds type definitions & typescript to the ODBuilderManager class.
@@ -224,7 +225,7 @@ export class ODFile_Default<Source extends string, Params, WorkerIds extends str
  * It's used to generate typescript declarations for this class.
  */
 export interface ODEmbedManagerIds_Default {
-    "opendiscord:error":{source:"slash"|"text"|"button"|"dropdown"|"modal"|"other",params:{guild:discord.Guild|null,channel:discord.TextBasedChannel,user:discord.User,error:string,layout:"simple"|"advanced"},workers:"opendiscord:error"},
+    "opendiscord:error":{source:"slash"|"text"|"button"|"dropdown"|"modal"|"other",params:{guild:discord.Guild|null,channel:discord.TextBasedChannel,user:discord.User,error:string,layout:"simple"|"advanced",customTitle?:string},workers:"opendiscord:error"},
     "opendiscord:error-option-missing":{source:"slash"|"text"|"other",params:{guild:discord.Guild|null,channel:discord.TextBasedChannel,user:discord.User,error:ODTextCommandErrorMissingOption},workers:"opendiscord:error-option-missing"},
     "opendiscord:error-option-invalid":{source:"slash"|"text"|"other",params:{guild:discord.Guild|null,channel:discord.TextBasedChannel,user:discord.User,error:ODTextCommandErrorInvalidOption},workers:"opendiscord:error-option-invalid"},
     "opendiscord:error-unknown-command":{source:"slash"|"text"|"other",params:{guild:discord.Guild|null,channel:discord.TextBasedChannel,user:discord.User,error:ODTextCommandErrorUnknownCommand},workers:"opendiscord:error-unknown-command"},
@@ -238,7 +239,7 @@ export interface ODEmbedManagerIds_Default {
     "opendiscord:error-option-unknown":{source:"slash"|"text"|"button"|"dropdown"|"modal"|"other",params:{guild:discord.Guild|null,channel:discord.TextBasedChannel,user:discord.User},workers:"opendiscord:error-option-unknown"},
     "opendiscord:error-panel-unknown":{source:"slash"|"text"|"button"|"dropdown"|"modal"|"other",params:{guild:discord.Guild|null,channel:discord.TextBasedChannel,user:discord.User},workers:"opendiscord:error-panel-unknown"},
     "opendiscord:error-not-in-guild":{source:"slash"|"text"|"button"|"dropdown"|"modal"|"other",params:{channel:discord.TextBasedChannel,user:discord.User},workers:"opendiscord:error-not-in-guild"},
-    "opendiscord:error-channel-rename":{source:"slash"|"text"|"button"|"dropdown"|"modal"|"ticket-pin"|"ticket-unpin"|"ticket-rename"|"ticket-move"|"other",params:{guild:discord.Guild|null,channel:discord.TextBasedChannel,user:discord.User,originalName:string,newName:string},workers:"opendiscord:error-channel-rename"},
+    "opendiscord:error-channel-rename":{source:"slash"|"text"|"button"|"dropdown"|"modal"|"ticket-pin"|"ticket-unpin"|"ticket-rename"|"ticket-move"|"ticket-priority"|"ticket-transfer"|"other",params:{guild:discord.Guild|null,channel:discord.TextBasedChannel,user:discord.User,originalName:string,newName:string},workers:"opendiscord:error-channel-rename"},
     "opendiscord:error-ticket-busy":{source:"slash"|"text"|"button"|"dropdown"|"modal"|"other",params:{guild:discord.Guild|null,channel:discord.TextBasedChannel,user:discord.User},workers:"opendiscord:error-ticket-busy"},
 
     "opendiscord:help-menu":{source:"text"|"slash"|"button"|"other",params:{mode:"slash"|"text",page:number},workers:"opendiscord:help-menu"},
@@ -281,6 +282,9 @@ export interface ODEmbedManagerIds_Default {
     "opendiscord:transcript-error":{source:"slash"|"text"|"ticket-message"|"reopen-message"|"close-message"|"autoclose-message"|"autodelete"|"clear"|"other",params:{guild:discord.Guild,channel:discord.GuildTextBasedChannel,user:discord.User,ticket:ODTicket,compiler:ODTranscriptCompiler<any,object|null>,reason:string|null},workers:"opendiscord:transcript-error"},
 
     "opendiscord:reaction-role":{source:"panel-button"|"other",params:{guild:discord.Guild,user:discord.User,role:ODRole,result:ODRoleUpdateResult[]},workers:"opendiscord:reaction-role"},
+    "opendiscord:reaction-role-dm":{source:"panel-button"|"other",params:{guild:discord.Guild,user:discord.User,role:ODRole,result:ODRoleUpdateResult[]},workers:"opendiscord:reaction-role-dm"},
+    "opendiscord:reaction-role-logs":{source:"panel-button"|"other",params:{guild:discord.Guild,user:discord.User,role:ODRole,result:ODRoleUpdateResult[]},workers:"opendiscord:reaction-role-logs"},
+
     "opendiscord:clear-verify-message":{source:"slash"|"text"|"other",params:{guild:discord.Guild,channel:discord.GuildTextBasedChannel,user:discord.User,filter:ODTicketClearFilter,list:string[]},workers:"opendiscord:clear-verify-message"},
     "opendiscord:clear-message":{source:"slash"|"text"|"other",params:{guild:discord.Guild,channel:discord.GuildTextBasedChannel,user:discord.User,filter:ODTicketClearFilter,list:string[]},workers:"opendiscord:clear-message"},
     "opendiscord:clear-logs":{source:"slash"|"text"|"other",params:{guild:discord.Guild,channel:discord.GuildTextBasedChannel,user:discord.User,filter:ODTicketClearFilter,list:string[]},workers:"opendiscord:clear-logs"},
@@ -291,6 +295,11 @@ export interface ODEmbedManagerIds_Default {
     "opendiscord:autodelete-enable":{source:"slash"|"text"|"other",params:{guild:discord.Guild,channel:discord.GuildTextBasedChannel,user:discord.User,ticket:ODTicket,time:number,reason:string|null},workers:"opendiscord:autodelete-enable"},
     "opendiscord:autoclose-disable":{source:"slash"|"text"|"other",params:{guild:discord.Guild,channel:discord.GuildTextBasedChannel,user:discord.User,ticket:ODTicket,reason:string|null},workers:"opendiscord:autoclose-disable"},
     "opendiscord:autodelete-disable":{source:"slash"|"text"|"other",params:{guild:discord.Guild,channel:discord.GuildTextBasedChannel,user:discord.User,ticket:ODTicket,reason:string|null},workers:"opendiscord:autodelete-disable"},
+
+    "opendiscord:topic-set":{source:"slash"|"text"|"ticket-action"|"other",params:{guild:discord.Guild,channel:discord.GuildTextBasedChannel,user:discord.User,ticket:ODTicket,topic:string},workers:"opendiscord:topic-set"},
+    "opendiscord:priority-set":{source:"slash"|"text"|"other",params:{guild:discord.Guild,channel:discord.GuildTextBasedChannel,user:discord.User,ticket:ODTicket,priority:ODPriorityLevel,reason:string|null},workers:"opendiscord:priority-set"},
+    "opendiscord:priority-get":{source:"slash"|"text"|"other",params:{guild:discord.Guild,channel:discord.GuildTextBasedChannel,user:discord.User,ticket:ODTicket,priority:ODPriorityLevel},workers:"opendiscord:priority-get"},
+    "opendiscord:transfer-message":{source:"slash"|"text"|"other",params:{guild:discord.Guild,channel:discord.GuildTextBasedChannel,user:discord.User,ticket:ODTicket,oldCreator:discord.User,newCreator:discord.User,reason:string|null},workers:"opendiscord:transfer-message"},
 }
 
 /**## ODEmbedManager_Default `default_class`
@@ -353,7 +362,7 @@ export interface ODMessageManagerIds_Default {
     "opendiscord:verifybar-unpin-message":{source:"verifybar",params:{guild:discord.Guild|null,channel:discord.TextBasedChannel,user:discord.User,verifybar:ODVerifyBar,originalMessage:discord.Message<boolean>},workers:"opendiscord:verifybar-unpin-message"}
     "opendiscord:verifybar-autoclose-message":{source:"verifybar",params:{guild:discord.Guild|null,channel:discord.TextBasedChannel,user:discord.User,verifybar:ODVerifyBar,originalMessage:discord.Message<boolean>},workers:"opendiscord:verifybar-autoclose-message"}
     
-    "opendiscord:error":{source:"slash"|"text"|"button"|"dropdown"|"modal"|"other",params:{guild:discord.Guild|null,channel:discord.TextBasedChannel,user:discord.User,error:string,layout:"simple"|"advanced"},workers:"opendiscord:error"},
+    "opendiscord:error":{source:"slash"|"text"|"button"|"dropdown"|"modal"|"other",params:{guild:discord.Guild|null,channel:discord.TextBasedChannel,user:discord.User,error:string,layout:"simple"|"advanced",customTitle?:string},workers:"opendiscord:error"},
     "opendiscord:error-option-missing":{source:"slash"|"text"|"other",params:{guild:discord.Guild|null,channel:discord.TextBasedChannel,user:discord.User,error:ODTextCommandErrorMissingOption},workers:"opendiscord:error-option-missing"},
     "opendiscord:error-option-invalid":{source:"slash"|"text"|"other",params:{guild:discord.Guild|null,channel:discord.TextBasedChannel,user:discord.User,error:ODTextCommandErrorInvalidOption},workers:"opendiscord:error-option-invalid"},
     "opendiscord:error-unknown-command":{source:"slash"|"text"|"other",params:{guild:discord.Guild|null,channel:discord.TextBasedChannel,user:discord.User,error:ODTextCommandErrorUnknownCommand},workers:"opendiscord:error-unknown-command"},
@@ -367,7 +376,7 @@ export interface ODMessageManagerIds_Default {
     "opendiscord:error-option-unknown":{source:"slash"|"text"|"button"|"dropdown"|"modal"|"other",params:{guild:discord.Guild|null,channel:discord.TextBasedChannel,user:discord.User},workers:"opendiscord:error-option-unknown"},
     "opendiscord:error-panel-unknown":{source:"slash"|"text"|"button"|"dropdown"|"modal"|"other",params:{guild:discord.Guild|null,channel:discord.TextBasedChannel,user:discord.User},workers:"opendiscord:error-panel-unknown"},
     "opendiscord:error-not-in-guild":{source:"slash"|"text"|"button"|"dropdown"|"modal"|"other",params:{channel:discord.TextBasedChannel,user:discord.User},workers:"opendiscord:error-not-in-guild"},
-    "opendiscord:error-channel-rename":{source:"slash"|"text"|"button"|"dropdown"|"modal"|"ticket-pin"|"ticket-unpin"|"ticket-rename"|"ticket-move"|"other",params:{guild:discord.Guild|null,channel:discord.TextBasedChannel,user:discord.User,originalName:string,newName:string},workers:"opendiscord:error-channel-rename"},
+    "opendiscord:error-channel-rename":{source:"slash"|"text"|"button"|"dropdown"|"modal"|"ticket-pin"|"ticket-unpin"|"ticket-rename"|"ticket-move"|"ticket-priority"|"ticket-transfer"|"other",params:{guild:discord.Guild|null,channel:discord.TextBasedChannel,user:discord.User,originalName:string,newName:string},workers:"opendiscord:error-channel-rename"},
     "opendiscord:error-ticket-busy":{source:"slash"|"text"|"button"|"dropdown"|"modal"|"other",params:{guild:discord.Guild|null,channel:discord.TextBasedChannel,user:discord.User},workers:"opendiscord:error-ticket-busy"},
     
     "opendiscord:help-menu":{source:"slash"|"text"|"button"|"other",params:{mode:"slash"|"text",page:number},workers:"opendiscord:help-menu"},
@@ -412,6 +421,9 @@ export interface ODMessageManagerIds_Default {
     "opendiscord:transcript-error":{source:"slash"|"text"|"ticket-message"|"reopen-message"|"close-message"|"autoclose-message"|"autodelete"|"clear"|"other",params:{guild:discord.Guild,channel:discord.GuildTextBasedChannel,user:discord.User,ticket:ODTicket,compiler:ODTranscriptCompiler<any,object|null>,reason:string|null},workers:"opendiscord:transcript-error"},
 
     "opendiscord:reaction-role":{source:"panel-button"|"other",params:{guild:discord.Guild,user:discord.User,role:ODRole,result:ODRoleUpdateResult[]},workers:"opendiscord:reaction-role"},
+    "opendiscord:reaction-role-dm":{source:"panel-button"|"other",params:{guild:discord.Guild,user:discord.User,role:ODRole,result:ODRoleUpdateResult[]},workers:"opendiscord:reaction-role-dm"},
+    "opendiscord:reaction-role-logs":{source:"panel-button"|"other",params:{guild:discord.Guild,user:discord.User,role:ODRole,result:ODRoleUpdateResult[]},workers:"opendiscord:reaction-role-logs"},
+
     "opendiscord:clear-verify-message":{source:"slash"|"text"|"other",params:{guild:discord.Guild,channel:discord.GuildTextBasedChannel,user:discord.User,filter:ODTicketClearFilter,list:string[]},workers:"opendiscord:clear-verify-message"},
     "opendiscord:clear-message":{source:"slash"|"text"|"other",params:{guild:discord.Guild,channel:discord.GuildTextBasedChannel,user:discord.User,filter:ODTicketClearFilter,list:string[]},workers:"opendiscord:clear-message"},
     "opendiscord:clear-logs":{source:"slash"|"text"|"other",params:{guild:discord.Guild,channel:discord.GuildTextBasedChannel,user:discord.User,filter:ODTicketClearFilter,list:string[]},workers:"opendiscord:clear-logs"},
@@ -422,6 +434,11 @@ export interface ODMessageManagerIds_Default {
     "opendiscord:autodelete-enable":{source:"slash"|"text"|"other",params:{guild:discord.Guild,channel:discord.GuildTextBasedChannel,user:discord.User,ticket:ODTicket,time:number,reason:string|null},workers:"opendiscord:autodelete-enable"},
     "opendiscord:autoclose-disable":{source:"slash"|"text"|"other",params:{guild:discord.Guild,channel:discord.GuildTextBasedChannel,user:discord.User,ticket:ODTicket,reason:string|null},workers:"opendiscord:autoclose-disable"},
     "opendiscord:autodelete-disable":{source:"slash"|"text"|"other",params:{guild:discord.Guild,channel:discord.GuildTextBasedChannel,user:discord.User,ticket:ODTicket,reason:string|null},workers:"opendiscord:autodelete-disable"},
+
+    "opendiscord:topic-set":{source:"slash"|"text"|"ticket-action"|"other",params:{guild:discord.Guild,channel:discord.GuildTextBasedChannel,user:discord.User,ticket:ODTicket,topic:string},workers:"opendiscord:topic-set"},
+    "opendiscord:priority-set":{source:"slash"|"text"|"other",params:{guild:discord.Guild,channel:discord.GuildTextBasedChannel,user:discord.User,ticket:ODTicket,priority:ODPriorityLevel,reason:string|null},workers:"opendiscord:priority-set"},
+    "opendiscord:priority-get":{source:"slash"|"text"|"other",params:{guild:discord.Guild,channel:discord.GuildTextBasedChannel,user:discord.User,ticket:ODTicket,priority:ODPriorityLevel},workers:"opendiscord:priority-get"},
+    "opendiscord:transfer-message":{source:"slash"|"text"|"other",params:{guild:discord.Guild,channel:discord.GuildTextBasedChannel,user:discord.User,ticket:ODTicket,oldCreator:discord.User,newCreator:discord.User,reason:string|null},workers:"opendiscord:transfer-message"},
 }
 
 /**## ODMessageManager_Default `default_class`

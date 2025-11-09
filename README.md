@@ -1,5 +1,5 @@
-> ### 🎥 Content Creators 🎥
-> Hey there! We're searching for content creators that would want to create a tutorial or setup guide for Open Ticket!<br>
+> ### 🎥 Content Creators
+> Hey there! We're searching for content creators that would like to create a tutorial or setup guide for Open Ticket!<br>
 > [📌 More Information](.github/CONTENT_CREATORS.md)
 ---
 
@@ -8,7 +8,7 @@
 <br>Powered By<br>
 <img src="https://apis.dj-dj.be/cdn/opendiscord/logo.png" alt="Open Ticket" width="170px"><br>
 <a href="https://discord.com/invite/26vT9wt3n3"><img alt="Discord Invite Link" src="https://img.shields.io/badge/discord-support%20server-5865F2.svg?style=flat-square&logo=discord"></img></a>
-<a href="https://github.com/open-discord-bots/open-ticket/releases/tag/v4.0.7"><img alt="Open Ticket Version" src="https://img.shields.io/badge/version-4.0.7-brightgreen.svg?style=flat-square"></img></a>
+<a href="https://github.com/open-discord-bots/open-ticket/releases/tag/v4.1.0"><img alt="Open Ticket Version" src="https://img.shields.io/badge/version-4.1.0-brightgreen.svg?style=flat-square"></img></a>
 <a href="https://otdocs.dj-dj.be"><img alt="Open Ticket Documentation" src="https://img.shields.io/badge/discord.js-v14-CB3837.svg?style=flat-square&logo=npm"></img></a>
 <a href="https://github.com/open-discord-bots/open-ticket/blob/main/LICENSE"><img alt="Open Ticket License" src="https://img.shields.io/badge/license-GPL%203.0-important.svg?style=flat-square"></img></a>
 <a href="https://otdocs.dj-dj.be"><img alt="Open Ticket Stars" src="https://img.shields.io/github/stars/djj123dj/open-ticket?color=yellow&label=stars&logo=github&style=flat-square"></img></a>
@@ -19,48 +19,50 @@
 </p>
 
 <p align="center">
-Open Ticket is the most advanced & customisable discord ticket bot that you will ever find! You can customise up to 300+ variables! This includes <code>Html Transcripts</code>, <code>Advanced Plugins</code>, <code>Custom Embeds</code>, <code>Questions/Modals</code>, <code>Stats</code> & more!
-You're also able to customise every little aspect of the bot! From embeds to transcripts. Open Ticket is also translated in more than <code>36 Languages</code>! If you need any help, feel free to join our <a href="https://discord.dj-dj.be">discord server</a>!
+Open Ticket is the most advanced & customisable discord ticket bot available! You are able to customise up to 300+ settings and aspects! This includes <code>Html Transcripts</code>, <code>Advanced Plugins</code>, <code>Custom Embeds</code>, <code>Questions/Modals</code>, <code>Stats</code> & more!
+The bot is translated in more than <code>36 Languages</code> and has been battle tested in large Discord servers! If you need any help, feel free to join our <a href="https://discord.dj-dj.be">discord server</a>!
 </p>
 
-<p align="center"><b>⭐️ Help us grow by giving a star! ⭐️</b></p>
+<h3 align="center"><b>⭐️ Help us grow by giving a star! ⭐️</b></h3>
 
 ### 📌 Features
-- **🦇 pterodactyl support** - Open Ticket works perfect on Pterodactyl based panels! [(Download official eggs)](.eggs/README.md)
-- **💩 no bloat** - Your Open Ticket bot doesn't contain any form of bloat or credits!
-- **🔒 tested & secure** - Open Ticket has been battletested by thousands of servers and is very secure!
-- **📈 scalable** - Open Ticket is made to handle huge servers! (Already tested in **servers with 100k members**)
-- **📄 HTML transcripts** - Make use of the most customisable, beautiful and easy-to-use HTML Transcripts!
-- **✅ ticket actions** - Close, Reopen, Delete, Claim, Pin, Rename & Move all your tickets!
-- **🇬🇧 translation** - Open Ticket has been translated in more than **36 languages** by our community!
-- **🎨 customisation** - Open Ticket has been created around customisation, everything can be customised!
-- **🖥️ interactions** - The bot has full support for Buttons, Dropdowns, Slash Commands and Modals!
-- **∞ unlimited** - Create an infinite amount of tickets & panels!
-- **📝 advanced plugins** - Create advanced plugins or use pre-made ones by our community!
-- **👥 user management** - Add & Remove users from all tickets!
-- **📊 detailed stats** - Open Ticket has ticket, user & global staticstics available for everyone!
-- **🚫 blacklist** - Blacklist users to prevent them from creating a ticket!
-- **❓ questions** - Let users answer questions in a modal before the ticket is created!
-- **📦 slash & text** - Open Ticket supports both slash & text commands!
-- **📥 extra buttons** - The bot also supports Reaction Roles & Url Buttons, because why not ¯\\_(ツ)_/¯
-- **✨ commands** - The bot contains more than 25 commands!
+- **⏳ Quick Setup** - Using the interactive Quick Setup CLI, you can **configure Open Ticket in less than 5min!**
+- **🦇 Pterodactyl Support** - Open Ticket works perfect on Pterodactyl based panels. [(Download official eggs)](.eggs/README.md)
+- **💩 No Credits** - Your bot won't contain any form of bloat or credits. It's all yours!
+- **🔒 Private & Secure** - It has been battletested by thousands of servers and **respects security & privacy.**
+- **📈 Scalable** - Made to handle huge servers and has already been **tested in servers with 100k members.**
+- **📄 HTML Transcripts** - The **built-in HTML Transcripts Service** provides beautiful & easy-to-use transcripts.
+- **✅ Ticket Status** - Close, reopen, delete, claim, pin, rename or move tickets in your server.
+- **🇬🇧 Translation** - Every message has been translated in more than **36 languages** by our community.
+- **🎨 Customisation** - More than **200+ settings** are related to customisation & advanced features.
+- **🖥️ Interactions** - The bot has full support for buttons, dropdowns, slash/text commands & modals.
+- **∞ Unlimited Possibilities** - Create an infinite amount of tickets, questions & panels.
+- **📝 Advanced Plugins** - Create advanced plugins or use [**pre-made plugins**](#-plugins) by our community.
+- **👥 Participants** - Add or remove participants & transfer ownership from one user to another.
+- **📊 Detailed Statistics** - With more than **50+ statistics** for tickets, users & the server.
+- **🚫 Blacklist** - Blacklist users to prevent them from creating new tickets.
+- **🚨 Priorities** - Assign different **priority levels** to tickets to mark them as important.
+- **❓ Modal Questions** - Give users the ability to **answer questions** in a modal before their ticket is created.
+- **✨ Commands** - Manage all your tickets with more than 28+ commands.
+- **🤖 Automation** - Automate ticket handling with **autoclose, autodelete** & slow mode.
+- **😎 Additional Features** - For some weird reason, the bot also supports Reaction Role & URL Buttons.
 
-#### And more using plugins!
-  - **💬 reviews** - Create & customise your own review system!
-  - **📢 feedback** - Collect feedback & create forms for people to answer!
-  - **🏷️ tags** - Create tags & answer questions automatically using keywords!
-  - **📝 forms** - Create advanced forms and ask people for additional details!
-  - **🔄 rotating status** - Create a rotating bot status & use dynamic variables from the bot!
-  - **💾 sqlite database** - Use an `sqlite` database for increased performances!
-  - **🎉 custom embeds** - Create your own embeds and use them in your server!
-  - **⏰ reminders** - Create & manage customisable reminders in your server!
-  - **🎨 customisation** - Yep, you heard it right! Even more customisation!
+#### And even more using [pre-made community plugins](#-plugins)!
+  - **💬 Reviews** - Create & manage a support review system.
+  - **📢 Feedback** - Collect feedback & create forms for users to answer.
+  - **⏰ Reminders** - Create & manage customisable reminders.
+  - **🏷️ Tags** - Create tags & answer questions automatically using keywords.
+  - **📝 Forms** - Create advanced forms and automatically ask for repetitive questions.
+  - **🔄 Channel Display** - Create a voice channel with realtime statistics from the ticket system.
+  - **💾 SQLite Database** - Use an `SQLite` database for increased performance.
+  - **🎉 Custom Embeds** - Create your own embeds and send them using a command.
+  - **🎨 Customisation** - Yep, you heard it right. Even more customisation!
   - **😁 And so much more...**
 
 > ### 📦 Resources
-> Not all resources are accurate yet! We are working on this.<br>
-> <a href="https://www.youtube.com/watch?v=2jK9kAf6ASU"><img src="https://apis.dj-dj.be/cdn/openticket/open-ticket-tutorial.png" alt="Open Ticket Tutorial" width="180px"></a>
-> <a href="https://openticket.dj-dj.be/message.html?msg=The%20current%20tutorial%20is%20outdated,%20we%27re%20still%20working%20on%20a%20new%20one!"><img src="https://apis.dj-dj.be/cdn/openticket/open-ticket-docs.png" alt="Open Ticket Docs" width="180px"></a>
+> These resources will help with configuration and usage of the bot:<br>
+> <!--<a href="https://openticket.dj-dj.be/message.html?msg=The%20current%20tutorial%20is%20outdated,%20we%27re%20still%20working%20on%20a%20new%20one!"><img src="https://apis.dj-dj.be/cdn/openticket/open-ticket-tutorial.png" alt="Open Ticket Tutorial" width="180px"></a>-->
+> <a href="https://otdocs.dj-dj.be"><img src="https://apis.dj-dj.be/cdn/openticket/open-ticket-docs.png" alt="Open Ticket Docs" width="180px"></a>
 > <a href="https://github.com/open-discord-bots/plugins"><img src="https://apis.dj-dj.be/cdn/openticket/open-ticket-plugins.png" alt="Open Ticket Plugins" width="180px"></a>
 
 ### ❤️ Sponsors
@@ -83,19 +85,19 @@ A big thanks to all our sponsors! Without them, it wouldn't be possible to creat
 <img src="https://github.com/BENZORICH.png" alt="BENZORICH" width="40px">
 </a>
 
-### ⏱️ Quick Setup
+### ⏱️ Quick Setup (Using CLI)
 > 1. Download the latest version of Open Ticket on [Github](https://github.com/open-discord-bots/open-ticket).
-> 2. Make sure node.js & npm are installed using `node -v` (minimum `v18`).
+> 2. Make sure node.js & npm are installed using `node -v` (minimum `v20`).
 > 3. Install any required dependencies using `npm install`.
-> 4. Configure the bot in the `./config/` directory.
-> 5. Start the bot using `npm start` or `node index.js`
+> 4. Start the **Quick Setup CLI** using `npm run setup`.
+> 5. Click on `> ⏱️ Quick Setup` and follow the instructions.
+> 6. Start the bot using `npm start` or `node index.js`
 >    - The bot will let you know any existing config errors.
 >    - Fix these errors and restart the bot.
-> 6. Enjoy using Open Ticket!
+> 7. Enjoy using Open Ticket!
 > ### [📔 Visit Documentation](https://otdocs.dj-dj.be)
 >
 > ### 🖥️ Recommended Hostings
-> - [⭐ **Peakhosting.nl**](https://peakhosting.nl/) - Official support for Open Ticket pterodactyl eggs.
 > - **Any Pterodactyl-Based Panel** - Easy installation & configuration.
 > - **A Virtual Private Server (VPS)** - Extra customisation & more stability. Recommended for large servers.
 > 
@@ -115,64 +117,69 @@ A list of people that contributed or provided the most support for Open Ticket.
 <td align="center"><img src="https://github.com/smetsliam.png" alt="Profile Picture" width="80px"></td>
 <td align="center"><img src="https://github.com/FrankVissers.png" alt="Profile Picture" width="80px"></td>
 <td align="center"><img src="https://github.com/Sank34.png" alt="Profile Picture" width="80px"></td>
-<td align="center"><img src="https://github.com/Roppl3r.png" alt="Profile Picture" width="80px"></td>
+<td align="center"><img src="https://github.com/guillee3.png" alt="Profile Picture" width="80px"></td>
 </tr>
 <tr>
 <th><a href="https://github.com/DJj123dj">💻 DJj123dj</a></th>
 <th><a href="https://github.com/smetsliam">💬 smetsliam</a></th>
 <th><a href="https://github.com/FrankVissers">💬 Frank Vissers</a></th>
 <th><a href="https://github.com/Sank34">💬 Sanke</a></th>
-<th><a href="https://github.com/Roppl3r">🧩 Roppl3r</a></th>
+<th><a href="https://github.com/guillee3">🧩 Guillee3</a></th>
 </tr>
 </table>
 
 ### 💬 Translators
-With the amazing support of our translators, we've been able to translate Open Ticket in more than **36 languages**!  
-As a result, you're able to enjoy using Open Ticket in your own native language.
-- **Categories: 🟢 Available - 🤖 Made Using AI - 🔴 Unavailable/Outdated**
+With the amazing support of our translators, we've been able to translate Open Ticket in more than **36 languages**!
+#### Categories:
+- **🟢 Available**
+- **⏳ In Progress (Incomplete)**
+- **🤖 Made Using AI**
+- **🟠 Incomplete**
+- **🔴 Unavailable/Outdated**
 
-|🔍 |Languages (36)        |Maintainer (Github/Discord)    |
-|---|---------------------|--------------------------------|
-|🟢 |🇬🇧 English            |djj123dj                       |
-|🟢 |🇳🇱 Dutch              |djj123dj                       |
-|🟢 |🇩🇪 German             |benzorich                      |
-|🟢 |🇪🇸 Spanish            |redactado & josuens            |
-|🟢 |🇵🇹 Portuguese         |quiradon                       |
-|🟢 |❓ Catalan            |guillee3                       |
-|🟢 |🇨🇿 Czech              |spyeye_                        |
-|🟢 |🇭🇺 Hungarian          |kornel0706                     |
-|🟢 |🇷🇴 Romanian           |sankedev                       |
-|🟢 |🇺🇦 Ukrainian          |anderskiy                      |
-|🟢 |🇮🇩 Indonesian         |erxg                           |
-|🟢 |🇮🇹 Italian            |fraden1mvp.                    |
-|🟢 |🇩🇰 Danish             |the_gamer                      |
-|🟢 |🇹🇭 Thai               |modshd                         |
-|🟢 |🇹🇷 Turkish            |palestinian                    |
-|🟢 |🇫🇷 French             |guillee.3                      |
-|🟢 |🇦🇪 Arabic             |palestinian                    |
-|🟢 |🇮🇳 Hindi              |an_developer                   |
-|🟢 |🇱🇹 Lithuanian         |tsgindrius                     |
-|🟢 |🇵🇱 Polish             |danoglez                       |
-|🟢 |🇳🇴 Norwegian          |NoOneNook                      |
-|🟢 |🇸🇪 Swedish            |NoOneNook                      |
-|🟢 |🇮🇷 Persian            |dysashop & zhavis              |
-|🟢 |🇧🇩 Bengali            |HanumeshGupta                  |
-|🤖 |🇪🇪 Estonian           |iamnotmega                     |
-|🤖 |🇫🇮 Finnish            |iamnotmega                     |
-|🤖 |🇷🇺 Russian            |NoOneNook                      |
-|🤖 |🇱🇻 Latvian            |NoOneNook                      |
-|🤖 |🇻🇳 Vietnamese         |ngocdiep2006                   |
-|🤖 |🇯🇵 Japanese           |HanumeshGupta                  |
-|🤖 |🇬🇷 Greek              |HanumeshGupta                  |
-|🤖 |🇸🇮 Slovenian          |HanumeshGupta                  |
-|🤖 |🇰🇷 Korean             |HanumeshGupta                  |
-|🤖 |🇮🇳 Tamil              |HanumeshGupta                  |
-|🤖 |🇨🇳 Simplified Chinese |HanumeshGupta                  |
-|🤖 |❓ Kurdish            |HanumeshGupta                  |
-|🔴 |🇨🇳 Traditional Chinese|[⭐ Contribute!](.github/CONTRIBUTING.md)|
+|🔍  |Languages (36)        |Maintainer (Github/Discord)    |
+|----|---------------------|--------------------------------|
+|🟢   |🇬🇧 English            |djj123dj                       |
+|🟢   |🇳🇱 Dutch              |djj123dj                       |
+|🟢   |❓ Catalan            |guillee3                       |
+|🟢   |🇮🇩 Indonesian         |erxg                           |
+|🟢   |🇮🇳 Hindi              |challenger_nova                |
+|🟢⏳ |🇩🇪 German             |benzorich                      |
+|🟢⏳ |🇪🇸 Spanish            |redactado & josuens            |
+|🟢⏳ |🇫🇷 French             |guillee.3                      |
+|🟢⏳ |🇵🇹 Portuguese         |quiradon                       |
+|🟢⏳ |🇨🇿 Czech              |spyeye_                        |
+|🟢⏳ |🇭🇺 Hungarian          |kornel0706                     |
+|🟢⏳ |🇷🇴 Romanian           |sankedev                       |
+|🟢⏳ |🇺🇦 Ukrainian          |anderskiy                      |
+|🟢⏳ |🇮🇹 Italian            |fraden1mvp.                    |
+|🟢⏳ |🇩🇰 Danish             |the_gamer                      |
+|🟢⏳ |🇹🇭 Thai               |modshd                         |
+|🟢⏳ |🇹🇷 Turkish            |palestinian                    |
+|🟢⏳ |🇦🇪 Arabic             |palestinian                    |
+|🟢⏳ |🇱🇹 Lithuanian         |tsgindrius                     |
+|🟢⏳ |🇵🇱 Polish             |danoglez                       |
+|🟢⏳ |🇳🇴 Norwegian          |NoOneNook                      |
+|🟢⏳ |🇸🇪 Swedish            |NoOneNook                      |
+|🟢⏳ |🇮🇷 Persian            |dysashop & zhavis              |
+|🟢⏳ |🇧🇩 Bengali            |HanumeshGupta                  |
+|🤖   |🇪🇪 Estonian           |iamnotmega                     |
+|🤖   |🇫🇮 Finnish            |iamnotmega                     |
+|🤖⏳ |🇷🇺 Russian            |NoOneNook                      |
+|🤖⏳ |🇱🇻 Latvian            |NoOneNook                      |
+|🤖⏳ |🇻🇳 Vietnamese         |ngocdiep2006                   |
+|🤖⏳ |🇯🇵 Japanese           |HanumeshGupta                  |
+|🤖⏳ |🇬🇷 Greek              |HanumeshGupta                  |
+|🤖⏳ |🇸🇮 Slovenian          |HanumeshGupta                  |
+|🤖⏳ |🇰🇷 Korean             |HanumeshGupta                  |
+|🤖⏳ |🇮🇳 Tamil              |HanumeshGupta                  |
+|🤖⏳ |🇨🇳 Simplified Chinese |HanumeshGupta                  |
+|🤖⏳ |❓ Kurdish            |HanumeshGupta                  |
+|🔴   |🇨🇳 Traditional Chinese|[⭐ Contribute!](.github/CONTRIBUTING.md)|
+<!--[⭐ Contribute!](.github/CONTRIBUTING.md) -->
 
 ## ⭐️ Star History
-Please give this repository a star if you like it.  
+If you enjoy using Open ticket, **consider starring** this repository.  
 This will help us grow and reach even more people!
 
 <a href="https://star-history.com/#open-discord-bots/open-ticket&Date">
@@ -184,13 +191,21 @@ This will help us grow and reach even more people!
 </a>
 
 ## 🧩 Plugins
-**Download all plugins in our [Official Plugin Repository](https://github.com/open-discord-bots/plugins)!**<br>
+**Download all plugins from our [Official Plugin Repository](https://github.com/open-discord-bots/plugins)!**<br>
 > #### ⭐ Featured Plugins (Top 5 Most Used)
 > **[`ot-sqlite-database`](https://github.com/open-discord-bots/plugins/tree/main/open-ticket/ot-sqlite-database/),
-> [`ot-migrate-v3`](https://github.com/open-discord-bots/plugins/tree/main/open-ticket/ot-migrate-v3/),
 > [`ot-reviews`](https://github.com/open-discord-bots/plugins/tree/main/open-ticket/ot-reviews/),
 > [`ot-feedback`](https://github.com/open-discord-bots/plugins/tree/main/open-ticket/ot-feedback/),
-> [`ot-tags`](https://github.com/open-discord-bots/plugins/tree/main/open-ticket/ot-tags/)**
+> [`ot-tags`](https://github.com/open-discord-bots/plugins/tree/main/open-ticket/ot-tags/),
+> [`ot-config-reload`](https://github.com/open-discord-bots/plugins/tree/main/open-ticket/ot-config-reload/)**
+
+#### Categories:
+- **📄 Example** - These plugins serve as an example or starting template.
+- **📢 Command** - These plugins add new commands to the bot.
+- **⚙️ Utility** - These plugins help with utility systems. You might not notice them as a ticket user/admin directly.
+- **🎨 Customisation** - These plugins add even more customisation to the bot.
+- **💼 Management** - These plugins add features that help you manage your server or ticket system.
+- **🤖 Client** - These plugins add features affecting the Discord Client or bot itself.
 
 ### 📦 Official *(made by DJdj Development)*
 |Name                                                                  |Category                    |Description              |
@@ -227,18 +242,10 @@ This will help us grow and reach even more people!
 |[`od-reminders`](https://github.com/open-discord-bots/plugins/tree/main/open-ticket/od-reminders/)                        |guillee.3                   |💼 Management               |Set reminders that will be sent to a channel every specified time. |
 |[`ot-translate-cmds`](https://github.com/open-discord-bots/plugins/tree/main/open-ticket/ot-translate-cmds/)              |guillee.3                   |🤖 Client                  |Translate all built-in command names, descriptions & options. |
 
-### 📢 Categories
-- **📄 Example** - These plugins serve as an example or starting template.
-- **📢 Command** - These plugins add new commands to the bot.
-- **⚙️ Utility** - These plugins help with backend & systems. You won't notice it in discord itself.
-- **🎨 Customisation** - These plugins help you customise the bot even further.
-- **💼 Management** - These plugins add features that help you manage your server.
-- **🤖 Client** - These plugins add features affecting the discord client or bot itself.
-
 ---
 <img src="https://apis.dj-dj.be/cdn/openticket/logo.png" alt="Open Ticket Logo" width="170px">
 
 **README.md**<br>
-[changelog](https://otgithub.dj-dj.be/releases) - [documentation](https://otdocs.dj-dj.be) - [tutorial](https://www.youtube.com/watch?v=2jK9kAf6ASU) - [website](https://openticket.dj-dj.be) - [discord server](https://discord.dj-dj.be) - [license](./LICENSE.md)<br>
+[Changelog](https://otgithub.dj-dj.be/releases) - [Documentation](https://otdocs.dj-dj.be) - [Website](https://openticket.dj-dj.be) - [Support Server](https://discord.dj-dj.be) - [License](./LICENSE.md)<br>
 
 © 2025 - [DJdj Development](https://www.dj-dj.be) - [Terms](https://www.dj-dj.be/terms) - [Privacy Policy](https://www.dj-dj.be/privacy) - [Support Us](https://github.com/sponsors/DJj123dj)

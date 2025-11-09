@@ -24,6 +24,7 @@ export const registerAllMessages = async () => {
     roleMessages()
     clearMessages()
     autoMessages()
+    extraMessages()
 }
 
 const verifyBarMessages = () => {
@@ -332,8 +333,8 @@ const errorMessages = () => {
     messages.add(new api.ODMessage("opendiscord:error"))
     messages.get("opendiscord:error").workers.add(
         new api.ODWorker("opendiscord:error",0,async (instance,params,source) => {
-            const {guild,channel,user,error,layout} = params
-            instance.addEmbed(await embeds.getSafe("opendiscord:error").build(source,{guild,channel,user,error,layout}))
+            const {guild,channel,user,error,layout,customTitle} = params
+            instance.addEmbed(await embeds.getSafe("opendiscord:error").build(source,{guild,channel,user,error,layout,customTitle}))
             instance.setEphemeral(true)
         })
     )
@@ -964,6 +965,24 @@ const roleMessages = () => {
             instance.setEphemeral(true)
         })
     )
+
+    //REACTION ROLE DM
+    messages.add(new api.ODMessage("opendiscord:reaction-role-dm"))
+    messages.get("opendiscord:reaction-role-dm").workers.add(
+        new api.ODWorker("opendiscord:reaction-role-dm",0,async (instance,params,source) => {
+            const {guild,user,role,result} = params
+            instance.addEmbed(await embeds.getSafe("opendiscord:reaction-role-dm").build(source,{guild,user,role,result}))
+        })
+    )
+
+    //REACTION ROLE LOGS
+    messages.add(new api.ODMessage("opendiscord:reaction-role-logs"))
+    messages.get("opendiscord:reaction-role-logs").workers.add(
+        new api.ODWorker("opendiscord:reaction-role-logs",0,async (instance,params,source) => {
+            const {guild,user,role,result} = params
+            instance.addEmbed(await embeds.getSafe("opendiscord:reaction-role-logs").build(source,{guild,user,role,result}))
+        })
+    )
 }
 
 const clearMessages = () => {
@@ -1052,6 +1071,44 @@ const autoMessages = () => {
         new api.ODWorker("opendiscord:autodelete-disable",0,async (instance,params,source) => {
             const {guild,channel,user,ticket,reason} = params
             instance.addEmbed(await embeds.getSafe("opendiscord:autodelete-disable").build(source,{guild,channel,user,ticket,reason}))
+        })
+    )
+}
+
+const extraMessages = () => {
+    //TOPIC SET
+    messages.add(new api.ODMessage("opendiscord:topic-set"))
+    messages.get("opendiscord:topic-set").workers.add(
+        new api.ODWorker("opendiscord:topic-set",0,async (instance,params,source) => {
+            const {guild,channel,user,ticket,topic} = params
+            instance.addEmbed(await embeds.getSafe("opendiscord:topic-set").build(source,{guild,channel,user,ticket,topic}))
+        })
+    )
+
+    //PRIORITY SET
+    messages.add(new api.ODMessage("opendiscord:priority-set"))
+    messages.get("opendiscord:priority-set").workers.add(
+        new api.ODWorker("opendiscord:priority-set",0,async (instance,params,source) => {
+            const {guild,channel,user,ticket,priority,reason} = params
+            instance.addEmbed(await embeds.getSafe("opendiscord:priority-set").build(source,{guild,channel,user,ticket,priority,reason}))
+        })
+    )
+
+    //PRIORITY GET
+    messages.add(new api.ODMessage("opendiscord:priority-get"))
+    messages.get("opendiscord:priority-get").workers.add(
+        new api.ODWorker("opendiscord:priority-get",0,async (instance,params,source) => {
+            const {guild,channel,user,ticket,priority} = params
+            instance.addEmbed(await embeds.getSafe("opendiscord:priority-get").build(source,{guild,channel,user,ticket,priority}))
+        })
+    )
+
+    //TRANSFER MESSAGE
+    messages.add(new api.ODMessage("opendiscord:transfer-message"))
+    messages.get("opendiscord:transfer-message").workers.add(
+        new api.ODWorker("opendiscord:transfer-message",0,async (instance,params,source) => {
+            const {guild,channel,user,ticket,oldCreator,newCreator,reason} = params
+            instance.addEmbed(await embeds.getSafe("opendiscord:transfer-message").build(source,{guild,channel,user,ticket,oldCreator,newCreator,reason}))
         })
     )
 }

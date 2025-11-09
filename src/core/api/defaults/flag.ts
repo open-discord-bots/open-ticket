@@ -23,6 +23,8 @@ export interface ODFlagManagerIds_Default {
     "opendiscord:force-slash-update":ODFlag,
     "opendiscord:no-compile":ODFlag,
     "opendiscord:compile-only":ODFlag,
+    "opendiscord:silent":ODFlag,
+    "opendiscord:cli":ODFlag,
 }
 
 /**## ODFlagManager_Default `default_class`

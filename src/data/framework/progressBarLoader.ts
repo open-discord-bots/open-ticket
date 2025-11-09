@@ -64,4 +64,13 @@ export const loadAllProgressBars = async () => {
 
     //SLASH COMMAND UPDATE (doesn't have correct amount yet)
     opendiscord.progressbars.add(new api.ODManualProgressBar("opendiscord:slash-command-update",fractRenderer.withAdditionalSettings({filledBarColor:"openticket"}),0,"max",null,"Commands Updated"))
+
+    //CONTEXT MENU REMOVE (doesn't have correct amount yet)
+    opendiscord.progressbars.add(new api.ODManualProgressBar("opendiscord:context-menu-remove",fractRenderer.withAdditionalSettings({filledBarColor:"red"}),0,"max",null,"Context Menus Removed"))
+
+    //CONTEXT MENU CREATE (doesn't have correct amount yet)
+    opendiscord.progressbars.add(new api.ODManualProgressBar("opendiscord:context-menu-create",fractRenderer.withAdditionalSettings({filledBarColor:"green"}),0,"max",null,"Context Menus Created"))
+
+    //CONTEXT MENU UPDATE (doesn't have correct amount yet)
+    opendiscord.progressbars.add(new api.ODManualProgressBar("opendiscord:context-menu-update",fractRenderer.withAdditionalSettings({filledBarColor:"openticket"}),0,"max",null,"Context Menus Updated"))
 }

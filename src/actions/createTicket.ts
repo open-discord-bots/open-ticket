@@ -5,6 +5,7 @@ import {opendiscord, api, utilities} from "../index"
 import * as discord from "discord.js"
 
 const generalConfig = opendiscord.configs.get("opendiscord:general")
+const lang = opendiscord.languages
 
 export const registerActions = async () => {
     opendiscord.actions.add(new api.ODAction("opendiscord:create-ticket"))
@@ -19,8 +20,8 @@ export const registerActions = async () => {
             const channelPrefix = option.get("opendiscord:channel-prefix").value
             const channelCategory = option.get("opendiscord:channel-category").value
             const channelBackupCategory = option.get("opendiscord:channel-category-backup").value
-            const channelDescription = option.get("opendiscord:channel-description").value
-            const channelSuffix = await opendiscord.options.suffix.getSuffixFromOption(option,user)
+            const channelTopicText = option.get("opendiscord:channel-topic").value
+            const channelSuffix = await opendiscord.options.suffix.getSuffixFromOption(option,user,guild)
             const channelName = channelPrefix+channelSuffix
 
             //handle category
@@ -73,7 +74,7 @@ export const registerActions = async () => {
                 permissions.push({
                     type:discord.OverwriteType.Role,
                     id:admin,
-                    allow:["ViewChannel","SendMessages","AddReactions","AttachFiles","SendPolls","ReadMessageHistory","ManageMessages"],
+                    allow:["ViewChannel","SendMessages","AddReactions","AttachFiles","SendPolls","ReadMessageHistory","ManageMessages","PinMessages","EmbedLinks"],
                     deny:[]
                 })
             })
@@ -82,7 +83,7 @@ export const registerActions = async () => {
                 permissions.push({
                     type:discord.OverwriteType.Role,
                     id:admin,
-                    allow:["ViewChannel","SendMessages","AddReactions","AttachFiles","SendPolls","ReadMessageHistory","ManageMessages"],
+                    allow:["ViewChannel","SendMessages","AddReactions","AttachFiles","SendPolls","ReadMessageHistory","ManageMessages","PinMessages","EmbedLinks"],
                     deny:[]
                 })
             })
@@ -93,28 +94,15 @@ export const registerActions = async () => {
                     type:discord.OverwriteType.Role,
                     id:admin,
                     allow:["ViewChannel","ReadMessageHistory"],
-                    deny:["SendMessages","AddReactions","AttachFiles","SendPolls"]
+                    deny:["SendMessages","AddReactions","AttachFiles","SendPolls","PinMessages"]
                 })
             })
             permissions.push({
                 type:discord.OverwriteType.Member,
                 id:user.id,
-                allow:["ViewChannel","SendMessages","AddReactions","AttachFiles","SendPolls","ReadMessageHistory"],
+                allow:["ViewChannel","SendMessages","AddReactions","AttachFiles","SendPolls","ReadMessageHistory","EmbedLinks","PinMessages"],
                 deny:[]
             })
-            
-            //create channel
-            const channel = await guild.channels.create({
-                type:discord.ChannelType.GuildText,
-                name:channelName,
-                nsfw:false,
-                topic:channelDescription,
-                parent:category,
-                reason:"Ticket Created By "+user.displayName,
-                permissionOverwrites:permissions
-            })
-
-            await opendiscord.events.get("afterTicketChannelCreated").emit([option,channel,user])
 
             //create participants
             const participants: {type:"role"|"user",id:string}[] = []
@@ -125,12 +113,42 @@ export const registerActions = async () => {
                 participants.push({type,id})
             })
 
+            //manage slowmode
+            const slowMode = option.get("opendiscord:slowmode-enabled").value ? option.get("opendiscord:slowmode-seconds").value : undefined
+            
+            //handle channel topic
+            const channelTopics: string[] = []
+            if (generalConfig.data.system.channelTopic.showOptionName) channelTopics.push(option.get("opendiscord:name").value)
+            if (generalConfig.data.system.channelTopic.showOptionDescription) channelTopics.push(option.get("opendiscord:description").value)
+            if (generalConfig.data.system.channelTopic.showOptionTopic) channelTopics.push(channelTopicText)
+            if (generalConfig.data.system.channelTopic.showPriority) channelTopics.push("**"+lang.getTranslation("params.uppercase.priority")+":** "+opendiscord.priorities.get("opendiscord:none").renderDisplayName())
+            if (generalConfig.data.system.channelTopic.showClosed) channelTopics.push("**"+lang.getTranslation("params.uppercase.status")+":** "+lang.getTranslation("params.uppercase.open"))
+            if (generalConfig.data.system.channelTopic.showClaimed) channelTopics.push("**"+lang.getTranslation("stats.properties.claimedBy")+":** "+lang.getTranslation("params.uppercase.noone"))
+            if (generalConfig.data.system.channelTopic.showPinned) channelTopics.push("**"+lang.getTranslation("params.uppercase.pinned")+":** "+lang.getTranslation("params.uppercase.no"))
+            if (generalConfig.data.system.channelTopic.showCreator) channelTopics.push("**"+lang.getTranslation("params.uppercase.creator")+":** "+discord.userMention(user.id))
+            if (generalConfig.data.system.channelTopic.showParticipants) channelTopics.push("**"+lang.getTranslation("params.uppercase.participants")+":** "+participants.map((p) => (p.type == "user") ? discord.userMention(p.id) : discord.roleMention(p.id)).join(", "))
+
+            //create channel
+            const channel = await guild.channels.create({
+                type:discord.ChannelType.GuildText,
+                name:channelName,
+                nsfw:false,
+                topic:(channelTopics.length > 0) ? channelTopics.join(" • ") : undefined,
+                parent:category,
+                reason:"Ticket Created By "+user.displayName,
+                permissionOverwrites:permissions,
+                rateLimitPerUser:slowMode
+            })
+
+            await opendiscord.events.get("afterTicketChannelCreated").emit([option,channel,user])
+
             //create ticket
             const ticket = new api.ODTicket(channel.id,option,[
                 new api.ODTicketData("opendiscord:busy",false),
                 new api.ODTicketData("opendiscord:ticket-message",null),
                 new api.ODTicketData("opendiscord:participants",participants),
                 new api.ODTicketData("opendiscord:channel-suffix",channelSuffix),
+                new api.ODTicketData("opendiscord:previous-creators",[]),
                 
                 new api.ODTicketData("opendiscord:open",true),
                 new api.ODTicketData("opendiscord:opened-by",user.id),
@@ -138,6 +156,9 @@ export const registerActions = async () => {
                 new api.ODTicketData("opendiscord:closed",false),
                 new api.ODTicketData("opendiscord:closed-by",null),
                 new api.ODTicketData("opendiscord:closed-on",null),
+                new api.ODTicketData("opendiscord:reopened",false),
+                new api.ODTicketData("opendiscord:reopened-by",null),
+                new api.ODTicketData("opendiscord:reopened-on",null),
                 new api.ODTicketData("opendiscord:claimed",false),
                 new api.ODTicketData("opendiscord:claimed-by",null),
                 new api.ODTicketData("opendiscord:claimed-on",null),
@@ -155,7 +176,11 @@ export const registerActions = async () => {
                 new api.ODTicketData("opendiscord:autodelete-enabled",option.get("opendiscord:autodelete-enable-days").value),
                 new api.ODTicketData("opendiscord:autodelete-days",(option.get("opendiscord:autodelete-enable-days").value ? option.get("opendiscord:autodelete-days").value : 0)),
 
-                new api.ODTicketData("opendiscord:answers",answers)
+                new api.ODTicketData("opendiscord:answers",answers),
+                new api.ODTicketData("opendiscord:priority",-1),
+                new api.ODTicketData("opendiscord:topic",option.get("opendiscord:channel-topic").value),
+                new api.ODTicketData("opendiscord:message-sent",false),
+                new api.ODTicketData("opendiscord:admin-message-sent",false),
             ])
 
             //manage stats
@@ -185,6 +210,9 @@ export const registerActions = async () => {
                 const msg = await channel.send((await opendiscord.builders.messages.getSafe("opendiscord:ticket-message").build(source,{guild,channel,user,ticket})).message)
                 
                 ticket.get("opendiscord:ticket-message").value = msg.id
+
+                //pin ticket message (if required)
+                if (generalConfig.data.system.pinFirstTicketMessage && msg.pinnable) await msg.pin("Ticket Message")
                 
                 //manage stats
                 await opendiscord.stats.get("opendiscord:ticket").setStat("opendiscord:messages-sent",ticket.id.value,1,"increase")

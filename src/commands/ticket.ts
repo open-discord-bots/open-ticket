@@ -5,6 +5,7 @@ import {opendiscord, api, utilities} from "../index"
 import * as discord from "discord.js"
 
 const generalConfig = opendiscord.configs.get("opendiscord:general")
+const lang = opendiscord.languages
 
 export const registerCommandResponders = async () => {
     //TICKET COMMAND RESPONDER
@@ -70,6 +71,7 @@ export const registerCommandResponders = async () => {
                 else if (res.reason == "global-user-limit") instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-no-permissions-limits").build(source,{guild:instance.guild,channel:instance.channel,user:instance.user,limit:"global-user"}))
                 else if (res.reason == "option-limit") instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-no-permissions-limits").build(source,{guild:instance.guild,channel:instance.channel,user:instance.user,limit:"option"}))
                 else if (res.reason == "option-user-limit") instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-no-permissions-limits").build(source,{guild:instance.guild,channel:instance.channel,user:instance.user,limit:"option-user"}))
+                else if (res.reason == "custom") instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error").build(source,{guild:instance.guild,channel:instance.channel,user:instance.user,layout:"simple",error:res.customReason ?? lang.getTranslation("errors.descriptions.unableToCreateTicket")+" `Unknown invalid_permission_reason => no reason specified by plugin`",customTitle:lang.getTranslation("errors.titles.permissionError")}))
                 else instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error").build(source,{guild:instance.guild,channel:instance.channel,user:instance.user,error:"Unknown invalid_permission reason => calculation failed #1",layout:"advanced"}))
                 return cancel()
             }
@@ -132,6 +134,7 @@ export const registerButtonResponders = async () => {
                 else if (res.reason == "global-user-limit") instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-no-permissions-limits").build(source,{guild:instance.guild,channel:instance.channel,user:instance.user,limit:"global-user"}))
                 else if (res.reason == "option-limit") instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-no-permissions-limits").build(source,{guild:instance.guild,channel:instance.channel,user:instance.user,limit:"option"}))
                 else if (res.reason == "option-user-limit") instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-no-permissions-limits").build(source,{guild:instance.guild,channel:instance.channel,user:instance.user,limit:"option-user"}))
+                else if (res.reason == "custom") instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error").build(source,{guild:instance.guild,channel:instance.channel,user:instance.user,layout:"simple",error:res.customReason ?? lang.getTranslation("errors.descriptions.unableToCreateTicket")+" `Unknown invalid_permission_reason => no reason specified by plugin`",customTitle:lang.getTranslation("errors.titles.permissionError")}))
                 else instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error").build(source,{guild:instance.guild,channel:instance.channel,user:instance.user,error:"Unknown invalid_permission reason => calculation failed #1",layout:"advanced"}))
                 return cancel()
             }
@@ -187,6 +190,7 @@ export const registerDropdownResponders = async () => {
                 else if (res.reason == "global-user-limit") instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-no-permissions-limits").build(source,{guild:instance.guild,channel:instance.channel,user:instance.user,limit:"global-user"}))
                 else if (res.reason == "option-limit") instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-no-permissions-limits").build(source,{guild:instance.guild,channel:instance.channel,user:instance.user,limit:"option"}))
                 else if (res.reason == "option-user-limit") instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-no-permissions-limits").build(source,{guild:instance.guild,channel:instance.channel,user:instance.user,limit:"option-user"}))
+                else if (res.reason == "custom") instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error").build(source,{guild:instance.guild,channel:instance.channel,user:instance.user,layout:"simple",error:res.customReason ?? lang.getTranslation("errors.descriptions.unableToCreateTicket")+" `Unknown invalid_permission_reason => no reason specified by plugin`",customTitle:lang.getTranslation("errors.titles.permissionError")}))
                 else instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error").build(source,{guild:instance.guild,channel:instance.channel,user:instance.user,error:"Unknown invalid_permission reason => calculation failed #1",layout:"advanced"}))
                 return cancel()
             }

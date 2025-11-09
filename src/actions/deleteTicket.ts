@@ -5,6 +5,7 @@ import {opendiscord, api, utilities} from "../index"
 import * as discord from "discord.js"
 
 const generalConfig = opendiscord.configs.get("opendiscord:general")
+const lang = opendiscord.languages
 
 export const registerActions = async () => {
     opendiscord.actions.add(new api.ODAction("opendiscord:delete-ticket"))
@@ -121,6 +122,14 @@ export const registerVerifyBars = async () => {
         new api.ODWorker("opendiscord:permissions",1,async (instance,params,source,cancel) => {
             const permissionMode = generalConfig.data.system.permissions.delete
 
+            //don't allow deleteWithoutTranscript to non-global-admins when enabled
+            if (params.data == "no-transcript" && generalConfig.data.system.adminOnlyDeleteWithoutTranscript){
+                if (!opendiscord.permissions.hasPermissions("support",await opendiscord.permissions.getPermissions(instance.user,instance.channel,instance.guild,{allowChannelRoleScope:false,allowChannelUserScope:false,allowGlobalRoleScope:true,allowGlobalUserScope:true}))){
+                    instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-no-permissions").build("button",{guild:instance.guild,channel:instance.channel,user:instance.user,permissions:["support"]}))
+                    return cancel()
+                }
+            }
+
             if (permissionMode == "none"){
                 //no permissions
                 instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-no-permissions").build("button",{guild:instance.guild,channel:instance.channel,user:instance.user,permissions:[]}))
@@ -166,6 +175,18 @@ export const registerVerifyBars = async () => {
             if (ticket.get("opendiscord:busy").value){
                 instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-ticket-busy").build("button",{guild,channel,user}))
                 return cancel()
+            }
+            //return when not allowed because of missing messages
+            if (!generalConfig.data.system.allowCloseBeforeMessage || !generalConfig.data.system.allowCloseBeforeAdminMessage){
+                const analysis = await opendiscord.transcripts.collector.ticketUserMessagesAnalysis(ticket,guild,channel)
+                if (analysis && !generalConfig.data.system.allowCloseBeforeMessage && analysis.totalMessages < 1){
+                    instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error").build("button",{guild,channel,user,layout:"simple",error:lang.getTranslation("errors.descriptions.closeBeforeMessage"),customTitle:lang.getTranslation("errors.titles.noPermissions")}))
+                    return cancel()
+                }
+                if (analysis && !generalConfig.data.system.allowCloseBeforeAdminMessage && analysis.adminMessages < 1){
+                    instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error").build("button",{guild,channel,user,layout:"simple",error:lang.getTranslation("errors.descriptions.closeBeforeAdminMessage"),customTitle:lang.getTranslation("errors.titles.noPermissions")}))
+                    return cancel()
+                }
             }
 
             //start deleting ticket
@@ -206,6 +227,14 @@ export const registerVerifyBars = async () => {
         new api.ODWorker("opendiscord:permissions",1,async (instance,params,source,cancel) => {
             const permissionMode = generalConfig.data.system.permissions.delete
 
+            //don't allow deleteWithoutTranscript to non-global-admins when enabled
+            if (params.data == "no-transcript" && generalConfig.data.system.adminOnlyDeleteWithoutTranscript){
+                if (!opendiscord.permissions.hasPermissions("support",await opendiscord.permissions.getPermissions(instance.user,instance.channel,instance.guild,{allowChannelRoleScope:false,allowChannelUserScope:false,allowGlobalRoleScope:true,allowGlobalUserScope:true}))){
+                    instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-no-permissions").build("button",{guild:instance.guild,channel:instance.channel,user:instance.user,permissions:["support"]}))
+                    return cancel()
+                }
+            }
+
             if (permissionMode == "none"){
                 //no permissions
                 instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-no-permissions").build("button",{guild:instance.guild,channel:instance.channel,user:instance.user,permissions:[]}))
@@ -251,6 +280,18 @@ export const registerVerifyBars = async () => {
             if (ticket.get("opendiscord:busy").value){
                 instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-ticket-busy").build("button",{guild,channel,user}))
                 return cancel()
+            }
+            //return when not allowed because of missing messages
+            if (!generalConfig.data.system.allowCloseBeforeMessage || !generalConfig.data.system.allowCloseBeforeAdminMessage){
+                const analysis = await opendiscord.transcripts.collector.ticketUserMessagesAnalysis(ticket,guild,channel)
+                if (analysis && !generalConfig.data.system.allowCloseBeforeMessage && analysis.totalMessages < 1){
+                    instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error").build("button",{guild,channel,user,layout:"simple",error:lang.getTranslation("errors.descriptions.closeBeforeMessage"),customTitle:lang.getTranslation("errors.titles.noPermissions")}))
+                    return cancel()
+                }
+                if (analysis && !generalConfig.data.system.allowCloseBeforeAdminMessage && analysis.adminMessages < 1){
+                    instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error").build("button",{guild,channel,user,layout:"simple",error:lang.getTranslation("errors.descriptions.closeBeforeAdminMessage"),customTitle:lang.getTranslation("errors.titles.noPermissions")}))
+                    return cancel()
+                }
             }
 
             //start deleting ticket
@@ -295,6 +336,14 @@ export const registerVerifyBars = async () => {
         new api.ODWorker("opendiscord:permissions",1,async (instance,params,source,cancel) => {
             const permissionMode = generalConfig.data.system.permissions.delete
 
+            //don't allow deleteWithoutTranscript to non-global-admins when enabled
+            if (params.data == "no-transcript" && generalConfig.data.system.adminOnlyDeleteWithoutTranscript){
+                if (!opendiscord.permissions.hasPermissions("support",await opendiscord.permissions.getPermissions(instance.user,instance.channel,instance.guild,{allowChannelRoleScope:false,allowChannelUserScope:false,allowGlobalRoleScope:true,allowGlobalUserScope:true}))){
+                    instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-no-permissions").build("button",{guild:instance.guild,channel:instance.channel,user:instance.user,permissions:["support"]}))
+                    return cancel()
+                }
+            }
+
             if (permissionMode == "none"){
                 //no permissions
                 instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-no-permissions").build("button",{guild:instance.guild,channel:instance.channel,user:instance.user,permissions:[]}))
@@ -340,6 +389,18 @@ export const registerVerifyBars = async () => {
             if (ticket.get("opendiscord:busy").value){
                 instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-ticket-busy").build("button",{guild,channel,user}))
                 return cancel()
+            }
+            //return when not allowed because of missing messages
+            if (!generalConfig.data.system.allowCloseBeforeMessage || !generalConfig.data.system.allowCloseBeforeAdminMessage){
+                const analysis = await opendiscord.transcripts.collector.ticketUserMessagesAnalysis(ticket,guild,channel)
+                if (analysis && !generalConfig.data.system.allowCloseBeforeMessage && analysis.totalMessages < 1){
+                    instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error").build("button",{guild,channel,user,layout:"simple",error:lang.getTranslation("errors.descriptions.closeBeforeMessage"),customTitle:lang.getTranslation("errors.titles.noPermissions")}))
+                    return cancel()
+                }
+                if (analysis && !generalConfig.data.system.allowCloseBeforeAdminMessage && analysis.adminMessages < 1){
+                    instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error").build("button",{guild,channel,user,layout:"simple",error:lang.getTranslation("errors.descriptions.closeBeforeAdminMessage"),customTitle:lang.getTranslation("errors.titles.noPermissions")}))
+                    return cancel()
+                }
             }
 
             //start deleting ticket
@@ -384,6 +445,14 @@ export const registerVerifyBars = async () => {
         new api.ODWorker("opendiscord:permissions",1,async (instance,params,source,cancel) => {
             const permissionMode = generalConfig.data.system.permissions.delete
 
+            //don't allow deleteWithoutTranscript to non-global-admins when enabled
+            if (params.data == "no-transcript" && generalConfig.data.system.adminOnlyDeleteWithoutTranscript){
+                if (!opendiscord.permissions.hasPermissions("support",await opendiscord.permissions.getPermissions(instance.user,instance.channel,instance.guild,{allowChannelRoleScope:false,allowChannelUserScope:false,allowGlobalRoleScope:true,allowGlobalUserScope:true}))){
+                    instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-no-permissions").build("button",{guild:instance.guild,channel:instance.channel,user:instance.user,permissions:["support"]}))
+                    return cancel()
+                }
+            }
+
             if (permissionMode == "none"){
                 //no permissions
                 instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-no-permissions").build("button",{guild:instance.guild,channel:instance.channel,user:instance.user,permissions:[]}))
@@ -429,6 +498,18 @@ export const registerVerifyBars = async () => {
             if (ticket.get("opendiscord:busy").value){
                 instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-ticket-busy").build("button",{guild,channel,user}))
                 return cancel()
+            }
+            //return when not allowed because of missing messages
+            if (!generalConfig.data.system.allowCloseBeforeMessage || !generalConfig.data.system.allowCloseBeforeAdminMessage){
+                const analysis = await opendiscord.transcripts.collector.ticketUserMessagesAnalysis(ticket,guild,channel)
+                if (analysis && !generalConfig.data.system.allowCloseBeforeMessage && analysis.totalMessages < 1){
+                    instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error").build("button",{guild,channel,user,layout:"simple",error:lang.getTranslation("errors.descriptions.closeBeforeMessage"),customTitle:lang.getTranslation("errors.titles.noPermissions")}))
+                    return cancel()
+                }
+                if (analysis && !generalConfig.data.system.allowCloseBeforeAdminMessage && analysis.adminMessages < 1){
+                    instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error").build("button",{guild,channel,user,layout:"simple",error:lang.getTranslation("errors.descriptions.closeBeforeAdminMessage"),customTitle:lang.getTranslation("errors.titles.noPermissions")}))
+                    return cancel()
+                }
             }
 
             //start deleting ticket

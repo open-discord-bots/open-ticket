@@ -10,6 +10,7 @@ import { ODTicket, ODTicketClearFilter } from "../openticket/ticket"
 import { ODTranscriptCompiler, ODTranscriptCompilerCompileResult } from "../openticket/transcript"
 import { ODMessageBuildSentResult } from "../modules/builder"
 import { ODRole, ODRoleUpdateMode, ODRoleUpdateResult } from "../openticket/role"
+import { ODPriorityLevel } from "../openticket/priority"
 
 /**## ODActionManagerIds_Default `interface`
  * This interface is a list of ids available in the `ODActionManager_Default` class.
@@ -19,7 +20,7 @@ export interface ODActionManagerIds_Default {
     "opendiscord:create-ticket-permissions":{
         source:"panel-button"|"panel-dropdown"|"slash"|"text"|"other",
         params:{guild:discord.Guild,user:discord.User,option:ODTicketOption},
-        result:{valid:boolean,reason:"blacklist"|"cooldown"|"global-limit"|"global-user-limit"|"option-limit"|"option-user-limit"|null,cooldownUntil?:Date},
+        result:{valid:boolean,reason:"blacklist"|"cooldown"|"global-limit"|"global-user-limit"|"option-limit"|"option-user-limit"|"custom"|null,cooldownUntil?:Date,customReason?:string},
         workers:"opendiscord:check-blacklist"|"opendiscord:check-cooldown"|"opendiscord:check-global-limits"|"opendiscord:check-option-limits"|"opendiscord:valid"
     },
     "opendiscord:create-transcript":{
@@ -111,7 +112,25 @@ export interface ODActionManagerIds_Default {
         params:{guild:discord.Guild,channel:discord.GuildTextBasedChannel,user:discord.User,filter:ODTicketClearFilter,list:ODTicket[]},
         result:{list:string[]},
         workers:"opendiscord:clear-tickets"|"opendiscord:discord-logs"|"opendiscord:logs"
-    }
+    },
+    "opendiscord:update-ticket-topic":{
+        source:"slash"|"text"|"ticket-action"|"other",
+        params:{guild:discord.Guild,channel:discord.GuildTextBasedChannel,user:discord.User,ticket:ODTicket,newTopic:string|null,sendMessage:boolean},
+        result:{},
+        workers:"opendiscord:update-ticket-topic"|"opendiscord:discord-logs"|"opendiscord:logs"
+    },
+    "opendiscord:update-ticket-priority":{
+        source:"slash"|"text"|"other",
+        params:{guild:discord.Guild,channel:discord.GuildTextBasedChannel,user:discord.User,ticket:ODTicket,newPriority:ODPriorityLevel,reason:string|null,sendMessage:boolean},
+        result:{},
+        workers:"opendiscord:update-ticket-priority"|"opendiscord:discord-logs"|"opendiscord:logs"
+    },
+    "opendiscord:transfer-ticket":{
+        source:"slash"|"text"|"other",
+        params:{guild:discord.Guild,channel:discord.GuildTextBasedChannel,user:discord.User,ticket:ODTicket,newCreator:discord.User,reason:string|null,sendMessage:boolean},
+        result:{},
+        workers:"opendiscord:transfer-ticket"|"opendiscord:discord-logs"|"opendiscord:logs"
+    },
 }
 
 /**## ODActionManager_Default `default_class`

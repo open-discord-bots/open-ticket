@@ -3,6 +3,16 @@ import * as discord from "discord.js"
 
 const lang = opendiscord.languages
 
+/** (CONTRIBUTOR GUIDE) HOW TO ADD NEW COMMANDS?
+ * - Register the command in loadAllSlashCommands() & loadAllTextCommands() in (./src/data/framework/commandLoader.ts)
+ * - Add autocomplete for the command in OD(Slash/Text)CommandManagerIds_Default in (./src/core/api/defaults/client.ts)
+ * - Add the command to the help menu in (./src/data/framework/helpMenuLoader.ts)
+ * - If required, new config variables should be added (incl. logs, dm-logs & permissions).
+ * - Update the Open Ticket Documentation.
+ * - If the command contains complex logic or can be executed from a button/dropdown, it should be placed inside an `ODAction`.
+ * - Check all files, test the bot carefully & try a lot of different scenario's with different settings.
+ */
+
 export const loadAllSlashCommands = async () => {
     const commands = opendiscord.client.slashCommands
     const generalConfig = opendiscord.configs.get("opendiscord:general")
@@ -12,19 +22,6 @@ export const loadAllSlashCommands = async () => {
     const acot = discord.ApplicationCommandOptionType
 
     if (!generalConfig.data.slashCommands) return
-
-    //create panel choices
-    const panelChoices : {name:string, value:string}[] = []
-    opendiscord.configs.get("opendiscord:panels").data.forEach((panel) => {
-        panelChoices.push({name:panel.name, value:panel.id})
-    })
-
-    //create ticket choices
-    const ticketChoices : {name:string, value:string}[] = []
-    opendiscord.configs.get("opendiscord:options").data.forEach((option) => {
-        if (option.type != "ticket") return
-        ticketChoices.push({name:option.name, value:option.id})
-    })
 
     const allowedCommands: string[] = []
     for (const key in generalConfig.data.system.permissions){
@@ -53,7 +50,7 @@ export const loadAllSlashCommands = async () => {
                 description:lang.getTranslation("commands.panelId"),
                 type:acot.String,
                 required:true,
-                choices:panelChoices
+                autocomplete:true
             },
             {
                 name:"auto-update",
@@ -62,14 +59,6 @@ export const loadAllSlashCommands = async () => {
                 required:false
             }
         ]
-    },(current) => {
-        //check if this slash command needs to be updated
-        const idOption = current.options.find((opt) => opt.name == "id" && opt.type == acot.String)
-        if (!idOption || idOption.choices.length != panelChoices.length) return true
-        if (!panelChoices.every((panel) => {
-            return (idOption.choices.find((c) => c.value == panel.value && c.name == panel.name)) ? true : false
-        })) return true
-        return false
     }))
 
     //TICKET (when enabled)
@@ -85,17 +74,9 @@ export const loadAllSlashCommands = async () => {
                 description:lang.getTranslation("commands.ticketId"),
                 type:acot.String,
                 required:true,
-                choices:ticketChoices
+                autocomplete:true
             }
         ]
-    },(current) => {
-        //check if this slash command needs to be updated
-        const idOption = current.options.find((opt) => opt.name == "id" && opt.type == acot.String)
-        if (!idOption || idOption.choices.length != ticketChoices.length) return true
-        if (!ticketChoices.every((ticket) => {
-            return (idOption.choices.find((c) => c.value == ticket.value && c.name == ticket.name)) ? true : false
-        })) return true
-        return false
     }))
 
     //CLOSE
@@ -257,7 +238,7 @@ export const loadAllSlashCommands = async () => {
                 description:lang.getTranslation("commands.moveId"),
                 type:acot.String,
                 required:true,
-                choices:ticketChoices
+                autocomplete:true
             },
             {
                 name:"reason",
@@ -266,14 +247,6 @@ export const loadAllSlashCommands = async () => {
                 required:false
             }
         ]
-    },(current) => {
-        //check if this slash command needs to be updated
-        const idOption = current.options.find((opt) => opt.name == "id" && opt.type == acot.String)
-        if (!idOption || idOption.choices.length != ticketChoices.length) return true
-        if (!ticketChoices.every((ticket) => {
-            return (idOption.choices.find((c) => c.value == ticket.value && c.name == ticket.name)) ? true : false
-        })) return true
-        return false
     }))
 
     //RENAME
@@ -579,6 +552,91 @@ export const loadAllSlashCommands = async () => {
                         required:false
                     }
                 ]
+            }
+        ]
+    }))
+
+    //TOPIC
+    if (allowedCommands.includes("topic")) commands.add(new api.ODSlashCommand("opendiscord:topic",{
+        type:act.ChatInput,
+        name:"topic",
+        description:lang.getTranslation("commands.topic"),
+        contexts:[discord.InteractionContextType.Guild],
+        integrationTypes:[discord.ApplicationIntegrationType.GuildInstall],
+        options:[
+            {
+                name:"set",
+                description:lang.getTranslation("commands.topicSet"),
+                type:acot.Subcommand,
+                options:[
+                    {
+                        name:"topic",
+                        description:lang.getTranslation("commands.topicValue"),
+                        type:acot.String,
+                        required:true
+                    }
+                ]
+            },
+            //TODO: list (v4.2)
+        ]
+    }))
+
+    //PRIORITY
+    if (allowedCommands.includes("priority")) commands.add(new api.ODSlashCommand("opendiscord:priority",{
+        type:act.ChatInput,
+        name:"priority",
+        description:lang.getTranslation("commands.priority"),
+        contexts:[discord.InteractionContextType.Guild],
+        integrationTypes:[discord.ApplicationIntegrationType.GuildInstall],
+        options:[
+            {
+                name:"set",
+                description:lang.getTranslation("commands.prioritySet"),
+                type:acot.Subcommand,
+                options:[
+                    {
+                        name:"priority",
+                        description:lang.getTranslation("commands.priorityValue"),
+                        type:acot.String,
+                        required:true,
+                        choices:opendiscord.priorities.getAll().sort((a,b) => b.priority-a.priority).map((prio) => ({value:prio.rawName,name:prio.renderDisplayName()}))
+                    },
+                    {
+                        name:"reason",
+                        description:lang.getTranslation("commands.reason"),
+                        type:acot.String,
+                        required:false
+                    }
+                ]
+            },
+            {
+                name:"get",
+                description:lang.getTranslation("commands.priorityGet"),
+                type:acot.Subcommand
+            },
+            //TODO: list (v4.2)
+        ]
+    }))
+
+    //TRANSFER
+    if (allowedCommands.includes("transfer")) commands.add(new api.ODSlashCommand("opendiscord:transfer",{
+        type:act.ChatInput,
+        name:"transfer",
+        description:lang.getTranslation("commands.transfer"),
+        contexts:[discord.InteractionContextType.Guild],
+        integrationTypes:[discord.ApplicationIntegrationType.GuildInstall],
+        options:[
+            {
+                name:"user",
+                description:lang.getTranslation("commands.transferUser"),
+                type:acot.User,
+                required:true
+            },
+            {
+                name:"reason",
+                description:lang.getTranslation("commands.reason"),
+                type:acot.String,
+                required:false
             }
         ]
     }))
@@ -1084,4 +1142,85 @@ export const loadAllTextCommands = async () => {
             }
         ]
     }))
+
+    //TOPIC
+    //TODO: topic list (v4.2)
+    if (allowedCommands.includes("topic")) commands.add(new api.ODTextCommand("opendiscord:topic-set",{
+        name:"topic set",
+        prefix,
+        dmPermission:false,
+        guildPermission:true,
+        allowBots:false,
+        options:[
+            {
+                name:"topic",
+                type:"string",
+                required:true,
+                allowSpaces:true
+            }
+        ]
+    }))
+
+    //PRIORITY
+    //TODO: priority list (v4.2)
+    if (allowedCommands.includes("priority")) commands.add(new api.ODTextCommand("opendiscord:priority-set",{
+        name:"priority set",
+        prefix,
+        dmPermission:false,
+        guildPermission:true,
+        allowBots:false,
+        options:[
+            {
+                name:"priority",
+                type:"string",
+                required:true,
+                allowSpaces:false,
+                choices:opendiscord.priorities.getAll().sort((a,b) => b.priority-a.priority).map((prio) => prio.rawName)
+            },
+            {
+                name:"reason",
+                type:"string",
+                required:false,
+                allowSpaces:true
+            }
+        ]
+    }))
+    if (allowedCommands.includes("priority")) commands.add(new api.ODTextCommand("opendiscord:priority-get",{
+        name:"priority get",
+        prefix,
+        dmPermission:false,
+        guildPermission:true,
+        allowBots:false,
+    }))
+
+    //TRANSFER
+    if (allowedCommands.includes("transfer")) commands.add(new api.ODTextCommand("opendiscord:transfer",{
+        name:"transfer",
+        prefix,
+        dmPermission:false,
+        guildPermission:true,
+        allowBots:false,
+        options:[
+            {
+                name:"user",
+                type:"user",
+                required:true
+            },
+            {
+                name:"reason",
+                type:"string",
+                required:false,
+                allowSpaces:true
+            }
+        ]
+    }))
+}
+
+export const loadAllContextMenus = async () => {
+    const menus = opendiscord.client.contextMenus
+    const generalConfig = opendiscord.configs.get("opendiscord:general")
+    if (!generalConfig) return
+
+    const act = discord.ApplicationCommandType
+    if (!generalConfig.data.slashCommands) return
 }

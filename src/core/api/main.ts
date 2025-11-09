@@ -37,6 +37,7 @@ import { ODQuestionManager } from "./openticket/question"
 import { ODBlacklistManager } from "./openticket/blacklist"
 import { ODTranscriptManager_Default } from "./openticket/transcript"
 import { ODRoleManager } from "./openticket/role"
+import { ODPriorityManager_Default } from "./openticket/priority"
 
 /**## ODMain `class`
  * This is the main Open Ticket class.
@@ -127,12 +128,14 @@ export class ODMain {
     transcripts: ODTranscriptManager_Default
     /**The manager that manages all reaction roles in the bot. (here, you can add additional data to roles) */
     roles: ODRoleManager
+    /**The manager that manages all priority levels in the bot. (register/edit ticket priority levels) */
+    priorities: ODPriorityManager_Default
 
     constructor(){
         this.versions = new ODVersionManager_Default()
-        this.versions.add(ODVersion.fromString("opendiscord:version","v4.0.7"))
+        this.versions.add(ODVersion.fromString("opendiscord:version","v4.1.0"))
         this.versions.add(ODVersion.fromString("opendiscord:api","v1.0.0"))
-        this.versions.add(ODVersion.fromString("opendiscord:transcripts","v2.0.0"))
+        this.versions.add(ODVersion.fromString("opendiscord:transcripts","v2.1.0"))
         this.versions.add(ODVersion.fromString("opendiscord:livestatus","v2.0.0"))
 
         this.debugfile = new ODDebugFileManager("./","otdebug.txt",5000,this.versions.get("opendiscord:version"))
@@ -173,8 +176,9 @@ export class ODMain {
         this.panels = new ODPanelManager(this.debug)
         this.tickets = new ODTicketManager(this.debug,this.client)
         this.blacklist = new ODBlacklistManager(this.debug)
-        this.transcripts = new ODTranscriptManager_Default(this.debug,this.tickets,this.client)
+        this.transcripts = new ODTranscriptManager_Default(this.debug,this.tickets,this.client,this.permissions)
         this.roles = new ODRoleManager(this.debug)
+        this.priorities = new ODPriorityManager_Default(this.debug)
     }
     
     /**Log a message to the console. But in the Open Ticket style :) */

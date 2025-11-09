@@ -31,7 +31,7 @@ export const loadAllStartScreenComponents = async () => {
     
     //STATS
     opendiscord.startscreen.add(new api.ODStartScreenPropertiesCategoryComponent("opendiscord:stats",2,"startup info",[
-        {key:"status",value:ansis.bold(opendiscord.client.activity.getStatusType())+opendiscord.client.activity.text+" ("+opendiscord.client.activity.status+")"},
+        {key:"status",value:ansis.bold(opendiscord.client.activity.getStatusType())+opendiscord.client.activity.text+" ("+opendiscord.client.activity.mode+")"},
         {key:"options",value:"loaded "+ansis.bold(opendiscord.options.getLength().toString())+" options!"},
         {key:"panels",value:"loaded "+ansis.bold(opendiscord.panels.getLength().toString())+" panels!"},
         {key:"tickets",value:"loaded "+ansis.bold(opendiscord.tickets.getLength().toString())+" tickets!"},

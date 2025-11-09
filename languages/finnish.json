@@ -1,8 +1,8 @@
 {
     "_TRANSLATION":{
-        "otversion":"v4.0.7",
+        "otversion":"v4.1.0",
         "translators":["iamnotmega","ChatGPT"],
-        "lastedited":"21/10/2024",
+        "lastedited":"09/11/2025",
         "language":"Finnish",
         "automated":true
     },
@@ -31,7 +31,15 @@
             "stringContains":"Tämän merkkijonon täytyy sisältää {0}!",
             "stringChoices":"Tämä merkkijono voi olla vain yksi seuraavista arvoista: {0}!",
             "stringRegex":"Tämä merkkijono on virheellinen!",
-
+            "stringInvertedContains":"Tämä merkkijono ei saa sisältää {0}!",
+            "stringLowercase":"Tämä merkkijono on kirjoitettava vain pienillä kirjaimilla!",
+            "stringUppercase":"Tämä merkkijono on kirjoitettava vain isoilla kirjaimilla!",
+            "stringSpecialCharacters":"Tämä merkkijono ei saa sisältää erikoismerkkejä! (vain a–z, 0–9 ja välilyönti)",
+            "stringNoSpaces":"Tämä merkkijono ei saa sisältää välilyöntejä!",
+            "stringCapitalWord":"On suositeltavaa, että jokainen sana tässä merkkijonossa alkaa isolla kirjaimella!",
+            "stringCapitalSentence":"Näyttää siltä, että jotkut lauseet tässä merkkijonossa eivät ala isolla kirjaimella!",
+            "stringPunctuation":"Näyttää siltä, että tämän merkkijonon lause ei pääty välimerkkiin!",
+            
             "numberTooShort":"Tämä numero ei voi olla lyhyempi kuin {0} merkkiä!",
             "numberTooLong":"Tämä numero ei voi olla pidempi kuin {0} merkkiä!",
             "numberLengthInvalid":"Tämän numeron on oltava {0} merkkiä pitkä!",
@@ -48,10 +56,12 @@
             "numberNegative":"Tämä luku ei voi olla negatiivinen!",
             "numberPositive":"Tämä luku ei voi olla positiivinen!",
             "numberZero":"Tämä luku ei voi olla nolla!",
-
+            "numberNan":"Tämä numero ei voi olla NaN (ei numero)!",
+            "numberInvertedContains":"Tämä numero ei saa sisältää {0}!",
+            
             "booleanTrue":"Tämä boolean ei voi olla totta!",
             "booleanFalse":"Tämä boolean ei voi olla väärä!",
-
+            
             "arrayEmptyDisabled":"Tämä taulukko ei saa olla tyhjä!",
             "arrayEmptyRequired":"Tämän taulukon on oltava tyhjä!",
             "arrayTooShort":"Tämän taulukon pituuden on oltava vähintään {0}!",
@@ -59,7 +69,7 @@
             "arrayLengthInvalid":"Tämän taulukon pituuden on oltava {0}!",
             "arrayInvalidTypes":"Tämä matriisi voi sisältää vain seuraavat tyypit: {0}!",
             "arrayDouble":"Tämä matriisi ei salli samaa arvoa kahdesti!",
-
+            
             "discordInvalidId":"Tämä on virheellinen discord {0} -tunnus!",
             "discordInvalidIdOptions":"Tämä on virheellinen discord {0} -tunnus! Voit myös käyttää jotakin seuraavista: {1}!",
             "discordInvalidToken":"Tämä on virheellinen discord tunnus (syntaktisesti)!",
@@ -76,7 +86,7 @@
             "urlInvalidPath":"Tällä URL-osoitteella on virheellinen polku!",
             "idNotUnique":"Tämä tunnus ei ole ainutlaatuinen, käytä sen sijaan toista tunnusta!",
             "idNonExistent":"Tunnusta {0} ei ole olemassa!",
-
+            
             "invalidType":"Tämän ominaisuuden on oltava tyyppiä: {0}!",
             "propertyMissing":"Ominaisuus {0} puuttuu tästä objektista!",
             "propertyOptional":"Ominaisuus {0} on valinnainen tässä objektissa!",
@@ -84,12 +94,13 @@
             "nullInvalid":"Tämä omaisuus ei voi olla tyhjä!",
             "switchInvalidType":"Tämän on oltava jokin seuraavista: {0}!",
             "objectSwitchInvalid":"Tämän objektin on oltava jokin seuraavista tyypeistä: {0}!",
-
+            
             "invalidLanguage":"Tämä on virheellinen kieli!",
             "invalidButton":"Tässä painikkeessa on oltava vähintään {0} tai {1}!",
             "unusedOption":"Vaihtoehtoa {0} ei käytetä missään!",
             "unusedQuestion":"Kysymystä {0} ei käytetä missään!",
-            "dropdownOption":"Paneeli, jossa pudotusvalikko on käytössä, voi sisältää vain \"lippu\"-tyyppisiä vaihtoehtoja!"
+            "dropdownOption":"Paneeli, jossa pudotusvalikko on käytössä, voi sisältää vain \"lippu\"-tyyppisiä vaihtoehtoja!",
+            "customInvalidVersion":"Määritetty versio kokoonpanossasi ei vastaa! Varmista, että olet päivittänyt kokoonpanon uusimpaan versioon!"
         }
     },
     "actions":{
@@ -122,7 +133,7 @@
             "move":"Lippu siirretty",
             "add":"Lipun käyttäjä lisätty",
             "remove":"Lipun käyttäjä poistettu",
-
+            
             "help":"Käytettävissä olevat komennot",
             "statsReset":"Nollaa tilastot",
             "blacklistAdd":"Käyttäjä mustalla listalla",
@@ -132,14 +143,20 @@
             "blacklistAddDm":"Lisätty mustalle listalle",
             "blacklistRemoveDm":"Poistettu mustalta listalta",
             "clear":"Liput tyhjennetty",
+            "clearTickets":"Tyhjennä Tiketit",
             "roles":"Roolit päivitetty",
-
+            
             "autoclose":"Lippu suljettu automaattisesti",
             "autocloseEnabled":"Automaattinen sulkeminen käytössä",
             "autocloseDisabled":"Automaattinen sulkeminen pois käytöstä",
             "autodelete":"Lippu poistettu automaattisesti",
             "autodeleteEnabled":"Automaattinen poisto käytössä",
-            "autodeleteDisabled":"Automaattinen poisto poissa käytöstä"
+            "autodeleteDisabled":"Automaattinen poisto poissa käytöstä",
+            
+            "topicSet":"Aihe Muutettu",
+            "prioritySet":"Prioriteetti Muutettu",
+            "priorityGet":"Tiketin Prioriteetti",
+            "transfer":"Tiketti Siirretty"
         },
         "descriptions":{
             "create":"Lippusi on luotu. Napsauta alla olevaa painiketta päästäksesi siihen!",
@@ -154,7 +171,7 @@
             "move":"Lippu on siirretty kohteeseen {0} onnistuneesti!",
             "add":"{0} on lisätty lippuun onnistuneesti!",
             "remove":"{0} on poistettu lipusta onnistuneesti!",
-
+            
             "helpExplanation":"`<nimi>` => pakollinen parametri\n`[nimi]` => valinnainen parametri",
             "statsReset":"Bottitilastot on nollattu onnistuneesti!",
             "statsError":"Lipputilastoja ei voi tarkastella!\n{0} ei ole lippu!",
@@ -167,7 +184,7 @@
             "clearVerify":"Haluatko varmasti poistaa useita lippuja? Tätä toimintoa ei voi kumota!",
             "clearReady":"{0} lippua on poistettu onnistuneesti!",
             "rolesEmpty":"Rooleja ei ole päivitetty!",
-
+            
             "autocloseLeave":"Tämä lippu on suljettu automaattisesti, koska luoja poistui palvelimelta!",
             "autocloseTimeout":"Tämä lippu on suljettu automaattisesti, koska se on ollut passiivinen yli `{0}h`!",
             "autodeleteLeave":"Tämä lippu on poistettu automaattisesti, koska sisällöntuottaja poistui palvelimelta!",
@@ -176,11 +193,16 @@
             "autocloseDisabled":"Automaattinen sulkeminen on poistettu käytöstä tässä lipussa! Se ei enää sulkeudu automaattisesti!",
             "autodeleteEnabled":"Automaattinen poisto on otettu käyttöön tässä lipussa! Se poistetaan, kun se on passiivinen yli `{0} päivään`!",
             "autodeleteDisabled":"Automaattinen poisto on poistettu käytöstä tässä lipussa! Sitä ei enää poisteta automaattisesti!",
-
+            
             "ticketMessageLimit":"Voit luoda vain {0} lippua samanaikaisesti!",
             "ticketMessageAutoclose":"Tämä lippu suljetaan automaattisesti, kun se ei ole aktiivinen {0} tuntia!",
             "ticketMessageAutodelete":"Tämä lippu poistetaan automaattisesti, kun se ei ole aktiivinen {0} päivään!",
-            "panelReady":"Löydät paneelin alta! Tämä viesti voidaan nyt poistaa!"
+            "panelReady":"Paneeli on saatavilla jatkoviestissä!\nTämä viesti voidaan nyt poistaa!",
+            
+            "topicSet":"Kanavan aihe on vaihdettu käyttäjän {0} toimesta onnistuneesti!",
+            "prioritySet":"Tiketin prioriteetti on vaihdettu arvoksi {0} käyttäjän {1} toimesta onnistuneesti!",
+            "priorityGet":"Tämän tiketin nykyinen prioriteetti on {0}.",
+            "transfer":"Tiketin omistus on siirretty käyttäjältä {0} käyttäjälle {1} käyttäjän {2} toimesta onnistuneesti!"
         },
         "modal":{
             "closePlaceholder":"Miksi suljit tämän lipun?",
@@ -215,12 +237,19 @@
             "addDm":"{0} on lisätty lippuusi palvelimellamme!",
             "removeLog":"{1} on poistanut {0} tästä lipusta!",
             "removeDm":"{0} on poistettu lipustasi palvelimellamme!",
-
+            
             "blacklistAddLog":"{1} lisäsi käyttäjän {0} mustalle listalle!",
             "blacklistRemoveLog":"{1} poisti käyttäjän {0} mustalta listalta!",
             "blacklistAddDm":"Sinut on mustalla listalla palvelimellamme! Tästä eteenpäin et voi luoda lippua!",
             "blacklistRemoveDm":"Sinut on poistettu palvelimemme mustalta listalta! Nyt voit luoda lippuja uudelleen!",
-            "clearLog":"{1} on poistanut {0} lippua!"
+            "clearLog":"{1} on poistanut {0} lippua!",
+            
+            "transferLog":"Tämän tiketin omistus on siirretty käyttäjältä {0} käyttäjälle {1} käyttäjän {2} toimesta!",
+            "transferDm":"Tiketin omistus on siirretty käyttäjältä {0} käyttäjälle {1} palvelimellamme!",
+            "prioritySetLog":"Tämän tiketin prioriteetti on vaihdettu arvoksi {0} käyttäjän {1} toimesta!",
+            "prioritySetDm":"Tiketin prioriteetti on vaihdettu arvoksi {0} palvelimellamme!",
+            "roleUpdateLog":"{0} on päivittänyt roolinsa!",
+            "roleUpdateDm":"Roolisi palvelimellamme on päivitetty!"
         }
     },
     "transcripts":{
@@ -229,7 +258,7 @@
             "ready":"Transkriptio luotu",
             "textFileDescription":"Tämä on poistetun lipun tekstikopio!",
             "htmlProgress":"Odota, kun tätä html-transkriptiota käsitellään...",
-
+            
             "createdChannel":"Uusi {0}-transkriptio on luotu palvelimelle!",
             "createdCreator":"Yhdelle lipullesi on luotu uusi transkriptio {0}!",
             "createdParticipant":"Uusi {0}-transkriptio on luotu yhteen lipuista, joihin osallistuit!",
@@ -241,7 +270,19 @@
             "retry":"Yritä uudelleen",
             "continue":"Poista ilman transkriptiota",
             "backup":"Luo varmuuskopio",
-            "error":"Jotain meni pieleen, kun yritettiin luoda transkriptiota. Mitä haluaisit tehdä? Tätä lippua ei poisteta, ennen kuin napsautat jotakin näistä painikkeista. "
+            "error":"Jotain meni pieleen, kun yritettiin luoda transkriptiota. Mitä haluaisit tehdä? Tätä lippua ei poisteta, ennen kuin napsautat jotakin näistä painikkeista. ",
+            "title":"Transkriptiovirhe"
+        },
+        "text":{
+            "messagesTitle":"VIESTIT",
+            "embedTitle":"UPOTUS",
+            "fileTitle":"TIEDOSTO",
+            "fieldsTitle":"KENTÄT",
+            "reactionsTitle":"REAKTIOT",
+            "statsTitle":"TILASTOT",
+            "emptyContent":"<sisältö on tyhjä>",
+            "noTitle":"<ei-otsikkoa>",
+            "noDesc":"<ei-kuvausta>"
         }
     },
     "errors":{
@@ -257,7 +298,8 @@
             "unknownPanel":"Tuntematon paneeli",
             "notInGuild":"Ei Palvelimessa",
             "channelRename":"Kanavaa ei voi nimetä uudelleen",
-            "busy":"Lippu on varattu"
+            "busy":"Lippu on varattu",
+            "permissionError":"Käyttöoikeusvirhe"
         },
         "descriptions":{
             "askForInfo":"Ota yhteyttä tämän botin omistajaan saadaksesi lisätietoja!",
@@ -280,7 +322,10 @@
             "notInGuild":"Tämä {0} ei toimi DM:ssä! Ole hyvä ja yritä uudelleen palvelimella!",
             "channelRename":"Discordin nopeusrajoitusten vuoksi botin on tällä hetkellä mahdotonta nimetä kanavaa uudelleen. Kanava nimetään automaattisesti uudelleen 10 minuutin kuluttua, jos bottia ei käynnistetä uudelleen.",
             "channelRenameSource":"Tämän virheen lähde on: {0}",
-            "busy":"Tätä {0} ei voi käyttää! Botti käsittelee lippua parhaillaan. Yritä uudelleen muutaman sekunnin kuluttua!"
+            "busy":"Tätä {0} ei voi käyttää! Botti käsittelee lippua parhaillaan. Yritä uudelleen muutaman sekunnin kuluttua!",
+            "closeBeforeMessage":"Tätä tikettiä ei voi sulkea/poistaa ennen kuin käyttäjä on lähettänyt viestin.",
+            "closeBeforeAdminMessage":"Tätä tikettiä ei voi sulkea/poistaa ennen kuin tikettien ylläpitäjä tai tukihenkilö on lähettänyt viestin.",
+            "unableToCreateTicket":"Et voi luoda tikettiä."
         },
         "optionInvalidReasons":{
             "stringRegex":"Arvo ei vastaa mallia!",
@@ -331,7 +376,6 @@
             "added":"Lisätty",
             "removed":"Poistettu",
             "filter":"Suodattaa",
-            "claimedBy":"Vaatimuksen tekijä: {0}",
             "method":"Menetelmä",
             "type":"Tyyppi",
             "blacklisted":"Mustalla listalla",
@@ -352,10 +396,30 @@
             "version":"Versio",
             "name":"Nimi",
             "role":"Rooli",
-            "status":"Status",
+            "status":"Tila",
             "claimed":"Väitetty",
             "pinned":"Kiinnitetty",
-            "creationDate":"Luontipäivämäärä"
+            "creationDate":"Luontipäivämäärä",
+            
+            "noone":"Ei Kukaan",
+            "open":"Avoin",
+            "closed":"Suljettu",
+            "priority":"Prioriteetti",
+            "participants":"Osallistujat",
+            "yes":"Kyllä",
+            "no":"Ei",
+            "option":"Vaihtoehto",
+            "topic":"Aihe",
+            "uptime":"Järjestelmän Käyttöaika",
+            "messages":"Viestit",
+            "embeds":"Upotukset",
+            "files":"Tiedostot",
+            "components":"Komponentit",
+            "cooldown":"Jäähy",
+            "maxTickets":"Maksimi Tiketit",
+            "admins":"Ylläpitäjät",
+            "roles":"Roolit",
+            "size":"Koko"
         },
         "lowercase":{
             "text":"teksti",
@@ -384,6 +448,7 @@
         "unclaim":"Peruuta lippu.",
         "pin":"Kiinnitä lippu.",
         "unpin":"Irrota lippu.",
+        
         "move":"Siirrä lippu.",
         "moveId":"Sen vaihtoehdon tunniste, johon haluat siirtyä.",
         "rename":"Nimeä lippu uudelleen.",
@@ -392,6 +457,7 @@
         "addUser":"Lisättävä käyttäjä.",
         "remove":"Poista käyttäjä lipusta.",
         "removeUser":"Poistettava käyttäjä.",
+        
         "blacklist":"Hallitse lippujen mustaa listaa.",
         "blacklistView":"Näytä luettelo nykyisestä mustasta listasta.",
         "blacklistAdd":"Lisää käyttäjä mustalle listalle.",
@@ -405,6 +471,7 @@
         "statsUserUser":"Käyttäjä katsella.",
         "statsTicket":"Tarkastele lipun tilastoja palvelimella.",
         "statsTicketTicket":"Lippu katsottavaksi.",
+        
         "clear":"Poista useita lippuja samanaikaisesti.",
         "clearFilter":"Lippujen tyhjennyssuodatin.",
         "clearFilters":{
@@ -417,6 +484,7 @@
             "unpin":"Irrotettu",
             "autoclose":"Automaattisuljettu"
         },
+        
         "autoclose":"Hallitse automaattista sulkemista lipussa.",
         "autocloseDisable":"Poista automaattinen sulkeminen käytöstä tässä lipussa.",
         "autocloseEnable":"Ota automaattinen sulkeminen käyttöön tässä lipussa.",
@@ -424,7 +492,19 @@
         "autodelete":"Hallitse automaattista poistoa lipussa.",
         "autodeleteDisable":"Poista automaattinen poisto käytöstä tässä lipussa.",
         "autodeleteEnable":"Ota automaattinen poisto käyttöön tässä lipussa.",
-        "autodeleteEnableTime":"Kuinka monta päivää tämän lipun on oltava passiivinen, jotta se voidaan poistaa."
+        "autodeleteEnableTime":"Kuinka monta päivää tämän lipun on oltava passiivinen, jotta se voidaan poistaa.",
+        
+        "topic":"Hallitse tikettikanavan aihetta.",
+        "topicSet":"Aseta tikettikanavan aihe.",
+        "topicValue":"Kanavan uusi aihe.",
+        "topicList":"Hae lista kaikista tiketeistä niiden aiheen ja tilastojen kanssa.",
+        "priority":"Hallitse tiketin prioriteettia.",
+        "prioritySet":"Aseta tiketin prioriteetti.",
+        "priorityValue":"Kanavan prioriteetti.",
+        "priorityGet":"Hae tiketin prioriteetti.",
+        "priorityList":"Hae lista kaikista tiketeistä ja niiden prioriteettitilasta.",
+        "transfer":"Siirrä tiketin omistus käyttäjältä toiselle.",
+        "transferUser":"Käyttäjä, jolle omistus siirretään."
     },
     "helpMenu":{
         "help":"Hanki luettelo kaikista käytettävissä olevista komennoista.",
@@ -452,7 +532,16 @@
         "autocloseDisable":"Poista automaattinen sulkeminen käytöstä tässä lipussa.",
         "autocloseEnable":"Ota automaattinen sulkeminen käyttöön tässä lipussa.",
         "autodeleteDisable":"Poista automaattinen poisto käytöstä tässä lipussa.",
-        "autodeleteEnable":"Ota automaattinen poisto käyttöön tässä lipussa."
+        "autodeleteEnable":"Ota automaattinen poisto käyttöön tässä lipussa.",
+        "categories":{
+            "general":"Yleiset Komennot",
+            "basicTicket":"Perus Tikettikomennot",
+            "advancedTicket":"Edistyneet Tikettikomennot",
+            "userTicket":"Käyttäjän Tikettikomennot",
+            "admin":"Ylläpitäjäkomennot",
+            "advanced":"Edistyneet Komennot",
+            "extra":"Lisäkomennot"
+        }
     },
     "stats":{
         "scopes":{
@@ -460,7 +549,8 @@
             "system":"Järjestelmätilastot",
             "user":"Käyttäjätilastot",
             "ticket":"Lipputilastot",
-            "participants":"Osallistujat"
+            "participants":"Osallistujat",
+            "messages":"Viestit"
         },
         "properties":{
             "ticketsCreated":"Liput luotu",
@@ -472,7 +562,47 @@
             "ticketsPinned":"Liput kiinni",
             "ticketsMoved":"Liput siirretty",
             "usersBlacklisted":"Käyttäjät mustalla listalla",
-            "transcriptsCreated":"Transkriptiot luotu"
+            "transcriptsCreated":"Transkriptiot luotu",
+            "ticketsAutodeleted":"Tiketit Automaattisesti Poistettu",
+            "ticketsTransferred":"Tiketit Siirretty",
+            "ticketVolume":"Tikettilukumäärä",
+            "averageTickets":"Keskimääräiset Tiketit/Käyttäjä",
+            "currentTickets":"Nykyiset Tiketit",
+            "age":"Tiketin Ikä",
+            "responseTime":"Vastausaika",
+            "resolutionTime":"Ratkaisuaika",
+            "createdOn":"Luotu",
+            "createdBy":"Luonut",
+            "closedOn":"Suljettu",
+            "closedBy":"Sulkenut",
+            "claimedOn":"Otettu Vastaan",
+            "claimedBy":"Vastaanottanut",
+            "pinnedOn":"Kiinnitetty",
+            "pinnedBy":"Kiinnittänyt",
+            "deletedOn":"Poistettu",
+            "deletedBy":"Poistanut"
+        },
+        "roles":{
+            "developer":"Kehittäjä",
+            "serverOwner":"Palvelimen Omistaja",
+            "serverAdmin":"Palvelimen Ylläpitäjä",
+            "moderator":"Moderaattoritiimi",
+            "support":"Tukitiimi",
+            "member":"Jäsen"
         }
+    },
+    "panel":{
+        "selectTicket":"Valitse tikettisi",
+        "selectRole":"Valitse roolisi",
+        "selectOption":"Valitse vaihtoehtosi"
+    },
+    "priorities":{
+        "urgent":"Kiireellinen",
+        "veryHigh":"Erittäin Korkea",
+        "high":"Korkea",
+        "normal":"Normaali",
+        "low":"Matala",
+        "veryLow":"Erittäin Matala",
+        "none":"Ei Mikään"
     }
 }

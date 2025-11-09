@@ -2,16 +2,26 @@ import {opendiscord, api, utilities} from "../../index"
 
 const lang = opendiscord.languages
 
+/** (CONTRIBUTOR GUIDE) HOW TO ADD NEW COMMANDS?
+ * - Register the command in loadAllSlashCommands() & loadAllTextCommands() in (./src/data/framework/commandLoader.ts)
+ * - Add autocomplete for the command in OD(Slash/Text)CommandManagerIds_Default in (./src/core/api/defaults/client.ts)
+ * - Add the command to the help menu in (./src/data/framework/helpMenuLoader.ts)
+ * - If required, new config variables should be added (incl. logs, dm-logs & permissions).
+ * - Update the Open Ticket Documentation.
+ * - If the command contains complex logic or can be executed from a button/dropdown, it should be placed inside an `ODAction`.
+ * - Check all files, test the bot carefully & try a lot of different scenario's with different settings.
+ */
+
 export const loadAllHelpMenuCategories = async () => {
     const helpmenu = opendiscord.helpmenu
 
-    helpmenu.add(new api.ODHelpMenuCategory("opendiscord:general",5,utilities.emojiTitle("📎","General Commands"))) //TODO TRANSLATION!!!
-    helpmenu.add(new api.ODHelpMenuCategory("opendiscord:ticket-basic",4,utilities.emojiTitle("🎫","Basic Ticket Commands"))) //TODO TRANSLATION!!!
-    helpmenu.add(new api.ODHelpMenuCategory("opendiscord:ticket-advanced",4,utilities.emojiTitle("💡","Advanced Ticket Commands"))) //TODO TRANSLATION!!!
-    helpmenu.add(new api.ODHelpMenuCategory("opendiscord:ticket-user",3,utilities.emojiTitle("👤","User Ticket Commands"))) //TODO TRANSLATION!!!
-    helpmenu.add(new api.ODHelpMenuCategory("opendiscord:admin",2,utilities.emojiTitle("🚨","Admin Commands"))) //TODO TRANSLATION!!!
-    helpmenu.add(new api.ODHelpMenuCategory("opendiscord:advanced",1,utilities.emojiTitle("🚧","Advanced Commands"))) //TODO TRANSLATION!!!
-    helpmenu.add(new api.ODHelpMenuCategory("opendiscord:extra",0,utilities.emojiTitle("✨","Extra Commands"))) //TODO TRANSLATION!!!
+    helpmenu.add(new api.ODHelpMenuCategory("opendiscord:general",5,utilities.emojiTitle("📎",lang.getTranslation("helpMenu.categories.general"))))
+    helpmenu.add(new api.ODHelpMenuCategory("opendiscord:ticket-basic",4,utilities.emojiTitle("🎫",lang.getTranslation("helpMenu.categories.basicTicket"))))
+    helpmenu.add(new api.ODHelpMenuCategory("opendiscord:ticket-advanced",4,utilities.emojiTitle("💡",lang.getTranslation("helpMenu.categories.advancedTicket"))))
+    helpmenu.add(new api.ODHelpMenuCategory("opendiscord:ticket-user",3,utilities.emojiTitle("👤",lang.getTranslation("helpMenu.categories.userTicket"))))
+    helpmenu.add(new api.ODHelpMenuCategory("opendiscord:admin",2,utilities.emojiTitle("🚨",lang.getTranslation("helpMenu.categories.admin"))))
+    helpmenu.add(new api.ODHelpMenuCategory("opendiscord:advanced",1,utilities.emojiTitle("🚧",lang.getTranslation("helpMenu.categories.advanced"))))
+    helpmenu.add(new api.ODHelpMenuCategory("opendiscord:extra",0,utilities.emojiTitle("✨",lang.getTranslation("helpMenu.categories.extra"))))
 }
 
 export const loadAllHelpMenuComponents = async () => {
@@ -117,7 +127,7 @@ export const loadAllHelpMenuComponents = async () => {
         }))
     }
 
-    const ticketUser = helpmenu.get("opendiscord:ticket-channel")
+    const ticketUser = helpmenu.get("opendiscord:ticket-user")
     if (ticketUser){
         if (allowedCommands.includes("claim")) ticketUser.add(new api.ODHelpMenuCommandComponent("opendiscord:claim",7,{
             textName:prefix+"claim",
@@ -148,6 +158,14 @@ export const loadAllHelpMenuComponents = async () => {
             textDescription:lang.getTranslation("helpMenu.remove"),
             slashName:"/remove",
             slashDescription:lang.getTranslation("helpMenu.remove"),
+            textOptions:[{name:"user",optional:false},{name:"reason",optional:true}],
+            slashOptions:[{name:"user",optional:false},{name:"reason",optional:true}]
+        }))
+        if (allowedCommands.includes("transfer")) ticketUser.add(new api.ODHelpMenuCommandComponent("opendiscord:transfer",-1,{
+            textName:prefix+"transfer",
+            textDescription:lang.getTranslation("commands.transfer"),
+            slashName:"/transfer",
+            slashDescription:lang.getTranslation("commands.transfer"),
             textOptions:[{name:"user",optional:false},{name:"reason",optional:true}],
             slashOptions:[{name:"user",optional:false},{name:"reason",optional:true}]
         }))
@@ -197,13 +215,13 @@ export const loadAllHelpMenuComponents = async () => {
 
     const advanced = helpmenu.get("opendiscord:advanced")
     if (advanced){
-        if (allowedCommands.includes("stats")) advanced.add(new api.ODHelpMenuCommandComponent("opendiscord:stats-global",5,{
+        if (allowedCommands.includes("stats")) advanced.add(new api.ODHelpMenuCommandComponent("opendiscord:stats-global",9,{
             textName:prefix+"stats global",
             textDescription:lang.getTranslation("commands.statsGlobal"),
             slashName:"/stats global",
             slashDescription:lang.getTranslation("commands.statsGlobal")
         }))
-        if (allowedCommands.includes("stats")) advanced.add(new api.ODHelpMenuCommandComponent("opendiscord:stats-ticket",4,{
+        if (allowedCommands.includes("stats")) advanced.add(new api.ODHelpMenuCommandComponent("opendiscord:stats-ticket",8,{
             textName:prefix+"stats ticket",
             textDescription:lang.getTranslation("commands.statsTicket"),
             slashName:"/stats ticket",
@@ -211,7 +229,7 @@ export const loadAllHelpMenuComponents = async () => {
             textOptions:[{name:"ticket",optional:false}],
             slashOptions:[{name:"ticket",optional:false}]
         }))
-        if (allowedCommands.includes("stats")) advanced.add(new api.ODHelpMenuCommandComponent("opendiscord:stats-user",2,{
+        if (allowedCommands.includes("stats")) advanced.add(new api.ODHelpMenuCommandComponent("opendiscord:stats-user",7,{
             textName:prefix+"stats user",
             textDescription:lang.getTranslation("commands.statsUser"),
             slashName:"/stats user",
@@ -219,7 +237,7 @@ export const loadAllHelpMenuComponents = async () => {
             textOptions:[{name:"user",optional:false}],
             slashOptions:[{name:"user",optional:false}]
         }))
-        if (allowedCommands.includes("stats")) advanced.add(new api.ODHelpMenuCommandComponent("opendiscord:stats-reset",2,{
+        if (allowedCommands.includes("stats")) advanced.add(new api.ODHelpMenuCommandComponent("opendiscord:stats-reset",6,{
             textName:prefix+"stats reset",
             textDescription:lang.getTranslation("commands.statsReset"),
             slashName:"/stats reset",
@@ -227,7 +245,7 @@ export const loadAllHelpMenuComponents = async () => {
             textOptions:[{name:"reason",optional:true}],
             slashOptions:[{name:"reason",optional:true}]
         }))
-        if (allowedCommands.includes("autoclose")) advanced.add(new api.ODHelpMenuCommandComponent("opendiscord:autoclose-disable",1,{
+        if (allowedCommands.includes("autoclose")) advanced.add(new api.ODHelpMenuCommandComponent("opendiscord:autoclose-disable",5,{
             textName:prefix+"autoclose disable",
             textDescription:lang.getTranslation("commands.autocloseDisable"),
             slashName:"/autoclose disable",
@@ -235,7 +253,7 @@ export const loadAllHelpMenuComponents = async () => {
             textOptions:[{name:"reason",optional:true}],
             slashOptions:[{name:"reason",optional:true}]
         }))
-        if (allowedCommands.includes("autoclose")) advanced.add(new api.ODHelpMenuCommandComponent("opendiscord:autoclose-enable",0,{
+        if (allowedCommands.includes("autoclose")) advanced.add(new api.ODHelpMenuCommandComponent("opendiscord:autoclose-enable",4,{
             textName:prefix+"autoclose enable",
             textDescription:lang.getTranslation("commands.autocloseEnable"),
             slashName:"/autoclose enable",
@@ -243,7 +261,7 @@ export const loadAllHelpMenuComponents = async () => {
             textOptions:[{name:"time",optional:false},{name:"reason",optional:true}],
             slashOptions:[{name:"time",optional:false},{name:"reason",optional:true}]
         }))
-        if (allowedCommands.includes("autodelete")) advanced.add(new api.ODHelpMenuCommandComponent("opendiscord:autodelete-disable",1,{
+        if (allowedCommands.includes("autodelete")) advanced.add(new api.ODHelpMenuCommandComponent("opendiscord:autodelete-disable",3,{
             textName:prefix+"autodelete disable",
             textDescription:lang.getTranslation("commands.autodeleteDisable"),
             slashName:"/autodelete disable",
@@ -251,13 +269,29 @@ export const loadAllHelpMenuComponents = async () => {
             textOptions:[{name:"reason",optional:true}],
             slashOptions:[{name:"reason",optional:true}]
         }))
-        if (allowedCommands.includes("autodelete")) advanced.add(new api.ODHelpMenuCommandComponent("opendiscord:autodelete-enable",0,{
+        if (allowedCommands.includes("autodelete")) advanced.add(new api.ODHelpMenuCommandComponent("opendiscord:autodelete-enable",2,{
             textName:prefix+"autodelete enable",
             textDescription:lang.getTranslation("commands.autodeleteEnable"),
             slashName:"/autodelete enable",
             slashDescription:lang.getTranslation("commands.autodeleteEnable"),
             textOptions:[{name:"time",optional:false},{name:"reason",optional:true}],
             slashOptions:[{name:"time",optional:false},{name:"reason",optional:true}]
+        }))
+        if (allowedCommands.includes("topic")) advanced.add(new api.ODHelpMenuCommandComponent("opendiscord:topic-set",1,{
+            textName:prefix+"topic set",
+            textDescription:lang.getTranslation("commands.topicSet"),
+            slashName:"/topic set",
+            slashDescription:lang.getTranslation("commands.topicSet"),
+            textOptions:[{name:"topic",optional:false}],
+            slashOptions:[{name:"topic",optional:false}]
+        }))
+        if (allowedCommands.includes("priority")) advanced.add(new api.ODHelpMenuCommandComponent("opendiscord:priority-set",0,{
+            textName:prefix+"priority set",
+            textDescription:lang.getTranslation("commands.prioritySet"),
+            slashName:"/priority set",
+            slashDescription:lang.getTranslation("commands.prioritySet"),
+            textOptions:[{name:"priority",optional:false},{name:"reason",optional:true}],
+            slashOptions:[{name:"priority",optional:false},{name:"reason",optional:true}]
         }))
     }
 }

@@ -7,6 +7,7 @@ import { ODTicket, ODTicketManager } from "./ticket"
 import { ODMessageBuildResult } from "../modules/builder"
 import { ODClientManager } from "../modules/client"
 import * as discord from "discord.js"
+import { ODPermissionManager_Default } from "#opendiscord-types"
 
 /**## ODTranscriptManager `class`
  * This is an Open Ticket transcript manager.
@@ -21,10 +22,10 @@ export class ODTranscriptManager extends ODManager<ODTranscriptCompiler<any,null
     /**Alias for the client manager. */
     #client: ODClientManager
 
-    constructor(debug:ODDebugger, tickets:ODTicketManager, client:ODClientManager){
+    constructor(debug:ODDebugger, tickets:ODTicketManager, client:ODClientManager, permissions:ODPermissionManager_Default){
         super(debug,"transcript compiler")
         this.#client = client
-        this.collector = new ODTranscriptCollector(tickets,client)
+        this.collector = new ODTranscriptCollector(tickets,client,permissions)
     }
 }
 
@@ -132,14 +133,14 @@ export interface ODTranscriptCompilerIds {
  * This default class is made for the global variable `opendiscord.transcripts`!
  */
 export class ODTranscriptManager_Default extends ODTranscriptManager {
-    get<QuestionId extends keyof ODTranscriptCompilerIds>(id:QuestionId): ODTranscriptCompilerIds[QuestionId]
+    get<CompilerId extends keyof ODTranscriptCompilerIds>(id:CompilerId): ODTranscriptCompilerIds[CompilerId]
     get(id:ODValidId): ODTranscriptCompiler<any,null|object>|null
     
     get(id:ODValidId): ODTranscriptCompiler<any,null|object>|null {
         return super.get(id)
     }
 
-    remove<QuestionId extends keyof ODTranscriptCompilerIds>(id:QuestionId): ODTranscriptCompilerIds[QuestionId]
+    remove<CompilerId extends keyof ODTranscriptCompilerIds>(id:CompilerId): ODTranscriptCompilerIds[CompilerId]
     remove(id:ODValidId): ODTranscriptCompiler<any,null|object>|null
     
     remove(id:ODValidId): ODTranscriptCompiler<any,null|object>|null {
@@ -166,10 +167,13 @@ export class ODTranscriptCollector {
     #tickets: ODTicketManager
     /**Alias for the client manager. */
     #client: ODClientManager
+    /**Alias for the permissions manager. */
+    #permissions: ODPermissionManager_Default
 
-    constructor(tickets:ODTicketManager,client:ODClientManager){
+    constructor(tickets:ODTicketManager,client:ODClientManager,permissions:ODPermissionManager_Default){
         this.#tickets = tickets
         this.#client = client
+        this.#permissions = permissions
     }
     
     /**Collect all messages from a given ticket channel. It may not include all messages depending on the ratelimit. */
@@ -386,11 +390,11 @@ export class ODTranscriptCollector {
     }
     /**Calculate a human-readable file size. Used in transcripts. */
     calculateFileSize(bytes:number): {size:number, unit:"B"|"KB"|"MB"|"GB"|"TB"} {
-        if (bytes >= 1000000000000) return {size:(Math.round((bytes/1000000000000)*100)/100),unit:"TB"}
-        if (bytes >= 1000000000) return {size:(Math.round((bytes/1000000000)*100)/100),unit:"GB"}
-        else if (bytes >= 1000000) return {size:(Math.round((bytes/1000000)*100)/100),unit:"MB"}
-        else if (bytes >= 1000) return {size:(Math.round((bytes/1000)*100)/100),unit:"KB"}
-        else return {size:bytes,unit:"B"}
+        if (bytes < 1024) return {size:Math.round(bytes),unit:"B"}
+        else if (bytes < 1024*1024) return {size:Math.round(bytes/1024),unit:"KB"}
+        else if (bytes < 1024*1024*1024) return {size:Math.round(bytes/(1024*1024)),unit:"MB"}
+        else if (bytes < 1024*1024*1024*1024) return {size:Math.round(bytes/(1024*1024*1024)),unit:"GB"}
+        else return {size:Math.round(bytes/(1024*1024*1024*1024)),unit:"TB"}
     }
     /**Get the `ODTranscriptEmojiData` from a discord.js component emoji. */
     #handleComponentEmoji(message:discord.Message<true>, rawEmoji:discord.APIMessageComponentEmoji|null): ODTranscriptEmojiData|null {
@@ -438,6 +442,25 @@ export class ODTranscriptCollector {
         if (member) userData.color = member.roles.highest.hexColor.replace("#000000","#ffffff") as discord.HexColorString
 
         return userData
+    }
+    /**Analyse the ticket for the amount of messages users & admins have sent in the ticket. */
+    async ticketUserMessagesAnalysis(ticket:ODTicket,guild:discord.Guild,channel:discord.GuildTextBasedChannel){
+        const messages = await this.collectAllMessages(ticket,{bots:true,client:true,users:true})
+        if (!messages) return null
+        const parsedMessages = await this.convertMessagesToTranscriptData(messages)
+        let userMessages = 0
+        let adminMessages = 0
+
+        for (const msg of parsedMessages){
+            if (msg.author.tag || msg.author.id == this.#client.client.user.id) continue
+            const user = await this.#client.fetchUser(msg.author.id)
+            if (!user) continue
+            const isAdmin = this.#permissions.hasPermissions("support",await this.#permissions.getPermissions(user,channel,guild))
+            if (isAdmin) adminMessages++
+            else userMessages++
+        }
+
+        return {userMessages,adminMessages,totalMessages:userMessages+adminMessages}
     }
 }
 

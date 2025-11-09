@@ -4,6 +4,16 @@
 import { ODValidId } from "../modules/base"
 import { ODHelpMenuCategory, ODHelpMenuCommandComponent, ODHelpMenuComponent, ODHelpMenuManager } from "../modules/helpmenu"
 
+/** (CONTRIBUTOR GUIDE) HOW TO ADD NEW COMMANDS?
+ * - Register the command in loadAllSlashCommands() & loadAllTextCommands() in (./src/data/framework/commandLoader.ts)
+ * - Add autocomplete for the command in OD(Slash/Text)CommandManagerIds_Default in (./src/core/api/defaults/client.ts)
+ * - Add the command to the help menu in (./src/data/framework/helpMenuLoader.ts)
+ * - If required, new config variables should be added (incl. logs, dm-logs & permissions).
+ * - Update the Open Ticket Documentation.
+ * - If the command contains complex logic or can be executed from a button/dropdown, it should be placed inside an `ODAction`.
+ * - Check all files, test the bot carefully & try a lot of different scenario's with different settings.
+ */
+
 /**## ODHelpMenuManagerIds_Default `interface`
  * This interface is a list of ids available in the `ODHelpMenuManager_Default` class.
  * It's used to generate typescript declarations for this class.
@@ -172,7 +182,8 @@ export interface ODHelpMenuManagerCategoryIds_DefaultTicketUser {
     "opendiscord:claim":ODHelpMenuCommandComponent,
     "opendiscord:unclaim":ODHelpMenuCommandComponent,
     "opendiscord:add":ODHelpMenuCommandComponent,
-    "opendiscord:remove":ODHelpMenuCommandComponent
+    "opendiscord:remove":ODHelpMenuCommandComponent,
+    "opendiscord:transfer":ODHelpMenuCommandComponent,
 }
 
 /**## ODHelpMenuCategory_DefaultTicketUser `default_class`
@@ -255,7 +266,11 @@ export interface ODHelpMenuManagerCategoryIds_DefaultAdvanced {
     "opendiscord:stats-ticket":ODHelpMenuCommandComponent,
     "opendiscord:stats-user":ODHelpMenuCommandComponent,
     "opendiscord:autoclose-disable":ODHelpMenuCommandComponent,
-    "opendiscord:autoclose-enable":ODHelpMenuCommandComponent
+    "opendiscord:autoclose-enable":ODHelpMenuCommandComponent,
+    "opendiscord:autodelete-disable":ODHelpMenuCommandComponent,
+    "opendiscord:autodelete-enable":ODHelpMenuCommandComponent,
+    "opendiscord:topic-set":ODHelpMenuCommandComponent,
+    "opendiscord:priority-set":ODHelpMenuCommandComponent,
 }
 
 /**## ODHelpMenuCategory_DefaultAdvanced `default_class`

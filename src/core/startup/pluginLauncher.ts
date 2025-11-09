@@ -82,7 +82,7 @@ export const loadAllPlugins = async () => {
         }
     })
 
-    //sorted plugins (based on priority)
+    //sorted plugins (sorted on priority. All plugins are loaded & enabled)
     const sortedPlugins = opendiscord.plugins.getAll().sort((a,b) => {
         return (b.priority - a.priority)
     })

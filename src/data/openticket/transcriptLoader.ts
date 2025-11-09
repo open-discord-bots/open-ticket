@@ -7,6 +7,7 @@ const transcriptConfig = opendiscord.configs.get("opendiscord:transcripts")
 const textConfig = transcriptConfig.data.textTranscriptStyle
 const htmlVersion = Buffer.from("eW91LXNob3VsZG50LWJlLWxvb2tpbmctYXQtdGhpcy0tLWZvci1tb3JlLWluZm8tY29tbWEtc2VuZC1hLW1lc3NhZ2UtdG8tZGpqMTIzZGo=","base64").toString("utf8")
 const htmlDomain = atob("dC5kai1kai5iZQ==")
+const lang = opendiscord.languages
 
 export const replaceHtmlTranscriptMentions = async (text:string) => {
     const mainServer = opendiscord.client.mainServer
@@ -65,8 +66,7 @@ export const loadAllTranscriptCompilers = async () => {
         const messages = await collector.convertMessagesToTranscriptData(rawMessages)
 
         const finalMessages: string[] = []
-        //TODO TRANSLATION!!!
-        finalMessages.push("=============== MESSAGES ===============")
+        finalMessages.push("=============== "+lang.getTranslation("transcripts.text.messagesTitle")+" ===============")
 
         messages.filter((msg) => textConfig.includeBotMessages || !msg.author.tag).forEach((msg) => {
             const timestamp = utilities.dateString(new Date(msg.timestamp))
@@ -77,23 +77,19 @@ export const loadAllTranscriptCompilers = async () => {
             if (textConfig.layout == "simple"){
                 //SIMPLE LAYOUT
                 const header = "["+timestamp+" | "+msg.author.displayname+authorId+"]"+edited+msgId
-                //TODO TRANSLATION!!!
-                const embeds = (textConfig.includeEmbeds) ? "\nEmbeds: "+msg.embeds.length : ""
-                const files = (textConfig.includeFiles) ? "\nFiles: "+msg.files.length : ""
-                //TODO TRANSLATION!!!
-                const content = (msg.content) ? msg.content : ("<content is empty>"+embeds+files)
+                const embeds = (textConfig.includeEmbeds) ? "\n"+lang.getTranslation("params.uppercase.embeds")+": "+msg.embeds.length : ""
+                const files = (textConfig.includeFiles) ? "\n"+lang.getTranslation("params.uppercase.files")+": "+msg.files.length : ""
+                const content = (msg.content) ? msg.content : (lang.getTranslation("transcripts.text.emptyContent")+embeds+files)
                 finalMessages.push(header+"\n   "+content.split("\n").join("\n    "))
                 
             }else if (textConfig.layout == "normal"){
                 //NORMAL LAYOUT
                 const header = "["+timestamp+" | "+msg.author.displayname+authorId+"]"+edited+msgId
                 const embeds = (textConfig.includeEmbeds && msg.embeds.length > 0) ? "\n"+msg.embeds.map((embed) => {
-                    //TODO TRANSLATION!!!
-                    return "==== (EMBED) "+(embed.title ?? "<no-title>")+" ====\n"+(embed.description ?? "<no-description>")
+                    return "==== ("+lang.getTranslation("transcripts.text.embedTitle")+") "+(embed.title ?? lang.getTranslation("transcripts.text.noTitle"))+" ====\n"+(embed.description ?? lang.getTranslation("transcripts.text.noDesc"))
                 }) : ""
                 const files = (textConfig.includeFiles && msg.files.length > 0) ? "\n"+msg.files.map((file) => {
-                    //TODO TRANSLATION!!!
-                    return "==== (FILE) "+(file.name)+" ====\nSize: "+(file.size+" "+file.unit)+"\nUrl: "+file.url
+                    return "==== ("+lang.getTranslation("transcripts.text.fileTitle")+") "+(file.name)+" ====\n"+lang.getTranslation("params.uppercase.size")+": "+(file.size+" "+file.unit)+"\nUrl: "+file.url
                 }) : ""
                 const content = (msg.content) ? msg.content : ""
                 finalMessages.push(header+"\n   "+(content+embeds+files).split("\n").join("\n    "))
@@ -102,15 +98,12 @@ export const loadAllTranscriptCompilers = async () => {
                 //ADVANCED LAYOUT
                 const header = "["+timestamp+" | "+msg.author.displayname+authorId+"]"+edited+msgId
                 const embeds = (textConfig.includeEmbeds && msg.embeds.length > 0) ? "\n"+msg.embeds.map((embed) => {
-                    //TODO TRANSLATION!!!
-                    return "\n==== (EMBED) "+(embed.title ?? "<no-title>")+" ====\n"+(embed.description ?? "<no-description>")+(embed.fields.length > 0 ? "\n\n== (FIELDS) ==\n"+embed.fields.map((field) => field.name+": "+field.value).join("\n") : "")
+                    return "\n==== ("+lang.getTranslation("transcripts.text.embedTitle")+") "+(embed.title ?? lang.getTranslation("transcripts.text.noTitle"))+" ====\n"+(embed.description ?? lang.getTranslation("transcripts.text.noDesc"))+(embed.fields.length > 0 ? "\n\n== ("+lang.getTranslation("transcripts.text.fieldsTitle")+") ==\n"+embed.fields.map((field) => field.name+": "+field.value).join("\n") : "")
                 }) : ""
                 const files = (textConfig.includeFiles && msg.files.length > 0) ? "\n"+msg.files.map((file) => {
-                    //TODO TRANSLATION!!!
-                    return "\n==== (FILE) "+(file.name)+" ====\nSize: "+(file.size+" "+file.unit)+"\nUrl: "+file.url+"\nAlt: "+(file.alt ?? "/")
+                    return "\n==== ("+lang.getTranslation("transcripts.text.fileTitle")+") "+(file.name)+" ====\n"+lang.getTranslation("params.uppercase.size")+": "+(file.size+" "+file.unit)+"\nUrl: "+file.url+"\nAlt: "+(file.alt ?? "/")
                 }) : ""
-                //TODO TRANSLATION!!!
-                const reactions = (msg.reactions.filter((r) => !r.custom).length > 0) ? "\n==== (REACTIONS) ====\n"+msg.reactions.filter((r) => !r.custom).map((r) => r.amount+" "+r.emoji).join(" - ") : ""
+                const reactions = (msg.reactions.filter((r) => !r.custom).length > 0) ? "\n==== ("+lang.getTranslation("transcripts.text.reactionsTitle")+") ====\n"+msg.reactions.filter((r) => !r.custom).map((r) => r.amount+" "+r.emoji).join(" - ") : ""
                 const content = (msg.content) ? msg.content : ""
                 finalMessages.push(header+"\n   "+(content+embeds+files+reactions).split("\n").join("\n    "))
             }
@@ -128,44 +121,40 @@ export const loadAllTranscriptCompilers = async () => {
         const pinner = await opendiscord.tickets.getTicketUser(ticket,"pinner")
 
         if (textConfig.includeStats){
-            //TODO TRANSLATION!!!
-            finalStats.push("=============== STATS ===============")
+            finalStats.push("=============== "+lang.getTranslation("transcripts.text.statsTitle")+" ===============")
             if (textConfig.layout == "simple"){
                 //SIMPLE LAYOUT
-                //TODO TRANSLATION!!!
-                if (creationDate) finalStats.push("Created On: "+utilities.dateString(new Date(creationDate)))
-                if (creator) finalStats.push("Created By: "+creator.displayName)
+                if (creationDate) finalStats.push(lang.getTranslation("stats.properties.createdOn")+": "+utilities.dateString(new Date(creationDate)))
+                if (creator) finalStats.push(lang.getTranslation("stats.properties.createdBy")+": "+creator.displayName)
                 finalStats.push("\n")
                 
             }else if (textConfig.layout == "normal"){
                 //NORMAL LAYOUT
-                //TODO TRANSLATION!!!
-                if (creationDate) finalStats.push("Created On: "+utilities.dateString(new Date(creationDate)))
-                if (creator) finalStats.push("Created By: "+creator.displayName)
+                if (creationDate) finalStats.push(lang.getTranslation("stats.properties.createdOn")+": "+utilities.dateString(new Date(creationDate)))
+                if (creator) finalStats.push(lang.getTranslation("stats.properties.createdBy")+": "+creator.displayName)
                 if (closer || claimer || pinner) finalStats.push("")
-                if (closer) finalStats.push("Closed By: "+closer.displayName)
-                if (claimer) finalStats.push("Claimed By: "+claimer.displayName)
-                if (pinner) finalStats.push("Pinned By: "+pinner.displayName)
-                finalStats.push("Deleted By: "+user.displayName)
+                if (closer) finalStats.push(lang.getTranslation("stats.properties.closedBy")+": "+closer.displayName)
+                if (claimer) finalStats.push(lang.getTranslation("stats.properties.claimedBy")+": "+claimer.displayName)
+                if (pinner) finalStats.push(lang.getTranslation("stats.properties.pinnedBy")+": "+pinner.displayName)
+                finalStats.push(lang.getTranslation("stats.properties.deletedBy")+": "+user.displayName)
                 finalStats.push("\n")
 
             }else if (textConfig.layout == "detailed"){
                 //ADVANCED LAYOUT
-                //TODO TRANSLATION!!!
-                if (creationDate) finalStats.push("Created On: "+utilities.dateString(new Date(creationDate)))
-                if (creator) finalStats.push("Created By: "+creator.displayName)
+                if (creationDate) finalStats.push(lang.getTranslation("stats.properties.createdOn")+": "+utilities.dateString(new Date(creationDate)))
+                if (creator) finalStats.push(lang.getTranslation("stats.properties.createdBy")+": "+creator.displayName)
                 if (closer || closeDate) finalStats.push("")
-                if (closeDate) finalStats.push("Closed On: "+utilities.dateString(new Date(closeDate)))
-                if (closer) finalStats.push("Closed By: "+closer.displayName)
+                if (closeDate) finalStats.push(lang.getTranslation("stats.properties.closedOn")+": "+utilities.dateString(new Date(closeDate)))
+                if (closer) finalStats.push(lang.getTranslation("stats.properties.closedBy")+": "+closer.displayName)
                 if (claimer || claimDate) finalStats.push("")
-                if (claimDate) finalStats.push("Claimed On: "+utilities.dateString(new Date(claimDate)))
-                if (claimer) finalStats.push("Claimed By: "+claimer.displayName)
+                if (claimDate) finalStats.push(lang.getTranslation("stats.properties.claimedOn")+": "+utilities.dateString(new Date(claimDate)))
+                if (claimer) finalStats.push(lang.getTranslation("stats.properties.claimedBy")+": "+claimer.displayName)
                 if (pinner || pinDate) finalStats.push("")
-                if (pinDate) finalStats.push("Pinned On: "+utilities.dateString(new Date(pinDate)))
-                if (pinner) finalStats.push("Pinned By: "+pinner.displayName)
+                if (pinDate) finalStats.push(lang.getTranslation("stats.properties.pinnedOn")+": "+utilities.dateString(new Date(pinDate)))
+                if (pinner) finalStats.push(lang.getTranslation("stats.properties.pinnedBy")+": "+pinner.displayName)
                 if (closer || claimer || pinner) finalStats.push("")
-                finalStats.push("Deleted On: "+utilities.dateString(new Date()))
-                finalStats.push("Deleted By: "+user.displayName)
+                finalStats.push(lang.getTranslation("stats.properties.deletedOn")+": "+utilities.dateString(new Date()))
+                finalStats.push(lang.getTranslation("stats.properties.deletedBy")+": "+user.displayName)
                 finalStats.push("\n")
             }
         }

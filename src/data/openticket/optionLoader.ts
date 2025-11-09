@@ -74,7 +74,7 @@ export const loadTicketOption = (option:api.ODJsonConfig_DefaultOptionTicketType
         new api.ODOptionData("opendiscord:channel-category-closed",option.channel.closedCategory),
         new api.ODOptionData("opendiscord:channel-category-backup",option.channel.backupCategory),
         new api.ODOptionData("opendiscord:channel-categories-claimed",option.channel.claimedCategory),
-        new api.ODOptionData("opendiscord:channel-description",option.channel.description),
+        new api.ODOptionData("opendiscord:channel-topic",option.channel.topic),
         
         new api.ODOptionData("opendiscord:dm-message-enabled",option.dmMessage.enabled),
         new api.ODOptionData("opendiscord:dm-message-text",option.dmMessage.text),
@@ -100,7 +100,10 @@ export const loadTicketOption = (option:api.ODJsonConfig_DefaultOptionTicketType
 
         new api.ODOptionData("opendiscord:limits-enabled",option.limits.enabled),
         new api.ODOptionData("opendiscord:limits-maximum-global",option.limits.globalMaximum),
-        new api.ODOptionData("opendiscord:limits-maximum-user",option.limits.userMaximum)
+        new api.ODOptionData("opendiscord:limits-maximum-user",option.limits.userMaximum),
+
+        new api.ODOptionData("opendiscord:slowmode-enabled",option.slowMode.enabled),
+        new api.ODOptionData("opendiscord:slowmode-seconds",option.slowMode.slowModeSeconds)
     ])
 }
 
@@ -136,6 +139,7 @@ export const loadTicketOptionSuffix = (option:api.ODTicketOption): api.ODOptionS
     const mode = option.get("opendiscord:channel-suffix").value
     const globalDatabase = opendiscord.databases.get("opendiscord:global")
     if (mode == "user-name") return new api.ODOptionUserNameSuffix(option.id.value,option)
+    else if (mode == "user-nickname") return new api.ODOptionUserNicknameSuffix(option.id.value,option)
     else if (mode == "random-number") return new api.ODOptionRandomNumberSuffix(option.id.value,option,globalDatabase)
     else if (mode == "random-hex") return new api.ODOptionRandomHexSuffix(option.id.value,option,globalDatabase)
     else if (mode == "counter-fixed") return new api.ODOptionCounterFixedSuffix(option.id.value,option,globalDatabase)
