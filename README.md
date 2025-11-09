@@ -137,45 +137,46 @@ With the amazing support of our translators, we've been able to translate Open T
 - **🟠 Incomplete**
 - **🔴 Unavailable/Outdated**
 
-|🔍 |Languages (36)        |Maintainer (Github/Discord)    |
-|---|---------------------|--------------------------------|
-|🟢 |🇬🇧 English            |djj123dj                       |
-|🟢 |🇳🇱 Dutch              |djj123dj                       |
-|🟢 |🇩🇪 German             |benzorich                      |
-|🟢 |🇪🇸 Spanish            |redactado & josuens            |
-|🟢 |🇵🇹 Portuguese         |quiradon                       |
-|🟢 |❓ Catalan            |guillee3                       |
-|🟢 |🇨🇿 Czech              |spyeye_                        |
-|🟢 |🇭🇺 Hungarian          |kornel0706                     |
-|🟢 |🇷🇴 Romanian           |sankedev                       |
-|🟢 |🇺🇦 Ukrainian          |anderskiy                      |
-|🟢 |🇮🇩 Indonesian         |erxg                           |
-|🟢 |🇮🇹 Italian            |fraden1mvp.                    |
-|🟢 |🇩🇰 Danish             |the_gamer                      |
-|🟢 |🇹🇭 Thai               |modshd                         |
-|🟢 |🇹🇷 Turkish            |palestinian                    |
-|🟢 |🇫🇷 French             |guillee.3                      |
-|🟢 |🇦🇪 Arabic             |palestinian                    |
-|🟢 |🇮🇳 Hindi              |an_developer                   |
-|🟢 |🇱🇹 Lithuanian         |tsgindrius                     |
-|🟢 |🇵🇱 Polish             |danoglez                       |
-|🟢 |🇳🇴 Norwegian          |NoOneNook                      |
-|🟢 |🇸🇪 Swedish            |NoOneNook                      |
-|🟢 |🇮🇷 Persian            |dysashop & zhavis              |
-|🟢 |🇧🇩 Bengali            |HanumeshGupta                  |
-|🤖 |🇪🇪 Estonian           |iamnotmega                     |
-|🤖 |🇫🇮 Finnish            |iamnotmega                     |
-|🤖 |🇷🇺 Russian            |NoOneNook                      |
-|🤖 |🇱🇻 Latvian            |NoOneNook                      |
-|🤖 |🇻🇳 Vietnamese         |ngocdiep2006                   |
-|🤖 |🇯🇵 Japanese           |HanumeshGupta                  |
-|🤖 |🇬🇷 Greek              |HanumeshGupta                  |
-|🤖 |🇸🇮 Slovenian          |HanumeshGupta                  |
-|🤖 |🇰🇷 Korean             |HanumeshGupta                  |
-|🤖 |🇮🇳 Tamil              |HanumeshGupta                  |
-|🤖 |🇨🇳 Simplified Chinese |HanumeshGupta                  |
-|🤖 |❓ Kurdish            |HanumeshGupta                  |
-|🔴 |🇨🇳 Traditional Chinese|[⭐ Contribute!](.github/CONTRIBUTING.md)|
+|🔍  |Languages (36)        |Maintainer (Github/Discord)    |
+|----|---------------------|--------------------------------|
+|🟢   |🇬🇧 English            |djj123dj                       |
+|🟢   |🇳🇱 Dutch              |djj123dj                       |
+|🟢   |❓ Catalan            |guillee3                       |
+|🟢   |🇮🇩 Indonesian         |erxg                           |
+|🟢   |🇮🇳 Hindi              |challenger_nova                |
+|🟢⏳ |🇩🇪 German             |benzorich                      |
+|🟢⏳ |🇪🇸 Spanish            |redactado & josuens            |
+|🟢⏳ |🇫🇷 French             |guillee.3                      |
+|🟢⏳ |🇵🇹 Portuguese         |quiradon                       |
+|🟢⏳ |🇨🇿 Czech              |spyeye_                        |
+|🟢⏳ |🇭🇺 Hungarian          |kornel0706                     |
+|🟢⏳ |🇷🇴 Romanian           |sankedev                       |
+|🟢⏳ |🇺🇦 Ukrainian          |anderskiy                      |
+|🟢⏳ |🇮🇹 Italian            |fraden1mvp.                    |
+|🟢⏳ |🇩🇰 Danish             |the_gamer                      |
+|🟢⏳ |🇹🇭 Thai               |modshd                         |
+|🟢⏳ |🇹🇷 Turkish            |palestinian                    |
+|🟢⏳ |🇦🇪 Arabic             |palestinian                    |
+|🟢⏳ |🇱🇹 Lithuanian         |tsgindrius                     |
+|🟢⏳ |🇵🇱 Polish             |danoglez                       |
+|🟢⏳ |🇳🇴 Norwegian          |NoOneNook                      |
+|🟢⏳ |🇸🇪 Swedish            |NoOneNook                      |
+|🟢⏳ |🇮🇷 Persian            |dysashop & zhavis              |
+|🟢⏳ |🇧🇩 Bengali            |HanumeshGupta                  |
+|🤖   |🇪🇪 Estonian           |iamnotmega                     |
+|🤖   |🇫🇮 Finnish            |iamnotmega                     |
+|🤖⏳ |🇷🇺 Russian            |NoOneNook                      |
+|🤖⏳ |🇱🇻 Latvian            |NoOneNook                      |
+|🤖⏳ |🇻🇳 Vietnamese         |ngocdiep2006                   |
+|🤖⏳ |🇯🇵 Japanese           |HanumeshGupta                  |
+|🤖⏳ |🇬🇷 Greek              |HanumeshGupta                  |
+|🤖⏳ |🇸🇮 Slovenian          |HanumeshGupta                  |
+|🤖⏳ |🇰🇷 Korean             |HanumeshGupta                  |
+|🤖⏳ |🇮🇳 Tamil              |HanumeshGupta                  |
+|🤖⏳ |🇨🇳 Simplified Chinese |HanumeshGupta                  |
+|🤖⏳ |❓ Kurdish            |HanumeshGupta                  |
+|🔴   |🇨🇳 Traditional Chinese|[⭐ Contribute!](.github/CONTRIBUTING.md)|
+<!--[⭐ Contribute!](.github/CONTRIBUTING.md) -->
 
 ## ⭐️ Star History
 If you enjoy using Open ticket, **consider starring** this repository.  
