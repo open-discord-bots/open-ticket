@@ -5,6 +5,7 @@ import {opendiscord, api, utilities} from "../index"
 import * as discord from "discord.js"
 
 const generalConfig = opendiscord.configs.get("opendiscord:general")
+const lang = opendiscord.languages
 
 export const registerActions = async () => {
     opendiscord.actions.add(new api.ODAction("opendiscord:update-ticket-topic"))
@@ -31,12 +32,12 @@ export const registerActions = async () => {
             if (generalConfig.data.system.channelTopic.showOptionName) channelTopics.push(ticket.option.get("opendiscord:name").value)
             if (generalConfig.data.system.channelTopic.showOptionDescription) channelTopics.push(ticket.option.get("opendiscord:description").value)
             if (generalConfig.data.system.channelTopic.showOptionTopic) channelTopics.push(ticket.get("opendiscord:topic").value)
-            if (generalConfig.data.system.channelTopic.showPriority) channelTopics.push("**Priority:** "+opendiscord.priorities.getFromPriorityLevel(ticket.get("opendiscord:priority").value).renderDisplayName()) //TODO TRANSLATION!!!
-            if (generalConfig.data.system.channelTopic.showClosed) channelTopics.push("**Status:** "+(closed ? "Closed" : "Opened")) //TODO TRANSLATION!!!
-            if (generalConfig.data.system.channelTopic.showClaimed) channelTopics.push("**Claimed By:** "+(claimedBy ? discord.userMention(claimedBy) : "No-one")) //TODO TRANSLATION!!!
-            if (generalConfig.data.system.channelTopic.showPinned) channelTopics.push("**Pinned:** "+(pinned ? "Yes" : "No")) //TODO TRANSLATION!!!
-            if (generalConfig.data.system.channelTopic.showCreator) channelTopics.push("**Creator:** "+discord.userMention(creator)) //TODO TRANSLATION!!!
-            if (generalConfig.data.system.channelTopic.showParticipants) channelTopics.push("**Participants:** "+ticket.get("opendiscord:participants").value.map((p) => (p.type == "user") ? discord.userMention(p.id) : discord.roleMention(p.id)).join(", ")) //TODO TRANSLATION!!!
+            if (generalConfig.data.system.channelTopic.showPriority) channelTopics.push("**"+lang.getTranslation("params.uppercase.priority")+":** "+opendiscord.priorities.getFromPriorityLevel(ticket.get("opendiscord:priority").value).renderDisplayName())
+            if (generalConfig.data.system.channelTopic.showClosed) channelTopics.push("**"+lang.getTranslation("params.uppercase.status")+":** "+(closed ? lang.getTranslation("params.uppercase.closed") : lang.getTranslation("params.uppercase.open")))
+            if (generalConfig.data.system.channelTopic.showClaimed) channelTopics.push("**"+lang.getTranslation("stats.properties.claimedBy")+":** "+(claimedBy ? discord.userMention(claimedBy) : lang.getTranslation("params.uppercase.noone")))
+            if (generalConfig.data.system.channelTopic.showPinned) channelTopics.push("**"+lang.getTranslation("params.uppercase.pinned")+":** "+(pinned ? lang.getTranslation("params.uppercase.yes") : lang.getTranslation("params.uppercase.no")))
+            if (generalConfig.data.system.channelTopic.showCreator) channelTopics.push("**"+lang.getTranslation("params.uppercase.creator")+":** "+discord.userMention(creator))
+            if (generalConfig.data.system.channelTopic.showParticipants) channelTopics.push("**"+lang.getTranslation("params.uppercase.participants")+":** "+ticket.get("opendiscord:participants").value.map((p) => (p.type == "user") ? discord.userMention(p.id) : discord.roleMention(p.id)).join(", "))
 
             //update channel
             channel.setTopic(channelTopics.join(" • "),"Topic Changed")

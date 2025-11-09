@@ -5,6 +5,7 @@ import {opendiscord, api, utilities} from "../index"
 import * as discord from "discord.js"
 
 const generalConfig = opendiscord.configs.get("opendiscord:general")
+const lang = opendiscord.languages
 
 export const registerActions = async () => {
     opendiscord.actions.add(new api.ODAction("opendiscord:create-ticket"))
@@ -120,12 +121,12 @@ export const registerActions = async () => {
             if (generalConfig.data.system.channelTopic.showOptionName) channelTopics.push(option.get("opendiscord:name").value)
             if (generalConfig.data.system.channelTopic.showOptionDescription) channelTopics.push(option.get("opendiscord:description").value)
             if (generalConfig.data.system.channelTopic.showOptionTopic) channelTopics.push(channelTopicText)
-            if (generalConfig.data.system.channelTopic.showPriority) channelTopics.push("**Priority:** "+opendiscord.priorities.get("opendiscord:none").renderDisplayName()) //TODO TRANSLATION!!!
-            if (generalConfig.data.system.channelTopic.showClosed) channelTopics.push("**Status:** Opened") //TODO TRANSLATION!!!
-            if (generalConfig.data.system.channelTopic.showClaimed) channelTopics.push("**Claimed By:** No-one") //TODO TRANSLATION!!!
-            if (generalConfig.data.system.channelTopic.showPinned) channelTopics.push("**Pinned:** No") //TODO TRANSLATION!!!
-            if (generalConfig.data.system.channelTopic.showCreator) channelTopics.push("**Creator:** "+discord.userMention(user.id)) //TODO TRANSLATION!!!
-            if (generalConfig.data.system.channelTopic.showParticipants) channelTopics.push("**Participants:** "+participants.map((p) => (p.type == "user") ? discord.userMention(p.id) : discord.roleMention(p.id)).join(", ")) //TODO TRANSLATION!!!
+            if (generalConfig.data.system.channelTopic.showPriority) channelTopics.push("**"+lang.getTranslation("params.uppercase.priority")+":** "+opendiscord.priorities.get("opendiscord:none").renderDisplayName())
+            if (generalConfig.data.system.channelTopic.showClosed) channelTopics.push("**"+lang.getTranslation("params.uppercase.status")+":** "+lang.getTranslation("params.uppercase.open"))
+            if (generalConfig.data.system.channelTopic.showClaimed) channelTopics.push("**"+lang.getTranslation("stats.properties.claimedBy")+":** "+lang.getTranslation("params.uppercase.noone"))
+            if (generalConfig.data.system.channelTopic.showPinned) channelTopics.push("**"+lang.getTranslation("params.uppercase.pinned")+":** "+lang.getTranslation("params.uppercase.no"))
+            if (generalConfig.data.system.channelTopic.showCreator) channelTopics.push("**"+lang.getTranslation("params.uppercase.creator")+":** "+discord.userMention(user.id))
+            if (generalConfig.data.system.channelTopic.showParticipants) channelTopics.push("**"+lang.getTranslation("params.uppercase.participants")+":** "+participants.map((p) => (p.type == "user") ? discord.userMention(p.id) : discord.roleMention(p.id)).join(", "))
 
             //create channel
             const channel = await guild.channels.create({

@@ -5,6 +5,7 @@ import {opendiscord, api, utilities} from "../index"
 import * as discord from "discord.js"
 
 const generalConfig = opendiscord.configs.get("opendiscord:general")
+const lang = opendiscord.languages
 
 export const registerActions = async () => {
     opendiscord.actions.add(new api.ODAction("opendiscord:close-ticket"))
@@ -214,7 +215,7 @@ export const registerVerifyBars = async () => {
             }
             //return when already closed
             if (ticket.get("opendiscord:closed").value){
-                instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error").build("button",{guild,channel,user,error:opendiscord.languages.getTranslation("errors.actionInvalid.close"),layout:"simple"}))
+                instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error").build("button",{guild,channel,user,error:lang.getTranslation("errors.actionInvalid.close"),layout:"simple"}))
                 return cancel()
             }
             //return when busy
@@ -226,11 +227,11 @@ export const registerVerifyBars = async () => {
             if (!generalConfig.data.system.allowCloseBeforeMessage || !generalConfig.data.system.allowCloseBeforeAdminMessage){
                 const analysis = await opendiscord.transcripts.collector.ticketUserMessagesAnalysis(ticket,guild,channel)
                 if (analysis && !generalConfig.data.system.allowCloseBeforeMessage && analysis.totalMessages < 1){
-                    instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error").build("button",{guild,channel,user,layout:"simple",error:"This ticket cannot be closed/deleted before a message has been sent by a user.",customTitle:opendiscord.languages.getTranslation("errors.titles.noPermissions")})) //TODO TRANSLATION!!!
+                    instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error").build("button",{guild,channel,user,layout:"simple",error:lang.getTranslation("errors.descriptions.closeBeforeMessage"),customTitle:lang.getTranslation("errors.titles.noPermissions")}))
                     return cancel()
                 }
                 if (analysis && !generalConfig.data.system.allowCloseBeforeAdminMessage && analysis.adminMessages < 1){
-                    instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error").build("button",{guild,channel,user,layout:"simple",error:"This ticket cannot be closed/deleted before a message has been sent by a ticket admin or support member.",customTitle:opendiscord.languages.getTranslation("errors.titles.noPermissions")})) //TODO TRANSLATION!!!
+                    instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error").build("button",{guild,channel,user,layout:"simple",error:lang.getTranslation("errors.descriptions.closeBeforeAdminMessage"),customTitle:lang.getTranslation("errors.titles.noPermissions")}))
                     return cancel()
                 }
             }
@@ -313,7 +314,7 @@ export const registerVerifyBars = async () => {
             }
             //return when already closed
             if (ticket.get("opendiscord:closed").value){
-                instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error").build("button",{guild,channel,user,error:opendiscord.languages.getTranslation("errors.actionInvalid.close"),layout:"simple"}))
+                instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error").build("button",{guild,channel,user,error:lang.getTranslation("errors.actionInvalid.close"),layout:"simple"}))
                 return cancel()
             }
             //return when busy
@@ -325,11 +326,11 @@ export const registerVerifyBars = async () => {
             if (!generalConfig.data.system.allowCloseBeforeMessage || !generalConfig.data.system.allowCloseBeforeAdminMessage){
                 const analysis = await opendiscord.transcripts.collector.ticketUserMessagesAnalysis(ticket,guild,channel)
                 if (analysis && !generalConfig.data.system.allowCloseBeforeMessage && analysis.totalMessages < 1){
-                    instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error").build("button",{guild,channel,user,layout:"simple",error:"This ticket cannot be closed/deleted before a message has been sent by a user.",customTitle:opendiscord.languages.getTranslation("errors.titles.noPermissions")})) //TODO TRANSLATION!!!
+                    instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error").build("button",{guild,channel,user,layout:"simple",error:lang.getTranslation("errors.descriptions.closeBeforeMessage"),customTitle:lang.getTranslation("errors.titles.noPermissions")}))
                     return cancel()
                 }
                 if (analysis && !generalConfig.data.system.allowCloseBeforeAdminMessage && analysis.adminMessages < 1){
-                    instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error").build("button",{guild,channel,user,layout:"simple",error:"This ticket cannot be closed/deleted before a message has been sent by a ticket admin or support member.",customTitle:opendiscord.languages.getTranslation("errors.titles.noPermissions")})) //TODO TRANSLATION!!!
+                    instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error").build("button",{guild,channel,user,layout:"simple",error:lang.getTranslation("errors.descriptions.closeBeforeAdminMessage"),customTitle:lang.getTranslation("errors.titles.noPermissions")}))
                     return cancel()
                 }
             }

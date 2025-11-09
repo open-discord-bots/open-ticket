@@ -617,7 +617,7 @@ const ticketEmbeds = () => {
             if (ticket.get("opendiscord:claimed").value){
                 const claimUser = await opendiscord.tickets.getTicketUser(ticket,"claimer")
                 if (!claimUser) return
-                instance.setAuthor(lang.getTranslationWithParams("params.uppercase.claimedBy",[claimUser.displayName]),claimUser.displayAvatarURL())
+                instance.setAuthor(lang.getTranslation("stats.properties.claimedBy")+" "+claimUser.displayName,claimUser.displayAvatarURL())
             }
         })
     )
@@ -838,8 +838,7 @@ const ticketEmbeds = () => {
             instance.setTimestamp(new Date())
             instance.addFields(
                 {name:lang.getTranslation("params.uppercase.ticket")+":",value:"```#"+(channel ? channel.name : "<unknown>")+"```",inline:false},
-                //TODO TRANSLATION!!!
-                {name:"Option"+":",value:"```"+(ticket.option.get("opendiscord:name").value)+"```",inline:false},
+                {name:lang.getTranslation("params.uppercase.option")+":",value:"```"+(ticket.option.get("opendiscord:name").value)+"```",inline:false},
             )
             if (reason || generalConfig.data.system.alwaysShowReason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+(reason ?? "/")+"```",inline:false})
 
@@ -1081,7 +1080,7 @@ const transcriptEmbeds = () => {
             const {guild,channel,user,ticket,compiler,reason} = params
             
             instance.setColor(generalConfig.data.system.useRedErrorEmbeds ? "Red" : generalConfig.data.mainColor)
-            instance.setTitle(utilities.emojiTitle("❌","Transcript Error")) //TODO TRANSLATION!!!
+            instance.setTitle(utilities.emojiTitle("❌",lang.getTranslation("transcripts.errors.title")))
             instance.setTimestamp(new Date())
             instance.setDescription(lang.getTranslation("transcripts.errors.error"))
             instance.setFooter(lang.getTranslation("errors.descriptions.askForInfo"))
@@ -1134,8 +1133,7 @@ const roleEmbeds = () => {
                 return (r.action == "added") ? "🟢 "+lang.getTranslation("params.uppercase.added")+" @"+r.role.name : "🔴 "+lang.getTranslation("params.uppercase.removed")+" @"+r.role.name
             })
             
-            //TODO TRANSLATION!!!
-            const baseDescription = ("Your roles in our server have been updated!")
+            const baseDescription = lang.getTranslation("actions.logs.roleUpdateDm")
 
             if (newResult.length > 0) instance.setDescription(baseDescription+"\n\n"+newResult.join("\n"))
             else instance.setDescription(baseDescription+"\n"+lang.getTranslation("actions.descriptions.rolesEmpty"))
@@ -1161,8 +1159,7 @@ const roleEmbeds = () => {
                 return (r.action == "added") ? "🟢 "+lang.getTranslation("params.uppercase.added")+" "+discord.roleMention(r.role.id) : "🔴 "+lang.getTranslation("params.uppercase.removed")+" "+discord.roleMention(r.role.id)
             })
             
-            //TODO TRANSLATION!!!
-            const baseDescription = ("{0} has updated their roles!").replace("{0}",discord.userMention(user.id))
+            const baseDescription = lang.getTranslationWithParams("actions.logs.roleUpdateLog",[discord.userMention(user.id)])
 
             if (newResult.length > 0) instance.setDescription(baseDescription+"\n\n"+newResult.join("\n"))
             else instance.setDescription(baseDescription+"\n"+lang.getTranslation("actions.descriptions.rolesEmpty"))
@@ -1178,7 +1175,7 @@ const clearEmbeds = () => {
             const {guild,channel,user,filter,list} = params
             
             instance.setColor(generalConfig.data.mainColor)
-            instance.setTitle(utilities.emojiTitle("⚠️","Clear Tickets")) //TODO TRANSLATION!!!
+            instance.setTitle(utilities.emojiTitle("⚠️",lang.getTranslation("actions.titles.clearTickets")))
             instance.setAuthor(user.displayName,user.displayAvatarURL())
             instance.setTimestamp(new Date())
             instance.setDescription(lang.getTranslation("actions.descriptions.clearVerify"))
@@ -1324,9 +1321,9 @@ const extraEmbeds = () => {
             
             instance.setAuthor(user.displayName,user.displayAvatarURL())
             instance.setColor(generalConfig.data.mainColor)
-            instance.setTitle(utilities.emojiTitle("ℹ️","Topic Changed")) //TODO TRANSLATION!!!
-            instance.setDescription("The channel topic has been changed by "+discord.userMention(user.id)+" successfully!") //TODO TRANSLATION!!!
-            if (topic) instance.addFields({name:"Topic"+":",value:"```"+topic+"```"}) //TODO TRANSLATION!!!
+            instance.setTitle(utilities.emojiTitle("ℹ️",lang.getTranslation("actions.titles.topicSet")))
+            instance.setDescription(lang.getTranslationWithParams("actions.descriptions.topicSet",[discord.userMention(user.id)]))
+            if (topic) instance.addFields({name:lang.getTranslation("params.uppercase.topic")+":",value:"```"+topic+"```"})
         })
     )
 
@@ -1338,8 +1335,8 @@ const extraEmbeds = () => {
 
             instance.setAuthor(user.displayName,user.displayAvatarURL())
             instance.setColor(generalConfig.data.mainColor)
-            instance.setTitle(utilities.emojiTitle("🚨","Priority Changed")) //TODO TRANSLATION!!!
-            instance.setDescription("The ticket priority has been changed to **"+priority.renderDisplayName()+"** by "+discord.userMention(user.id)+" successfully!") //TODO TRANSLATION!!!
+            instance.setTitle(utilities.emojiTitle("🚨",lang.getTranslation("actions.titles.prioritySet")))
+            instance.setDescription(lang.getTranslationWithParams("actions.descriptions.prioritySet",["**"+priority.renderDisplayName()+"**",discord.userMention(user.id)]))
             if (reason || generalConfig.data.system.alwaysShowReason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+(reason ?? "/")+"```"})
         })
     )
@@ -1352,8 +1349,8 @@ const extraEmbeds = () => {
 
             instance.setAuthor(user.displayName,user.displayAvatarURL())
             instance.setColor(generalConfig.data.mainColor)
-            instance.setTitle(utilities.emojiTitle("🚨","Ticket Priority")) //TODO TRANSLATION!!!
-            instance.setDescription("The current priority of this ticket is **"+priority.renderDisplayName()+"**!") //TODO TRANSLATION!!!
+            instance.setTitle(utilities.emojiTitle("🚨",lang.getTranslation("actions.titles.priorityGet")))
+            instance.setDescription(lang.getTranslationWithParams("actions.descriptions.priorityGet",["**"+priority.renderDisplayName()+"**"]))
         })
     )
 
@@ -1365,8 +1362,8 @@ const extraEmbeds = () => {
 
             instance.setAuthor(user.displayName,user.displayAvatarURL())
             instance.setColor(generalConfig.data.mainColor)
-            instance.setTitle(utilities.emojiTitle("🔀","Ticket Transferred")) //TODO TRANSLATION!!!
-            instance.setDescription("The ticket ownership has been transferred from "+discord.userMention(oldCreator.id)+" to "+discord.userMention(newCreator.id)+" by "+discord.userMention(user.id)+" successfully!") //TODO TRANSLATION!!!
+            instance.setTitle(utilities.emojiTitle("🔀",lang.getTranslation("actions.titles.transfer")))
+            instance.setDescription(lang.getTranslationWithParams("actions.descriptions.transfer",[discord.userMention(oldCreator.id),discord.userMention(newCreator.id),discord.userMention(user.id)]))
             if (reason || generalConfig.data.system.alwaysShowReason) instance.addFields({name:lang.getTranslation("params.uppercase.reason")+":",value:"```"+(reason ?? "/")+"```"})
         })
     )

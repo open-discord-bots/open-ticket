@@ -15,13 +15,13 @@ const lang = opendiscord.languages
 export const loadAllHelpMenuCategories = async () => {
     const helpmenu = opendiscord.helpmenu
 
-    helpmenu.add(new api.ODHelpMenuCategory("opendiscord:general",5,utilities.emojiTitle("📎","General Commands"))) //TODO TRANSLATION!!!
-    helpmenu.add(new api.ODHelpMenuCategory("opendiscord:ticket-basic",4,utilities.emojiTitle("🎫","Basic Ticket Commands"))) //TODO TRANSLATION!!!
-    helpmenu.add(new api.ODHelpMenuCategory("opendiscord:ticket-advanced",4,utilities.emojiTitle("💡","Advanced Ticket Commands"))) //TODO TRANSLATION!!!
-    helpmenu.add(new api.ODHelpMenuCategory("opendiscord:ticket-user",3,utilities.emojiTitle("👤","User Ticket Commands"))) //TODO TRANSLATION!!!
-    helpmenu.add(new api.ODHelpMenuCategory("opendiscord:admin",2,utilities.emojiTitle("🚨","Admin Commands"))) //TODO TRANSLATION!!!
-    helpmenu.add(new api.ODHelpMenuCategory("opendiscord:advanced",1,utilities.emojiTitle("🚧","Advanced Commands"))) //TODO TRANSLATION!!!
-    helpmenu.add(new api.ODHelpMenuCategory("opendiscord:extra",0,utilities.emojiTitle("✨","Extra Commands"))) //TODO TRANSLATION!!!
+    helpmenu.add(new api.ODHelpMenuCategory("opendiscord:general",5,utilities.emojiTitle("📎",lang.getTranslation("helpMenu.categories.general"))))
+    helpmenu.add(new api.ODHelpMenuCategory("opendiscord:ticket-basic",4,utilities.emojiTitle("🎫",lang.getTranslation("helpMenu.categories.basicTicket"))))
+    helpmenu.add(new api.ODHelpMenuCategory("opendiscord:ticket-advanced",4,utilities.emojiTitle("💡",lang.getTranslation("helpMenu.categories.advancedTicket"))))
+    helpmenu.add(new api.ODHelpMenuCategory("opendiscord:ticket-user",3,utilities.emojiTitle("👤",lang.getTranslation("helpMenu.categories.userTicket"))))
+    helpmenu.add(new api.ODHelpMenuCategory("opendiscord:admin",2,utilities.emojiTitle("🚨",lang.getTranslation("helpMenu.categories.admin"))))
+    helpmenu.add(new api.ODHelpMenuCategory("opendiscord:advanced",1,utilities.emojiTitle("🚧",lang.getTranslation("helpMenu.categories.advanced"))))
+    helpmenu.add(new api.ODHelpMenuCategory("opendiscord:extra",0,utilities.emojiTitle("✨",lang.getTranslation("helpMenu.categories.extra"))))
 }
 
 export const loadAllHelpMenuComponents = async () => {
@@ -163,9 +163,9 @@ export const loadAllHelpMenuComponents = async () => {
         }))
         if (allowedCommands.includes("transfer")) ticketUser.add(new api.ODHelpMenuCommandComponent("opendiscord:transfer",-1,{
             textName:prefix+"transfer",
-            textDescription:"Transfer the ticket ownership from one user to another.", //TODO TRANSLATION!!!
+            textDescription:lang.getTranslation("commands.transfer"),
             slashName:"/transfer",
-            slashDescription:"Transfer the ticket ownership from one user to another.", //TODO TRANSLATION!!!
+            slashDescription:lang.getTranslation("commands.transfer"),
             textOptions:[{name:"user",optional:false},{name:"reason",optional:true}],
             slashOptions:[{name:"user",optional:false},{name:"reason",optional:true}]
         }))
@@ -279,17 +279,17 @@ export const loadAllHelpMenuComponents = async () => {
         }))
         if (allowedCommands.includes("topic")) advanced.add(new api.ODHelpMenuCommandComponent("opendiscord:topic-set",1,{
             textName:prefix+"topic set",
-            textDescription:"Set the topic of the ticket channel.", //TODO TRANSLATION!!!
+            textDescription:lang.getTranslation("commands.topicSet"),
             slashName:"/topic set",
-            slashDescription:"Manage the topic of the ticket channel.", //TODO TRANSLATION!!!
+            slashDescription:lang.getTranslation("commands.topicSet"),
             textOptions:[{name:"topic",optional:false}],
             slashOptions:[{name:"topic",optional:false}]
         }))
         if (allowedCommands.includes("priority")) advanced.add(new api.ODHelpMenuCommandComponent("opendiscord:priority-set",0,{
             textName:prefix+"priority set",
-            textDescription:"Set the priority of the ticket.", //TODO TRANSLATION!!!
+            textDescription:lang.getTranslation("commands.prioritySet"),
             slashName:"/priority set",
-            slashDescription:"Manage the priority of the ticket.", //TODO TRANSLATION!!!
+            slashDescription:lang.getTranslation("commands.prioritySet"),
             textOptions:[{name:"priority",optional:false},{name:"reason",optional:true}],
             slashOptions:[{name:"priority",optional:false},{name:"reason",optional:true}]
         }))

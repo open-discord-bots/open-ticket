@@ -560,18 +560,18 @@ export const loadAllSlashCommands = async () => {
     if (allowedCommands.includes("topic")) commands.add(new api.ODSlashCommand("opendiscord:topic",{
         type:act.ChatInput,
         name:"topic",
-        description:"Manage the topic of the ticket channel.", //TODO TRANSLATION!!!
+        description:lang.getTranslation("commands.topic"),
         contexts:[discord.InteractionContextType.Guild],
         integrationTypes:[discord.ApplicationIntegrationType.GuildInstall],
         options:[
             {
                 name:"set",
-                description:"Set the topic of the ticket channel to a specific value.", //TODO TRANSLATION!!!
+                description:lang.getTranslation("commands.topicSet"),
                 type:acot.Subcommand,
                 options:[
                     {
                         name:"topic",
-                        description:"The new topic of the channel.",
+                        description:lang.getTranslation("commands.topicValue"),
                         type:acot.String,
                         required:true
                     }
@@ -585,18 +585,18 @@ export const loadAllSlashCommands = async () => {
     if (allowedCommands.includes("priority")) commands.add(new api.ODSlashCommand("opendiscord:priority",{
         type:act.ChatInput,
         name:"priority",
-        description:"Manage the priority of the ticket.", //TODO TRANSLATION!!!
+        description:lang.getTranslation("commands.priority"),
         contexts:[discord.InteractionContextType.Guild],
         integrationTypes:[discord.ApplicationIntegrationType.GuildInstall],
         options:[
             {
                 name:"set",
-                description:"Set the priority of the ticket.", //TODO TRANSLATION!!!
+                description:lang.getTranslation("commands.prioritySet"),
                 type:acot.Subcommand,
                 options:[
                     {
                         name:"priority",
-                        description:"The priority of the channel.",
+                        description:lang.getTranslation("commands.priorityValue"),
                         type:acot.String,
                         required:true,
                         choices:opendiscord.priorities.getAll().sort((a,b) => b.priority-a.priority).map((prio) => ({value:prio.rawName,name:prio.renderDisplayName()}))
@@ -611,7 +611,7 @@ export const loadAllSlashCommands = async () => {
             },
             {
                 name:"get",
-                description:"Get the priority of the ticket.", //TODO TRANSLATION!!!
+                description:lang.getTranslation("commands.priorityGet"),
                 type:acot.Subcommand
             },
             //TODO: list (v4.2)
@@ -622,13 +622,13 @@ export const loadAllSlashCommands = async () => {
     if (allowedCommands.includes("transfer")) commands.add(new api.ODSlashCommand("opendiscord:transfer",{
         type:act.ChatInput,
         name:"transfer",
-        description:"Transfer the ticket ownership from one user to another.", //TODO TRANSLATION!!!
+        description:lang.getTranslation("commands.transfer"),
         contexts:[discord.InteractionContextType.Guild],
         integrationTypes:[discord.ApplicationIntegrationType.GuildInstall],
         options:[
             {
                 name:"user",
-                description:"The user to transfer to.", //TODO TRANSLATION!!!
+                description:lang.getTranslation("commands.transferUser"),
                 type:acot.User,
                 required:true
             },

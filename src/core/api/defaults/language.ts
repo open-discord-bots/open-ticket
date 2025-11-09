@@ -76,6 +76,7 @@ export type ODLanguageManagerTranslations_Default = (
     "checker.system.dataPath"|
     "checker.system.dataDocs"|
     "checker.system.dataMessages"|
+
     "checker.messages.invalidType"|
     "checker.messages.propertyMissing"|
     "checker.messages.propertyOptional"|
@@ -83,6 +84,7 @@ export type ODLanguageManagerTranslations_Default = (
     "checker.messages.nullInvalid"|
     "checker.messages.switchInvalidType"|
     "checker.messages.objectSwitchInvalid"|
+
     "checker.messages.stringTooShort"|
     "checker.messages.stringTooLong"|
     "checker.messages.stringLengthInvalid"|
@@ -91,6 +93,15 @@ export type ODLanguageManagerTranslations_Default = (
     "checker.messages.stringContains"|
     "checker.messages.stringChoices"|
     "checker.messages.stringRegex"|
+    "checker.messages.stringInvertedContains"|
+    "checker.messages.stringLowercase"|
+    "checker.messages.stringUppercase"|
+    "checker.messages.stringSpecialCharacters"|
+    "checker.messages.stringNoSpaces"|
+    "checker.messages.stringCapitalWord"|
+    "checker.messages.stringCapitalSentence"|
+    "checker.messages.stringPunctuation"|
+
     "checker.messages.numberTooShort"|
     "checker.messages.numberTooLong"|
     "checker.messages.numberLengthInvalid"|
@@ -107,8 +118,12 @@ export type ODLanguageManagerTranslations_Default = (
     "checker.messages.numberNegative"|
     "checker.messages.numberPositive"|
     "checker.messages.numberZero"|
+    "checker.messages.numberNan"|
+    "checker.messages.numberInvertedContains"|
+
     "checker.messages.booleanTrue"|
     "checker.messages.booleanFalse"|
+
     "checker.messages.arrayEmptyDisabled"|
     "checker.messages.arrayEmptyRequired"|
     "checker.messages.arrayTooShort"|
@@ -116,6 +131,7 @@ export type ODLanguageManagerTranslations_Default = (
     "checker.messages.arrayLengthInvalid"|
     "checker.messages.arrayInvalidTypes"|
     "checker.messages.arrayDouble"|
+
     "checker.messages.discordInvalidId"|
     "checker.messages.discordInvalidIdOptions"|
     "checker.messages.discordInvalidToken"|
@@ -137,6 +153,8 @@ export type ODLanguageManagerTranslations_Default = (
     "checker.messages.unusedOption"|
     "checker.messages.unusedQuestion"|
     "checker.messages.dropdownOption"|
+    "checker.messages.customInvalidVersion"|
+
     "actions.buttons.create"|
     "actions.buttons.close"|
     "actions.buttons.delete"|
@@ -174,6 +192,7 @@ export type ODLanguageManagerTranslations_Default = (
     "actions.titles.blacklistAddDm"|
     "actions.titles.blacklistRemoveDm"|
     "actions.titles.clear"|
+    "actions.titles.clearTickets"|
     "actions.titles.roles"|
 
     "actions.titles.autoclose"|
@@ -182,6 +201,11 @@ export type ODLanguageManagerTranslations_Default = (
     "actions.titles.autodelete"|
     "actions.titles.autodeleteEnabled"|
     "actions.titles.autodeleteDisabled"|
+
+    "actions.titles.topicSet"|
+    "actions.titles.prioritySet"|
+    "actions.titles.priorityGet"|
+    "actions.titles.transfer"|
 
     "actions.descriptions.create"|
     "actions.descriptions.close"|
@@ -223,6 +247,11 @@ export type ODLanguageManagerTranslations_Default = (
     "actions.descriptions.ticketMessageAutodelete"|
     "actions.descriptions.panelReady"|
 
+    "actions.descriptions.topicSet"|
+    "actions.descriptions.prioritySet"|
+    "actions.descriptions.priorityGet"|
+    "actions.descriptions.transfer"|
+
     "actions.modal.closePlaceholder"|
     "actions.modal.deletePlaceholder"|
     "actions.modal.reopenPlaceholder"|
@@ -261,6 +290,13 @@ export type ODLanguageManagerTranslations_Default = (
     "actions.logs.blacklistRemoveDm"|
     "actions.logs.clearLog"|
 
+    "actions.logs.transferLog"|
+    "actions.logs.transferDm"|
+    "actions.logs.prioritySetLog"|
+    "actions.logs.prioritySetDm"|
+    "actions.logs.roleUpdateLog"|
+    "actions.logs.roleUpdateDm"|
+
     "transcripts.success.visit"|
     "transcripts.success.ready"|
     "transcripts.success.textFileDescription"|
@@ -277,6 +313,17 @@ export type ODLanguageManagerTranslations_Default = (
     "transcripts.errors.continue"|
     "transcripts.errors.backup"|
     "transcripts.errors.error"|
+    "transcripts.errors.title"|
+
+    "transcripts.text.messagesTitle"|
+    "transcripts.text.embedTitle"|
+    "transcripts.text.fileTitle"|
+    "transcripts.text.fieldsTitle"|
+    "transcripts.text.reactionsTitle"|
+    "transcripts.text.statsTitle"|
+    "transcripts.text.emptyContent"|
+    "transcripts.text.noTitle"|
+    "transcripts.text.noDesc"|
 
     "errors.titles.internalError"|
     "errors.titles.optionMissing"|
@@ -290,6 +337,7 @@ export type ODLanguageManagerTranslations_Default = (
     "errors.titles.notInGuild"|
     "errors.titles.channelRename"|
     "errors.titles.busy"|
+    "errors.titles.permissionError"|
 
     "errors.descriptions.askForInfo"|
     "errors.descriptions.askForInfoResolve"|
@@ -312,6 +360,9 @@ export type ODLanguageManagerTranslations_Default = (
     "errors.descriptions.channelRename"|
     "errors.descriptions.channelRenameSource"|
     "errors.descriptions.busy"|
+    "errors.descriptions.closeBeforeMessage"|
+    "errors.descriptions.closeBeforeAdminMessage"|
+    "errors.descriptions.unableToCreateTicket"|
 
     "errors.optionInvalidReasons.stringRegex"|
     "errors.optionInvalidReasons.stringMinLength"|
@@ -356,7 +407,6 @@ export type ODLanguageManagerTranslations_Default = (
     "params.uppercase.added"|
     "params.uppercase.removed"|
     "params.uppercase.filter"|
-    "params.uppercase.claimedBy"|
     "params.uppercase.method"|
     "params.uppercase.type"|
     "params.uppercase.blacklisted"|
@@ -381,6 +431,27 @@ export type ODLanguageManagerTranslations_Default = (
     "params.uppercase.claimed"|
     "params.uppercase.pinned"|
     "params.uppercase.creationDate"|
+
+    "params.uppercase.noone"|
+    "params.uppercase.open"|
+    "params.uppercase.closed"|
+    "params.uppercase.priority"|
+    "params.uppercase.status"|
+    "params.uppercase.participants"|
+    "params.uppercase.yes"|
+    "params.uppercase.no"|
+    "params.uppercase.option"|
+    "params.uppercase.topic"|
+    "params.uppercase.uptime"|
+    "params.uppercase.messages"|
+    "params.uppercase.embeds"|
+    "params.uppercase.files"|
+    "params.uppercase.components"|
+    "params.uppercase.cooldown"|
+    "params.uppercase.maxTickets"|
+    "params.uppercase.admins"|
+    "params.uppercase.roles"|
+    "params.uppercase.size"|
 
     "params.lowercase.text"|
     "params.lowercase.html"|
@@ -448,6 +519,18 @@ export type ODLanguageManagerTranslations_Default = (
     "commands.autodeleteEnable"|
     "commands.autodeleteEnableTime"|
 
+    "commands.topic"|
+    "commands.topicSet"|
+    "commands.topicValue"|
+    "commands.topicList"|
+    "commands.priority"|
+    "commands.prioritySet"|
+    "commands.priorityValue"|
+    "commands.priorityGet"|
+    "commands.priorityList"|
+    "commands.transfer"|
+    "commands.transferUser"|
+
     "helpMenu.help"|
     "helpMenu.ticket"|
     "helpMenu.close"|
@@ -475,11 +558,20 @@ export type ODLanguageManagerTranslations_Default = (
     "helpMenu.autodeleteDisable"|
     "helpMenu.autodeleteEnable"|
 
+    "helpMenu.categories.general"|
+    "helpMenu.categories.basicTicket"|
+    "helpMenu.categories.advancedTicket"|
+    "helpMenu.categories.userTicket"|
+    "helpMenu.categories.admin"|
+    "helpMenu.categories.advanced"|
+    "helpMenu.categories.extra"|
+
     "stats.scopes.global"|
     "stats.scopes.system"|
     "stats.scopes.user"|
     "stats.scopes.ticket"|
     "stats.scopes.participants"|
+    "stats.scopes.messages"|
 
     "stats.properties.ticketsCreated"|
     "stats.properties.ticketsClosed"|
@@ -490,7 +582,44 @@ export type ODLanguageManagerTranslations_Default = (
     "stats.properties.ticketsPinned"|
     "stats.properties.ticketsMoved"|
     "stats.properties.usersBlacklisted"|
-    "stats.properties.transcriptsCreated"
+    "stats.properties.transcriptsCreated"|
+    "stats.properties.ticketsAutodeleted"|
+    "stats.properties.ticketsTransferred"|
+    "stats.properties.ticketVolume"|
+    "stats.properties.averageTickets"|
+    "stats.properties.currentTickets"|
+    "stats.properties.age"|
+    "stats.properties.responseTime"|
+    "stats.properties.resolutionTime"|
+    "stats.properties.createdOn"|
+    "stats.properties.createdBy"|
+    "stats.properties.closedOn"|
+    "stats.properties.closedBy"|
+    "stats.properties.claimedOn"|
+    "stats.properties.claimedBy"|
+    "stats.properties.pinnedOn"|
+    "stats.properties.pinnedBy"|
+    "stats.properties.deletedOn"|
+    "stats.properties.deletedBy"|
+
+    "stats.roles.developer"|
+    "stats.roles.serverOwner"|
+    "stats.roles.serverAdmin"|
+    "stats.roles.moderator"|
+    "stats.roles.support"|
+    "stats.roles.member"|
+
+    "panel.selectTicket"|
+    "panel.selectRole"|
+    "panel.selectOption"|
+
+    "priorities.urgent"|
+    "priorities.veryHigh"|
+    "priorities.high"|
+    "priorities.normal"|
+    "priorities.low"|
+    "priorities.veryLow"|
+    "priorities.none"
 )
 
 /**## ODLanguageManager_Default `default_class`
