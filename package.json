@@ -19,7 +19,8 @@
         "test": "node index.js --dev-config --dev-database --soft-plugins",
         "testsetup": "node index.js --cli --dev-config --dev-database --soft-plugins",
         "testnc": "node index.js --no-compile --dev-config --dev-database --soft-plugins",
-        "docs": "npx typedoc --options .docs/typedoc-config.json && node .docs/createDocs.js"
+        "docs": "npx typedoc --options .docs/typedoc-config.json && node .docs/createDocs.js",
+        "mergelang": "node .docs/mergeTranslations.js"
     },
     "type": "commonjs",
     "license": "GPL-3.0-only",
