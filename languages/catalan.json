@@ -2,7 +2,7 @@
     "_TRANSLATION":{
         "otversion":"v4.1.0",
         "translators":["guillee3"],
-        "lastedited":"21/08/2024",
+        "lastedited":"09/11/2025",
         "language":"Catalan",
         "automated":false
     },
@@ -31,7 +31,15 @@
             "stringContains":"Aquesta cadena ha de contenir {0}!",
             "stringChoices":"Aquesta cadena només pot ser un dels valors següents: {0}!",
             "stringRegex":"Aquesta cadena és invàlida!",
-
+            "stringInvertedContains":"Aquesta cadena no pot contenir {0}!",
+            "stringLowercase":"Aquesta cadena ha d'estar escrita només en minúscules!",
+            "stringUppercase":"Aquesta cadena ha d'estar escrita només en majúscules!",
+            "stringSpecialCharacters":"Aquesta cadena no pot contenir cap caràcter especial! (només a-z, 0-9 i espai)",
+            "stringNoSpaces":"Aquesta cadena no pot contenir espais!",
+            "stringCapitalWord":"Es recomana que cada paraula d'aquesta cadena comenci amb una lletra majúscula!",
+            "stringCapitalSentence":"Sembla que algunes frases d'aquesta cadena no comencen amb una lletra majúscula!",
+            "stringPunctuation":"Sembla que la frase d'aquesta cadena no acaba amb un signe de puntuació!",
+            
             "numberTooShort":"Aquest nombre no pot tenir menys de {0} caràcters!",
             "numberTooLong":"Aquest nombre no pot tenir més de {0} caràcters!",
             "numberLengthInvalid":"Aquest nombre ha de tenir {0} caràcters!",
@@ -48,10 +56,12 @@
             "numberNegative":"Aquest nombre no pot ser negatiu!",
             "numberPositive":"Aquest nombre no pot ser positiu!",
             "numberZero":"Aquest nombre no pot ser zero!",
-
+            "numberNan":"Aquest número no pot ser NaN (Not A Number)!",
+            "numberInvertedContains":"Aquest número no pot contenir {0}!",
+            
             "booleanTrue":"Aquest booleà no pot ser veritable!",
             "booleanFalse":"Aquest booleà no pot ser fals!",
-
+            
             "arrayEmptyDisabled":"Aquest array no pot estar buit!",
             "arrayEmptyRequired":"Aquest array ha d'estar buit!",
             "arrayTooShort":"Aquest array ha de tenir una longitud d'almenys {0}!",
@@ -59,7 +69,7 @@
             "arrayLengthInvalid":"Aquest array ha de tenir una longitud de {0}!",
             "arrayInvalidTypes":"Aquest array només pot contenir els tipus següents: {0}!",
             "arrayDouble":"Aquest array no permet el mateix valor dues vegades!",
-
+            
             "discordInvalidId":"Aquest és un id de {0} de discord invàlid!",
             "discordInvalidIdOptions":"Aquest és un id de {0} de discord invàlid! També en pots utilitzar un d'aquests: {1}!",
             "discordInvalidToken":"Aquest és un token de discord invàlid (sintàcticament)!",
@@ -76,7 +86,7 @@
             "urlInvalidPath":"Aquesta url té un camí invàlid!",
             "idNotUnique":"Aquest id no és únic, utilitza un altre id!",
             "idNonExistent":"L'id {0} no existeix!",
-
+            
             "invalidType":"Aquesta propietat ha de ser del tipus: {0}!",
             "propertyMissing":"La propietat {0} falta en aquest objecte!",
             "propertyOptional":"La propietat {0} és opcional en aquest objecte!",
@@ -84,12 +94,13 @@
             "nullInvalid":"Aquesta propietat no pot ser nul·la!",
             "switchInvalidType":"Això ha de ser d'un dels tipus següents: {0}!",
             "objectSwitchInvalid":"Aquest objecte ha de ser d'un dels tipus següents: {0}!",
-
+            
             "invalidLanguage":"Aquest és un idioma invàlid!",
             "invalidButton":"Aquest botó ha de tenir almenys un {0} o {1}!",
             "unusedOption":"L'opció {0} no s'utilitza enlloc!",
             "unusedQuestion":"La pregunta {0} no s'utilitza enlloc!",
-            "dropdownOption":"Un panell amb desplegable activat només pot contenir opcions del tipus 'ticket'!"
+            "dropdownOption":"Un panell amb desplegable activat només pot contenir opcions del tipus 'ticket'!",
+            "customInvalidVersion":"La versió especificada a la teva configuració no coincideix! Assegura't d'haver actualitzat la configuració a la versió més recent!"
         }
     },
     "actions":{
@@ -122,7 +133,7 @@
             "move":"Ticket Mogut",
             "add":"Usuari Afegit al Ticket",
             "remove":"Usuari Eliminat del Ticket",
-
+            
             "help":"Comandes Disponibles",
             "statsReset":"Restablir Estadístiques",
             "blacklistAdd":"Usuari a la Llista Negra",
@@ -132,14 +143,20 @@
             "blacklistAddDm":"Afegit a la Llista Negra",
             "blacklistRemoveDm":"Eliminat de la Llista Negra",
             "clear":"Tickets Netejats",
+            "clearTickets":"Netejar Tickets",
             "roles":"Rols Actualitzats",
-
+            
             "autoclose":"Ticket Tancat Automàticament",
             "autocloseEnabled":"Tancament Automàtic Activat",
             "autocloseDisabled":"Tancament Automàtic Desactivat",
             "autodelete":"Ticket Eliminat Automàticament",
             "autodeleteEnabled":"Eliminació Automàtica Activada",
-            "autodeleteDisabled":"Eliminació Automàtica Desactivada"
+            "autodeleteDisabled":"Eliminació Automàtica Desactivada",
+            
+            "topicSet":"Tema Canviat",
+            "prioritySet":"Prioritat Canviada",
+            "priorityGet":"Prioritat del Ticket",
+            "transfer":"Ticket Transferit"
         },
         "descriptions":{
             "create":"El teu ticket ha estat creat. Fes clic al botó a continuació per accedir-hi!",
@@ -154,7 +171,7 @@
             "move":"El ticket ha estat mogut a {0} amb èxit!",
             "add":"{0} ha estat afegit al ticket amb èxit!",
             "remove":"{0} ha estat eliminat del ticket amb èxit!",
-
+            
             "helpExplanation":"`<nom>` => paràmetre requerit\n`[nom]` => paràmetre opcional",
             "statsReset":"Les estadístiques del bot s'han restablert correctament!",
             "statsError":"No es poden veure les estadístiques del ticket!\n{0} no és un ticket!",
@@ -167,7 +184,7 @@
             "clearVerify":"Estàs segur que vols eliminar múltiples tickets?\nAquesta acció no es pot desfer!",
             "clearReady":"{0} tickets han estat eliminats amb èxit!",
             "rolesEmpty":"No s'han actualitzat rols!",
-
+            
             "autocloseLeave":"Aquest ticket ha estat tancat automàticament perquè el creador ha abandonat el servidor!",
             "autocloseTimeout":"Aquest ticket ha estat tancat automàticament perquè ha estat inactiu durant més de `{0}h`!",
             "autodeleteLeave":"Aquest ticket ha estat eliminat automàticament perquè el creador ha abandonat el servidor!",
@@ -176,11 +193,16 @@
             "autocloseDisabled":"El tancament automàtic ha estat desactivat en aquest ticket!\nJa no es tancarà automàticament!",
             "autodeleteEnabled":"L'eliminació automàtica ha estat activada en aquest ticket!\nS'eliminarà quan estigui inactiu durant més de `{0} dies`!",
             "autodeleteDisabled":"L'eliminació automàtica ha estat desactivada en aquest ticket!\nJa no s'eliminarà automàticament!",
-
+            
             "ticketMessageLimit":"Només pots crear {0} ticket(s) al mateix temps!",
             "ticketMessageAutoclose":"Aquest ticket es tancarà automàticament quan estigui inactiu durant {0}h!",
             "ticketMessageAutodelete":"Aquest ticket es eliminarà automàticament quan estigui inactiu durant {0} dies!",
-            "panelReady":"Pots trobar el panell a continuació!\nAquest missatge ara es pot eliminar!"
+            "panelReady":"El panell està disponible en el missatge de seguiment!\nAquest missatge es pot eliminar ara!",
+            
+            "topicSet":"El tema del canal ha estat canviat per {0} amb èxit!",
+            "prioritySet":"La prioritat del ticket ha estat canviada a {0} per {1} amb èxit!",
+            "priorityGet":"La prioritat actual d'aquest ticket és {0}.",
+            "transfer":"La propietat del ticket ha estat transferida de {0} a {1} per {2} amb èxit!"
         },
         "modal":{
             "closePlaceholder":"Per què has tancat aquest ticket?",
@@ -215,12 +237,19 @@
             "addDm":"{0} ha estat afegit al teu ticket al nostre servidor!",
             "removeLog":"{0} ha estat eliminat d'aquest ticket per {1}!",
             "removeDm":"{0} ha estat eliminat del teu ticket al nostre servidor!",
-
+            
             "blacklistAddLog":"{0} ha estat afegit a la llista negra per {1}!",
             "blacklistRemoveLog":"{0} ha estat eliminat de la llista negra per {1}!",
             "blacklistAddDm":"Has estat afegit a la llista negra al nostre servidor!\nA partir d'ara, no pots crear cap ticket!",
             "blacklistRemoveDm":"Has estat eliminat de la llista negra al nostre servidor!\nAra pots crear tickets de nou!",
-            "clearLog":"{0} tickets han estat eliminats per {1}!"
+            "clearLog":"{0} tickets han estat eliminats per {1}!",
+            
+            "transferLog":"La propietat d'aquest ticket ha estat transferida de {0} a {1} per {2}!",
+            "transferDm":"La propietat del teu ticket ha estat transferida de {0} a {1} al nostre servidor!",
+            "prioritySetLog":"La prioritat d'aquest ticket ha estat canviada a {0} per {1}!",
+            "prioritySetDm":"La prioritat del teu ticket ha estat canviada a {0} al nostre servidor!",
+            "roleUpdateLog":"{0} ha actualitzat els seus rols!",
+            "roleUpdateDm":"Els teus rols al nostre servidor han estat actualitzats!"
         }
     },
     "transcripts":{
@@ -229,7 +258,7 @@
             "ready":"Transcripció Creada",
             "textFileDescription":"Aquesta és la transcripció de text d'un ticket eliminat!",
             "htmlProgress":"Si us plau, espera mentre aquesta transcripció html es processa...",
-
+            
             "createdChannel":"S'ha creat una nova transcripció tipus {0} al servidor!",
             "createdCreator":"S'ha creat una nova transcripció tipus {0} per un dels teus tickets!",
             "createdParticipant":"S'ha creat una nova transcripció tipus {0} en un dels tickets on has participat!",
@@ -241,7 +270,19 @@
             "retry":"Torna-ho a intentar",
             "continue":"Elimina Sense Transcripció",
             "backup":"Crea Transcripció de Backup",
-            "error":"Alguna cosa ha anat malament mentre intentàvem crear la transcripció.\nQuè t'agradaria fer?\n\nAquest ticket no s'eliminarà fins que facis clic en un d'aquests botons."
+            "error":"Alguna cosa ha anat malament mentre intentàvem crear la transcripció.\nQuè t'agradaria fer?\n\nAquest ticket no s'eliminarà fins que facis clic en un d'aquests botons.",
+            "title":"Error de transcripció"
+        },
+        "text":{
+            "messagesTitle":"MISSATGES",
+            "embedTitle":"EMBED",
+            "fileTitle":"FITXER",
+            "fieldsTitle":"CAMPS",
+            "reactionsTitle":"REACCIONS",
+            "statsTitle":"ESTADÍSTIQUES",
+            "emptyContent":"<el contingut està buit>",
+            "noTitle":"<sense títol>",
+            "noDesc":"<sense descripció>"
         }
     },
     "errors":{
@@ -257,7 +298,8 @@
             "unknownPanel":"Panell Desconegut",
             "notInGuild":"No Ets Al Servidor",
             "channelRename":"No Es Pot Canviar El Nom Del Canal",
-            "busy":"El Ticket Està Ocupat"
+            "busy":"El Ticket Està Ocupat",
+            "permissionError":"Error de Permisos"
         },
         "descriptions":{
             "askForInfo":"Contacta amb el propietari d'aquest bot per obtenir més informació!",
@@ -280,7 +322,10 @@
             "notInGuild":"Aquest {0} no funciona en DM! Si us plau, torna a intentar-ho en un servidor!",
             "channelRename":"Degut a les limitacions de discord, actualment és impossible per al bot canviar el nom del canal. El canal es canviarà automàticament en 10 minuts si el bot no es reinicia.",
             "channelRenameSource":"La font d'aquest error és: {0}",
-            "busy":"No es pot utilitzar aquest {0}!\nEl ticket està sent processat pel bot.\n\nSi us plau, torna a intentar-ho en uns segons!"
+            "busy":"No es pot utilitzar aquest {0}!\nEl ticket està sent processat pel bot.\n\nSi us plau, torna a intentar-ho en uns segons!",
+            "closeBeforeMessage":"Aquest ticket no pot ser tancat/eliminat abans que un usuari hagi enviat un missatge.",
+            "closeBeforeAdminMessage":"Aquest ticket no pot ser tancat/eliminat abans que un administrador o membre de suport hagi enviat un missatge.",
+            "unableToCreateTicket":"No pots crear cap ticket."
         },
         "optionInvalidReasons":{
             "stringRegex":"El valor no coincideix amb el patró!",
@@ -331,7 +376,6 @@
             "added":"Afegit",
             "removed":"Eliminat",
             "filter":"Filtre",
-            "claimedBy":"Reclamat Per {0}",
             "method":"Mètode",
             "type":"Tipus",
             "blacklisted":"Llista Negra",
@@ -355,7 +399,27 @@
             "status":"Estat",
             "claimed":"Reclamat",
             "pinned":"Fixat",
-            "creationDate":"Data de Creació"
+            "creationDate":"Data de Creació",
+            
+            "noone":"Ningú",
+            "open":"Obert",
+            "closed":"Tancat",
+            "priority":"Prioritat",
+            "participants":"Participants",
+            "yes":"Si",
+            "no":"No",
+            "option":"Opció",
+            "topic":"Tema",
+            "uptime":"Temps d'Activitat del Sistema",
+            "messages":"Missatges",
+            "embeds":"Embeds",
+            "files":"Fitxers",
+            "components":"Components",
+            "cooldown":"Refredament",
+            "maxTickets":"Max Tickets",
+            "admins":"Admins",
+            "roles":"Rols",
+            "size":"Mida"
         },
         "lowercase":{
             "text":"text",
@@ -384,6 +448,7 @@
         "unclaim":"Allibera un ticket.",
         "pin":"Fixa un ticket.",
         "unpin":"Desfixa un ticket.",
+        
         "move":"Mou un ticket.",
         "moveId":"L'identificador de l'opció a la qual vols moure't.",
         "rename":"Renomena un ticket.",
@@ -392,6 +457,7 @@
         "addUser":"L'usuari a afegir.",
         "remove":"Elimina un usuari d'un ticket.",
         "removeUser":"L'usuari a eliminar.",
+        
         "blacklist":"Gestiona la llista negra de tickets.",
         "blacklistView":"Veure una llista de l'actual llista negra.",
         "blacklistAdd":"Afegeix un usuari a la llista negra.",
@@ -405,6 +471,7 @@
         "statsUserUser":"L'usuari del qual vols veure les estadístiques.",
         "statsTicket":"Veure les estadístiques d'un ticket al servidor.",
         "statsTicketTicket":"El ticket que vols veure.",
+        
         "clear":"Elimina múltiples tickets al mateix temps.",
         "clearFilter":"El filtre per a la neteja de tickets.",
         "clearFilters":{
@@ -417,6 +484,7 @@
             "unpin":"Desfixats",
             "autoclose":"Tancat Automàticaments"
         },
+        
         "autoclose":"Gestiona el tancament automàtic en un ticket.",
         "autocloseDisable":"Desactiva el tancament automàtic en aquest ticket.",
         "autocloseEnable":"Activa el tancament automàtic en aquest ticket.",
@@ -424,7 +492,19 @@
         "autodelete":"Gestiona l'eliminació automàtica en un ticket.",
         "autodeleteDisable":"Desactiva l'eliminació automàtica en aquest ticket.",
         "autodeleteEnable":"Activa l'eliminació automàtica en aquest ticket.",
-        "autodeleteEnableTime":"La quantitat de dies que aquest ticket ha d'estar inactiu per eliminar-lo."
+        "autodeleteEnableTime":"La quantitat de dies que aquest ticket ha d'estar inactiu per eliminar-lo.",
+        
+        "topic":"Gestiona el tema del canal del ticket.",
+        "topicSet":"Estableix el tema del canal del ticket.",
+        "topicValue":"El nou tema del canal.",
+        "topicList":"Obté una llista de tots els tickets amb el seu tema i estadístiques.",
+        "priority":"Gestiona la prioritat del ticket.",
+        "prioritySet":"Estableix la prioritat del ticket.",
+        "priorityValue":"La prioritat del canal.",
+        "priorityGet":"Obtenir la prioritat del ticket.",
+        "priorityList":"Obté una llista de tots els tickets amb el seu estat de prioritat.",
+        "transfer":"Transfereix la propietat del ticket d'un usuari a un altre.",
+        "transferUser":"L'usuari al qual transferir."
     },
     "helpMenu":{
         "help":"Obtingues una llista de totes les comandes disponibles.",
@@ -452,7 +532,16 @@
         "autocloseDisable":"Desactiva el tancament automàtic en aquest ticket.",
         "autocloseEnable":"Activa el tancament automàtic en aquest ticket.",
         "autodeleteDisable":"Desactiva l'eliminació automàtica en aquest ticket.",
-        "autodeleteEnable":"Activa l'eliminació automàtica en aquest ticket."
+        "autodeleteEnable":"Activa l'eliminació automàtica en aquest ticket.",
+        "categories":{
+            "general":"Comandes Generals",
+            "basicTicket":"Comandes Bàsiques de Tickets",
+            "advancedTicket":"Comandes Avançades de Tickets",
+            "userTicket":"Comandes de Tickets d'Usuari",
+            "admin":"Comandes d'Admin",
+            "advanced":"Comandes Avançades",
+            "extra":"Comandes Extra"
+        }
     },
     "stats":{
         "scopes":{
@@ -460,7 +549,8 @@
             "system":"Estadístiques del Sistema",
             "user":"Estadístiques d'Usuari",
             "ticket":"Estadístiques de Ticket",
-            "participants":"Participants"
+            "participants":"Participants",
+            "messages":"Missatges"
         },
         "properties":{
             "ticketsCreated":"Tickets Creats",
@@ -472,7 +562,47 @@
             "ticketsPinned":"Tickets Fixats",
             "ticketsMoved":"Tickets Moguts",
             "usersBlacklisted":"Usuaris a la Llista Negra",
-            "transcriptsCreated":"Transcripcions Creades"
+            "transcriptsCreated":"Transcripcions Creades",
+            "ticketsAutodeleted":"Tickets Eliminats Automàticament",
+            "ticketsTransferred":"Tickets Transferits",
+            "ticketVolume":"Volum de Tickets",
+            "averageTickets":"Mitjana de Tickets/Usuari",
+            "currentTickets":"Tickets Actuals",
+            "age":"Edat del Ticket",
+            "responseTime":"Temps de Resposta",
+            "resolutionTime":"Temps de Resolució",
+            "createdOn":"Creat el",
+            "createdBy":"Creat per",
+            "closedOn":"Tancat el",
+            "closedBy":"Tancat per",
+            "claimedOn":"Reclamat el",
+            "claimedBy":"Reclamat per",
+            "pinnedOn":"Fixat el",
+            "pinnedBy":"Fixat per",
+            "deletedOn":"Eliminat el",
+            "deletedBy":"Eliminat per"
+        },
+        "roles":{
+            "developer":"Desenvolupador",
+            "serverOwner":"Propietari del Servidor",
+            "serverAdmin":"Admin del Servidor",
+            "moderator":"Equip de Moderació",
+            "support":"Equip de Suport",
+            "member":"Membre"
         }
+    },
+    "panel":{
+        "selectTicket":"Selecciona el teu ticket",
+        "selectRole":"Selecciona el teu rol",
+        "selectOption":"Selecciona la teva opció"
+    },
+    "priorities":{
+        "urgent":"Urgent",
+        "veryHigh":"Molt Alt",
+        "high":"Alt",
+        "normal":"Normal",
+        "low":"Baix",
+        "veryLow":"Molt Baix",
+        "none":"Cap"
     }
 }

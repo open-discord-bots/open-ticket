@@ -2,7 +2,7 @@
     "_TRANSLATION":{
         "otversion":"v4.1.0",
         "translators":["iamnotmega","ChatGPT"],
-        "lastedited":"21/10/2024",
+        "lastedited":"09/11/2025",
         "language":"Estonian",
         "automated":true
     },
@@ -31,7 +31,15 @@
             "stringContains":"See string peab sisaldama {0}!",
             "stringChoices":"See string võib olla ainult üks järgmistest väärtustest: {0}!",
             "stringRegex":"See string on kehtetu!",
-
+            "stringInvertedContains":"See string ei tohi sisaldada {0}!",
+            "stringLowercase":"See string peab olema kirjutatud ainult väikeste tähtedega!",
+            "stringUppercase":"See string peab olema kirjutatud ainult suurte tähtedega!",
+            "stringSpecialCharacters":"See string ei tohi sisaldada erimärke! (ainult a-z, 0-9 ja tühik)",
+            "stringNoSpaces":"See string ei tohi sisaldada tühikuid!",
+            "stringCapitalWord":"Soovitatav on, et iga sõna selles stringis algaks suure tähega!",
+            "stringCapitalSentence":"Tundub, et mõned laused selles stringis ei alga suure tähega!",
+            "stringPunctuation":"Tundub, et lause selles stringis ei lõpe kirjavahemärgiga!",
+            
             "numberTooShort":"See number ei tohi olla lühem kui {0} tähemärki!",
             "numberTooLong":"See number ei tohi olla pikem kui {0} tähemärki!",
             "numberLengthInvalid":"See number peab olema {0} tähemärki pikk!",
@@ -48,10 +56,12 @@
             "numberNegative":"See arv ei saa olla negatiivne!",
             "numberPositive":"See arv ei saa olla positiivne!",
             "numberZero":"See arv ei saa olla null!",
-
+            "numberNan":"See number ei tohi olla NaN (mitte number)!",
+            "numberInvertedContains":"See number ei tohi sisaldada {0}!",
+            
             "booleanTrue":"See tõeväärtus ei saa olla tõsi!",
             "booleanFalse":"See tõeväärtus ei saa olla vale!",
-
+            
             "arrayEmptyDisabled":"See massiiv ei tohi olla tühi!",
             "arrayEmptyRequired":"See massiiv peab olema tühi!",
             "arrayTooShort":"Selle massiivi pikkus peab olema vähemalt {0}!",
@@ -59,7 +69,7 @@
             "arrayLengthInvalid":"Selle massiivi pikkus peab olema {0}!",
             "arrayInvalidTypes":"See massiiv võib sisaldada ainult järgmisi tüüpe: {0}!",
             "arrayDouble":"See massiiv ei luba sama väärtust kaks korda kasutada!",
-
+            
             "discordInvalidId":"See on kehtetu Discordi {0} ID!",
             "discordInvalidIdOptions":"See on kehtetu Discordi {0} ID! Võite kasutada ka ühte järgmistest: {1}!",
             "discordInvalidToken":"See on kehtetu Discordi tooken (süntaktiliselt)!",
@@ -76,7 +86,7 @@
             "urlInvalidPath":"Sellel URL-il on vale tee!",
             "idNotUnique":"See ID ei ole kordumatu, kasutage selle asemel teist ID-d!",
             "idNonExistent":"ID-d {0} pole olemas!",
-
+            
             "invalidType":"Selle atribuudi tüüp peab olema: {0}!",
             "propertyMissing":"Sellel objektil puudub atribuut {0}!",
             "propertyOptional":"Atribuut {0} on selles objektis valikuline!",
@@ -84,12 +94,13 @@
             "nullInvalid":"See vara ei saa olla tühi!",
             "switchInvalidType":"See peab olema üks järgmistest tüüpidest: {0}!",
             "objectSwitchInvalid":"See objekt peab olema ühte järgmistest tüüpidest: {0}!",
-
+            
             "invalidLanguage":"See on sobimatu keel!",
             "invalidButton":"Sellel nupul peab olema vähemalt {0} või {1}!",
             "unusedOption":"Valik {0} ei ole kusagil kasutusel!",
             "unusedQuestion":"Küsimust {0} ei kasutata kuskil!",
-            "dropdownOption":"Lubatud rippmenüüga paneel võib sisaldada ainult \"pileti\" tüüpi valikuid!"
+            "dropdownOption":"Lubatud rippmenüüga paneel võib sisaldada ainult \"pileti\" tüüpi valikuid!",
+            "customInvalidVersion":"Teie konfiguratsioonis määratud versioon ei ühti! Veenduge, et olete konfiguratsiooni uuendanud uusimale versioonile!"
         }
     },
     "actions":{
@@ -122,7 +133,7 @@
             "move":"Pilet teisaldatud",
             "add":"Pileti kasutaja lisatud",
             "remove":"Pileti kasutaja eemaldatud",
-
+            
             "help":"Saadaolevad käsud",
             "statsReset":"Lähtestage statistika",
             "blacklistAdd":"Kasutaja on mustas nimekirjas",
@@ -132,14 +143,20 @@
             "blacklistAddDm":"Lisatud musta nimekirja",
             "blacklistRemoveDm":"Eemaldatud mustast nimekirjast",
             "clear":"Piletid kustutatud",
+            "clearTickets":"Kustuta Piletid",
             "roles":"Rollid uuendatud",
-
+            
             "autoclose":"Pilet automaatselt suletud",
             "autocloseEnabled":"Automaatne sulgemine lubatud",
             "autocloseDisabled":"Automaatne sulgemine keelatud",
             "autodelete":"Pilet on automaatselt kustutatud",
             "autodeleteEnabled":"Automaatne kustutamine lubatud",
-            "autodeleteDisabled":"Automaatne kustutamine keelatud"
+            "autodeleteDisabled":"Automaatne kustutamine keelatud",
+            
+            "topicSet":"Teema Muudetud",
+            "prioritySet":"Prioriteet Muudetud",
+            "priorityGet":"Pileti Prioriteet",
+            "transfer":"Pilet Üle Antud"
         },
         "descriptions":{
             "create":"Teie pilet on loodud. Sellele juurdepääsuks klõpsake alloleval nupul!",
@@ -154,7 +171,7 @@
             "move":"Pilet teisaldati asukohta {0} edukalt!",
             "add":"{0} lisati piletile edukalt!",
             "remove":"{0} eemaldati piletist edukalt!",
-
+            
             "helpExplanation":"`<nimi>` => nõutav parameeter\n`[nimi]` => valikuline parameeter",
             "statsReset":"Boti statistika on edukalt lähtestatud!",
             "statsError":"Piletistatistikat ei saa vaadata!\n{0} ei ole pilet!",
@@ -167,7 +184,7 @@
             "clearVerify":"Kas soovite kindlasti mitu piletit kustutada?\nSeda toimingut ei saa tagasi võtta!",
             "clearReady":"{0} piletit on edukalt kustutatud!",
             "rolesEmpty":"Ühtegi rolli pole värskendatud!",
-
+            
             "autocloseLeave":"See pilet on automaatselt suletud, kuna looja lahkus serverist!",
             "autocloseTimeout":"See pilet on automaatselt suletud, kuna see on olnud passiivne rohkem kui `{0}h`!",
             "autodeleteLeave":"See pilet on automaatselt kustutatud, kuna looja lahkus serverist!",
@@ -176,11 +193,16 @@
             "autocloseDisabled":"Automaatne sulgemine on sellel piletil keelatud!\nSeda ei suleta enam automaatselt!",
             "autodeleteEnabled":"Sellel piletil on automaatne kustutamine lubatud!\nSee kustutatakse, kui see on passiivne rohkem kui `{0} päeva`!",
             "autodeleteDisabled":"Automaatne kustutamine on sellel piletil keelatud!\nSeda ei kustutata enam automaatselt!",
-
+            
             "ticketMessageLimit":"Saate korraga luua ainult {0} piletit!",
             "ticketMessageAutoclose":"See pilet suletakse automaatselt, kui see on {0} tundi passiivne!",
             "ticketMessageAutodelete":"See pilet kustutatakse automaatselt, kui see on {0} päeva passiivne!",
-            "panelReady":"Paneeli leiate altpoolt!\nSelle sõnumi saab nüüd kustutada!"
+            "panelReady":"Paneel on saadaval järelteates!\nSelle sõnumi võib nüüd kustutada!",
+            
+            "topicSet":"Kanaliteema on edukalt muudetud kasutaja {0} poolt!",
+            "prioritySet":"Pileti prioriteet on edukalt muudetud väärtuseks {0} kasutaja {1} poolt!",
+            "priorityGet":"Selle pileti praegune prioriteet on {0}.",
+            "transfer":"Pileti omand on edukalt üle antud kasutajalt {0} kasutajale {1} kasutaja {2} poolt!"
         },
         "modal":{
             "closePlaceholder":"Miks sa selle pileti kinni panid?",
@@ -215,12 +237,19 @@
             "addDm":"{0} lisati teie piletile meie serveris!",
             "removeLog":"Kasutaja {1} eemaldas sellelt piletilt {0}!",
             "removeDm":"{0} on teie piletist meie serveris eemaldatud!",
-
+            
             "blacklistAddLog":"{1} lisas kasutaja {0} musta nimekirja!",
             "blacklistRemoveLog":"Kasutaja {1} eemaldas kasutaja {0} mustast nimekirjast!",
             "blacklistAddDm":"Olete meie serveris mustas nimekirjas!\nNüüdsest ei saa te piletit luua!",
             "blacklistRemoveDm":"Teid on meie serveri mustast nimekirjast eemaldatud!\nNüüd saate uuesti pileteid luua!",
-            "clearLog":"{1} on kustutanud {0} piletit!"
+            "clearLog":"{1} on kustutanud {0} piletit!",
+            
+            "transferLog":"Selle pileti omand on üle antud kasutajalt {0} kasutajale {1} kasutaja {2} poolt!",
+            "transferDm":"Teie pileti omand on üle antud kasutajalt {0} kasutajale {1} meie serveris!",
+            "prioritySetLog":"Selle pileti prioriteet on muudetud väärtuseks {0} kasutaja {1} poolt!",
+            "prioritySetDm":"Teie pileti prioriteet on muudetud väärtuseks {0} meie serveris!",
+            "roleUpdateLog":"{0} uuendas oma rolle!",
+            "roleUpdateDm":"Teie rolle meie serveris on uuendatud!"
         }
     },
     "transcripts":{
@@ -229,7 +258,7 @@
             "ready":"Transkriptsioon loodud",
             "textFileDescription":"See on kustutatud pileti teksti ärakiri!",
             "htmlProgress":"Palun oodake, kuni seda html-i ärakirja töödeldakse...",
-
+            
             "createdChannel":"Serveris on loodud uus {0} ärakiri!",
             "createdCreator":"Ühe teie pileti jaoks on loodud uus {0} ärakiri!",
             "createdParticipant":"Ühes teie osalenud piletis on loodud uus {0} ärakiri!",
@@ -241,7 +270,19 @@
             "retry":"Proovi uuesti",
             "continue":"Kustuta ilma ärakirjata",
             "backup":"Loo varukoopia ärakirjast",
-            "error":"Midagi läks ärakirja loomisel valesti.\nMida sa teha tahaksid?\n\nSeda piletit ei kustutata enne, kui klõpsate ühel neist nuppudest."
+            "error":"Midagi läks ärakirja loomisel valesti.\nMida sa teha tahaksid?\n\nSeda piletit ei kustutata enne, kui klõpsate ühel neist nuppudest.",
+            "title":"Transkriptsiooniviga"
+        },
+        "text":{
+            "messagesTitle":"SÕNUMID",
+            "embedTitle":"EMBED",
+            "fileTitle":"FAIL",
+            "fieldsTitle":"VÄLJAD",
+            "reactionsTitle":"REAKTSIOONID",
+            "statsTitle":"STATISTIKA",
+            "emptyContent":"<sisu on tühi>",
+            "noTitle":"<pealkiri puudub>",
+            "noDesc":"<kirjeldus puudub>"
         }
     },
     "errors":{
@@ -257,7 +298,8 @@
             "unknownPanel":"Tundmatu paneel",
             "notInGuild":"Pole serveris",
             "channelRename":"Kanalit ei saa ümber nimetada",
-            "busy":"Pilet on kinni"
+            "busy":"Pilet on kinni",
+            "permissionError":"Õiguste Viga"
         },
         "descriptions":{
             "askForInfo":"Lisateabe saamiseks võtke ühendust selle roboti omanikuga!",
@@ -280,7 +322,10 @@
             "notInGuild":"See {0} ei tööta DM-is! Palun proovi uuesti serveris!",
             "channelRename":"Ebakõlaliste kiiruspiirangute tõttu on robotil praegu võimatu kanalit ümber nimetada. Kui robotit ei taaskäivitata, nimetatakse kanal 10 minuti jooksul automaatselt ümber.",
             "channelRenameSource":"Selle vea allikas on: {0}",
-            "busy":"Seda {0} ei saa kasutada!\nPiletit töötleb praegu bot.\n\nPalun proovige mõne sekundi pärast uuesti!"
+            "busy":"Seda {0} ei saa kasutada!\nPiletit töötleb praegu bot.\n\nPalun proovige mõne sekundi pärast uuesti!",
+            "closeBeforeMessage":"Seda piletit ei saa sulgeda/kustutada enne, kui kasutaja on sõnumi saatnud.",
+            "closeBeforeAdminMessage":"Seda piletit ei saa sulgeda/kustutada enne, kui piletihaldur või tugiliige on sõnumi saatnud.",
+            "unableToCreateTicket":"Te ei saa piletit luua."
         },
         "optionInvalidReasons":{
             "stringRegex":"Väärtus ei vasta mustrile!",
@@ -331,7 +376,6 @@
             "added":"Lisatud",
             "removed":"Eemaldatud",
             "filter":"Filter",
-            "claimedBy":"Nõude esitas {0}",
             "method":"Meetod",
             "type":"Tüüp",
             "blacklisted":"Mustas nimekirjas",
@@ -355,7 +399,27 @@
             "status":"Olek",
             "claimed":"Nõutud",
             "pinned":"Kinnitatud",
-            "creationDate":"Loomise kuupäev"
+            "creationDate":"Loomise kuupäev",
+            
+            "noone":"Mitte Keegi",
+            "open":"Avatud",
+            "closed":"Suletud",
+            "priority":"Prioriteet",
+            "participants":"Osalejad",
+            "yes":"Jah",
+            "no":"Ei",
+            "option":"Valik",
+            "topic":"Teema",
+            "uptime":"Süsteemi Töötamise Aeg",
+            "messages":"Sõnumid",
+            "embeds":"Embedid",
+            "files":"Failid",
+            "components":"Komponendid",
+            "cooldown":"Jahtumisaeg",
+            "maxTickets":"Maksimaalselt Pileteid",
+            "admins":"Adminid",
+            "roles":"Rollid",
+            "size":"Suurus"
         },
         "lowercase":{
             "text":"tekst",
@@ -384,6 +448,7 @@
         "unclaim":"Tühista pilet.",
         "pin":"Kinnitage pilet.",
         "unpin":"Vabastage pilet.",
+        
         "move":"Liigutage pilet.",
         "moveId":"Selle valiku identifikaator, millele soovite liikuda.",
         "rename":"Nimetage pilet ümber.",
@@ -392,6 +457,7 @@
         "addUser":"Lisatav kasutaja.",
         "remove":"Kasutaja eemaldamine piletist.",
         "removeUser":"Eemaldatav kasutaja.",
+        
         "blacklist":"Hallake piletite musta nimekirja.",
         "blacklistView":"Vaadake praeguse musta nimekirja loendit.",
         "blacklistAdd":"Lisage kasutaja musta nimekirja.",
@@ -405,6 +471,7 @@
         "statsUserUser":"Kasutaja vaatamiseks.",
         "statsTicket":"Vaadake serveris pileti statistikat.",
         "statsTicketTicket":"Pilet vaatamiseks.",
+        
         "clear":"Kustutage mitu piletit korraga.",
         "clearFilter":"Piletite puhastamise filter.",
         "clearFilters":{
@@ -417,6 +484,7 @@
             "unpin":"Vabastatud",
             "autoclose":"Automaatselt suletud"
         },
+        
         "autoclose":"Hallake piletis automaatset sulgemist.",
         "autocloseDisable":"Keela sellel piletil automaatne sulgemine.",
         "autocloseEnable":"Luba sellel piletil automaatne sulgemine.",
@@ -424,7 +492,19 @@
         "autodelete":"Automaatse kustutamise haldamine piletis.",
         "autodeleteDisable":"Keela sellel piletil automaatne kustutamine.",
         "autodeleteEnable":"Luba sellel piletil automaatne kustutamine.",
-        "autodeleteEnableTime":"Päevade arv, mille jooksul see pilet peab olema selle kustutamiseks passiivne."
+        "autodeleteEnableTime":"Päevade arv, mille jooksul see pilet peab olema selle kustutamiseks passiivne.",
+        
+        "topic":"Halda pileti kanali teemat.",
+        "topicSet":"Määra pileti kanali teema.",
+        "topicValue":"Kanali uus teema.",
+        "topicList":"Hangi nimekiri kõigist piletitest koos nende teemade ja statistikaga.",
+        "priority":"Halda pileti prioriteeti.",
+        "prioritySet":"Määra pileti prioriteet.",
+        "priorityValue":"Kanali prioriteet.",
+        "priorityGet":"Hangi pileti prioriteet.",
+        "priorityList":"Hangi nimekiri kõigist piletitest ja nende prioriteedi olekust.",
+        "transfer":"Anna pileti omand üle ühelt kasutajalt teisele.",
+        "transferUser":"Kasutaja, kellele omand üle anda."
     },
     "helpMenu":{
         "help":"Hankige kõigi saadaolevate käskude loend.",
@@ -452,7 +532,16 @@
         "autocloseDisable":"Keela sellel piletil automaatne sulgemine.",
         "autocloseEnable":"Luba sellel piletil automaatne sulgemine.",
         "autodeleteDisable":"Keela sellel piletil automaatne kustutamine.",
-        "autodeleteEnable":"Luba sellel piletil automaatne kustutamine."
+        "autodeleteEnable":"Luba sellel piletil automaatne kustutamine.",
+        "categories":{
+            "general":"Üldised Käsud",
+            "basicTicket":"Põhilised Piletikäsud",
+            "advancedTicket":"Täpsemad Piletikäsud",
+            "userTicket":"Kasutaja Piletikäsud",
+            "admin":"Admini Käsud",
+            "advanced":"Täpsemad Käsud",
+            "extra":"Lisakäsud"
+        }
     },
     "stats":{
         "scopes":{
@@ -460,7 +549,8 @@
             "system":"Süsteemi statistika",
             "user":"Kasutaja statistika",
             "ticket":"Piletistatistika",
-            "participants":"Osalejad"
+            "participants":"Osalejad",
+            "messages":"Sõnumid"
         },
         "properties":{
             "ticketsCreated":"Pileteid loodud",
@@ -472,7 +562,47 @@
             "ticketsPinned":"Pileteid kinnitatud",
             "ticketsMoved":"Pileteid teisaldatud",
             "usersBlacklisted":"Kasutajaid mustas nimekirjas",
-            "transcriptsCreated":"Loodud ärakirjad"
+            "transcriptsCreated":"Loodud ärakirjad",
+            "ticketsAutodeleted":"Piletid Automaatselt Kustutatud",
+            "ticketsTransferred":"Piletid Üle Antud",
+            "ticketVolume":"Piletite Arv",
+            "averageTickets":"Keskmine Piletite Arv/Kasutaja",
+            "currentTickets":"Praegused Piletid",
+            "age":"Pileti Vanus",
+            "responseTime":"Reageerimisaeg",
+            "resolutionTime":"Lahendusaeg",
+            "createdOn":"Loodud",
+            "createdBy":"Looja",
+            "closedOn":"Suletud",
+            "closedBy":"Sulgenud",
+            "claimedOn":"Võetud",
+            "claimedBy":"Võtnud",
+            "pinnedOn":"Kinnitatud",
+            "pinnedBy":"Kinnitanud",
+            "deletedOn":"Kustutatud",
+            "deletedBy":"Kustutanud"
+        },
+        "roles":{
+            "developer":"Arendaja",
+            "serverOwner":"Serveri Omanik",
+            "serverAdmin":"Serveri Administraator",
+            "moderator":"Moderaatorite Meeskond",
+            "support":"Tugimeeskond",
+            "member":"Liige"
         }
+    },
+    "panel":{
+        "selectTicket":"Vali oma pilet",
+        "selectRole":"Vali oma roll",
+        "selectOption":"Vali oma valik"
+    },
+    "priorities":{
+        "urgent":"Kiireloomuline",
+        "veryHigh":"Väga Kõrge",
+        "high":"Kõrge",
+        "normal":"Tavaline",
+        "low":"Madal",
+        "veryLow":"Väga Madal",
+        "none":"Puudub"
     }
 }
