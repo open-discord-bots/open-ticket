@@ -134,5 +134,9 @@ export const migrations = [
 
             ticketDatabase.set("opendiscord:ticket",ticket.key,ticketData)
         }
-    })
+    }),
+
+    //MIGRATE TO v4.1.1
+    new utilities.ODVersionMigration(api.ODVersion.fromString("opendiscord:version","v4.1.1"),async () => {},async () => {}),
+
 ]

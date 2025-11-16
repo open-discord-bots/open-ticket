@@ -417,7 +417,7 @@ export class ODCommandResponderInstance {
     /**Defer this command. */
     async defer(ephemeral:boolean){
         if (this.type != "interaction" || !(this.interaction instanceof discord.ChatInputCommandInteraction)) return false
-        if (this.interaction.deferred) return false
+        if (this.interaction.deferred || this.interaction.replied) return false
         const msgFlags: number[] = ephemeral ? [discord.MessageFlags.Ephemeral] : []
         await this.interaction.deferReply({flags:msgFlags})
         this.didReply = true
@@ -589,7 +589,7 @@ export class ODButtonResponderInstance {
     }
     /**Defer this button. */
     async defer(type:"reply"|"update", ephemeral:boolean){
-        if (this.interaction.deferred) return false
+        if (this.interaction.deferred || this.interaction.replied) return false
         if (type == "reply"){
             const msgFlags: number[] = ephemeral ? [discord.MessageFlags.Ephemeral] : []
             await this.interaction.deferReply({flags:msgFlags})
@@ -877,7 +877,7 @@ export class ODDropdownResponderInstance {
     }
     /**Defer this dropdown. */
     async defer(type:"reply"|"update", ephemeral:boolean){
-        if (this.interaction.deferred) return false
+        if (this.interaction.deferred || this.interaction.replied) return false
         if (type == "reply"){
             const msgFlags: number[] = ephemeral ? [discord.MessageFlags.Ephemeral] : []
             await this.interaction.deferReply({flags:msgFlags})
@@ -1096,7 +1096,7 @@ export class ODModalResponderInstance {
     }
     /**Defer this modal. */
     async defer(type:"reply"|"update", ephemeral:boolean){
-        if (this.interaction.deferred) return false
+        if (this.interaction.deferred || this.interaction.replied) return false
         if (type == "reply"){
             const msgFlags: number[] = ephemeral ? [discord.MessageFlags.Ephemeral] : []
             await this.interaction.deferReply({flags:msgFlags})
@@ -1251,7 +1251,7 @@ export class ODContextMenuResponderInstance {
     }
     /**Defer this context menu. */
     async defer(type:"reply", ephemeral:boolean){
-        if (this.interaction.deferred) return false
+        if (this.interaction.deferred || this.interaction.replied) return false
         if (type == "reply"){
             const msgFlags: number[] = ephemeral ? [discord.MessageFlags.Ephemeral] : []
             await this.interaction.deferReply({flags:msgFlags})

@@ -1,8 +1,8 @@
 {
     "_TRANSLATION":{
-        "otversion":"v4.1.0",
+        "otversion":"v4.1.1",
         "translators":["DJj123dj"],
-        "lastedited":"09/11/2025",
+        "lastedited":"16/11/2025",
         "language":"Dutch",
         "automated":false
     },
@@ -302,7 +302,7 @@
             "permissionError":"Permission Error"
         },
         "descriptions":{
-            "askForInfo":"Contacteer the eigenaar van deze bot voor meer info!",
+            "askForInfo":"Contacteer de eigenaar van deze bot voor meer info!",
             "askForInfoResolve":"Contacteer de eigenaar van deze bot als het probleem niet opgelost wordt na enkele keren.",
             "internalError":"Gefaald om te reageren op deze {0} door een interne error!",
             "optionMissing":"Een verplichte parameter mist in deze command!",

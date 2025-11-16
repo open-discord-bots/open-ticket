@@ -1,8 +1,8 @@
 {
     "_TRANSLATION":{
-        "otversion":"v4.1.0",
-        "translators":["HanumeshGupta"],
-        "lastedited":"19/06/2025",
+        "otversion":"v4.1.1",
+        "translators":["HanumeshGupta","ChatGPT"],
+        "lastedited":"16/11/2025",
         "language":"Japanese",
         "automated":true
     },
@@ -12,78 +12,95 @@
             "headerOpenTicket":"チケットを開く",
             "typeWarning":"[警告]",
             "typeInfo":"[情報]",
-            "headerConfigChecker": "コンフィグチェッカー",  
-            "headerDescription": "設定ファイルのエラーをチェック！",  
-            "footerError": "{0}が修正されるまでボットは起動しません！",  
-            "footerWarning": "起動前にすべての{0}を修正することを推奨します！",  
-            "footerSupport": "サポート: {0} - ドキュメント: {1}",  
-            "compactInformation": "詳細は{0}を使用してください！",  
-            "dataPath": "パス",  
-            "dataDocs": "ドキュメント",  
-            "dataMessages": "メッセージ"  
+            "headerConfigChecker":"コンフィグチェッカー",
+            "headerDescription":"設定ファイルのエラーをチェック！",
+            "footerError":"{0}が修正されるまでボットは起動しません！",
+            "footerWarning":"起動前にすべての{0}を修正することを推奨します！",
+            "footerSupport":"サポート: {0} - ドキュメント: {1}",
+            "compactInformation":"詳細は{0}を使用してください！",
+            "dataPath":"パス",
+            "dataDocs":"ドキュメント",
+            "dataMessages":"メッセージ"
         },
         "messages":{
-            "stringTooShort": "この文字列は{0}文字より短くできません！",
-            "stringTooLong": "この文字列は{0}文字より長くできません！",
-            "stringLengthInvalid": "この文字列は{0}文字でなければなりません！",
-            "stringStartsWith": "この文字列は「{0}」で始まる必要があります！",
-            "stringEndsWith": "この文字列は「{0}」で終わる必要があります！",
-            "stringContains": "この文字列には「{0}」が含まれている必要があります！",
-            "stringChoices": "この文字列は次のいずれかの値でなければなりません: {0}！",
-            "stringRegex": "この文字列は無効です！",
-            "numberTooShort": "この数値は{0}桁より短くできません！",
-            "numberTooLong": "この数値は{0}桁より長くできません！",
-            "numberLengthInvalid": "この数値は{0}桁でなければなりません！",
-            "numberTooSmall": "この数値は{0}以上でなければなりません！",
-            "numberTooLarge": "この数値は{0}以下でなければなりません！",
-            "numberNotEqual": "この数値は{0}でなければなりません！",
-            "numberStep": "この数値は{0}の倍数でなければなりません！",
-            "numberStepOffset": "この数値は{1}から始まる{0}の倍数でなければなりません！",
-            "numberStartsWith": "この数値は「{0}」で始まる必要があります！",
-            "numberEndsWith": "この数値は「{0}」で終わる必要があります！",
-            "numberContains": "この数値には「{0}」が含まれている必要があります！",
-            "numberChoices": "この数値は次のいずれかの値でなければなりません: {0}！",
-            "numberFloat": "この数値は小数にできません！",
-            "numberNegative": "この数値は負の値にできません！",
-            "numberPositive": "この数値は正の値にできません！",
-            "numberZero": "この数値はゼロにできません！",
-            "booleanTrue": "このブール値はtrueにできません！",
-            "booleanFalse": "このブール値はfalseにできません！",
-            "arrayEmptyDisabled": "この配列を空にすることは許可されていません！",
-            "arrayEmptyRequired": "この配列は空でなければなりません！",
-            "arrayTooShort": "この配列の長さは少なくとも{0}でなければなりません！",
-            "arrayTooLong": "この配列の長さは最大{0}でなければなりません！",
-            "arrayLengthInvalid": "この配列の長さは{0}でなければなりません！",
-            "arrayInvalidTypes": "この配列に含めることができる型は次のみです: {0}！",
-            "arrayDouble": "この配列では同じ値を2回使用できません！",
-            "discordInvalidId": "これは無効なDiscordの{0}IDです！",
-            "discordInvalidIdOptions": "これは無効なDiscordの{0}IDです！ 代わりに次のいずれかを使用できます: {1}！",
-            "discordInvalidToken": "これは無効なDiscordトークンです（構文的に）！",
-            "colorInvalid": "これは無効なHEXカラーコードです！",
-            "emojiTooShort": "この文字列には少なくとも{0}個の絵文字が必要です！",
-            "emojiTooLong": "この文字列には最大{0}個の絵文字しか含められません！",
-            "emojiCustom": "この絵文字はDiscordのカスタム絵文字にできません！",
-            "emojiInvalid": "これは無効な絵文字です！",
-            "urlInvalid": "このURLは無効です！",
-            "urlInvalidHttp": "This url can only use the https:// protocol!",
-            "urlInvalidProtocol": "This url can only use the http:// & https:// protocols!",
-            "urlInvalidHostname": "このURLのホスト名は許可されていません！",
-            "urlInvalidExtension": "このURLの拡張子が無効です！ 次のいずれかを選択してください: {0}！",
-            "urlInvalidPath": "このURLのパスが無効です！",
-            "idNotUnique": "このIDは一意ではありません。別のIDを使用してください！",
-            "idNonExistent": "ID「{0}」は存在しません！",
-            "invalidType": "このプロパティは{0}型でなければなりません！",
-            "propertyMissing": "このオブジェクトにはプロパティ「{0}」がありません！",
-            "propertyOptional": "このオブジェクトではプロパティ「{0}」はオプションです！",
-            "objectDisabled": "このオブジェクトは無効です。{0}を使用して有効にしてください！",
-            "nullInvalid": "このプロパティはnullにできません！",
-            "switchInvalidType": "これは次のいずれかの型でなければなりません: {0}！",
-            "objectSwitchInvalid": "このオブジェクトは次のいずれかの型でなければなりません: {0}！",
-            "invalidLanguage": "これは無効な言語です！",
-            "invalidButton": "このボタンには少なくとも「{0}」または「{1}」が必要です！",
-            "unusedOption": "オプション「{0}」はどこでも使用されていません！",
-            "unusedQuestion": "質問「{0}」はどこでも使用されていません！",
-            "dropdownOption": "ドロップダウンが有効なパネルには「ticket」タイプのオプションのみ含めることができます！"
+            "stringTooShort":"この文字列は{0}文字より短くできません！",
+            "stringTooLong":"この文字列は{0}文字より長くできません！",
+            "stringLengthInvalid":"この文字列は{0}文字でなければなりません！",
+            "stringStartsWith":"この文字列は「{0}」で始まる必要があります！",
+            "stringEndsWith":"この文字列は「{0}」で終わる必要があります！",
+            "stringContains":"この文字列には「{0}」が含まれている必要があります！",
+            "stringChoices":"この文字列は次のいずれかの値でなければなりません: {0}！",
+            "stringRegex":"この文字列は無効です！",
+            "stringInvertedContains":"この文字列には {0} を含めることはできません！",
+            "stringLowercase":"この文字列はすべて小文字で書かなければなりません！",
+            "stringUppercase":"この文字列はすべて大文字で書かなければなりません！",
+            "stringSpecialCharacters":"この文字列には特殊文字を含めることはできません！（a-z、0-9、スペースのみ）",
+            "stringNoSpaces":"この文字列にはスペースを含めることはできません！",
+            "stringCapitalWord":"この文字列の各単語は大文字で始めることを推奨します！",
+            "stringCapitalSentence":"この文字列の一部の文が大文字で始まっていないようです！",
+            "stringPunctuation":"この文字列の文が句読点で終わっていないようです！",
+            
+            "numberTooShort":"この数値は{0}桁より短くできません！",
+            "numberTooLong":"この数値は{0}桁より長くできません！",
+            "numberLengthInvalid":"この数値は{0}桁でなければなりません！",
+            "numberTooSmall":"この数値は{0}以上でなければなりません！",
+            "numberTooLarge":"この数値は{0}以下でなければなりません！",
+            "numberNotEqual":"この数値は{0}でなければなりません！",
+            "numberStep":"この数値は{0}の倍数でなければなりません！",
+            "numberStepOffset":"この数値は{1}から始まる{0}の倍数でなければなりません！",
+            "numberStartsWith":"この数値は「{0}」で始まる必要があります！",
+            "numberEndsWith":"この数値は「{0}」で終わる必要があります！",
+            "numberContains":"この数値には「{0}」が含まれている必要があります！",
+            "numberChoices":"この数値は次のいずれかの値でなければなりません: {0}！",
+            "numberFloat":"この数値は小数にできません！",
+            "numberNegative":"この数値は負の値にできません！",
+            "numberPositive":"この数値は正の値にできません！",
+            "numberZero":"この数値はゼロにできません！",
+            "numberNan":"この数値は NaN（Not A Number）であってはなりません！",
+            "numberInvertedContains":"この数値には {0} を含めることはできません！",
+            
+            "booleanTrue":"このブール値はtrueにできません！",
+            "booleanFalse":"このブール値はfalseにできません！",
+            
+            "arrayEmptyDisabled":"この配列を空にすることは許可されていません！",
+            "arrayEmptyRequired":"この配列は空でなければなりません！",
+            "arrayTooShort":"この配列の長さは少なくとも{0}でなければなりません！",
+            "arrayTooLong":"この配列の長さは最大{0}でなければなりません！",
+            "arrayLengthInvalid":"この配列の長さは{0}でなければなりません！",
+            "arrayInvalidTypes":"この配列に含めることができる型は次のみです: {0}！",
+            "arrayDouble":"この配列では同じ値を2回使用できません！",
+            
+            "discordInvalidId":"これは無効なDiscordの{0}IDです！",
+            "discordInvalidIdOptions":"これは無効なDiscordの{0}IDです！ 代わりに次のいずれかを使用できます: {1}！",
+            "discordInvalidToken":"これは無効なDiscordトークンです（構文的に）！",
+            "colorInvalid":"これは無効なHEXカラーコードです！",
+            "emojiTooShort":"この文字列には少なくとも{0}個の絵文字が必要です！",
+            "emojiTooLong":"この文字列には最大{0}個の絵文字しか含められません！",
+            "emojiCustom":"この絵文字はDiscordのカスタム絵文字にできません！",
+            "emojiInvalid":"これは無効な絵文字です！",
+            "urlInvalid":"このURLは無効です！",
+            "urlInvalidHttp":"This url can only use the https:// protocol!",
+            "urlInvalidProtocol":"This url can only use the http:// & https:// protocols!",
+            "urlInvalidHostname":"このURLのホスト名は許可されていません！",
+            "urlInvalidExtension":"このURLの拡張子が無効です！ 次のいずれかを選択してください: {0}！",
+            "urlInvalidPath":"このURLのパスが無効です！",
+            "idNotUnique":"このIDは一意ではありません。別のIDを使用してください！",
+            "idNonExistent":"ID「{0}」は存在しません！",
+            
+            "invalidType":"このプロパティは{0}型でなければなりません！",
+            "propertyMissing":"このオブジェクトにはプロパティ「{0}」がありません！",
+            "propertyOptional":"このオブジェクトではプロパティ「{0}」はオプションです！",
+            "objectDisabled":"このオブジェクトは無効です。{0}を使用して有効にしてください！",
+            "nullInvalid":"このプロパティはnullにできません！",
+            "switchInvalidType":"これは次のいずれかの型でなければなりません: {0}！",
+            "objectSwitchInvalid":"このオブジェクトは次のいずれかの型でなければなりません: {0}！",
+            
+            "invalidLanguage":"これは無効な言語です！",
+            "invalidButton":"このボタンには少なくとも「{0}」または「{1}」が必要です！",
+            "unusedOption":"オプション「{0}」はどこでも使用されていません！",
+            "unusedQuestion":"質問「{0}」はどこでも使用されていません！",
+            "dropdownOption":"ドロップダウンが有効なパネルには「ticket」タイプのオプションのみ含めることができます！",
+            "customInvalidVersion":"設定ファイルに指定されたバージョンが一致しません！ 設定を最新バージョンに更新してください！"
         }
     },
     "actions":{
@@ -126,6 +143,7 @@
             "blacklistAddDm":"ブラックリストに追加されました",
             "blacklistRemoveDm":"ブラックリストから解除されました",
             "clear":"チケットが一括削除されました",
+            "clearTickets":"チケットをクリア",
             "roles":"ロールが更新されました",
             
             "autoclose":"チケットが自動閉じされました",
@@ -133,7 +151,12 @@
             "autocloseDisabled":"自動閉じが無効化されました",
             "autodelete":"チケットが自動削除されました",
             "autodeleteEnabled":"自動削除が有効化されました",
-            "autodeleteDisabled":"自動削除が無効化されました"
+            "autodeleteDisabled":"自動削除が無効化されました",
+            
+            "topicSet":"トピックが変更されました",
+            "prioritySet":"優先度が変更されました",
+            "priorityGet":"チケットの優先度",
+            "transfer":"チケットが転送されました"
         },
         "descriptions":{
             "create":"チケットが作成されました。下のボタンをクリックしてアクセスしてください！",
@@ -148,7 +171,7 @@
             "move":"チケットが「{0}」に正常に移動されました！",
             "add":"{0}がチケットに正常に追加されました！",
             "remove":"{0}がチケットから正常に削除されました！",
-
+            
             "helpExplanation":"`<名前>` => 必須パラメータ\n`[名前]` => オプションパラメータ",
             "statsReset":"ボットの統計が正常にリセットされました！",
             "statsError":"チケット統計を表示できません！\n{0}はチケットではありません！",
@@ -161,7 +184,7 @@
             "clearVerify":"複数のチケットを削除してもよろしいですか？\nこの操作は元に戻せません！",
             "clearReady":"{0}件のチケットが正常に削除されました！",
             "rolesEmpty":"更新されたロールはありません！",
-
+            
             "autocloseLeave":"作成者がサーバーを退出したため、このチケットは自動閉じされました！",
             "autocloseTimeout":"このチケットは{0}時間以上非アクティブだったため自動閉じされました！",
             "autodeleteLeave":"作成者がサーバーを退出したため、このチケットは自動削除されました！",
@@ -170,11 +193,16 @@
             "autocloseDisabled":"このチケットで自動閉じが無効化されました！\n今後は自動的に閉じられません！",
             "autodeleteEnabled":"このチケットで自動削除が有効化されました！\n{0}日間以上非アクティブの場合に自動的に削除されます！",
             "autodeleteDisabled":"このチケットで自動削除が無効化されました！\n今後は自動的に削除されません！",
-
+            
             "ticketMessageLimit":"同時に作成できるチケットは{0}件までです！",
             "ticketMessageAutoclose":"このチケットは{0}時間非アクティブの場合に自動閉じされます！",
             "ticketMessageAutodelete":"このチケットは{0}日間非アクティブの場合に自動削除されます！",
-            "panelReady":"下にパネルが表示されます！\nこのメッセージは削除可能です！"
+            "panelReady":"パネルは次のメッセージで利用できます！\nこのメッセージは削除しても構いません！",
+            
+            "topicSet":"チャンネルのトピックは {0} によって正常に変更されました！",
+            "prioritySet":"チケットの優先度は {1} により {0} に正常に変更されました！",
+            "priorityGet":"このチケットの現在の優先度は {0} です。",
+            "transfer":"チケットの所有権は {2} によって {0} から {1} に正常に転送されました！"
         },
         "modal":{
             "closePlaceholder":"このチケットを閉じた理由は？",
@@ -209,12 +237,19 @@
             "addDm":"サーバーであなたのチケットに{0}が追加されました！",
             "removeLog":"{1}によって{0}がこのチケットから削除されました！",
             "removeDm":"サーバーであなたのチケットから{0}が削除されました！",
-
+            
             "blacklistAddLog":"{1}によって{0}がブラックリストに追加されました！",
             "blacklistRemoveLog":"{1}によって{0}がブラックリストから解除されました！",
             "blacklistAddDm":"あなたはサーバーのブラックリストに追加されました！\n今後チケットを作成できなくなります！",
             "blacklistRemoveDm":"あなたはサーバーのブラックリストから解除されました！\n再びチケットを作成できるようになりました！",
-            "clearLog":"{1}によって{0}件のチケットが削除されました！"
+            "clearLog":"{1}によって{0}件のチケットが削除されました！",
+            
+            "transferLog":"このチケットの所有権は {2} によって {0} から {1} に転送されました！",
+            "transferDm":"あなたのチケットの所有権はサーバー内で {0} から {1} に転送されました！",
+            "prioritySetLog":"このチケットの優先度は {1} により {0} に変更されました！",
+            "prioritySetDm":"あなたのチケットの優先度はサーバー内で {0} に変更されました！",
+            "roleUpdateLog":"{0} がロールを更新しました！",
+            "roleUpdateDm":"サーバー内のあなたのロールが更新されました！"
         }
     },
     "transcripts":{
@@ -223,7 +258,7 @@
             "ready":"トランスクリプトが作成されました",
             "textFileDescription":"これは削除されたチケットのテキストトランスクリプトです！",
             "htmlProgress":"HTMLトランスクリプトを処理中です。お待ちください...",
-
+            
             "createdChannel":"サーバーに新しい{0}トランスクリプトが作成されました！",
             "createdCreator":"あなたのチケットの{0}トランスクリプトが作成されました！",
             "createdParticipant":"参加したチケットの{0}トランスクリプトが作成されました！",
@@ -235,7 +270,19 @@
             "retry":"再試行",
             "continue":"トランスクリプトなしで削除",
             "backup":"バックアップトランスクリプトを作成",
-            "error":"トランスクリプトの作成中にエラーが発生しました。\nどうしますか？\n\nいずれかのボタンをクリックするまでチケットは削除されません。"
+            "error":"トランスクリプトの作成中にエラーが発生しました。\nどうしますか？\n\nいずれかのボタンをクリックするまでチケットは削除されません。",
+            "title":"トランスクリプトエラー"
+        },
+        "text":{
+            "messagesTitle":"メッセージ",
+            "embedTitle":"EMBED",
+            "fileTitle":"ファイル",
+            "fieldsTitle":"フィールド",
+            "reactionsTitle":"リアクション",
+            "statsTitle":"統計",
+            "emptyContent":"<内容は空です>",
+            "noTitle":"<タイトルなし>",
+            "noDesc":"<説明なし>"
         }
     },
     "errors":{
@@ -251,10 +298,11 @@
             "unknownPanel":"不明なパネル",
             "notInGuild":"サーバー内にいません",
             "channelRename":"チャンネル名を変更できません",
-            "busy":"チケットは使用中です"
+            "busy":"チケットは使用中です",
+            "permissionError":"権限エラー"
         },
         "descriptions":{
-           "askForInfo":"詳細はボットの所有者に問い合わせてください！",
+            "askForInfo":"詳細はボットの所有者に問い合わせてください！",
             "askForInfoResolve":"数回試しても解決しない場合は、ボットの所有者に連絡してください。",
             "internalError":"内部エラーのため、この{0}に応答できませんでした！",
             "optionMissing":"このコマンドに必要なパラメータが不足しています！",
@@ -274,7 +322,10 @@
             "notInGuild":"この{0}はDMでは動作しません！サーバー内で再試行してください！",
             "channelRename":"Discordのレートリミットにより、現在チャンネル名を変更できません。10分以内に自動的に変更されます。",
             "channelRenameSource":"エラーの原因：{0}",
-            "busy":"この{0}は使用できません！\nチケットは現在処理中です。\n\n数秒後にもう一度お試しください！"
+            "busy":"この{0}は使用できません！\nチケットは現在処理中です。\n\n数秒後にもう一度お試しください！",
+            "closeBeforeMessage":"ユーザーがメッセージを送信する前に、このチケットを閉じたり削除したりすることはできません。",
+            "closeBeforeAdminMessage":"チケット管理者またはサポートメンバーがメッセージを送信する前に、このチケットを閉じたり削除したりすることはできません。",
+            "unableToCreateTicket":"チケットを作成することはできません。"
         },
         "optionInvalidReasons":{
             "stringRegex":"値がパターンに一致しません！",
@@ -325,7 +376,6 @@
             "added":"追加済み",
             "removed":"削除済み",
             "filter":"フィルター",
-            "claimedBy":"{0}が引き受け",
             "method":"方法",
             "type":"タイプ",
             "blacklisted":"ブラックリスト",
@@ -349,7 +399,27 @@
             "status":"ステータス",
             "claimed":"引き受け済み",
             "pinned":"ピン留め済み",
-            "creationDate":"作成日時"
+            "creationDate":"作成日時",
+            
+            "noone":"該当なし",
+            "open":"オープン",
+            "closed":"クローズ",
+            "priority":"優先度",
+            "participants":"参加者",
+            "yes":"はい",
+            "no":"いいえ",
+            "option":"オプション",
+            "topic":"トピック",
+            "uptime":"システム稼働時間",
+            "messages":"メッセージ",
+            "embeds":"埋め込み",
+            "files":"ファイル",
+            "components":"コンポーネント",
+            "cooldown":"クールダウン",
+            "maxTickets":"最大チケット数",
+            "admins":"管理者",
+            "roles":"ロール",
+            "size":"サイズ"
         },
         "lowercase":{
             "text":"テキスト",
@@ -378,6 +448,7 @@
         "unclaim":"チケットの引き受けを解除します。",
         "pin":"チケットをピン留めします。",
         "unpin":"チケットのピン留めを解除します。",
+        
         "move":"チケットを移動します。",
         "moveId":"移動先のオプション識別子。",
         "rename":"チケット名を変更します。",
@@ -386,6 +457,7 @@
         "addUser":"追加するユーザー。",
         "remove":"ユーザーをチケットから削除します。",
         "removeUser":"削除するユーザー。",
+        
         "blacklist":"チケットブラックリストを管理します。",
         "blacklistView":"現在のブラックリストを表示します。",
         "blacklistAdd":"ユーザーをブラックリストに追加します。",
@@ -399,6 +471,7 @@
         "statsUserUser":"表示するユーザー。",
         "statsTicket":"サーバー内のチケット統計を表示します。",
         "statsTicketTicket":"表示するチケット。",
+        
         "clear":"複数のチケットを同時に削除します。",
         "clearFilter":"チケットを一括削除するフィルター。",
         "clearFilters":{
@@ -411,6 +484,7 @@
             "unpin":"ピン留め解除済み",
             "autoclose":"自動閉じ済み"
         },
+        
         "autoclose":"チケットの自動閉じを管理します。",
         "autocloseDisable":"このチケットの自動閉じを無効にします。",
         "autocloseEnable":"このチケットの自動閉じを有効にします。",
@@ -418,7 +492,19 @@
         "autodelete":"チケットの自動削除を管理します。",
         "autodeleteDisable":"このチケットの自動削除を無効にします。",
         "autodeleteEnable":"このチケットの自動削除を有効にします。",
-        "autodeleteEnableTime":"チケットを自動削除する非アクティブ時間（日単位）。"
+        "autodeleteEnableTime":"チケットを自動削除する非アクティブ時間（日単位）。",
+        
+        "topic":"チケットチャネルのトピックを管理します。",
+        "topicSet":"チケットチャネルのトピックを設定します。",
+        "topicValue":"チャンネルの新しいトピック。",
+        "topicList":"すべてのチケットをトピックと統計付きで一覧表示します。",
+        "priority":"チケットの優先度を管理します。",
+        "prioritySet":"チケットの優先度を設定します。",
+        "priorityValue":"チャンネルの優先度。",
+        "priorityGet":"チケットの優先度を取得します。",
+        "priorityList":"すべてのチケットを優先度ステータス付きで一覧表示します。",
+        "transfer":"チケットの所有権を別のユーザーに転送します。",
+        "transferUser":"転送先のユーザー。"
     },
     "helpMenu":{
         "help":"利用可能なすべてのコマンドのリストを表示します。",
@@ -446,7 +532,16 @@
         "autocloseDisable":"このチケットの自動閉じを無効にします。",
         "autocloseEnable":"このチケットの自動閉じを有効にします。",
         "autodeleteDisable":"このチケットの自動削除を無効にします。",
-        "autodeleteEnable":"このチケットの自動削除を有効にします。"
+        "autodeleteEnable":"このチケットの自動削除を有効にします。",
+        "categories":{
+            "general":"一般コマンド",
+            "basicTicket":"基本チケットコマンド",
+            "advancedTicket":"高度なチケットコマンド",
+            "userTicket":"ユーザーチケットコマンド",
+            "admin":"管理者コマンド",
+            "advanced":"高度なコマンド",
+            "extra":"追加コマンド"
+        }
     },
     "stats":{
         "scopes":{
@@ -454,7 +549,8 @@
             "system":"システム統計",
             "user":"ユーザー統計",
             "ticket":"チケット統計",
-            "participants":"参加者"
+            "participants":"参加者",
+            "messages":"メッセージ"
         },
         "properties":{
             "ticketsCreated":"作成済みチケット",
@@ -466,7 +562,47 @@
             "ticketsPinned":"ピン留め済みチケット",
             "ticketsMoved":"移動済みチケット",
             "usersBlacklisted":"ブラックリストユーザー",
-            "transcriptsCreated":"作成済みトランスクリプト"
+            "transcriptsCreated":"作成済みトランスクリプト",
+            "ticketsAutodeleted":"自動削除されたチケット",
+            "ticketsTransferred":"転送されたチケット",
+            "ticketVolume":"チケット量",
+            "averageTickets":"平均チケット数/ユーザー",
+            "currentTickets":"現在のチケット",
+            "age":"チケットの経過時間",
+            "responseTime":"応答時間",
+            "resolutionTime":"解決時間",
+            "createdOn":"作成日",
+            "createdBy":"作成者",
+            "closedOn":"クローズ日",
+            "closedBy":"クローズ者",
+            "claimedOn":"引き受け日",
+            "claimedBy":"引き受け者",
+            "pinnedOn":"ピン留め日",
+            "pinnedBy":"ピン留め者",
+            "deletedOn":"削除日",
+            "deletedBy":"削除者"
+        },
+        "roles":{
+            "developer":"開発者",
+            "serverOwner":"サーバーオーナー",
+            "serverAdmin":"サーバー管理者",
+            "moderator":"モデレーターチーム",
+            "support":"サポートチーム",
+            "member":"メンバー"
         }
+    },
+    "panel":{
+        "selectTicket":"チケットを選択してください",
+        "selectRole":"ロールを選択してください",
+        "selectOption":"オプションを選択してください"
+    },
+    "priorities":{
+        "urgent":"緊急",
+        "veryHigh":"非常に高い",
+        "high":"高い",
+        "normal":"普通",
+        "low":"低い",
+        "veryLow":"非常に低い",
+        "none":"なし"
     }
 }

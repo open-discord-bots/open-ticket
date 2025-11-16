@@ -643,7 +643,7 @@ for (const language of fs.readdirSync(".docs/languages/")){
         }
     }
     original["_TRANSLATION"]["lastedited"] = new Date().toLocaleDateString("nl-BE",{day:"2-digit",month:"2-digit",year:"numeric"})
-    original["_TRANSLATION"]["otversion"] = "v4.1.0"
+    original["_TRANSLATION"]["otversion"] = "v4.1.1"
     const finalText = formatter.stringify(original)
     fs.writeFileSync("./languages/"+language,finalText)
 }
