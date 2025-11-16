@@ -165,16 +165,16 @@ With the amazing support of our translators, we've been able to translate Open T
 |🟢⏳ |🇧🇩 Bengali            |HanumeshGupta                  |
 |🤖   |🇪🇪 Estonian           |iamnotmega                     |
 |🤖   |🇫🇮 Finnish            |iamnotmega                     |
+|🤖   |🇯🇵 Japanese           |HanumeshGupta                  |
+|🤖   |🇬🇷 Greek              |HanumeshGupta                  |
+|🤖   |🇸🇮 Slovenian          |HanumeshGupta                  |
+|🤖   |🇰🇷 Korean             |HanumeshGupta                  |
+|🤖   |🇮🇳 Tamil              |HanumeshGupta                  |
+|🤖   |🇨🇳 Simplified Chinese |HanumeshGupta                  |
+|🤖   |❓ Kurdish            |HanumeshGupta                  |
 |🤖⏳ |🇷🇺 Russian            |NoOneNook                      |
 |🤖⏳ |🇱🇻 Latvian            |NoOneNook                      |
 |🤖⏳ |🇻🇳 Vietnamese         |ngocdiep2006                   |
-|🤖⏳ |🇯🇵 Japanese           |HanumeshGupta                  |
-|🤖⏳ |🇬🇷 Greek              |HanumeshGupta                  |
-|🤖⏳ |🇸🇮 Slovenian          |HanumeshGupta                  |
-|🤖⏳ |🇰🇷 Korean             |HanumeshGupta                  |
-|🤖⏳ |🇮🇳 Tamil              |HanumeshGupta                  |
-|🤖⏳ |🇨🇳 Simplified Chinese |HanumeshGupta                  |
-|🤖⏳ |❓ Kurdish            |HanumeshGupta                  |
 |🔴   |🇨🇳 Traditional Chinese|[⭐ Contribute!](.github/CONTRIBUTING.md)|
 <!--[⭐ Contribute!](.github/CONTRIBUTING.md) -->
 
