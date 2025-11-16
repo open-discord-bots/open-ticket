@@ -147,7 +147,7 @@ export class ODPlugin extends ODManagerData {
         if ((this.enabled && !this.crashed) || force){
             try{
                 //import relative plugin directory path (works on windows & unix based systems)
-                const pluginPath = nodepath.join("../../../../plugins/",this.getStartFile())
+                const pluginPath = nodepath.join("../../../../plugins/",this.getStartFile()).replaceAll("\\","/")
                 await import(pluginPath)
                 debug.console.log("Plugin \""+this.id.value+"\" loaded successfully!","plugin")
                 this.executed = true

@@ -575,6 +575,11 @@ async function renderQuickSetupTicketCount(backFn:() => api.ODPromiseVoid){
         "3️⃣ 3 Ticket Options",
         "4️⃣ 4 Ticket Options",
         "5️⃣ 5 Ticket Options",
+        "6️⃣ 6 Ticket Options",
+        "7️⃣ 7 Ticket Options",
+        "8️⃣ 8 Ticket Options",
+        "9️⃣ 9 Ticket Options",
+        "🔟 10 Ticket Options",
     ],{
         leftPadding:"> ",
         style:terminal.cyan,
@@ -1208,7 +1213,7 @@ async function saveQuickSetupConfig(){
         _INFO:{
             support:"https://otdocs.dj-dj.be",
             discord:"https://discord.dj-dj.be",
-            version:"open-ticket-v4.0.6"
+            version:"open-ticket-"+opendiscord.versions.get("opendiscord:version").toString()
         },
         
         token:quickSetupStorage.client?.token ?? "<unknown-token>",
