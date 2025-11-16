@@ -1,13 +1,33 @@
 [
     {
         "message":{
-            "title":"Open Ticket v4.0",
+            "title":"Update Required",
             "titleColor":"red",
-            "description":"Open Ticket v4.0 has officially been released! Please give our project a star to help us grow!",
+            "description":"This version of Open Ticket will soon be deprecated, please update to v4.1 or higher!",
             "descriptionColor":"normal"
         },
         "active":{
-            "versions":["4.0.0","4.0.1","4.0.2","4.0.3","4.0.4"],
+            "versions":["4.0.0","4.0.1","4.0.2","4.0.3","4.0.4","4.0.5"],
+            "languages":[],
+            "allLanguages":true,
+            "usingPlugins":true,
+            "notUsingPlugins":true,
+            "usingSlashCommands":true,
+            "notUsingSlashCommands":true,
+            "notUsingTranscripts":true,
+            "usingTextTranscripts":true,
+            "usingHtmlTranscripts":true
+        }
+    },
+    {
+        "message":{
+            "title":"Open Ticket v4.1",
+            "titleColor":"green",
+            "description":"Open Ticket v4.1 has officially been released! Go check it out!",
+            "descriptionColor":"normal"
+        },
+        "active":{
+            "versions":["4.0.0","4.0.1","4.0.2","4.0.3","4.0.4","4.0.5","4.0.6","4.0.7"],
             "languages":[],
             "allLanguages":true,
             "usingPlugins":true,
@@ -27,7 +47,7 @@
             "descriptionColor":"normal"
         },
         "active":{
-            "versions":["4.0.0","4.0.1","4.0.2","4.0.3","4.0.4","4.0.5","4.0.6","4.0.7","4.0.8","4.0.9","4.1.0"],
+            "versions":["4.0.0","4.0.1","4.0.2","4.0.3","4.0.4","4.0.5","4.0.6","4.0.7","4.1.0","4.1.1","4.1.2","4.1.3","4.1.4","4.1.5"],
             "languages":[],
             "allLanguages":true,
             "usingPlugins":true,
@@ -47,7 +67,7 @@
             "descriptionColor":"normal"
         },
         "active":{
-            "versions":["4.0.0","4.0.1","4.0.2","4.0.3","4.0.4","4.0.5","4.0.6","4.0.7","4.0.8","4.0.9","4.1.0"],
+            "versions":["4.0.0","4.0.1","4.0.2","4.0.3","4.0.4","4.0.5","4.0.6","4.0.7","4.1.0","4.1.1","4.1.2","4.1.3","4.1.4","4.1.5"],
             "languages":[],
             "allLanguages":true,
             "usingPlugins":true,
