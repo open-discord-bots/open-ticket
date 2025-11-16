@@ -197,7 +197,7 @@ This will help us grow and reach even more people!
 > [`ot-reviews`](https://github.com/open-discord-bots/plugins/tree/main/open-ticket/ot-reviews/),
 > [`ot-feedback`](https://github.com/open-discord-bots/plugins/tree/main/open-ticket/ot-feedback/),
 > [`ot-tags`](https://github.com/open-discord-bots/plugins/tree/main/open-ticket/ot-tags/),
-> [`ot-config-reload`](https://github.com/open-discord-bots/plugins/tree/main/open-ticket/ot-config-reload/)**
+> [`ot-restrictions`](https://github.com/open-discord-bots/plugins/tree/main/open-ticket/ot-restrictions/)**
 
 #### Categories:
 - **📄 Example** - These plugins serve as an example or starting template.
@@ -206,6 +206,7 @@ This will help us grow and reach even more people!
 - **🎨 Customisation** - These plugins add even more customisation to the bot.
 - **💼 Management** - These plugins add features that help you manage your server or ticket system.
 - **🤖 Client** - These plugins add features affecting the Discord Client or bot itself.
+- Please Create a new category when your plugin doesn't fit in one of the available categories.
 
 ### 📦 Official *(made by DJdj Development)*
 |Name                                                                  |Category                    |Description              |
@@ -229,7 +230,10 @@ This will help us grow and reach even more people!
 |[`ot-move-actions`](https://github.com/open-discord-bots/plugins/tree/main/open-ticket/ot-move-actions/)                   |💼 Management               |Automatically unclaim/unpin a ticket when it's moved using `/move`. |
 |[`ot-reviews`](https://github.com/open-discord-bots/plugins/tree/main/open-ticket/ot-reviews/)                             |💼 Management               |Review system for Open Ticket! It is very customisable and has lots of features. |
 |[`ot-tags`](https://github.com/open-discord-bots/plugins/tree/main/open-ticket/ot-tags/)                                   |💼 Management               |Use tags to quickly reply with a pre-existing text. |
+|[`ot-restrictions`](https://github.com/open-discord-bots/plugins/tree/main/open-ticket/ot-restrictions/)                   |💼 Management               |Restrict which roles can open a specific ticket option. |
 |[`ot-better-status`](https://github.com/open-discord-bots/plugins/tree/main/open-ticket/ot-better-status/)                 |🤖 Client                   |An advanced status plugin to rotate between states. It also allows for the use of variables. |
+|[`ot-channel-display`](https://github.com/open-discord-bots/plugins/tree/main/open-ticket/ot-channel-display/)             |🤖 Client                   |A plugin to show different variables in a voice channel in your server. |
+|[`ot-vanity`](https://github.com/open-discord-bots/plugins/tree/main/open-ticket/ot-vanity/)                               |🤖 Client                   |A plugin to detect the vanity status of members in the server and give them exclusive privilleges. |
 
 ### ✅ Verified *(made by community)*
 |Name                                                                 |Author                      |Category                    |Description              |
@@ -240,6 +244,8 @@ This will help us grow and reach even more people!
 |[`ot-assign-role`](https://github.com/open-discord-bots/plugins/tree/main/open-ticket/ot-assign-role/)                    |rapid.fast                  |💼 Management               |This plugin assigns a predefined role to a user upon creating a ticket. |
 |[`ot-volume-warning`](https://github.com/open-discord-bots/plugins/tree/main/open-ticket/ot-volume-warning/)              |guillee.3                   |💼 Management               |Alerts ticket creators when too many tickets are open, indicating possible response delays. |
 |[`od-reminders`](https://github.com/open-discord-bots/plugins/tree/main/open-ticket/od-reminders/)                        |guillee.3                   |💼 Management               |Set reminders that will be sent to a channel every specified time. |
+|[`od-moderation`](https://github.com/open-discord-bots/plugins/tree/main/open-ticket/od-moderation/)                      |NotMukundOP                 |💼 Management               |A simple moderation plugin for Open Discord with ban, kick & warnings. |
+|[`ot-followups`](https://github.com/open-discord-bots/plugins/tree/main/open-ticket/ot-followups/)                        |guillee.3                   |💼 Management               |Send additional follow-up messages to a ticket. |
 |[`ot-translate-cmds`](https://github.com/open-discord-bots/plugins/tree/main/open-ticket/ot-translate-cmds/)              |guillee.3                   |🤖 Client                  |Translate all built-in command names, descriptions & options. |
 
 ---
