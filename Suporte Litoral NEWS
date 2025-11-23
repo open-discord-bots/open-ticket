@@ -1,0 +1,76 @@
+panels:
+  suporte_litoralnews:
+    name: "Suporte Litoral NEWS"
+    description: "Painel de Suporte do Litoral NEWS"
+    message:
+      embeds:
+        - title: "Suporte Litoral NEWS"
+          description: |
+            📑 Aqui você pode enviar sua dúvida, problema ou pedido relacionado ao jornal.
+
+            🧑‍💼 Nossa equipe está ativa e preparada para resolver sua situação da melhor forma possível.
+
+            ⚠️ Observação: Abra um ticket somente quando realmente precisar — isso mantém o suporte organizado para todos!
+          color: "#87CEFA"   # Azul claro
+          image:
+            url: "https://cdn.discordapp.com/attachments/1442015687777194056/1442263273859842228/1763918397587.png?ex=6924cbd8&is=69237a58&hm=025e4705e30e0f9c6a3b4355b5dee04ff9eb9ca31047e4ba8f16b4411c6a921a&"
+      components:
+        - type: 1
+          components:
+            - type: 2
+              style: 1
+              label: "❔️・Dúvidas"
+              custom_id: "litoralnews_duvidas"
+
+            - type: 2
+              style: 1
+              label: "💡・Sugestões"
+              custom_id: "litoralnews_sugestoes"
+
+            - type: 2
+              style: 1
+              label: "🖋・Criação de conteúdo"
+              custom_id: "litoralnews_criacao"
+
+tickets:
+  litoralnews_duvidas:
+    panel: "suporte_litoralnews"
+    name: "Dúvidas"
+    message:
+      embeds:
+        - title: "📩 Ticket de Dúvidas"
+          description: |
+            🗞 Bem-vindo ao atendimento do Litoral NEWS!
+
+            ⚠️ Para agilizar sua solicitação, seja direto e claro na explicação do seu caso. Envie todos os detalhes importantes para que nossa equipe possa ajudar o mais rápido possível.
+
+            📰 Sua mensagem já entrou na fila da redação, e um membro da equipe irá responder em breve.
+          color: "#87CEFA"
+
+  litoralnews_sugestoes:
+    panel: "suporte_litoralnews"
+    name: "Sugestões"
+    message:
+      embeds:
+        - title: "💡 Ticket de Sugestões"
+          description: |
+            🗞 Bem-vindo ao atendimento do Litoral NEWS!
+
+            ⚠️ Para agilizar sua solicitação, seja direto e claro na explicação do seu caso. Envie todos os detalhes importantes para que nossa equipe possa ajudar o mais rápido possível.
+
+            📰 Sua mensagem já entrou na fila da redação, e um membro da equipe irá responder em breve.
+          color: "#87CEFA"
+
+  litoralnews_criacao:
+    panel: "suporte_litoralnews"
+    name: "Criação de conteúdo"
+    message:
+      embeds:
+        - title: "🖋 Ticket de Criação de Conteúdo"
+          description: |
+            🗞 Bem-vindo ao atendimento do Litoral NEWS!
+
+            ⚠️ Para agilizar sua solicitação, seja direto e claro na explicação do seu caso. Envie todos os detalhes importantes para que nossa equipe possa ajudar o mais rápido possível.
+
+            📰 Sua mensagem já entrou na fila da redação, e um membro da equipe irá responder em breve.
+          color: "#87CEFA"
