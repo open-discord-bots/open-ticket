@@ -4,6 +4,7 @@
 import { ODId, ODValidId, ODManager, ODSystemError, ODManagerData } from "./base"
 import * as discord from "discord.js"
 import { ODDebugger } from "./console"
+import { ODClientManager } from "./client"
 
 /**## ODPermissionType `type`
  * All available permission types/levels. Can be used in the `ODPermission` class.
@@ -111,6 +112,8 @@ export type ODPermissionCalculationCallback = (user:discord.User, channel?:disco
 export class ODPermissionManager extends ODManager<ODPermission> {
     /**The function for calculating permissions in this manager. */
     #calculation: ODPermissionCalculationCallback|null
+    /**An alias to the Open Discord client manager. */
+    #client: ODClientManager
     /**The result which is returned when no other permissions match. (`member` by default) */
     defaultResult: ODPermissionResult = {
         level:ODPermissionLevel["member"],
@@ -119,9 +122,10 @@ export class ODPermissionManager extends ODManager<ODPermission> {
         source:null
     }
 
-    constructor(debug:ODDebugger, useDefaultCalculation?:boolean){
+    constructor(debug:ODDebugger, client:ODClientManager, useDefaultCalculation?:boolean){
         super(debug,"permission")
         this.#calculation = useDefaultCalculation ? this.#defaultCalculation : null
+        this.#client = client
     }
 
     /**Edit the permission calculation function in this manager. */
@@ -193,7 +197,7 @@ export class ODPermissionManager extends ODManager<ODPermission> {
         //check for global role permissions
         if (allowGlobalRoleScope){
             if (guild){
-                const member = await guild.members.fetch(user.id)
+                const member = await this.#client.fetchGuildMember(guild,user.id)
                 if (member){
                     const memberRoles = member.roles.cache.map((role) => role.id)
                     const roles = this.getFiltered((permission) => (!idRegex || (idRegex && idRegex.test(permission.id.value))) && permission.scope == "global-role" && (permission.value instanceof discord.Role) && memberRoles.includes(permission.value.id) && permission.value.guild.id == guild.id)
@@ -256,7 +260,7 @@ export class ODPermissionManager extends ODManager<ODPermission> {
             
             //check for channel role permissions
             if (allowChannelRoleScope){
-                const member = await guild.members.fetch(user.id)
+                const member = await this.#client.fetchGuildMember(guild,user.id)
                 if (member){
                     const memberRoles = member.roles.cache.map((role) => role.id)
                     const roles = this.getFiltered((permission) => (!idRegex || (idRegex && idRegex.test(permission.id.value))) && permission.scope == "channel-role" && permission.channel && (permission.channel.id == channel.id) && (permission.value instanceof discord.Role) && memberRoles.includes(permission.value.id) && permission.value.guild.id == guild.id)

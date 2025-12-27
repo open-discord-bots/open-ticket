@@ -3,6 +3,7 @@
 ///////////////////////////////////////
 import { ODDebugger } from "../modules/console"
 import { ODPermissionManager } from "../modules/permission"
+import { ODClientManager_Default } from "./client"
 
 /**## ODPermissionManager_Default `default_class`
  * This is a special class that adds type definitions & typescript to the ODPermissionManager class.
@@ -11,8 +12,8 @@ import { ODPermissionManager } from "../modules/permission"
  * This default class is made for the global variable `opendiscord.permissions`!
  */
 export class ODPermissionManager_Default extends ODPermissionManager {
-    constructor(debug:ODDebugger){
-        super(debug,true)
+    constructor(debug:ODDebugger,client:ODClientManager_Default){
+        super(debug,client,true)
     }
 }
 

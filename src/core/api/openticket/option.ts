@@ -357,10 +357,18 @@ export class ODOptionSuffixManager extends ODManager<ODOptionSuffix> {
         const suffix = this.getAll().find((suffix) => suffix.option.id.value == option.id.value)
         if (!suffix) return null
         try{
-            const member = await guild.members.fetch(user.id)
+            const member = await this.#getMember(guild,user)
+            if (!member) return null
             return await suffix.getSuffix(member)
         }catch(err){
             process.emit("uncaughtException",err)
+            return null
+        }
+    }
+    async #getMember(guild:discord.Guild,user:discord.User){
+        try{
+            return await guild.members.fetch(user.id)
+        }catch{
             return null
         }
     }
