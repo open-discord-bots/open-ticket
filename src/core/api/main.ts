@@ -157,7 +157,7 @@ export class ODMain {
         this.responders = new ODResponderManager_Default(this.debug,this.client)
         this.actions = new ODActionManager_Default(this.debug)
         this.verifybars = new ODVerifyBarManager_Default(this.debug)
-        this.permissions = new ODPermissionManager_Default(this.debug)
+        this.permissions = new ODPermissionManager_Default(this.debug,this.client)
         this.cooldowns = new ODCooldownManager_Default(this.debug)
         this.helpmenu = new ODHelpMenuManager_Default(this.debug)
         this.stats = new ODStatsManager_Default(this.debug)
