@@ -133,7 +133,7 @@ export class ODMain {
 
     constructor(){
         this.versions = new ODVersionManager_Default()
-        this.versions.add(ODVersion.fromString("opendiscord:version","v4.1.1"))
+        this.versions.add(ODVersion.fromString("opendiscord:version","v4.1.2"))
         this.versions.add(ODVersion.fromString("opendiscord:api","v1.0.0"))
         this.versions.add(ODVersion.fromString("opendiscord:transcripts","v2.1.0"))
         this.versions.add(ODVersion.fromString("opendiscord:livestatus","v2.0.0"))

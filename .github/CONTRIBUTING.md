@@ -1,7 +1,7 @@
 # Contributing Guidelines
 <img src="https://apis.dj-dj.be/cdn/openticket/logo.png" alt="Open Ticket Logo" width="500px">
 
-[![discord](https://img.shields.io/badge/discord-support%20server-5865F2.svg?style=flat-square&logo=discord)](https://discord.com/invite/26vT9wt3n3)  [![version](https://img.shields.io/badge/version-4.1.1-brightgreen.svg?style=flat-square)](https://github.com/open-discord-bots/open-ticket/releases/tag/v4.1.1)  [![Sponsor DJj123dj](https://img.shields.io/badge/sponsor-DJj123dj-ea4aaa?style=flat-square&logo=githubsponsors)](https://github.com/sponsors/DJj123dj)
+[![discord](https://img.shields.io/badge/discord-support%20server-5865F2.svg?style=flat-square&logo=discord)](https://discord.com/invite/26vT9wt3n3)  [![version](https://img.shields.io/badge/version-4.1.2-brightgreen.svg?style=flat-square)](https://github.com/open-discord-bots/open-ticket/releases/tag/v4.1.2)  [![Sponsor DJj123dj](https://img.shields.io/badge/sponsor-DJj123dj-ea4aaa?style=flat-square&logo=githubsponsors)](https://github.com/sponsors/DJj123dj)
 
 These are the Contributing Guidelines of Open Ticket!<br>
 Here you can find everything you need to know about contributing to Open Ticket.<br>
@@ -89,4 +89,4 @@ you are **REQUIRED to send the bug privately via one of the following methods:**
 **Contributing Guidelines**<br>
 [Changelog](https://otgithub.dj-dj.be/releases) - [Documentation](https://otdocs.dj-dj.be) - [Website](https://openticket.dj-dj.be) - [Support Server](https://discord.dj-dj.be) - [License](./LICENSE.md)<br>
 
-© 2025 - [DJdj Development](https://www.dj-dj.be) - [Terms](https://www.dj-dj.be/terms) - [Privacy Policy](https://www.dj-dj.be/privacy) - [Support Us](https://github.com/sponsors/DJj123dj)
+© 2021 - 2026 - [DJdj Development](https://www.dj-dj.be) - [Terms](https://www.dj-dj.be/terms) - [Privacy Policy](https://www.dj-dj.be/privacy) - [Support Us](https://github.com/sponsors/DJj123dj)

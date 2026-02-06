@@ -14,20 +14,21 @@ This list will be updated on every release.
 - 🟦 In Development **(ideas, bugs, support, html transcripts)**
 - ✅ Supported **(features, bugs, support, docs, html transcripts)**
 - 🚧 Maintenance **(support, docs, html transcripts)**
-- 🟧 Deprecated **(docs)**
+- 🟧 Deprecated **(docs only)**
 - ❌ Fully Deprecated
 
 | Version    | Supported | Notes                                                         |
 |------------|-----------|---------------------------------------------------------------|
-| 4.2.0      | 🟦        | Transcripts v2.0 will be inaccessible when v4.2 is released.  |
-| 4.1.2      | 🟦        |                                                               |
-| 4.1.1      | ✅        |                                                               |
-| 4.1.0      | ✅        |                                                               |
-| 4.0.7      | ✅        | Supported Until December 2025 (LTS)                           |
+| 4.2.0      | 🟦        | In Development                                                |
+| 4.1.x      | 🟦        | In Development                                                |
+| 4.1.2      | ✅        |                                                               |
+| 4.1.1      | ✅        | Supported Until April 2026 (LTS)                              |
+| 4.1.0      | 🚧        |                                                               |
+| 4.0.7      | 🚧        |                                                               |
 | 4.0.6      | 🚧        |                                                               |
-| 4.0.5      | 🚧        |                                                               |
-| 4.0.4      | 🚧        |                                                               |
-| < 4.0.4    | 🟧        | Deprecated Transcripts v2.0, Documentation Only               |
+| 4.0.5      | 🟧        | Deprecated                                                    |
+| 4.0.4      | 🟧        | Deprecated                                                    |
+| < 4.0.4    | 🟧        | Deprecated, Transcripts v2.0, Documentation Only              |
 | < 4.0.0    | ❌        |                                                               |
 
 ### 🕷️ Reporting Vulnerabilities
@@ -50,4 +51,4 @@ If possible, try to provide screenshots!
 **Security Policy**<br>
 [Changelog](https://otgithub.dj-dj.be/releases) - [Documentation](https://otdocs.dj-dj.be) - [Website](https://openticket.dj-dj.be) - [Support Server](https://discord.dj-dj.be) - [License](./LICENSE.md)<br>
 
-© 2025 - [DJdj Development](https://www.dj-dj.be) - [Terms](https://www.dj-dj.be/terms) - [Privacy Policy](https://www.dj-dj.be/privacy) - [Support Us](https://github.com/sponsors/DJj123dj)
+© 2021 - 2026 - [DJdj Development](https://www.dj-dj.be) - [Terms](https://www.dj-dj.be/terms) - [Privacy Policy](https://www.dj-dj.be/privacy) - [Support Us](https://github.com/sponsors/DJj123dj)
