@@ -55,14 +55,14 @@ export const registerCommandResponders = async () => {
                 return cancel()
             }
 
+            //check ticket permissions
+            if (!checkTicketCreationPerms(instance,source,guild,user,option)) return cancel()
+
             //start ticket creation
             if (option.exists("opendiscord:questions") && option.get("opendiscord:questions").value.length > 0){
                 //send modal
                 instance.modal(await opendiscord.builders.modals.getSafe("opendiscord:ticket-questions").build(source,{guild,channel,user,option}))
             }else{
-                //check ticket permissions
-                if (!checkTicketCreationPerms(instance,source,guild,user,option)) return cancel()
-
                 //create ticket
                 await instance.defer(true)
                 const res = await opendiscord.actions.get("opendiscord:create-ticket").run(source,{guild,user,answers:[],option})
@@ -106,14 +106,14 @@ export const registerButtonResponders = async () => {
                 return cancel()
             }
 
+            //check ticket permissions
+            if (!checkTicketCreationPerms(instance,"panel-button",guild,user,option)) return cancel()
+
             //start ticket creation
             if (option.exists("opendiscord:questions") && option.get("opendiscord:questions").value.length > 0){
                 //send modal
                 instance.modal(await opendiscord.builders.modals.getSafe("opendiscord:ticket-questions").build("panel-button",{guild,channel,user,option}))
             }else{
-                //check ticket permissions
-                if (!checkTicketCreationPerms(instance,"panel-button",guild,user,option)) return cancel()
-
                 //create ticket
                 await instance.defer((generalConfig.data.system.replyOnTicketCreation) ? "reply" : "update",true)
 
@@ -150,14 +150,14 @@ export const registerDropdownResponders = async () => {
                 return cancel()
             }
 
+            //check ticket permissions
+            if (!checkTicketCreationPerms(instance,"panel-dropdown",guild,user,option)) return cancel()
+
             //start ticket creation
             if (option.exists("opendiscord:questions") && option.get("opendiscord:questions").value.length > 0){
                 //send modal
                 instance.modal(await opendiscord.builders.modals.getSafe("opendiscord:ticket-questions").build("panel-dropdown",{guild,channel,user,option}))
             }else{
-                //check ticket permissions
-                if (!checkTicketCreationPerms(instance,"panel-dropdown",guild,user,option)) return cancel()
-
                 //create ticket
                 await instance.defer((generalConfig.data.system.replyOnTicketCreation) ? "reply" : "update",true)
 
@@ -205,9 +205,6 @@ export const registerModalResponders = async () => {
                 instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-option-unknown").build(source,{guild:instance.guild,channel,user:instance.user}))
                 return cancel()
             }
-
-            //check ticket permissions
-            if (!checkTicketCreationPerms(instance,originalSource,guild,user,option)) return cancel()
 
             //get answers
             const answers: {id:string,name:string,type:"short"|"paragraph",value:string|null}[] = []
