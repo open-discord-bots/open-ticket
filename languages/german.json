@@ -1,8 +1,8 @@
 {
     "_TRANSLATION":{
-        "otversion":"v4.1.1",
+        "otversion":"v4.1.2",
         "translators":["benzorich"],
-        "lastedited":"06/10/2024",
+        "lastedited":"03/12/2025",
         "language":"German",
         "automated":false
     },
@@ -31,7 +31,15 @@
             "stringContains":"Diese Zeichenfolge muss {0} enthalten!",
             "stringChoices":"Diese Zeichenfolge kann nur einen der folgenden Werte annehmen: {0}!",
             "stringRegex":"Diese Zeichenfolge ist ungültig!",
-
+            "stringInvertedContains":"Diese Zeichenkette darf {0} nicht enthalten!",
+            "stringLowercase":"Diese Zeichenkette muss ausschließlich in Kleinbuchstaben geschrieben werden!",
+            "stringUppercase":"Diese Zeichenkette muss ausschließlich in Großbuchstaben geschrieben werden!",
+            "stringSpecialCharacters":"Diese Zeichenkette darf keine Sonderzeichen enthalten! (nur a-z, 0-9 & Leerzeichen)",
+            "stringNoSpaces":"Diese Zeichenkette darf keine Leerzeichen enthalten!",
+            "stringCapitalWord":"Es wird empfohlen, dass jedes Wort in dieser Zeichenkette mit einem Großbuchstaben beginnt!",
+            "stringCapitalSentence":"Es sieht so aus, als würden einige Sätze in dieser Zeichenkette nicht mit einem Großbuchstaben beginnen!",
+            "stringPunctuation":"Es sieht so aus, als würde der Satz in dieser Zeichenkette nicht mit einem Satzzeichen enden!",
+            
             "numberTooShort":"Diese Zahl kann nicht kürzer als {0} Zeichen sein!",
             "numberTooLong":"Diese Nummer darf nicht länger als {0} Zeichen sein!",
             "numberLengthInvalid":"Diese Nummer muss {0} Zeichen lang sein!",
@@ -48,10 +56,12 @@
             "numberNegative":"Diese Zahl kann nicht negativ sein!",
             "numberPositive":"Diese Zahl kann nicht positiv sein!",
             "numberZero":"Diese Zahl kann nicht Null sein!",
-
+            "numberNan":"Diese Zahl darf nicht NaN (Not A Number) sein!",
+            "numberInvertedContains":"Diese Zahl darf {0} nicht enthalten!",
+            
             "booleanTrue":"Dieser boolean Wert kann nicht wahr sein!",
             "booleanFalse":"Dieser boolean Wert kann nicht falsch sein!",
-
+            
             "arrayEmptyDisabled":"Dieses Array darf nicht leer sein!",
             "arrayEmptyRequired":"Dieses Array muss leer sein!",
             "arrayTooShort":"Dieses Array muss eine Länge von mindestens {0} haben!",
@@ -59,7 +69,7 @@
             "arrayLengthInvalid":"Dieses Array muss eine Länge von {0} haben!",
             "arrayInvalidTypes":"Dieses Array kann nur die folgenden Typen enthalten: {0}!",
             "arrayDouble":"In diesem Array darf derselbe Wert nicht zweimal vorkommen!",
-
+            
             "discordInvalidId":"Dies ist eine ungültige Discord {0} id!",
             "discordInvalidIdOptions":"Dies ist eine ungültige Discord {0} id! Du kannst auch eine der folgenden verwenden: {1}!",
             "discordInvalidToken":"Das ist ein ungültiger Discord-Token (syntaktisch)!",
@@ -76,7 +86,7 @@
             "urlInvalidPath":"Diese Url hat einen ungültigen Pfad!",
             "idNotUnique":"Diese ID ist nicht eindeutig, verwenden Sie stattdessen eine andere ID!",
             "idNonExistent":"Die ID {0} existiert nicht!",
-
+            
             "invalidType":"Diese Eigenschaft muss vom Typ sein: {0}!",
             "propertyMissing":"Die Eigenschaft {0} fehlt in diesem Objekt!",
             "propertyOptional":"Die Eigenschaft {0} ist in diesem Objekt optional!",
@@ -84,12 +94,13 @@
             "nullInvalid":"Diese Eigenschaft kann nicht null sein!",
             "switchInvalidType":"Dies muss einer der folgenden Typen sein: {0}!",
             "objectSwitchInvalid":"Dieses Objekt muss einer der folgenden Typen sein: {0}!",
-
+            
             "invalidLanguage":"Dies ist eine ungültige Sprache!",
             "invalidButton":"Dieser Button muss mindestens eine {0} oder {1} enthalten!",
             "unusedOption":"Die Option {0} wird nirgends verwendet!",
             "unusedQuestion":"Die Frage {0} wird nirgends verwendet!",
-            "dropdownOption":"Ein Panel mit aktiviertem Dropdown kann nur Optionen vom Typ 'Ticket' enthalten!"
+            "dropdownOption":"Ein Panel mit aktiviertem Dropdown kann nur Optionen vom Typ 'Ticket' enthalten!",
+            "customInvalidVersion":"Die in deiner Konfiguration angegebene Version stimmt nicht überein! Stelle sicher, dass du die Konfiguration auf die neueste Version aktualisiert hast!"
         }
     },
     "actions":{
@@ -132,6 +143,7 @@
             "blacklistAddDm":"Zur Blacklist hinzugefügt",
             "blacklistRemoveDm":"Von der Blacklist entfernen",
             "clear":"Freigegebene Tickets",
+            "clearTickets":"Tickets Löschen",
             "roles":"Aktualisierte Rollen",
             
             "autoclose":"Ticket automatisch geschlossen",
@@ -139,7 +151,12 @@
             "autocloseDisabled":"Automatisches schließen Deaktiviert",
             "autodelete":"Ticket automatisch gelöscht",
             "autodeleteEnabled":"Automatisches Löschen Aktiviert",
-            "autodeleteDisabled":"Automatisches Löschen Deaktiviert"
+            "autodeleteDisabled":"Automatisches Löschen Deaktiviert",
+            
+            "topicSet":"Thema Geändert",
+            "prioritySet":"Priorität Geändert",
+            "priorityGet":"Ticket-Priorität",
+            "transfer":"Ticket Übertragen"
         },
         "descriptions":{
             "create":"Ihr Ticket wurde bereits erstellt. Klicken Sie auf die Button unten, um es zu öffnen!",
@@ -154,7 +171,7 @@
             "move":"Das Ticket wurde erfolgreich nach {0} verschoben!",
             "add":"{0} wurde erfolgreich zum Ticket hinzugefügt!",
             "remove":"{0} wurde erfolgreich aus dem Ticket entfernt!",
-
+            
             "helpExplanation":"`<name>` => erforderlicher Parameter\n`[name]` => optionaler Parameter",
             "statsReset":"Die Bot-Statistiken wurden erfolgreich zurückgesetzt!",
             "statsError":"Ticketstatistiken können nicht angezeigt werden!\n{0} ist kein Ticket!",
@@ -167,7 +184,7 @@
             "clearVerify":"Sind Sie sicher, dass Sie mehrere Tickets löschen möchten?\nDiese Aktion kann nicht rückgängig gemacht werden!",
             "clearReady":"{0} Tickets wurden erfolgreich gelöscht!",
             "rolesEmpty":"Es wurden keine Rollen aktualisiert!",
-
+            
             "autocloseLeave":"Dieses Ticket wurde automatisch geschlossen, weil der Ersteller den Server verlassen hat!",
             "autocloseTimeout":"Dieses Ticket wurde automatisch geschlossen, da es seit mehr als `{0}h` inaktiv ist!",
             "autodeleteLeave":"Dieses Ticket wurde automatisch gelöscht, weil der Ersteller den Server verlassen hat!",
@@ -176,11 +193,16 @@
             "autocloseDisabled":"Autoclose wurde für dieses Ticket deaktiviert! Es wird nicht mehr automatisch geschlossen!",
             "autodeleteEnabled":"Automatisches Löschen wurde für dieses Ticket aktiviert! Es wird gelöscht, wenn es länger als `{0} Tage` inaktiv ist!",
             "autodeleteDisabled":"Automatisches Löschen wurde bei diesem Ticket deaktiviert! Es wird nicht mehr automatisch gelöscht!",
-
+            
             "ticketMessageLimit":"Sie können nur {0} Tickets gleichzeitig erstellen!",
             "ticketMessageAutoclose":"Dieses Ticket wird automatisch geschlossen, wenn es {0}h lang inaktiv war!",
             "ticketMessageAutodelete":"Dieses Ticket wird automatisch gelöscht, wenn es {0} Tage lang inaktiv war!",
-            "panelReady":"Sie finden das Panel unten!\nDiese Nachricht kann jetzt gelöscht werden!"
+            "panelReady":"Das Panel ist in der folgenden Nachricht verfügbar!\nDiese Nachricht kann nun gelöscht werden!",
+            
+            "topicSet":"Das Kanalthema wurde erfolgreich von {0} geändert!",
+            "prioritySet":"Die Ticket-Priorität wurde erfolgreich von {1} auf {0} geändert!",
+            "priorityGet":"Die aktuelle Priorität dieses Tickets ist {0}.",
+            "transfer":"Das Ticket wurde erfolgreich von {0} an {1} durch {2} übertragen!"
         },
         "modal":{
             "closePlaceholder":"Warum haben Sie dieses Ticket geschlossen?",
@@ -215,12 +237,19 @@
             "addDm":"{0} wurde zu Ihrem Ticket auf unserem Server hinzugefügt!",
             "removeLog":"{0} wurde von {1} aus diesem Ticket entfernt!",
             "removeDm":"{0} wurde von Ihrem Ticket auf unserem Server entfernt!",
-
+            
             "blacklistAddLog":"{0} wurde von {1} auf die Blacklist gesetzt!",
             "blacklistRemoveLog":"{0} wurde von {1} von der Blacklist entfernt!",
             "blacklistAddDm":"Sie wurden in unserem Server auf die Blacklist gesetzt!\nAb sofort können Sie kein Ticket mehr erstellen!",
             "blacklistRemoveDm":"Sie wurden von der Blacklist unseres Servers entfernt!\n Jetzt können Sie wieder Tickets erstellen!",
-            "clearLog":"{0} Tickets wurden von {1} gelöscht!"
+            "clearLog":"{0} Tickets wurden von {1} gelöscht!",
+            
+            "transferLog":"Das Ticket wurde von {0} an {1} durch {2} übertragen!",
+            "transferDm":"Dein Ticket wurde von {0} an {1} auf unserem Server übertragen!",
+            "prioritySetLog":"Die Priorität dieses Tickets wurde von {1} auf {0} geändert!",
+            "prioritySetDm":"Die Priorität deines Tickets wurde auf unserem Server auf {0} geändert!",
+            "roleUpdateLog":"{0} hat seine Rollen aktualisiert!",
+            "roleUpdateDm":"Deine Rollen auf unserem Server wurden aktualisiert!"
         }
     },
     "transcripts":{
@@ -229,7 +258,7 @@
             "ready":"Transkript erstellt",
             "textFileDescription":"Dies ist die Textabschrift eines gelöschten Tickets!",
             "htmlProgress":"Bitte warten Sie, während dieses html-Transkript verarbeitet wird...",
-
+            
             "createdChannel":"Ein neues {0} Transkript wurde auf dem Server erstellt!",
             "createdCreator":"Es wurde ein neues {0} Transkript für eines Ihrer Tickets erstellt!",
             "createdParticipant":"In einem der Tickets, an denen Sie teilgenommen haben, wurde ein neues {0} Transkript erstellt!",
@@ -241,7 +270,19 @@
             "retry":"Erneut versuchen",
             "continue":"Löschen ohne Transkript",
             "backup":"Sicherungstranskript erstellen",
-            "error":"Beim Versuch, das Transkript zu erstellen, ist etwas schief gelaufen.\nWas möchten Sie tun?\n\nDieses Ticket wird erst gelöscht, wenn Sie auf eine der folgenden Buttons klicken."
+            "error":"Beim Versuch, das Transkript zu erstellen, ist etwas schief gelaufen.\nWas möchten Sie tun?\n\nDieses Ticket wird erst gelöscht, wenn Sie auf eine der folgenden Buttons klicken.",
+            "title":"Transkript-Fehler"
+        },
+        "text":{
+            "messagesTitle":"NACHRICHTEN",
+            "embedTitle":"EMBED",
+            "fileTitle":"DATEI",
+            "fieldsTitle":"FELDER",
+            "reactionsTitle":"REAKTIONEN",
+            "statsTitle":"STATISTIKEN",
+            "emptyContent":"<Inhalt ist leer>",
+            "noTitle":"<kein Titel>",
+            "noDesc":"<keine Beschreibung>"
         }
     },
     "errors":{
@@ -257,7 +298,8 @@
             "unknownPanel":"Unbekanntes Panel",
             "notInGuild":"Nicht auf dem Server",
             "channelRename":"Kanal kann nicht umbenannt werden",
-            "busy":"Ticket ist besetzt"
+            "busy":"Ticket ist besetzt",
+            "permissionError":"Berechtigungsfehler"
         },
         "descriptions":{
             "askForInfo":"Kontaktieren Sie den Besitzer dieses Bots für weitere Informationen!",
@@ -280,7 +322,10 @@
             "notInGuild":"{0} funktioniert nicht in DM! Bitte versuchen Sie es erneut auf einem Server!",
             "channelRename":"Aufgrund von Discord-Ratelimits ist es dem Bot derzeit nicht möglich, den Channel umzubenennen. Der Channel wird nach 10 Minuten automatisch umbenannt, wenn der Bot nicht neu gestartet wird.",
             "channelRenameSource":"Die Quelle dieses Fehlers ist: {0}",
-            "busy":"{0} kann nicht verwendet werden!\nDas Ticket wird derzeit vom Bot bearbeitet.\n\nBitte versuchen Sie es in ein paar Sekunden erneut!"
+            "busy":"{0} kann nicht verwendet werden!\nDas Ticket wird derzeit vom Bot bearbeitet.\n\nBitte versuchen Sie es in ein paar Sekunden erneut!",
+            "closeBeforeMessage":"Dieses Ticket kann nicht geschlossen/gelöscht werden, bevor eine Nachricht von einem Benutzer gesendet wurde.",
+            "closeBeforeAdminMessage":"Dieses Ticket kann nicht geschlossen/gelöscht werden, bevor eine Nachricht von einem Ticket-Admin oder Support-Mitglied gesendet wurde.",
+            "unableToCreateTicket":"Du kannst kein Ticket erstellen."
         },
         "optionInvalidReasons":{
             "stringRegex":"Wert stimmt nicht mit Muster überein!",
@@ -331,7 +376,6 @@
             "added":"Hinzugefügt",
             "removed":"Entfernt",
             "filter":"Filter",
-            "claimedBy":"Beansprucht von {0}",
             "method":"Methode",
             "type":"Typ",
             "blacklisted":"Gesperrt",
@@ -355,7 +399,27 @@
             "status":"Status",
             "claimed":"Beansprucht",
             "pinned":"Angepinnt",
-            "creationDate":"Erstellungsdatum"
+            "creationDate":"Erstellungsdatum",
+            
+            "noone":"Niemand",
+            "open":"Offen",
+            "closed":"Geschlossen",
+            "priority":"Priorität",
+            "participants":"Teilnehmer",
+            "yes":"Ja",
+            "no":"Nein",
+            "option":"Option",
+            "topic":"Thema",
+            "uptime":"System-Laufzeit",
+            "messages":"Nachrichten",
+            "embeds":"Embeds",
+            "files":"Dateien",
+            "components":"Komponenten",
+            "cooldown":"Cooldown",
+            "maxTickets":"Max. Tickets",
+            "admins":"Admins",
+            "roles":"Rollen",
+            "size":"Größe"
         },
         "lowercase":{
             "text":"text",
@@ -384,6 +448,7 @@
         "unclaim":"Beanspruchen Sie ein Ticket zurück.",
         "pin":"Pinne ein Ticket an.",
         "unpin":"Pinne ein Ticket ab.",
+        
         "move":"Verschieben Sie ein Ticket.",
         "moveId":"Die Kennung der Option.",
         "rename":"Ein Ticket umbenennen.",
@@ -392,6 +457,7 @@
         "addUser":"Der hinzuzufügende Benutzer.",
         "remove":"Entfernen Sie einen Benutzer aus einem Ticket.",
         "removeUser":"Der zu entfernende Benutzer.",
+        
         "blacklist":"Verwalten Sie die Blacklist für Tickets.",
         "blacklistView":"Zeigen Sie eine Liste der aktuellen Blacklist an.",
         "blacklistAdd":"Hinzufügen eines Benutzers zur Blacklist.",
@@ -405,6 +471,7 @@
         "statsUserUser":"Der zu betrachtende Benutzer.",
         "statsTicket":"Anzeigen der Statistiken eines Tickets auf dem Server.",
         "statsTicketTicket":"Das Ticket zur Betrachtung.",
+        
         "clear":"Mehrere Tickets gleichzeitig löschen. Optional kann ein Filter angegeben werden.",
         "clearFilter":"Der Filter zum Löschen von Tickets.",
         "clearFilters":{
@@ -417,6 +484,7 @@
             "unpin":"nicht Angepinnte",
             "autoclose":"Autoclosed"
         },
+        
         "autoclose":"Verwalten Sie die automatische Schließung in einem Ticket.",
         "autocloseDisable":"Deaktivieren Sie das automatische Schließen in diesem Ticket.",
         "autocloseEnable":"Aktivieren Sie das automatische Schließen in diesem Ticket.",
@@ -424,7 +492,19 @@
         "autodelete":"Verwalten Sie die automatische Löschung in einem Ticket.",
         "autodeleteDisable":"Deaktivieren Sie das automatische Löschen in diesem Ticket.",
         "autodeleteEnable":"Aktivieren Sie das automatische Löschen in diesem Ticket.",
-        "autodeleteEnableTime":"Die Anzahl der Tage, die das Ticket inaktiv sein muss, um es zu löschen."
+        "autodeleteEnableTime":"Die Anzahl der Tage, die das Ticket inaktiv sein muss, um es zu löschen.",
+        
+        "topic":"Verwalte das Thema des Ticket-Kanals.",
+        "topicSet":"Setze das Thema des Ticket-Kanals.",
+        "topicValue":"Das neue Thema des Kanals.",
+        "topicList":"Zeige eine Liste aller Tickets mit ihrem Thema und Statistiken an.",
+        "priority":"Verwalte die Priorität des Tickets.",
+        "prioritySet":"Setze die Priorität des Tickets.",
+        "priorityValue":"Die Priorität des Kanals.",
+        "priorityGet":"Zeige die Priorität des Tickets an.",
+        "priorityList":"Zeige eine Liste aller Tickets mit ihrem Prioritätsstatus an.",
+        "transfer":"Übertrage das Ticket von einem Benutzer an einen anderen.",
+        "transferUser":"Der Benutzer, an den übertragen werden soll."
     },
     "helpMenu":{
         "help":"Erhalten Sie eine Liste mit allen verfügbaren Befehlen.",
@@ -452,7 +532,16 @@
         "autocloseDisable":"Deaktivieren Sie das automatische Schließen in diesem Ticket.",
         "autocloseEnable":"Aktivieren Sie das automatische Schließen in diesem Ticket.",
         "autodeleteDisable":"Deaktivieren Sie das automatische Löschen in diesem Ticket.",
-        "autodeleteEnable":"Aktivieren Sie das automatische Löschen in diesem Ticket."
+        "autodeleteEnable":"Aktivieren Sie das automatische Löschen in diesem Ticket.",
+        "categories":{
+            "general":"Allgemeine Befehle",
+            "basicTicket":"Basis-Ticket-Befehle",
+            "advancedTicket":"Erweiterte Ticket-Befehle",
+            "userTicket":"Benutzer-Ticket-Befehle",
+            "admin":"Admin-Befehle",
+            "advanced":"Erweiterte Befehle",
+            "extra":"Extra-Befehle"
+        }
     },
     "stats":{
         "scopes":{
@@ -460,7 +549,8 @@
             "system":"System-Statistiken",
             "user":"Benutzer-Statistiken",
             "ticket":"Ticket-Statistiken",
-            "participants":"Teilnehmer"
+            "participants":"Teilnehmer",
+            "messages":"Nachrichten"
         },
         "properties":{
             "ticketsCreated":"Tickets erstellt",
@@ -472,7 +562,47 @@
             "ticketsPinned":"Tickets angepinnt",
             "ticketsMoved":"Tickets verschoben",
             "usersBlacklisted":"Nutzer auf der Blacklist",
-            "transcriptsCreated":"Transcripts erstellt"
+            "transcriptsCreated":"Transcripts erstellt",
+            "ticketsAutodeleted":"Automatisch gelöschte Tickets",
+            "ticketsTransferred":"Übertragene Tickets",
+            "ticketVolume":"Ticket-Volumen",
+            "averageTickets":"Durchschnittliche Tickets/Benutzer",
+            "currentTickets":"Aktuelle Tickets",
+            "age":"Ticket-Alter",
+            "responseTime":"Antwortzeit",
+            "resolutionTime":"Lösungszeit",
+            "createdOn":"Erstellt am",
+            "createdBy":"Erstellt von",
+            "closedOn":"Geschlossen am",
+            "closedBy":"Geschlossen von",
+            "claimedOn":"Angenommen am",
+            "claimedBy":"Angenommen von",
+            "pinnedOn":"Angepinnt am",
+            "pinnedBy":"Angepinnt von",
+            "deletedOn":"Gelöscht am",
+            "deletedBy":"Gelöscht von"
+        },
+        "roles":{
+            "developer":"Entwickler",
+            "serverOwner":"Server-Besitzer",
+            "serverAdmin":"Server-Administrator",
+            "moderator":"Moderatoren-Team",
+            "support":"Support-Team",
+            "member":"Mitglied"
         }
+    },
+    "panel":{
+        "selectTicket":"Wähle dein Ticket",
+        "selectRole":"Wähle deine Rolle",
+        "selectOption":"Wähle deine Option"
+    },
+    "priorities":{
+        "urgent":"Dringend",
+        "veryHigh":"Sehr Hoch",
+        "high":"Hoch",
+        "normal":"Normal",
+        "low":"Niedrig",
+        "veryLow":"Sehr Niedrig",
+        "none":"Keine"
     }
 }

@@ -1,6 +1,8 @@
-> ### 🎥 Content Creators
-> Hey there! We're searching for content creators that would like to create a tutorial or setup guide for Open Ticket!<br>
-> [📌 More Information](.github/CONTENT_CREATORS.md)
+> ### 📌 Open Ticket Quick Links
+> - [⏱️ Quick Setup](#️-quick-setup-using-cli)
+> - [📔 Documentation](https://otdocs.dj-dj.be)
+> - [🧩 Available Plugins](#-plugins)
+> - [📞 Discord Server](https://discord.dj-dj.be)
 ---
 
 <p align="center">
@@ -8,7 +10,7 @@
 <br>Powered By<br>
 <img src="https://apis.dj-dj.be/cdn/opendiscord/logo.png" alt="Open Ticket" width="170px"><br>
 <a href="https://discord.com/invite/26vT9wt3n3"><img alt="Discord Invite Link" src="https://img.shields.io/badge/discord-support%20server-5865F2.svg?style=flat-square&logo=discord"></img></a>
-<a href="https://github.com/open-discord-bots/open-ticket/releases/tag/v4.1.1"><img alt="Open Ticket Version" src="https://img.shields.io/badge/version-4.1.1-brightgreen.svg?style=flat-square"></img></a>
+<a href="https://github.com/open-discord-bots/open-ticket/releases/tag/v4.1.2"><img alt="Open Ticket Version" src="https://img.shields.io/badge/version-4.1.2-brightgreen.svg?style=flat-square"></img></a>
 <a href="https://otdocs.dj-dj.be"><img alt="Open Ticket Documentation" src="https://img.shields.io/badge/discord.js-v14-CB3837.svg?style=flat-square&logo=npm"></img></a>
 <a href="https://github.com/open-discord-bots/open-ticket/blob/main/LICENSE"><img alt="Open Ticket License" src="https://img.shields.io/badge/license-GPL%203.0-important.svg?style=flat-square"></img></a>
 <a href="https://otdocs.dj-dj.be"><img alt="Open Ticket Stars" src="https://img.shields.io/github/stars/djj123dj/open-ticket?color=yellow&label=stars&logo=github&style=flat-square"></img></a>
@@ -71,9 +73,11 @@ A big thanks to all our sponsors! Without them, it wouldn't be possible to creat
 <table>
 <tr>
 <td><img src="https://github.com/guillee3.png" alt="Profile Picture" width="100px"></td>
+<td><img src="https://github.com/yeeetSK.png" alt="Profile Picture" width="100px"></td>
 </tr>
 <tr>
 <td align="center"><a href="https://github.com/guillee3"><b>guillee3</b></a></td>
+<td align="center"><a href="https://github.com/yeeetSK"><b>yeeetSK</b></a></td>
 </tr>
 </table>
 
@@ -144,7 +148,7 @@ With the amazing support of our translators, we've been able to translate Open T
 |🟢   |❓ Catalan            |guillee3                       |
 |🟢   |🇮🇩 Indonesian         |erxg                           |
 |🟢   |🇮🇳 Hindi              |challenger_nova                |
-|🟢⏳ |🇩🇪 German             |benzorich                      |
+|🟢   |🇩🇪 German             |benzorich                      |
 |🟢⏳ |🇪🇸 Spanish            |redactado & josuens            |
 |🟢⏳ |🇫🇷 French             |guillee.3                      |
 |🟢⏳ |🇵🇹 Portuguese         |quiradon                       |
@@ -254,4 +258,4 @@ This will help us grow and reach even more people!
 **README.md**<br>
 [Changelog](https://otgithub.dj-dj.be/releases) - [Documentation](https://otdocs.dj-dj.be) - [Website](https://openticket.dj-dj.be) - [Support Server](https://discord.dj-dj.be) - [License](./LICENSE.md)<br>
 
-© 2025 - [DJdj Development](https://www.dj-dj.be) - [Terms](https://www.dj-dj.be/terms) - [Privacy Policy](https://www.dj-dj.be/privacy) - [Support Us](https://github.com/sponsors/DJj123dj)
+© 2021 - 2026 - [DJdj Development](https://www.dj-dj.be) - [Terms](https://www.dj-dj.be/terms) - [Privacy Policy](https://www.dj-dj.be/privacy) - [Support Us](https://github.com/sponsors/DJj123dj)

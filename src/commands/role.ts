@@ -12,13 +12,14 @@ export const registerButtonResponders = async () => {
     opendiscord.responders.buttons.get("opendiscord:role-option").workers.add(
         new api.ODWorker("opendiscord:role-option",0,async (instance,params,source,cancel) => {
             const {guild,channel,user} = instance
+            
+            //check is in guild/server
             if (!guild){
-                //error
                 instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-not-in-guild").build(source,{channel:instance.channel,user:instance.user}))
                 return cancel()
             }
 
-            //get option
+            //get option data
             const optionId = instance.interaction.customId.split("_")[2]
             const option = opendiscord.options.get(optionId)
             if (!option || !(option instanceof api.ODRoleOption)){

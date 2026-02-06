@@ -1,6 +1,6 @@
 <!-- omit from toc -->
 # Open Ticket (License)
-© 2025 - DJj123dj & Contributors
+© 2021 - 2026 - DJj123dj & Contributors
 
 #### Table Of Contents
 - [General License](#general-license)

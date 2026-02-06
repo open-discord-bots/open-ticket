@@ -7,52 +7,46 @@ import * as discord from "discord.js"
 const generalConfig = opendiscord.configs.get("opendiscord:general")
 const lang = opendiscord.languages
 
+async function checkTicketCreationPerms(instance:api.ODButtonResponderInstance|api.ODDropdownResponderInstance|api.ODModalResponderInstance|api.ODCommandResponderInstance,source:api.ODActionManagerIds_Default["opendiscord:create-ticket-permissions"]["source"],guild:discord.Guild,user:discord.User,option:api.ODTicketOption){
+    //check ticket permissions
+    const permsRes = await opendiscord.actions.get("opendiscord:create-ticket-permissions").run(source,{guild,user,option})
+    if (!permsRes.valid && instance.channel){
+        //error
+        const newSource = (source === "slash" || source === "text") ? source : "other"
+        if (permsRes.reason == "blacklist") instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-no-permissions-blacklisted").build(newSource,{guild:instance.guild,channel:instance.channel,user:instance.user}))
+        else if (permsRes.reason == "cooldown") instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-no-permissions-cooldown").build(newSource,{guild:instance.guild,channel:instance.channel,user:instance.user,until:permsRes.cooldownUntil}))
+        else if (permsRes.reason == "global-limit") instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-no-permissions-limits").build(newSource,{guild:instance.guild,channel:instance.channel,user:instance.user,limit:"global"}))
+        else if (permsRes.reason == "global-user-limit") instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-no-permissions-limits").build(newSource,{guild:instance.guild,channel:instance.channel,user:instance.user,limit:"global-user"}))
+        else if (permsRes.reason == "option-limit") instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-no-permissions-limits").build(newSource,{guild:instance.guild,channel:instance.channel,user:instance.user,limit:"option"}))
+        else if (permsRes.reason == "option-user-limit") instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-no-permissions-limits").build(newSource,{guild:instance.guild,channel:instance.channel,user:instance.user,limit:"option-user"}))
+        else if (permsRes.reason == "custom") instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error").build(newSource,{guild:instance.guild,channel:instance.channel,user:instance.user,layout:"simple",error:permsRes.customReason ?? lang.getTranslation("errors.descriptions.unableToCreateTicket")+" `Unknown invalid_permission_reason => no reason specified by plugin`",customTitle:lang.getTranslation("errors.titles.permissionError")}))
+        else instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error").build(newSource,{guild:instance.guild,channel:instance.channel,user:instance.user,error:"Unknown invalid_permission reason => calculation failed #1",layout:"advanced"}))
+        return false
+    }else return true
+}
+
 export const registerCommandResponders = async () => {
     //TICKET COMMAND RESPONDER
     opendiscord.responders.commands.add(new api.ODCommandResponder("opendiscord:ticket",generalConfig.data.prefix,/^ticket/))
     opendiscord.responders.commands.get("opendiscord:ticket").workers.add([
-        new api.ODWorker("opendiscord:permissions",1,async (instance,params,source,cancel) => {
-            const permissionMode = generalConfig.data.system.permissions.ticket
-            
-            if (permissionMode == "none"){
-                //no permissions
-                instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-no-permissions").build("button",{guild:instance.guild,channel:instance.channel,user:instance.user,permissions:[]}))
-                return cancel()
-            }else if (permissionMode == "everyone") return
-            else if (permissionMode == "admin"){
-                if (!opendiscord.permissions.hasPermissions("support",await opendiscord.permissions.getPermissions(instance.user,instance.channel,instance.guild))){
-                    //no permissions
-                    instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-no-permissions").build(source,{guild:instance.guild,channel:instance.channel,user:instance.user,permissions:["support"]}))
-                    return cancel()
-                }else return
-            }else{
-                if (!instance.guild || !instance.member){
-                    //error
-                    instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error").build(source,{guild:instance.guild,channel:instance.channel,user:instance.user,error:"Permission Error: Not in Server #1",layout:"advanced"}))
-                    return cancel()
-                }
-                const role = await opendiscord.client.fetchGuildRole(instance.guild,permissionMode)
-                if (!role){
-                    //error
-                    instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error").build(source,{guild:instance.guild,channel:instance.channel,user:instance.user,error:"Permission Error: Not in Server #2",layout:"advanced"}))
-                    return cancel()
-                }
-                if (!role.members.has(instance.member.id)){
-                    //no permissions
-                    instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-no-permissions").build(source,{guild:instance.guild,channel:instance.channel,user:instance.user,permissions:[]}))
-                    return cancel()
-                }else return
-            }
-        }),
         new api.ODWorker("opendiscord:ticket",0,async (instance,params,source,cancel) => {
-            const {guild,channel,user} = instance
+            const {user,member,channel,guild} = instance
+                        
+            //check permissions
+            const permsResult = await opendiscord.permissions.checkCommandPerms(generalConfig.data.system.permissions.ticket,"support",user,member,channel,guild)
+            if (!permsResult.hasPerms){
+                if (permsResult.reason == "not-in-server") await instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-not-in-guild").build("button",{channel,user}))
+                else await instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-no-permissions").build(source,{guild,channel,user,permissions:["support"]}))
+                return cancel()
+            }
+
+            //check is in guild/server
             if (!guild){
-                //error
                 instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-not-in-guild").build(source,{channel:instance.channel,user:instance.user}))
                 return cancel()
             }
 
-            //get option
+            //get option data
             const optionId = instance.options.getString("id",true)
             const option = opendiscord.options.get(optionId)
             if (!option || !(option instanceof api.ODTicketOption)){
@@ -62,19 +56,7 @@ export const registerCommandResponders = async () => {
             }
 
             //check ticket permissions
-            const res = await opendiscord.actions.get("opendiscord:create-ticket-permissions").run(source,{guild,user,option})
-            if (!res.valid){
-                //error
-                if (res.reason == "blacklist") instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-no-permissions-blacklisted").build(source,{guild:instance.guild,channel:instance.channel,user:instance.user}))
-                else if (res.reason == "cooldown") instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-no-permissions-cooldown").build(source,{guild:instance.guild,channel:instance.channel,user:instance.user,until:res.cooldownUntil}))
-                else if (res.reason == "global-limit") instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-no-permissions-limits").build(source,{guild:instance.guild,channel:instance.channel,user:instance.user,limit:"global"}))
-                else if (res.reason == "global-user-limit") instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-no-permissions-limits").build(source,{guild:instance.guild,channel:instance.channel,user:instance.user,limit:"global-user"}))
-                else if (res.reason == "option-limit") instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-no-permissions-limits").build(source,{guild:instance.guild,channel:instance.channel,user:instance.user,limit:"option"}))
-                else if (res.reason == "option-user-limit") instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-no-permissions-limits").build(source,{guild:instance.guild,channel:instance.channel,user:instance.user,limit:"option-user"}))
-                else if (res.reason == "custom") instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error").build(source,{guild:instance.guild,channel:instance.channel,user:instance.user,layout:"simple",error:res.customReason ?? lang.getTranslation("errors.descriptions.unableToCreateTicket")+" `Unknown invalid_permission_reason => no reason specified by plugin`",customTitle:lang.getTranslation("errors.titles.permissionError")}))
-                else instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error").build(source,{guild:instance.guild,channel:instance.channel,user:instance.user,error:"Unknown invalid_permission reason => calculation failed #1",layout:"advanced"}))
-                return cancel()
-            }
+            if (!(await checkTicketCreationPerms(instance,source,guild,user,option))) return cancel()
 
             //start ticket creation
             if (option.exists("opendiscord:questions") && option.get("opendiscord:questions").value.length > 0){
@@ -125,19 +107,7 @@ export const registerButtonResponders = async () => {
             }
 
             //check ticket permissions
-            const res = await opendiscord.actions.get("opendiscord:create-ticket-permissions").run("panel-button",{guild,user,option})
-            if (!res.valid){
-                //error
-                if (res.reason == "blacklist") instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-no-permissions-blacklisted").build(source,{guild:instance.guild,channel:instance.channel,user:instance.user}))
-                else if (res.reason == "cooldown") instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-no-permissions-cooldown").build(source,{guild:instance.guild,channel:instance.channel,user:instance.user,until:res.cooldownUntil}))
-                else if (res.reason == "global-limit") instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-no-permissions-limits").build(source,{guild:instance.guild,channel:instance.channel,user:instance.user,limit:"global"}))
-                else if (res.reason == "global-user-limit") instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-no-permissions-limits").build(source,{guild:instance.guild,channel:instance.channel,user:instance.user,limit:"global-user"}))
-                else if (res.reason == "option-limit") instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-no-permissions-limits").build(source,{guild:instance.guild,channel:instance.channel,user:instance.user,limit:"option"}))
-                else if (res.reason == "option-user-limit") instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-no-permissions-limits").build(source,{guild:instance.guild,channel:instance.channel,user:instance.user,limit:"option-user"}))
-                else if (res.reason == "custom") instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error").build(source,{guild:instance.guild,channel:instance.channel,user:instance.user,layout:"simple",error:res.customReason ?? lang.getTranslation("errors.descriptions.unableToCreateTicket")+" `Unknown invalid_permission_reason => no reason specified by plugin`",customTitle:lang.getTranslation("errors.titles.permissionError")}))
-                else instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error").build(source,{guild:instance.guild,channel:instance.channel,user:instance.user,error:"Unknown invalid_permission reason => calculation failed #1",layout:"advanced"}))
-                return cancel()
-            }
+            if (!(await checkTicketCreationPerms(instance,"panel-button",guild,user,option))) return cancel()
 
             //start ticket creation
             if (option.exists("opendiscord:questions") && option.get("opendiscord:questions").value.length > 0){
@@ -181,19 +151,7 @@ export const registerDropdownResponders = async () => {
             }
 
             //check ticket permissions
-            const res = await opendiscord.actions.get("opendiscord:create-ticket-permissions").run("panel-dropdown",{guild,user,option})
-            if (!res.valid){
-                //error
-                if (res.reason == "blacklist") instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-no-permissions-blacklisted").build(source,{guild:instance.guild,channel:instance.channel,user:instance.user}))
-                else if (res.reason == "cooldown") instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-no-permissions-cooldown").build(source,{guild:instance.guild,channel:instance.channel,user:instance.user,until:res.cooldownUntil}))
-                else if (res.reason == "global-limit") instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-no-permissions-limits").build(source,{guild:instance.guild,channel:instance.channel,user:instance.user,limit:"global"}))
-                else if (res.reason == "global-user-limit") instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-no-permissions-limits").build(source,{guild:instance.guild,channel:instance.channel,user:instance.user,limit:"global-user"}))
-                else if (res.reason == "option-limit") instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-no-permissions-limits").build(source,{guild:instance.guild,channel:instance.channel,user:instance.user,limit:"option"}))
-                else if (res.reason == "option-user-limit") instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-no-permissions-limits").build(source,{guild:instance.guild,channel:instance.channel,user:instance.user,limit:"option-user"}))
-                else if (res.reason == "custom") instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error").build(source,{guild:instance.guild,channel:instance.channel,user:instance.user,layout:"simple",error:res.customReason ?? lang.getTranslation("errors.descriptions.unableToCreateTicket")+" `Unknown invalid_permission_reason => no reason specified by plugin`",customTitle:lang.getTranslation("errors.titles.permissionError")}))
-                else instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error").build(source,{guild:instance.guild,channel:instance.channel,user:instance.user,error:"Unknown invalid_permission reason => calculation failed #1",layout:"advanced"}))
-                return cancel()
-            }
+            if (!(await checkTicketCreationPerms(instance,"panel-dropdown",guild,user,option))) return cancel()
 
             //start ticket creation
             if (option.exists("opendiscord:questions") && option.get("opendiscord:questions").value.length > 0){
@@ -229,6 +187,7 @@ export const registerModalResponders = async () => {
     opendiscord.responders.modals.get("opendiscord:ticket-questions").workers.add([
         new api.ODWorker("opendiscord:ticket-questions",0,async (instance,params,source,cancel) => {
             const {guild,channel,user} = instance
+            await instance.defer((generalConfig.data.system.replyOnTicketCreation) ? "reply" : "update",true)
             if (!channel) throw new api.ODSystemError("The 'Ticket Questions' modal requires a channel for responding!")
             if (!guild){
                 //error
@@ -270,8 +229,6 @@ export const registerModalResponders = async () => {
             })
 
             //create ticket
-            await instance.defer((generalConfig.data.system.replyOnTicketCreation) ? "reply" : "update",true)
-            
             const res = await opendiscord.actions.get("opendiscord:create-ticket").run(originalSource,{guild,user,answers,option})
             if (!res.channel || !res.ticket){
                 //error

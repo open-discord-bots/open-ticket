@@ -4,6 +4,7 @@
 import { ODId, ODValidId, ODManager, ODSystemError, ODManagerData } from "./base"
 import * as discord from "discord.js"
 import { ODDebugger } from "./console"
+import { ODClientManager } from "./client"
 
 /**## ODPermissionType `type`
  * All available permission types/levels. Can be used in the `ODPermission` class.
@@ -100,6 +101,20 @@ export interface ODPermissionSettings {
  */
 export type ODPermissionCalculationCallback = (user:discord.User, channel?:discord.Channel|null, guild?:discord.Guild|null, settings?:ODPermissionSettings|null) => Promise<ODPermissionResult>
 
+/**## ODPermissionCommandResult `type`
+ * The result of calculating permissions for a command.
+ */
+export type ODPermissionCommandResult = {
+    /**Returns `true` when the user has valid permissions. */
+    hasPerms:false,
+    reason:"no-perms"|"disabled"|"not-in-server"
+}|{
+    /**Returns `true` when the user has valid permissions. */
+    hasPerms:true,
+    /**Is the user a server admin or a normal member? This does not decide if the user has permissions or not. */
+    isAdmin:boolean
+}
+
 /**## ODPermissionManager `class`
  * This is an Open Ticket permission manager.
  * 
@@ -109,8 +124,12 @@ export type ODPermissionCalculationCallback = (user:discord.User, channel?:disco
  * Add new permissions using the `ODPermission` class in your plugin!
  */
 export class ODPermissionManager extends ODManager<ODPermission> {
+    /**Alias for Open Ticket debugger. */
+    #debug: ODDebugger
     /**The function for calculating permissions in this manager. */
     #calculation: ODPermissionCalculationCallback|null
+    /**An alias to the Open Discord client manager. */
+    #client: ODClientManager
     /**The result which is returned when no other permissions match. (`member` by default) */
     defaultResult: ODPermissionResult = {
         level:ODPermissionLevel["member"],
@@ -119,9 +138,11 @@ export class ODPermissionManager extends ODManager<ODPermission> {
         source:null
     }
 
-    constructor(debug:ODDebugger, useDefaultCalculation?:boolean){
+    constructor(debug:ODDebugger, client:ODClientManager, useDefaultCalculation?:boolean){
         super(debug,"permission")
+        this.#debug = debug
         this.#calculation = useDefaultCalculation ? this.#defaultCalculation : null
+        this.#client = client
     }
 
     /**Edit the permission calculation function in this manager. */
@@ -193,7 +214,7 @@ export class ODPermissionManager extends ODManager<ODPermission> {
         //check for global role permissions
         if (allowGlobalRoleScope){
             if (guild){
-                const member = await guild.members.fetch(user.id)
+                const member = await this.#client.fetchGuildMember(guild,user.id)
                 if (member){
                     const memberRoles = member.roles.cache.map((role) => role.id)
                     const roles = this.getFiltered((permission) => (!idRegex || (idRegex && idRegex.test(permission.id.value))) && permission.scope == "global-role" && (permission.value instanceof discord.Role) && memberRoles.includes(permission.value.id) && permission.value.guild.id == guild.id)
@@ -256,7 +277,7 @@ export class ODPermissionManager extends ODManager<ODPermission> {
             
             //check for channel role permissions
             if (allowChannelRoleScope){
-                const member = await guild.members.fetch(user.id)
+                const member = await this.#client.fetchGuildMember(guild,user.id)
                 if (member){
                     const memberRoles = member.roles.cache.map((role) => role.id)
                     const roles = this.getFiltered((permission) => (!idRegex || (idRegex && idRegex.test(permission.id.value))) && permission.scope == "channel-role" && permission.channel && (permission.channel.id == channel.id) && (permission.value instanceof discord.Role) && memberRoles.includes(permission.value.id) && permission.value.guild.id == guild.id)
@@ -285,5 +306,35 @@ export class ODPermissionManager extends ODManager<ODPermission> {
 
         //spread result to prevent accidental modification because of referencing
         return {...this.defaultResult}
+    }
+
+    /**Check the permissions for a certain command of the bot. */
+    async checkCommandPerms(permissionMode:string,requiredLevel:ODPermissionType,user:discord.User,member?:discord.GuildMember|null,channel?:discord.Channel|null,guild?:discord.Guild|null,settings?:ODPermissionSettings): Promise<ODPermissionCommandResult> {
+        if (permissionMode === "none"){
+            return {hasPerms:false,reason:"disabled"}
+
+        }else if (permissionMode === "everyone"){
+            const isAdmin = this.hasPermissions(requiredLevel,await this.getPermissions(user,channel,guild,settings))
+            return {hasPerms:true,isAdmin}
+
+        }else if (permissionMode === "admin"){
+            const isAdmin = this.hasPermissions(requiredLevel,await this.getPermissions(user,channel,guild,settings))
+            if (!isAdmin) return {hasPerms:false,reason:"no-perms"}
+            else return {hasPerms:true,isAdmin}
+        }else{
+            if (!guild || !member){
+                this.#debug.debug("ODPermissionManager.checkCommandPerms(): Permission Error, Not in server! (#1)")
+                return {hasPerms:false,reason:"not-in-server"}
+            }
+            const role = await this.#client.fetchGuildRole(guild,permissionMode)
+            if (!role){
+                this.#debug.debug("ODPermissionManager.checkCommandPerms(): Permission Error, Not in server! (#2)")
+                return {hasPerms:false,reason:"not-in-server"}
+            }
+            if (!role.members.has(member.id)) return {hasPerms:false,reason:"no-perms"}
+
+            const isAdmin = this.hasPermissions(requiredLevel,await this.getPermissions(user,channel,guild,settings))
+            return {hasPerms:true,isAdmin}
+        }
     }
 }
