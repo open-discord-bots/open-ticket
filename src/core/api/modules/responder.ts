@@ -426,7 +426,8 @@ export class ODCommandResponderInstance {
     /**Show a modal as reply to this command. */
     async modal(modal:ODModalBuildResult){
         if (this.type != "interaction" || !(this.interaction instanceof discord.ChatInputCommandInteraction)) return false
-        this.interaction.showModal(modal.modal)
+        if (this.interaction.deferred || this.interaction.replied) return false
+        await this.interaction.showModal(modal.modal)
         this.didReply = true
         return true
     }
@@ -601,7 +602,8 @@ export class ODButtonResponderInstance {
     }
     /**Show a modal as reply to this button. */
     async modal(modal:ODModalBuildResult){
-        this.interaction.showModal(modal.modal)
+        if (this.interaction.deferred || this.interaction.replied) return false
+        await this.interaction.showModal(modal.modal)
         this.didReply = true
         return true
     }
@@ -889,7 +891,8 @@ export class ODDropdownResponderInstance {
     }
     /**Show a modal as reply to this dropdown. */
     async modal(modal:ODModalBuildResult){
-        this.interaction.showModal(modal.modal)
+        if (this.interaction.deferred || this.interaction.replied) return false
+        await this.interaction.showModal(modal.modal)
         this.didReply = true
         return true
     }
@@ -1261,7 +1264,8 @@ export class ODContextMenuResponderInstance {
     }
     /**Show a modal as reply to this context menu. */
     async modal(modal:ODModalBuildResult){
-        this.interaction.showModal(modal.modal)
+        if (this.interaction.deferred || this.interaction.replied) return false
+        await this.interaction.showModal(modal.modal)
         this.didReply = true
         return true
     }

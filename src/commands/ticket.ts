@@ -56,7 +56,7 @@ export const registerCommandResponders = async () => {
             }
 
             //check ticket permissions
-            if (!checkTicketCreationPerms(instance,source,guild,user,option)) return cancel()
+            if (!(await checkTicketCreationPerms(instance,source,guild,user,option))) return cancel()
 
             //start ticket creation
             if (option.exists("opendiscord:questions") && option.get("opendiscord:questions").value.length > 0){
@@ -107,7 +107,7 @@ export const registerButtonResponders = async () => {
             }
 
             //check ticket permissions
-            if (!checkTicketCreationPerms(instance,"panel-button",guild,user,option)) return cancel()
+            if (!(await checkTicketCreationPerms(instance,"panel-button",guild,user,option))) return cancel()
 
             //start ticket creation
             if (option.exists("opendiscord:questions") && option.get("opendiscord:questions").value.length > 0){
@@ -151,7 +151,7 @@ export const registerDropdownResponders = async () => {
             }
 
             //check ticket permissions
-            if (!checkTicketCreationPerms(instance,"panel-dropdown",guild,user,option)) return cancel()
+            if (!(await checkTicketCreationPerms(instance,"panel-dropdown",guild,user,option))) return cancel()
 
             //start ticket creation
             if (option.exists("opendiscord:questions") && option.get("opendiscord:questions").value.length > 0){
