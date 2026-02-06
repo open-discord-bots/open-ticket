@@ -1389,7 +1389,7 @@ export class ODAutocompleteResponderInstance {
             else return raw
         })
 
-        const filteredChoices = newChoices.filter((choice) => choice.name.startsWith(this.target.value) || choice.value.toString().startsWith(this.target.value))
+        const filteredChoices = newChoices.filter((choice) => choice.name.startsWith(this.target.value) || choice.value.toString().startsWith(this.target.value)).slice(0,25)
         return await this.autocomplete(filteredChoices)
     }
 }

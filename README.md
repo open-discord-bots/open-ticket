@@ -144,7 +144,7 @@ With the amazing support of our translators, we've been able to translate Open T
 |🟢   |❓ Catalan            |guillee3                       |
 |🟢   |🇮🇩 Indonesian         |erxg                           |
 |🟢   |🇮🇳 Hindi              |challenger_nova                |
-|🟢⏳ |🇩🇪 German             |benzorich                      |
+|🟢   |🇩🇪 German             |benzorich                      |
 |🟢⏳ |🇪🇸 Spanish            |redactado & josuens            |
 |🟢⏳ |🇫🇷 French             |guillee.3                      |
 |🟢⏳ |🇵🇹 Portuguese         |quiradon                       |
