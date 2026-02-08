@@ -149,6 +149,7 @@ With the amazing support of our translators, we've been able to translate Open T
 |🟢   |🇮🇳 Hindi              |challenger_nova                |
 |🟢   |🇩🇪 German             |benzorich                      |
 |🟢   |🇮🇹 Italian            |fraden1mvp. & imperatorix_17   |
+|🟢   |🇹🇭 Thai               |modshd                         |
 |🟠   |🇪🇸 Spanish            |redactado & josuens            |
 |🟠   |🇫🇷 French             |guillee.3                      |
 |🟠   |🇵🇹 Portuguese         |quiradon                       |
@@ -157,7 +158,6 @@ With the amazing support of our translators, we've been able to translate Open T
 |🟠   |🇷🇴 Romanian           |sankedev                       |
 |🟠   |🇺🇦 Ukrainian          |anderskiy                      |
 |🟠   |🇩🇰 Danish             |the_gamer                      |
-|🟠   |🇹🇭 Thai               |modshd                         |
 |🟠   |🇹🇷 Turkish            |palestinian                    |
 |🟠   |🇦🇪 Arabic             |palestinian                    |
 |🟠   |🇱🇹 Lithuanian         |tsgindrius                     |
