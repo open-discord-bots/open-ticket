@@ -136,8 +136,7 @@ A list of people that contributed or provided the most support for Open Ticket.
 With the amazing support of our translators, we've been able to translate Open Ticket in more than **36 languages**!
 #### Categories:
 - **🟢 Available**
-- **⏳ In Progress (Incomplete)**
-- **🤖 Made Using AI**
+- **🤖 Partially Made Using AI**
 - **🟠 Incomplete**
 - **🔴 Unavailable/Outdated**
 
@@ -149,24 +148,24 @@ With the amazing support of our translators, we've been able to translate Open T
 |🟢   |🇮🇩 Indonesian         |erxg                           |
 |🟢   |🇮🇳 Hindi              |challenger_nova                |
 |🟢   |🇩🇪 German             |benzorich                      |
-|🟢⏳ |🇪🇸 Spanish            |redactado & josuens            |
-|🟢⏳ |🇫🇷 French             |guillee.3                      |
-|🟢⏳ |🇵🇹 Portuguese         |quiradon                       |
-|🟢⏳ |🇨🇿 Czech              |spyeye_                        |
-|🟢⏳ |🇭🇺 Hungarian          |kornel0706                     |
-|🟢⏳ |🇷🇴 Romanian           |sankedev                       |
-|🟢⏳ |🇺🇦 Ukrainian          |anderskiy                      |
-|🟢⏳ |🇮🇹 Italian            |fraden1mvp.                    |
-|🟢⏳ |🇩🇰 Danish             |the_gamer                      |
-|🟢⏳ |🇹🇭 Thai               |modshd                         |
-|🟢⏳ |🇹🇷 Turkish            |palestinian                    |
-|🟢⏳ |🇦🇪 Arabic             |palestinian                    |
-|🟢⏳ |🇱🇹 Lithuanian         |tsgindrius                     |
-|🟢⏳ |🇵🇱 Polish             |danoglez                       |
-|🟢⏳ |🇳🇴 Norwegian          |NoOneNook                      |
-|🟢⏳ |🇸🇪 Swedish            |NoOneNook                      |
-|🟢⏳ |🇮🇷 Persian            |dysashop & zhavis              |
-|🟢⏳ |🇧🇩 Bengali            |HanumeshGupta                  |
+|🟢   |🇮🇹 Italian            |fraden1mvp. & imperatorix_17   |
+|🟠   |🇪🇸 Spanish            |redactado & josuens            |
+|🟠   |🇫🇷 French             |guillee.3                      |
+|🟠   |🇵🇹 Portuguese         |quiradon                       |
+|🟠   |🇨🇿 Czech              |spyeye_                        |
+|🟠   |🇭🇺 Hungarian          |kornel0706                     |
+|🟠   |🇷🇴 Romanian           |sankedev                       |
+|🟠   |🇺🇦 Ukrainian          |anderskiy                      |
+|🟠   |🇩🇰 Danish             |the_gamer                      |
+|🟠   |🇹🇭 Thai               |modshd                         |
+|🟠   |🇹🇷 Turkish            |palestinian                    |
+|🟠   |🇦🇪 Arabic             |palestinian                    |
+|🟠   |🇱🇹 Lithuanian         |tsgindrius                     |
+|🟠   |🇵🇱 Polish             |danoglez                       |
+|🟠   |🇳🇴 Norwegian          |NoOneNook                      |
+|🟠   |🇸🇪 Swedish            |NoOneNook                      |
+|🟠   |🇮🇷 Persian            |dysashop & zhavis              |
+|🟠   |🇧🇩 Bengali            |HanumeshGupta                  |
 |🤖   |🇪🇪 Estonian           |iamnotmega                     |
 |🤖   |🇫🇮 Finnish            |iamnotmega                     |
 |🤖   |🇯🇵 Japanese           |HanumeshGupta                  |
