@@ -2,7 +2,7 @@
     "_TRANSLATION":{
         "otversion":"v4.1.2",
         "translators":["TsgIndrius"],
-        "lastedited":"26/01/2025",
+        "lastedited":"08/02/2026",
         "language":"Lithuanian",
         "automated":false
     },
@@ -31,7 +31,15 @@
             "stringContains":"Šita eilutė turi turėti {0}!",
             "stringChoices":"Ši eilutė gali būti tik viena iš šių pasirinkimų: {0}!",
             "stringRegex":"Šita eilutė nėra teisinga!",
-
+            "stringInvertedContains":"Šioje eilutėje neleidžiama naudoti šito {0}!",
+            "stringLowercase":"Ši eilutė turi būti rašoma tik mažosiomis raidėmis!",
+            "stringUppercase":"Ši eilutė turi būti rašoma tik didžiosiomis raidėmis!",
+            "stringSpecialCharacters":"Šioje eilutėje negali būti jokių specialiųjų simbolių! (tik a–z, 0–9 ir tarpai)",
+            "stringNoSpaces":"Šioje eilutėje negali būti tarpų!",
+            "stringCapitalWord":"Rekomenduojama, kad kiekvienas šios eilutės žodis prasidėtų didžiąja raide!",
+            "stringCapitalSentence":"Panašu, kad kai kurie sakiniai šioje eilutėje neprasideda didžiąja raide!",
+            "stringPunctuation":"Panašu, kad sakinys šioje eilutėje nesibaigia skyrybos ženklu!",
+            
             "numberTooShort":"Šis skaičius negali būti trumpesnis nei {0} raidžių!",
             "numberTooLong":"Šis skaičius negali būti ilgesnis nei {0} raidžių!",
             "numberLengthInvalid":"Šis skaičius turi būti {0} raidžių ilgio!",
@@ -48,10 +56,12 @@
             "numberNegative":"Šitas numeris negali būti neigiamas!",
             "numberPositive":"Šitas numeris negali būti teigiamas!",
             "numberZero":"Šitas numeris negali būti nulinis!",
-
+            "numberNan":"Šis skaičius negali būti nulis (ne skaičius)!",
+            "numberInvertedContains":"Šiame skaičiuje negali būti {0}!",
+            
             "booleanTrue":"Šis boolean negali būti tiesa!",
             "booleanFalse":"Šis boolean negali būti neteisingas!",
-
+            
             "arrayEmptyDisabled":"Šis array negali būti tuščias!",
             "arrayEmptyRequired":"Šis array turi būti tuščias!",
             "arrayTooShort":"Šis array turi būti bent ilgesnis  negu {0}!",
@@ -59,7 +69,7 @@
             "arrayLengthInvalid":"Šio array ilgis turi būti {0}!",
             "arrayInvalidTypes":"Šiame array gali būti tik šie tipai: {0}!",
             "arrayDouble":"Šis array neleidžia tureti tos pačios reikšmės du kartus!",
-
+            
             "discordInvalidId":"Šitas neteisingas discord'o {0} ID!",
             "discordInvalidIdOptions":"Tai neteisingas discord {0} ID! Taip pat galite naudoti vieną iš šių: {1}!",
             "discordInvalidToken":"Šitas Token yra neteisingas prašyčiau idėti teisinga Token!",
@@ -76,7 +86,7 @@
             "urlInvalidPath":"Šiame URL yra netinkamas kelias!",
             "idNotUnique":"Šis ID nėra unikalus, naudokite kitą ID!",
             "idNonExistent":"Šitas ID {0} neegzistuoja!",
-
+            
             "invalidType":"Šios valdos turi būti tipas: {0}!",
             "propertyMissing":"Ši valda {0} šio objekto trūksta!",
             "propertyOptional":"Ši valda {0} yra neprivalomas šiame objekte!",
@@ -84,12 +94,13 @@
             "nullInvalid":"Ši valda negali būti niekinė!",
             "switchInvalidType":"Tai turi būti vienas iš toliau nurodytų tipų: {0}!",
             "objectSwitchInvalid":"Šis objektas turi būti vieno iš šių tipų: {0}!",
-
+            
             "invalidLanguage":"Neiteisinga Kalba!",
             "invalidButton":"Šis mygtukas turi turėti bent {0} arba {1}!",
             "unusedOption":"Šis pasirinkimas {0} nėra naudojamas!",
             "unusedQuestion":"Klausimas {0} nėra naudojamas niekur!",
-            "dropdownOption":"Pasirinkimas su įjungtu išskleidžiamuoju meniu gali būti tik „bilieto“ tipo parinktys!"
+            "dropdownOption":"Pasirinkimas su įjungtu išskleidžiamuoju meniu gali būti tik „bilieto“ tipo parinktys!",
+            "customInvalidVersion":"Jūsų nustatymuose nurodyta versija nesutampa! Įsitikinkite, kad atnaujinote nustatymus į naujausią versiją.!"
         }
     },
     "actions":{
@@ -132,6 +143,7 @@
             "blacklistAddDm":"Žmogus buvo užblokuotas",
             "blacklistRemoveDm":"Pašalino užblokavima",
             "clear":"Bilietai išvalyti",
+            "clearTickets":"Išvalyti Bilietus",
             "roles":"Roles Atnaujinti",
             
             "autoclose":"Bilietas automatiškai uždarytas",
@@ -139,7 +151,12 @@
             "autocloseDisabled":"Automatinis uždarymas išjungtas",
             "autodelete":"Bilietas automatiškai ištrintas",
             "autodeleteEnabled":"Bilieto automatinis ištrynimas įjungtas",
-            "autodeleteDisabled":"Bilieto automatinis ištrynimas išjungtas"
+            "autodeleteDisabled":"Bilieto automatinis ištrynimas išjungtas",
+            
+            "topicSet":"Tema pakeista",
+            "prioritySet":"Prilioritetas pakeistas",
+            "priorityGet":"Bilieto prilioritetas",
+            "transfer":"Bilietas perkeltas"
         },
         "descriptions":{
             "create":"Jūsų bilietas sukurtas. Spustelėkite toliau esantį mygtuką, kad jį pasiektumėte!",
@@ -154,7 +171,7 @@
             "move":"Bilietas buvo perkeltas į {0} sėkmingai!",
             "add":"{0} buvo pridėtas į bilieta sekmingai!",
             "remove":"{0} buvo pašalintas iš bilieto sėkmingai!",
-
+            
             "helpExplanation":"`<pavadinimas>` => reikalingas parametras\n`[pavadinimas]` => pasirenkamas parametras",
             "statsReset":"Boto statistika buvo sekmingai nustatyti iš naujo!",
             "statsError":"Negaliu matyti bilieto statistikos!\n{0} nėra bilietas!",
@@ -167,7 +184,7 @@
             "clearVerify":"Ar tikrai norite ištrinti kelis bilietus?\nŠio veiksmo anuliuoti negalima!",
             "clearReady":"{0} bilietai buvo sėkmingai pašalinti!",
             "rolesEmpty":"Jokie roles nebuvo atnaujinti!",
-
+            
             "autocloseLeave":"Šis bilietas buvo automatiškai uždarytas, nes kūrėjas paliko serverį!",
             "autocloseTimeout":"Šis bilietas buvo automatiškai uždarytas, nes buvo neaktyvus daugiau nei `{0}h`!",
             "autodeleteLeave":"Šis bilietas buvo automatiškai ištrintas, nes kūrėjas paliko serverį!",
@@ -176,11 +193,16 @@
             "autocloseDisabled":"Šiame biliete automatinis uždarymas išjungtas!\nJis nebebus automatiškai uždarytas!",
             "autodeleteEnabled":"Šiame biliete įgalintas automatinis ištrynimas!\nJis bus ištrintas, kai bus neaktyvus ilgiau nei `{0} dienas`!",
             "autodeleteDisabled":"Automatinis ištrynimas šiame biliete išjungtas!\nJis nebebus automatiškai ištrintas!",
-
+            
             "ticketMessageLimit":"Tu gali sukurti tik {0} bilietus tuo pačiu metu!",
             "ticketMessageAutoclose":"Šis bilietas bus automatiškai uždarytas, kai bus neaktyvus {0}h!",
             "ticketMessageAutodelete":"Šis bilietas bus automatiškai ištrintas, kai neaktyvus {0} dienas!",
-            "panelReady":"Žemiau rasite skydelį!\nŠį pranešimą dabar galima ištrinti!"
+            "panelReady":"Skydelis pasiekiamas tolesniame pranešime!\nŠią žinutę dabar galima ištrinti!",
+            
+            "topicSet":"Kanalo temą sėkmingai pakeitė {0}!",
+            "prioritySet":"Bilieto prioritetas sėkmingai pakeistas į {0}, naudotojo {1}!",
+            "priorityGet":"Dabartinis šio bilieto prioritetas yra {0}.",
+            "transfer":"Bilieto nuosavybė sėkmingai perduota iš {0} į {1}, naudotojo {2}!"
         },
         "modal":{
             "closePlaceholder":"Kodėl tu uždarei šį bilieta?",
@@ -215,12 +237,19 @@
             "addDm":"{0} Buvo pridėtas į tavo bilieta!",
             "removeLog":"{0} buvo pašalintas iš šito bilieto nuo {1}!",
             "removeDm":"{0} buvo pasalintas iš tavo bilieto!",
-
+            
             "blacklistAddLog":"{0} buvo užblokuotas nuo {1}!",
             "blacklistRemoveLog":"{0} buvo atblokuotas nuo  {1}!",
             "blacklistAddDm":"Jūs buvote užblokuotas!\nNuo šiol negalite sukurti bilieto!",
             "blacklistRemoveDm":"Jūs buvote pašalinti iš juodojo sąrašo mūsų serveryje!\nDabar vėl galite kurti bilietus!",
-            "clearLog":"{0} bilietai buvo pašalinti nuo {1}!"
+            "clearLog":"{0} bilietai buvo pašalinti nuo {1}!",
+            
+            "transferLog":"Šio bilieto nuosavybė buvo perleista iš {0} {1}, naudotojo {2}!",
+            "transferDm":"Jūsų bilieto nuosavybė mūsų serveryje buvo perduota iš {0} į {1}!",
+            "prioritySetLog":"Šio bilieto prioritetas buvo pakeistas į {0}, autorius {1}!",
+            "prioritySetDm":"Jūsų bilieto prioritetas mūsų serveryje pakeistas į {0}!",
+            "roleUpdateLog":"{0} atnaujino savo roles!",
+            "roleUpdateDm":"Jūsų rolės mūsų serveryje buvo atnaujinti!"
         }
     },
     "transcripts":{
@@ -229,7 +258,7 @@
             "ready":"Išrašai sukurti",
             "textFileDescription":"!",
             "htmlProgress":"Palaukite, kol šis html išrašas bus apdorojamas...",
-
+            
             "createdChannel":"Naujas {0} išrašas buvo sukurtas!",
             "createdCreator":"Naujas {0} vieno iš jūsų bilietų išrašas sukurtas!",
             "createdParticipant":"Naujas {0} išrašas buvo sukurta viename iš bilietų, kuriuose dalyvavote!",
@@ -241,7 +270,19 @@
             "retry":"Bandyk Iš naujo",
             "continue":"Ištrinti be išrašo",
             "backup":"Sukurti Atsarginį išraša",
-            "error":"Kažkas nepavyko bandant sukurti išraša.\nKą norėtumėte daryti?\n\nŠis bilietas nebus ištrintas, kol spustelėsite vieną iš šių mygtukų."
+            "error":"Kažkas nepavyko bandant sukurti išraša.\nKą norėtumėte daryti?\n\nŠis bilietas nebus ištrintas, kol spustelėsite vieną iš šių mygtukų.",
+            "title":"Nuorašo klaida"
+        },
+        "text":{
+            "messagesTitle":"ŽINUTĖS",
+            "embedTitle":"EMBED",
+            "fileTitle":"FAILAI",
+            "fieldsTitle":"FIELDS",
+            "reactionsTitle":"Jaustukai",
+            "statsTitle":"STATISTIKA",
+            "emptyContent":"<Kontantas yra tusčias>",
+            "noTitle":"<Nėra pavadinimo>",
+            "noDesc":"<Nėra aprašymo>"
         }
     },
     "errors":{
@@ -257,7 +298,8 @@
             "unknownPanel":"Nepažystama skydelis",
             "notInGuild":"Nera serveryje",
             "channelRename":"Negaliu pervadyti kanalo",
-            "busy":"Bilietas yra užimtas"
+            "busy":"Bilietas yra užimtas",
+            "permissionError":"Leidimų klaida"
         },
         "descriptions":{
             "askForInfo":"Susisiek su savininku šito bilieto del daigiau informacijos!",
@@ -280,7 +322,10 @@
             "notInGuild":"Šis {0} neveikia DM! Bandykite dar kartą serveryje!",
             "channelRename":"Dėl discord'o greičio apribojimų, šiuo metu robotas negali pervardyti kanalo. Kanalas bus automatiškai pervardytas per 10 minučių, jei robotas nebus paleistas iš naujo.",
             "channelRenameSource":"Šios klaidos šaltinis yra: {0}",
-            "busy":"Neįmanoma naudoti šio {0}!\nBilietą šiuo metu apdoroja botas.\n\nBandykite dar kartą po kelių sekundžių!"
+            "busy":"Neįmanoma naudoti šio {0}!\nBilietą šiuo metu apdoroja botas.\n\nBandykite dar kartą po kelių sekundžių!",
+            "closeBeforeMessage":"Šios užklausos negalima uždaryti / ištrinti, kol vartotojas neišsiuntė pranešimo..",
+            "closeBeforeAdminMessage":"Šios užklausos negalima uždaryti / ištrinti, kol užklausos administratorius arba palaikymo komandos narys neišsiuntė pranešimo..",
+            "unableToCreateTicket":"Kažkas atsitiko jūs negalite sukurti bilieto."
         },
         "optionInvalidReasons":{
             "stringRegex":"Vertė neatitinka šablono!",
@@ -331,7 +376,6 @@
             "added":"Pridėta",
             "removed":"Pašalinta",
             "filter":"Filteris",
-            "claimedBy":"Claimed nuo {0}",
             "method":"Metodas",
             "type":"Tipas",
             "blacklisted":"Užblokuotas",
@@ -355,7 +399,27 @@
             "status":"Statusas",
             "claimed":"Claimed",
             "pinned":"Prisegta",
-            "creationDate":"Sukūrimo data"
+            "creationDate":"Sukūrimo data",
+            
+            "noone":"Niekas",
+            "open":"Atidarytas",
+            "closed":"Uždarytas",
+            "priority":"Prioritetas",
+            "participants":"Dalyviai",
+            "yes":"Taip",
+            "no":"Ne",
+            "option":"Pasirinkimai",
+            "topic":"Tema",
+            "uptime":"Sistemos Buvimo laikas",
+            "messages":"Žinutės",
+            "embeds":"Embeds",
+            "files":"Failai",
+            "components":"Komponentai",
+            "cooldown":"Letasis Režimas",
+            "maxTickets":"Maksimalus Bilietai",
+            "admins":"Adminai",
+            "roles":"Rolės",
+            "size":"Dydis"
         },
         "lowercase":{
             "text":"tekstas",
@@ -384,6 +448,7 @@
         "unclaim":"Unclaim bilieta.",
         "pin":"Prisegti bilieta.",
         "unpin":"Atsegti bilieta.",
+        
         "move":"Perkelti bilieta.",
         "moveId":"Parinkties, į kurią norite pereiti, identifikatorius.",
         "rename":"Pervadinti bilieta.",
@@ -392,6 +457,7 @@
         "addUser":"Asmuo kurį norite pridėti.",
         "remove":"Pašalinti naudotoja iš bilieto.",
         "removeUser":"Pašalinti asmuo iš bilieto.",
+        
         "blacklist":"Tvarkykite bilietų užblokavimo sąrašą.",
         "blacklistView":"Peržiūrėkite dabartinio užblokavimo sąrašą.",
         "blacklistAdd":"Pridėk asmenį i užblokuoti saraša.",
@@ -405,6 +471,7 @@
         "statsUserUser":"Asmuo kuri norite peržiūrėti.",
         "statsTicket":"Peržiūrėkite bilieto statistiką serveryje.",
         "statsTicketTicket":"Pamatyti Bilieta.",
+        
         "clear":"Ištrinkite kelis bilietus vienu metu.",
         "clearFilter":"Bilietų išvalymo filtras.",
         "clearFilters":{
@@ -417,6 +484,7 @@
             "unpin":"Atsegtus",
             "autoclose":"Automatinius uždarymus"
         },
+        
         "autoclose":"Tvarkykite automatinį uždarymą biliete.",
         "autocloseDisable":"Išjungti automatinį uždarymą šiame biliete.",
         "autocloseEnable":"Įgalinti automatinį uždarymą šiame biliete.",
@@ -424,7 +492,19 @@
         "autodelete":"Tvarkykite automatinį ištrynimą biliete.",
         "autodeleteDisable":"Išjungti automatinį ištrynimą šiame biliete.",
         "autodeleteEnable":"Įgalinti automatinį ištrynimą šiame biliete.",
-        "autodeleteEnableTime":"Kiek dienų šis bilietas turi būti neaktyvus, kad jį būtų galima ištrinti."
+        "autodeleteEnableTime":"Kiek dienų šis bilietas turi būti neaktyvus, kad jį būtų galima ištrinti.",
+        
+        "topic":"Tvarkyti bilietų kanalo temą.",
+        "topicSet":"Nustatykite bilietų kanalo temą.",
+        "topicValue":"Nauja kanalo tema.",
+        "topicList":"Gaukite visų bilietų sąrašą su jų tema ir statistika.",
+        "priority":"Tvarkykite bilieto prioritetą.",
+        "prioritySet":"Nustatykite bilieto prioritetą.",
+        "priorityValue":"Kanalo prioritetas.",
+        "priorityGet":"Gaukite bilieto prioritetą.",
+        "priorityList":"Gaukite visų bilietų sąrašą su jų prioriteto būsena.",
+        "transfer":"Perduoti bilieto nuosavybę iš vieno vartotojo kitam.",
+        "transferUser":"Vartotojas, kuriam reikia perkelti."
     },
     "helpMenu":{
         "help":"Gauk saraša galimų komandų.",
@@ -452,7 +532,16 @@
         "autocloseDisable":"Išjungti automatinį uždarymą šiame biliete.",
         "autocloseEnable":"Įgalinti automatinį uždarymą šiame biliete.",
         "autodeleteDisable":"Išjungti automatinį ištrynimą šiame biliete.",
-        "autodeleteEnable":"Įgalinti automatinį ištrynimą šiame biliete."
+        "autodeleteEnable":"Įgalinti automatinį ištrynimą šiame biliete.",
+        "categories":{
+            "general":"Generaliniai Komandos",
+            "basicTicket":"Paparasti bilieto komandos",
+            "advancedTicket":"Geresnės bilieto komandos",
+            "userTicket":"Naudotojo bilieto komandos",
+            "admin":"Administratoriaus komandos",
+            "advanced":"Išplėstinės komandos",
+            "extra":"Daugiau komandų"
+        }
     },
     "stats":{
         "scopes":{
@@ -460,7 +549,8 @@
             "system":"Sisteminė statistika",
             "user":"Naudotojo statistika",
             "ticket":"Bilieto statistika",
-            "participants":"Dalyviai"
+            "participants":"Dalyviai",
+            "messages":"Žinutės"
         },
         "properties":{
             "ticketsCreated":"Bilietai Sukurti",
@@ -472,7 +562,47 @@
             "ticketsPinned":"Bilietai Prisegti",
             "ticketsMoved":"Bilietai Perkelti",
             "usersBlacklisted":"Naudojas Užblokuotas",
-            "transcriptsCreated":"Išrašai sukurti"
+            "transcriptsCreated":"Išrašai sukurti",
+            "ticketsAutodeleted":"Bilietas buvo ištrintas automatiškai",
+            "ticketsTransferred":"Bilietas perkeltas",
+            "ticketVolume":"Bilieto Balsas",
+            "averageTickets":"Vidutinis bilietų skaičius vienam vartotojui",
+            "currentTickets":"Dabartiniai bilietai",
+            "age":"Bilieto Amžius",
+            "responseTime":"Atsiliepimo Laikas",
+            "resolutionTime":"Rezoliucijos laikas",
+            "createdOn":"Sukurta",
+            "createdBy":"Sukurta nuo",
+            "closedOn":"Uždaryta",
+            "closedBy":"Uždarė",
+            "claimedOn":"Tvarkyti pradėjo",
+            "claimedBy":"Tvarkytojas",
+            "pinnedOn":"Prisegta",
+            "pinnedBy":"Prisegė",
+            "deletedOn":"Ištrinta",
+            "deletedBy":"Ištrynė"
+        },
+        "roles":{
+            "developer":"Developeris",
+            "serverOwner":"Serverio Savininkas",
+            "serverAdmin":"Serverio administratorius",
+            "moderator":"Moderatorius ",
+            "support":"Pagalbos narys",
+            "member":"Narys"
         }
+    },
+    "panel":{
+        "selectTicket":"Pasirink Bilieta",
+        "selectRole":"Pasirink Role",
+        "selectOption":"Pasirinkite savo parinktį"
+    },
+    "priorities":{
+        "urgent":"Skubiai",
+        "veryHigh":"Labai greitai",
+        "high":"Greitai",
+        "normal":"Normaliai",
+        "low":"Paprastai",
+        "veryLow":"Silpnai",
+        "none":"Nėra"
     }
 }
