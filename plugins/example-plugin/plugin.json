@@ -14,6 +14,9 @@
 
     "details":{
         "author":"DJj123dj",
+        "authors":["DJj123dj"],
+        "contributors":[],
+        "versions":["OTv4.0.x","OTv4.1.x"],
         "shortDescription":"A simple template for an Open Ticket v4 plugin!",
         "longDescription":"A simple example of an Open Ticket v4 plugin!",
         "imageUrl":"",

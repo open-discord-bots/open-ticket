@@ -78,8 +78,14 @@ export interface ODPluginData {
  * Additional details in the `plugin.json` file from a plugin.
  */
 export interface ODPluginDetails {
-    /**The author of the plugin. */
-    author:string,
+    /**The author of the plugin. (string for backwards compatibility, or string[] for multiple authors) */
+    author:string|string[],
+    /**A list of authors of the plugin. (new format, optional if author is provided) */
+    authors?:string[],
+    /**A list of contributors to the plugin. (optional) */
+    contributors?:string[],
+    /**A list of compatible versions. (e.g. ["OTv4.0.x", "OTv4.1.x", "ODv1.0.0"]) */
+    versions?:string[],
     /**A short description of this plugin. */
     shortDescription:string,
     /**A large description of this plugin. */
@@ -211,6 +217,28 @@ export class ODPlugin extends ODManagerData {
         })
         
         return incompatible
+    }
+    
+    /**Get all authors as an array. Handles both old (string) and new (array) format. */
+    getAuthors(): string[] {
+        if (Array.isArray(this.details.author)) {
+            return this.details.author
+        } else if (this.details.authors && Array.isArray(this.details.authors)) {
+            return this.details.authors
+        } else if (typeof this.details.author === "string") {
+            return [this.details.author]
+        }
+        return []
+    }
+    
+    /**Get all contributors as an array. */
+    getContributors(): string[] {
+        return this.details.contributors || []
+    }
+    
+    /**Get all compatible versions as an array. */
+    getCompatibleVersions(): string[] {
+        return this.details.versions || []
     }
 }
 

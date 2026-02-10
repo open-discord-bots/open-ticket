@@ -84,6 +84,54 @@ function saveNewCompilationHash(){
 }
 
 if (!process.argv.includes("--no-compile")){
+    // Read plugin.json files before compilation to check for npm dependencies
+    const pluginDependencies = new Set()
+    if (fs.existsSync("./plugins")){
+        console.log("OT: Reading plugin.json files...")
+        const plugins = fs.readdirSync("./plugins")
+        for (const pluginDir of plugins){
+            if (pluginDir === ".DS_Store") continue
+            const pluginPath = nodepath.join("./plugins", pluginDir)
+            if (!fs.statSync(pluginPath).isDirectory()) continue
+            
+            const pluginJsonPath = nodepath.join(pluginPath, "plugin.json")
+            if (fs.existsSync(pluginJsonPath)){
+                try {
+                    const pluginData = JSON.parse(fs.readFileSync(pluginJsonPath).toString())
+                    if (pluginData.npmDependencies && Array.isArray(pluginData.npmDependencies)){
+                        pluginData.npmDependencies.forEach(dep => {
+                            if (typeof dep === "string" && dep.trim()) {
+                                pluginDependencies.add(dep.trim())
+                            }
+                        })
+                    }
+                } catch (e) {
+                    // Silently skip invalid plugin.json files - they'll be caught during plugin loading
+                }
+            }
+        }
+        
+        // Check for missing dependencies
+        if (pluginDependencies.size > 0){
+            console.log("OT: Checking plugin npm dependencies...")
+            const missingDeps = []
+            for (const dep of pluginDependencies){
+                try {
+                    require.resolve(dep)
+                } catch {
+                    missingDeps.push(dep)
+                }
+            }
+            
+            if (missingDeps.length > 0){
+                console.log("OT: Warning - Missing npm dependencies required by plugins:")
+                missingDeps.forEach(dep => console.log(`  - ${dep}`))
+                console.log("OT: Please install missing dependencies with: npm install " + missingDeps.join(" "))
+                console.log("OT: Continuing compilation anyway...")
+            }
+        }
+    }
+    
     if (requiresCompilation()){
         console.log("OT: Compilation Required...")
 
