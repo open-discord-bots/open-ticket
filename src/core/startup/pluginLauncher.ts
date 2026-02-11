@@ -12,6 +12,7 @@ export const loadAllPlugins = async () => {
         return
     }
     const plugins = fs.readdirSync("./plugins")
+    const pluginVersionRegex = /^(OT|OM)v(\d+)\.(\d+|x)\.(\d+|x)$/
 
     //check & validate
     plugins.forEach((p) => {
@@ -38,6 +39,20 @@ export const loadAllPlugins = async () => {
             if (typeof rawplugindata.version != "string") throw new ODPluginError("Failed to load plugin.json/version")
             if (typeof rawplugindata.startFile != "string") throw new ODPluginError("Failed to load plugin.json/startFile")
             
+            //only check "supportedVersions" if it exists (should be array)
+            if (rawplugindata.supportedVersions){
+                if (!Array.isArray(rawplugindata.supportedVersions)) throw new ODPluginError("Failed to load plugin.json/supportedVersions (must be array)")
+                for (const version of rawplugindata.supportedVersions){
+                    if (typeof version !== "string"){
+                        throw new ODPluginError("Failed to load plugin.json/supportedVersions (all items must be strings)")
+                    }
+                    //only OT (Open Ticket) & OM (Open Moderation) are supported at the moment
+                    if (!pluginVersionRegex.test(version)){
+                        throw new ODPluginError(`Failed to load plugin.json/supportedVersions (invalid format: "${version}", expected format like "OTv4.0.x" or "OMv1.0.0")`)
+                    }
+                }
+            }
+            
             if (typeof rawplugindata.enabled != "boolean") throw new ODPluginError("Failed to load plugin.json/enabled")
             if (typeof rawplugindata.priority != "number") throw new ODPluginError("Failed to load plugin.json/priority")
             if (!Array.isArray(rawplugindata.events)) throw new ODPluginError("Failed to load plugin.json/events")
@@ -47,40 +62,10 @@ export const loadAllPlugins = async () => {
             if (!Array.isArray(rawplugindata.incompatiblePlugins)) throw new ODPluginError("Failed to load plugin.json/incompatiblePlugins")
             
             if (typeof rawplugindata.details != "object") throw new ODPluginError("Failed to load plugin.json/details")
+            if (typeof rawplugindata.details.author != "string") throw new ODPluginError("Failed to load plugin.json/details/author (must be string or array)")
             
-            // author can be string (old) or array (new), convert to array for consistency
-            if (typeof rawplugindata.details.author != "string" && !Array.isArray(rawplugindata.details.author)) {
-                throw new ODPluginError("Failed to load plugin.json/details/author (must be string or array)")
-            }
-            
-            if (typeof rawplugindata.details.author == "string") {
-                rawplugindata.details.authors = [rawplugindata.details.author]
-            } else if (Array.isArray(rawplugindata.details.author)) {
-                rawplugindata.details.authors = rawplugindata.details.author
-            }
-            
-            if (rawplugindata.details.authors && !Array.isArray(rawplugindata.details.authors)) {
-                throw new ODPluginError("Failed to load plugin.json/details/authors (must be array)")
-            }
-            
-            if (rawplugindata.details.contributors && !Array.isArray(rawplugindata.details.contributors)) {
-                throw new ODPluginError("Failed to load plugin.json/details/contributors (must be array)")
-            }
-            
-            if (rawplugindata.details.versions) {
-                if (!Array.isArray(rawplugindata.details.versions)) {
-                    throw new ODPluginError("Failed to load plugin.json/details/versions (must be array)")
-                }
-                for (const version of rawplugindata.details.versions) {
-                    if (typeof version != "string") {
-                        throw new ODPluginError("Failed to load plugin.json/details/versions (all items must be strings)")
-                    }
-                    const versionPattern = /^(OT|OD|OM|OU)v\d+\.\d+(\.\d+|\.x)$/
-                    if (!versionPattern.test(version)) {
-                        throw new ODPluginError(`Failed to load plugin.json/details/versions (invalid format: "${version}", expected format like "OTv4.0.x" or "ODv1.0.0")`)
-                    }
-                }
-            }
+            //only check "contributors" if it exists (should be array)
+            if (rawplugindata.details.contributors && !Array.isArray(rawplugindata.details.contributors)) throw new ODPluginError("Failed to load plugin.json/details/contributors (must be array)")
             
             if (typeof rawplugindata.details.shortDescription != "string") throw new ODPluginError("Failed to load plugin.json/details/shortDescription")
             if (typeof rawplugindata.details.longDescription != "string") throw new ODPluginError("Failed to load plugin.json/details/longDescription")
@@ -134,41 +119,31 @@ export const loadAllPlugins = async () => {
         plugin.pluginsIncompatible(opendiscord.plugins).forEach((incompatible) => incompatibilities.push({from,to:incompatible}))
         plugin.pluginsInstalled(opendiscord.plugins).forEach((missing) => missingPlugins.push({id:from,missing}))
         
-        // check if plugin versions are compatible
-        if (plugin.data.details.versions && plugin.data.details.versions.length > 0) {
+        //check if plugins are compatible with version of bot
+        if (plugin.data.supportedVersions && plugin.data.supportedVersions.length > 0){
             const currentVersion = opendiscord.versions.get("opendiscord:version")
             let isCompatible = false
             
-            for (const versionStr of plugin.data.details.versions) {
-                const match = versionStr.match(/^(OT|OD|OM|OU)v(\d+)\.(\d+)(?:\.(\d+|x))$/)
+            for (const versionStr of plugin.data.supportedVersions){
+                const match = versionStr.match(pluginVersionRegex)
                 if (!match) continue
                 
                 const projectPrefix = match[1]
                 const primary = parseInt(match[2])
-                const secondary = parseInt(match[3])
-                const tertiary = match[4]
+                const secondary = (match[3] === "x") ? null : parseInt(match[3])
+                const tertiary = (match[4] === "x") ? null : parseInt(match[4])
                 
                 if (projectPrefix !== "OT") continue
-                
-                if (tertiary === "x") {
-                    if (currentVersion.primary === primary && currentVersion.secondary === secondary) {
-                        isCompatible = true
-                        break
-                    }
-                } else {
-                    const requiredVersion = api.ODVersion.fromString("temp", `v${primary}.${secondary}.${parseInt(tertiary)}`)
-                    if (currentVersion.primary === requiredVersion.primary && 
-                        currentVersion.secondary === requiredVersion.secondary && 
-                        currentVersion.tertiary === requiredVersion.tertiary) {
-                        isCompatible = true
-                        break
-                    }
+                else if (primary !== currentVersion.primary) continue
+                else if (typeof secondary === "number" && secondary !== currentVersion.secondary) continue
+                else if (typeof tertiary === "number" && tertiary !== currentVersion.tertiary) continue
+                else{
+                    isCompatible = true
+                    break
                 }
             }
             
-            if (!isCompatible) {
-                versionIncompatibilities.push({id:from})
-            }
+            if (!isCompatible) versionIncompatibilities.push({id:from})
         }
     })
 
@@ -224,16 +199,17 @@ export const loadAllPlugins = async () => {
         initPluginError = true
     })
 
+    //handle all bot version incompatibilities
     versionIncompatibilities.forEach((match) => {
         const plugin = opendiscord.plugins.get(match.id)
         if (plugin && !plugin.crashed){
             plugin.crashed = true
-            plugin.crashReason = "missing.dependency"
+            plugin.crashReason = "incompatible.version"
         }
 
-        const versions = plugin?.data.details.versions?.join(", ") ?? "unknown"
+        const versions = plugin?.data.supportedVersions?.join(", ") ?? "<unknown-version>"
         const currentVersion = opendiscord.versions.get("opendiscord:version").toString()
-        opendiscord.log(`Plugin version incompatibility: plugin requires "${versions}" but current version is "${currentVersion}", canceling plugin execution...`,"plugin",[
+        opendiscord.log(`Plugin version incompatibility: plugin requires "${versions}" but current bot version is "${currentVersion}", canceling plugin execution...`,"plugin",[
             {key:"path",value:"./plugins/"+match.id}
         ])
         initPluginError = true
@@ -264,20 +240,19 @@ export const loadAllPlugins = async () => {
     }
 
     for (const plugin of sortedPlugins){
-        const authors = (Array.isArray(plugin.details.author) ? plugin.details.author : 
-                        (plugin.details.authors || [plugin.details.author as string])).join(", ")
+        const authors = [plugin.details.author,...(plugin.details.contributors ?? [])].join(", ")
         
         if (plugin.enabled){
             opendiscord.debug.debug("Plugin \""+plugin.id.value+"\" loaded",[
                 {key:"status",value:(plugin.crashed ? "crashed" : "success")},
                 {key:"crashReason",value:(plugin.crashed ? (plugin.crashReason ?? "/") : "/")},
-                {key:"author",value:authors},
+                {key:"authors",value:authors},
                 {key:"version",value:plugin.version.toString()},
                 {key:"priority",value:plugin.priority.toString()}
             ])
         }else{
             opendiscord.debug.debug("Plugin \""+plugin.id.value+"\" disabled",[
-                {key:"author",value:authors},
+                {key:"authors",value:authors},
                 {key:"version",value:plugin.version.toString()},
                 {key:"priority",value:plugin.priority.toString()}
             ])

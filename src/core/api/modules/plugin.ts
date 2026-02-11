@@ -55,6 +55,11 @@ export interface ODPluginData {
     version:string,
     /**The location of the start file of the plugin relative to the rootDir of the plugin */
     startFile:string,
+    /**A list of compatible versions. (e.g. `["OTv4.0.x", "OMv1.x.x"]`) (optional, will be required in future version)
+     * - `OT` --> Open Ticket support
+     * - `OM` --> Open Moderation support
+     */
+    supportedVersions?:string[],
 
     /**Is this plugin enabled? */
     enabled:boolean,
@@ -78,14 +83,10 @@ export interface ODPluginData {
  * Additional details in the `plugin.json` file from a plugin.
  */
 export interface ODPluginDetails {
-    /**The author of the plugin. (string for backwards compatibility, or string[] for multiple authors) */
-    author:string|string[],
-    /**A list of authors of the plugin. (new format, optional if author is provided) */
-    authors?:string[],
-    /**A list of contributors to the plugin. (optional) */
+    /**The main author of the plugin. Additional contributors can be specified in `contributors`. */
+    author:string,
+    /**A list of plugin contributors. (optional, will be required in future version) */
     contributors?:string[],
-    /**A list of compatible versions. (e.g. ["OTv4.0.x", "OTv4.1.x", "ODv1.0.0"]) */
-    versions?:string[],
     /**A short description of this plugin. */
     shortDescription:string,
     /**A large description of this plugin. */
@@ -127,7 +128,7 @@ export class ODPlugin extends ODManagerData {
     /**Did this plugin crash? (A reason is available in the `crashReason`) */
     crashed: boolean
     /**The reason which caused this plugin to crash. */
-    crashReason: null|"incompatible.plugin"|"missing.plugin"|"missing.dependency"|"executed" = null
+    crashReason: null|"incompatible.plugin"|"missing.plugin"|"missing.dependency"|"incompatible.version"|"executed" = null
     
     constructor(dir:string, jsondata:ODPluginData){
         super(jsondata.id)
@@ -218,24 +219,9 @@ export class ODPlugin extends ODManagerData {
         
         return incompatible
     }
-    
+    /**Get a list of all authors & contributors of this plugin. */
     getAuthors(): string[] {
-        if (Array.isArray(this.details.author)) {
-            return this.details.author
-        } else if (this.details.authors && Array.isArray(this.details.authors)) {
-            return this.details.authors
-        } else if (typeof this.details.author === "string") {
-            return [this.details.author]
-        }
-        return []
-    }
-    
-    getContributors(): string[] {
-        return this.details.contributors || []
-    }
-    
-    getCompatibleVersions(): string[] {
-        return this.details.versions || []
+        return [this.details.author,...(this.details.contributors ?? [])]
     }
 }
 
