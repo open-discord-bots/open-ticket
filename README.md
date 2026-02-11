@@ -10,7 +10,7 @@
 <br>Powered By<br>
 <img src="https://apis.dj-dj.be/cdn/opendiscord/logo.png" alt="Open Ticket" width="170px"><br>
 <a href="https://discord.com/invite/26vT9wt3n3"><img alt="Discord Invite Link" src="https://img.shields.io/badge/discord-support%20server-5865F2.svg?style=flat-square&logo=discord"></img></a>
-<a href="https://github.com/open-discord-bots/open-ticket/releases/tag/v4.1.2"><img alt="Open Ticket Version" src="https://img.shields.io/badge/version-4.1.2-brightgreen.svg?style=flat-square"></img></a>
+<a href="https://github.com/open-discord-bots/open-ticket/releases/tag/v4.1.3"><img alt="Open Ticket Version" src="https://img.shields.io/badge/version-4.1.3-brightgreen.svg?style=flat-square"></img></a>
 <a href="https://otdocs.dj-dj.be"><img alt="Open Ticket Documentation" src="https://img.shields.io/badge/discord.js-v14-CB3837.svg?style=flat-square&logo=npm"></img></a>
 <a href="https://github.com/open-discord-bots/open-ticket/blob/main/LICENSE"><img alt="Open Ticket License" src="https://img.shields.io/badge/license-GPL%203.0-important.svg?style=flat-square"></img></a>
 <a href="https://otdocs.dj-dj.be"><img alt="Open Ticket Stars" src="https://img.shields.io/github/stars/djj123dj/open-ticket?color=yellow&label=stars&logo=github&style=flat-square"></img></a>
@@ -150,8 +150,9 @@ With the amazing support of our translators, we've been able to translate Open T
 |🟢   |🇩🇪 German             |benzorich                      |
 |🟢   |🇮🇹 Italian            |fraden1mvp. & imperatorix_17   |
 |🟢   |🇹🇭 Thai               |modshd                         |
+|🟢   |🇱🇹 Lithuanian         |tsgindrius                     |
+|🟢   |🇫🇷 French             |guillee.3                      |
 |🟠   |🇪🇸 Spanish            |redactado & josuens            |
-|🟠   |🇫🇷 French             |guillee.3                      |
 |🟠   |🇵🇹 Portuguese         |quiradon                       |
 |🟠   |🇨🇿 Czech              |spyeye_                        |
 |🟠   |🇭🇺 Hungarian          |kornel0706                     |
@@ -160,7 +161,6 @@ With the amazing support of our translators, we've been able to translate Open T
 |🟠   |🇩🇰 Danish             |the_gamer                      |
 |🟠   |🇹🇷 Turkish            |palestinian                    |
 |🟠   |🇦🇪 Arabic             |palestinian                    |
-|🟠   |🇱🇹 Lithuanian         |tsgindrius                     |
 |🟠   |🇵🇱 Polish             |danoglez                       |
 |🟠   |🇳🇴 Norwegian          |NoOneNook                      |
 |🟠   |🇸🇪 Swedish            |NoOneNook                      |
@@ -218,17 +218,17 @@ This will help us grow and reach even more people!
 |[`example-command`](https://github.com/open-discord-bots/plugins/tree/main/open-ticket/example-command/)                   |📄 Example                  |Sample custom command using the Open Discord system. |
 |[`ot-jump-to-top`](https://github.com/open-discord-bots/plugins/tree/main/open-ticket/ot-jump-to-top/)                     |📢 Command                  |Add a simple command to jump to the top of the ticket. |
 |[`ot-kill-switch`](https://github.com/open-discord-bots/plugins/tree/main/open-ticket/ot-kill-switch/)                     |📢 Command                  |Temporarily disable the ticket system using a kill switch. |
-|[`od-hosting-status`](https://github.com/open-discord-bots/plugins/tree/main/open-ticket/od-hosting-status/)               |📢 Command                  |A simple command to send hosting status updates to a channel. |
-|[`od-shutdown`](https://github.com/open-discord-bots/plugins/tree/main/open-ticket/od-shutdown/)                           |📢 Command                  |A simple command to turn off the bot from a slash command (server & bot owner only). |
+|[`ot-hosting-status`](https://github.com/open-discord-bots/plugins/tree/main/open-ticket/ot-hosting-status/)               |📢 Command                  |A simple command to send hosting status updates to a channel. |
+|[`ot-shutdown`](https://github.com/open-discord-bots/plugins/tree/main/open-ticket/ot-shutdown/)                           |📢 Command                  |A simple command to turn off the bot from a slash command (server & bot owner only). |
 |[`ot-sqlite-database`](https://github.com/open-discord-bots/plugins/tree/main/open-ticket/ot-sqlite-database/)             |⚙️ Utility                  |With this plugin, the database will be an SQLite file. It's a must-have for large servers! |
-|[`od-no-slash-clear`](https://github.com/open-discord-bots/plugins/tree/main/open-ticket/od-no-slash-clear/)               |⚙️ Utility                  |Disable the automatic removal of slash commands that aren't used by Open Ticket. |
+|[`ot-no-slash-clear`](https://github.com/open-discord-bots/plugins/tree/main/open-ticket/ot-no-slash-clear/)               |⚙️ Utility                  |Disable the automatic removal of slash commands that aren't used by Open Ticket. |
 |[`ot-migrate-v3`](https://github.com/open-discord-bots/plugins/tree/main/open-ticket/ot-migrate-v3/)                       |⚙️ Utility                  |Use this plugin to migrate all tickets from Open Ticket v3 to v4. |
 |[`ot-ticket-message-extras`](https://github.com/open-discord-bots/plugins/tree/main/open-ticket/ot-ticket-message-extras/) |🎨 Customisation            |A plugin which adds a few little features to the ticket message. |
 |[`ot-rename-keep-prefix`](https://github.com/open-discord-bots/plugins/tree/main/open-ticket/ot-rename-keep-prefix/)       |🎨 Customisation            |Simple plugin to keep the channel prefix when using the /rename command. |
 |[`ot-customise-buttons`](https://github.com/open-discord-bots/plugins/tree/main/open-ticket/ot-customise-buttons/)         |🎨 Customisation            |Customise almost all built-in buttons. This includes the claim, reopen, close & delete buttons. |
 |[`ot-ephemeral-messages`](https://github.com/open-discord-bots/plugins/tree/main/open-ticket/ot-ephemeral-messages/)       |🎨 Customisation            |Customise for every messages if it needs to be ephemeral or not. |
 |[`ot-footers`](https://github.com/open-discord-bots/plugins/tree/main/open-ticket/ot-footers/)                             |🎨 Customisation            |A simple plugin to add footers in all Open Ticket embeds. |
-|[`od-alt-detector`](https://github.com/open-discord-bots/plugins/tree/main/open-ticket/od-alt-detector/)                   |💼 Management               |Use the discord-alt-detector npm package by DJdj Development in your ticket bot. |
+|[`ot-alt-detector`](https://github.com/open-discord-bots/plugins/tree/main/open-ticket/ot-alt-detector/)                   |💼 Management               |Use the discord-alt-detector npm package by DJdj Development in your ticket bot. |
 |[`ot-embeds`](https://github.com/open-discord-bots/plugins/tree/main/open-ticket/ot-embeds/)                               |💼 Management               |Create custom premade embeds in the config or use the command to create one from scratch. |
 |[`ot-move-actions`](https://github.com/open-discord-bots/plugins/tree/main/open-ticket/ot-move-actions/)                   |💼 Management               |Automatically unclaim/unpin a ticket when it's moved using `/move`. |
 |[`ot-reviews`](https://github.com/open-discord-bots/plugins/tree/main/open-ticket/ot-reviews/)                             |💼 Management               |Review system for Open Ticket! It is very customisable and has lots of features. |
@@ -246,10 +246,11 @@ This will help us grow and reach even more people!
 |[`ot-feedback`](https://github.com/open-discord-bots/plugins/tree/main/open-ticket/ot-feedback/)                          |an_developer                |💼 Management               |A plugin to gather feedback of your support service. |
 |[`ot-assign-role`](https://github.com/open-discord-bots/plugins/tree/main/open-ticket/ot-assign-role/)                    |rapid.fast                  |💼 Management               |This plugin assigns a predefined role to a user upon creating a ticket. |
 |[`ot-volume-warning`](https://github.com/open-discord-bots/plugins/tree/main/open-ticket/ot-volume-warning/)              |guillee.3                   |💼 Management               |Alerts ticket creators when too many tickets are open, indicating possible response delays. |
-|[`od-reminders`](https://github.com/open-discord-bots/plugins/tree/main/open-ticket/od-reminders/)                        |guillee.3                   |💼 Management               |Set reminders that will be sent to a channel every specified time. |
-|[`od-moderation`](https://github.com/open-discord-bots/plugins/tree/main/open-ticket/od-moderation/)                      |NotMukundOP                 |💼 Management               |A simple moderation plugin for Open Discord with ban, kick & warnings. |
+|[`ot-reminders`](https://github.com/open-discord-bots/plugins/tree/main/open-ticket/ot-reminders/)                        |guillee.3                   |💼 Management               |Set reminders that will be sent to a channel every specified time. |
+|[`ot-moderation`](https://github.com/open-discord-bots/plugins/tree/main/open-ticket/ot-moderation/)                      |NotMukundOP                 |💼 Management               |A simple moderation plugin for Open Discord with ban, kick & warnings. |
 |[`ot-followups`](https://github.com/open-discord-bots/plugins/tree/main/open-ticket/ot-followups/)                        |guillee.3                   |💼 Management               |Send additional follow-up messages to a ticket. |
-|[`ot-translate-cmds`](https://github.com/open-discord-bots/plugins/tree/main/open-ticket/ot-translate-cmds/)              |guillee.3                   |🤖 Client                  |Translate all built-in command names, descriptions & options. |
+|[`ot-twitch-notifier`](https://github.com/open-discord-bots/plugins/tree/main/open-ticket/ot-twitch-notifier/)            |guillee.3                   |💼 Management               |Get notified when your favorite Twitch streamers go live. |
+|[`ot-translate-cmds`](https://github.com/open-discord-bots/plugins/tree/main/open-ticket/ot-translate-cmds/)              |guillee.3                   |🤖 Client                   |Translate all built-in command names, descriptions & options. |
 
 ---
 <img src="https://apis.dj-dj.be/cdn/openticket/logo.png" alt="Open Ticket Logo" width="170px">
