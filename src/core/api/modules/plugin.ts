@@ -219,7 +219,6 @@ export class ODPlugin extends ODManagerData {
         return incompatible
     }
     
-    /**Get all authors as an array. Handles both old (string) and new (array) format. */
     getAuthors(): string[] {
         if (Array.isArray(this.details.author)) {
             return this.details.author
@@ -231,12 +230,10 @@ export class ODPlugin extends ODManagerData {
         return []
     }
     
-    /**Get all contributors as an array. */
     getContributors(): string[] {
         return this.details.contributors || []
     }
     
-    /**Get all compatible versions as an array. */
     getCompatibleVersions(): string[] {
         return this.details.versions || []
     }

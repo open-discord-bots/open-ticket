@@ -84,7 +84,6 @@ function saveNewCompilationHash(){
 }
 
 if (!process.argv.includes("--no-compile")){
-    // Read plugin.json files before compilation to check for npm dependencies
     const pluginDependencies = new Set()
     if (fs.existsSync("./plugins")){
         console.log("OT: Reading plugin.json files...")
@@ -106,12 +105,11 @@ if (!process.argv.includes("--no-compile")){
                         })
                     }
                 } catch (e) {
-                    // Silently skip invalid plugin.json files - they'll be caught during plugin loading
+                    // skip invalid plugin.json files, will be caught later
                 }
             }
         }
         
-        // Check for missing dependencies
         if (pluginDependencies.size > 0){
             console.log("OT: Checking plugin npm dependencies...")
             const missingDeps = []

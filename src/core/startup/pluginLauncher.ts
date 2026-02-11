@@ -48,41 +48,33 @@ export const loadAllPlugins = async () => {
             
             if (typeof rawplugindata.details != "object") throw new ODPluginError("Failed to load plugin.json/details")
             
-            // Handle author field - support both old (string) and new (array) format for backwards compatibility
+            // author can be string (old) or array (new), convert to array for consistency
             if (typeof rawplugindata.details.author != "string" && !Array.isArray(rawplugindata.details.author)) {
                 throw new ODPluginError("Failed to load plugin.json/details/author (must be string or array)")
             }
             
-            // Normalize author to array format for internal use
             if (typeof rawplugindata.details.author == "string") {
-                // Old format: convert string to array
                 rawplugindata.details.authors = [rawplugindata.details.author]
             } else if (Array.isArray(rawplugindata.details.author)) {
-                // New format: use author array as authors
                 rawplugindata.details.authors = rawplugindata.details.author
             }
             
-            // Validate authors array if provided separately
             if (rawplugindata.details.authors && !Array.isArray(rawplugindata.details.authors)) {
                 throw new ODPluginError("Failed to load plugin.json/details/authors (must be array)")
             }
             
-            // Validate contributors array if provided
             if (rawplugindata.details.contributors && !Array.isArray(rawplugindata.details.contributors)) {
                 throw new ODPluginError("Failed to load plugin.json/details/contributors (must be array)")
             }
             
-            // Validate versions array if provided
             if (rawplugindata.details.versions) {
                 if (!Array.isArray(rawplugindata.details.versions)) {
                     throw new ODPluginError("Failed to load plugin.json/details/versions (must be array)")
                 }
-                // Validate version format: should match pattern like "OTv4.0.x", "ODv1.0.0", etc.
                 for (const version of rawplugindata.details.versions) {
                     if (typeof version != "string") {
                         throw new ODPluginError("Failed to load plugin.json/details/versions (all items must be strings)")
                     }
-                    // Check format: project prefix (OT, OD, OM, OU) + v + version pattern
                     const versionPattern = /^(OT|OD|OM|OU)v\d+\.\d+(\.\d+|\.x)$/
                     if (!versionPattern.test(version)) {
                         throw new ODPluginError(`Failed to load plugin.json/details/versions (invalid format: "${version}", expected format like "OTv4.0.x" or "ODv1.0.0")`)
@@ -142,13 +134,12 @@ export const loadAllPlugins = async () => {
         plugin.pluginsIncompatible(opendiscord.plugins).forEach((incompatible) => incompatibilities.push({from,to:incompatible}))
         plugin.pluginsInstalled(opendiscord.plugins).forEach((missing) => missingPlugins.push({id:from,missing}))
         
-        // Check version compatibility
+        // check if plugin versions are compatible
         if (plugin.data.details.versions && plugin.data.details.versions.length > 0) {
             const currentVersion = opendiscord.versions.get("opendiscord:version")
             let isCompatible = false
             
             for (const versionStr of plugin.data.details.versions) {
-                // Parse version string (e.g., "OTv4.0.x" or "OTv4.1.2")
                 const match = versionStr.match(/^(OT|OD|OM|OU)v(\d+)\.(\d+)(?:\.(\d+|x))$/)
                 if (!match) continue
                 
@@ -157,18 +148,14 @@ export const loadAllPlugins = async () => {
                 const secondary = parseInt(match[3])
                 const tertiary = match[4]
                 
-                // Only check OT (Open Ticket) versions for now
                 if (projectPrefix !== "OT") continue
                 
-                // Check if version matches
                 if (tertiary === "x") {
-                    // Wildcard version (e.g., "OTv4.0.x" matches 4.0.0, 4.0.1, etc.)
                     if (currentVersion.primary === primary && currentVersion.secondary === secondary) {
                         isCompatible = true
                         break
                     }
                 } else {
-                    // Exact version (e.g., "OTv4.0.0")
                     const requiredVersion = api.ODVersion.fromString("temp", `v${primary}.${secondary}.${parseInt(tertiary)}`)
                     if (currentVersion.primary === requiredVersion.primary && 
                         currentVersion.secondary === requiredVersion.secondary && 
@@ -237,12 +224,11 @@ export const loadAllPlugins = async () => {
         initPluginError = true
     })
 
-    //handle all version incompatibilities
     versionIncompatibilities.forEach((match) => {
         const plugin = opendiscord.plugins.get(match.id)
         if (plugin && !plugin.crashed){
             plugin.crashed = true
-            plugin.crashReason = "missing.dependency" // Reuse this reason for version incompatibility
+            plugin.crashReason = "missing.dependency"
         }
 
         const versions = plugin?.data.details.versions?.join(", ") ?? "unknown"
@@ -278,7 +264,6 @@ export const loadAllPlugins = async () => {
     }
 
     for (const plugin of sortedPlugins){
-        // Get authors list (normalized to array)
         const authors = (Array.isArray(plugin.details.author) ? plugin.details.author : 
                         (plugin.details.authors || [plugin.details.author as string])).join(", ")
         
