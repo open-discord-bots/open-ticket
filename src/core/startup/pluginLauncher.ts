@@ -1,6 +1,5 @@
 import {opendiscord, api, utilities} from "../../index"
 import fs from "fs"
-import { ODPluginError } from "../api/api"
 
 export const loadAllPlugins = async () => {
     //start launching plugins
@@ -33,49 +32,49 @@ export const loadAllPlugins = async () => {
         try {
             const rawplugindata: api.ODPluginData = JSON.parse(fs.readFileSync("./plugins/"+p+"/plugin.json").toString())
 
-            if (typeof rawplugindata != "object") throw new ODPluginError("Failed to load plugin.json")
-            if (typeof rawplugindata.id != "string") throw new ODPluginError("Failed to load plugin.json/id")
-            if (typeof rawplugindata.name != "string") throw new ODPluginError("Failed to load plugin.json/name")
-            if (typeof rawplugindata.version != "string") throw new ODPluginError("Failed to load plugin.json/version")
-            if (typeof rawplugindata.startFile != "string") throw new ODPluginError("Failed to load plugin.json/startFile")
+            if (typeof rawplugindata != "object") throw new api.ODPluginError("Failed to load plugin.json")
+            if (typeof rawplugindata.id != "string") throw new api.ODPluginError("Failed to load plugin.json/id")
+            if (typeof rawplugindata.name != "string") throw new api.ODPluginError("Failed to load plugin.json/name")
+            if (typeof rawplugindata.version != "string") throw new api.ODPluginError("Failed to load plugin.json/version")
+            if (typeof rawplugindata.startFile != "string") throw new api.ODPluginError("Failed to load plugin.json/startFile")
             
             //only check "supportedVersions" if it exists (should be array)
             if (rawplugindata.supportedVersions){
-                if (!Array.isArray(rawplugindata.supportedVersions)) throw new ODPluginError("Failed to load plugin.json/supportedVersions (must be array)")
+                if (!Array.isArray(rawplugindata.supportedVersions)) throw new api.ODPluginError("Failed to load plugin.json/supportedVersions (must be array)")
                 for (const version of rawplugindata.supportedVersions){
                     if (typeof version !== "string"){
-                        throw new ODPluginError("Failed to load plugin.json/supportedVersions (all items must be strings)")
+                        throw new api.ODPluginError("Failed to load plugin.json/supportedVersions (all items must be strings)")
                     }
                     //only OT (Open Ticket) & OM (Open Moderation) are supported at the moment
                     if (!pluginVersionRegex.test(version)){
-                        throw new ODPluginError(`Failed to load plugin.json/supportedVersions (invalid format: "${version}", expected format like "OTv4.0.x" or "OMv1.0.0")`)
+                        throw new api.ODPluginError(`Failed to load plugin.json/supportedVersions (invalid format: "${version}", expected format like "OTv4.0.x" or "OMv1.0.0")`)
                     }
                 }
             }
             
-            if (typeof rawplugindata.enabled != "boolean") throw new ODPluginError("Failed to load plugin.json/enabled")
-            if (typeof rawplugindata.priority != "number") throw new ODPluginError("Failed to load plugin.json/priority")
-            if (!Array.isArray(rawplugindata.events)) throw new ODPluginError("Failed to load plugin.json/events")
+            if (typeof rawplugindata.enabled != "boolean") throw new api.ODPluginError("Failed to load plugin.json/enabled")
+            if (typeof rawplugindata.priority != "number") throw new api.ODPluginError("Failed to load plugin.json/priority")
+            if (!Array.isArray(rawplugindata.events)) throw new api.ODPluginError("Failed to load plugin.json/events")
             
-            if (!Array.isArray(rawplugindata.npmDependencies)) throw new ODPluginError("Failed to load plugin.json/npmDependencies")
-            if (!Array.isArray(rawplugindata.requiredPlugins)) throw new ODPluginError("Failed to load plugin.json/requiredPlugins")
-            if (!Array.isArray(rawplugindata.incompatiblePlugins)) throw new ODPluginError("Failed to load plugin.json/incompatiblePlugins")
+            if (!Array.isArray(rawplugindata.npmDependencies)) throw new api.ODPluginError("Failed to load plugin.json/npmDependencies")
+            if (!Array.isArray(rawplugindata.requiredPlugins)) throw new api.ODPluginError("Failed to load plugin.json/requiredPlugins")
+            if (!Array.isArray(rawplugindata.incompatiblePlugins)) throw new api.ODPluginError("Failed to load plugin.json/incompatiblePlugins")
             
-            if (typeof rawplugindata.details != "object") throw new ODPluginError("Failed to load plugin.json/details")
-            if (typeof rawplugindata.details.author != "string") throw new ODPluginError("Failed to load plugin.json/details/author (must be string or array)")
+            if (typeof rawplugindata.details != "object") throw new api.ODPluginError("Failed to load plugin.json/details")
+            if (typeof rawplugindata.details.author != "string") throw new api.ODPluginError("Failed to load plugin.json/details/author")
             
             //only check "contributors" if it exists (should be array)
-            if (rawplugindata.details.contributors && !Array.isArray(rawplugindata.details.contributors)) throw new ODPluginError("Failed to load plugin.json/details/contributors (must be array)")
+            if (rawplugindata.details.contributors && !Array.isArray(rawplugindata.details.contributors)) throw new api.ODPluginError("Failed to load plugin.json/details/contributors (must be array)")
             
-            if (typeof rawplugindata.details.shortDescription != "string") throw new ODPluginError("Failed to load plugin.json/details/shortDescription")
-            if (typeof rawplugindata.details.longDescription != "string") throw new ODPluginError("Failed to load plugin.json/details/longDescription")
-            if (typeof rawplugindata.details.imageUrl != "string") throw new ODPluginError("Failed to load plugin.json/details/imageUrl")
-            if (typeof rawplugindata.details.projectUrl != "string") throw new ODPluginError("Failed to load plugin.json/details/projectUrl")
-            if (!Array.isArray(rawplugindata.details.tags)) throw new ODPluginError("Failed to load plugin.json/details/tags")
+            if (typeof rawplugindata.details.shortDescription != "string") throw new api.ODPluginError("Failed to load plugin.json/details/shortDescription")
+            if (typeof rawplugindata.details.longDescription != "string") throw new api.ODPluginError("Failed to load plugin.json/details/longDescription")
+            if (typeof rawplugindata.details.imageUrl != "string") throw new api.ODPluginError("Failed to load plugin.json/details/imageUrl")
+            if (typeof rawplugindata.details.projectUrl != "string") throw new api.ODPluginError("Failed to load plugin.json/details/projectUrl")
+            if (!Array.isArray(rawplugindata.details.tags)) throw new api.ODPluginError("Failed to load plugin.json/details/tags")
             
-            if (rawplugindata.id != p) throw new ODPluginError("Failed to load plugin, directory name is required to match the id")
+            if (rawplugindata.id != p) throw new api.ODPluginError("Failed to load plugin, directory name is required to match the id")
             
-            if (opendiscord.plugins.exists(rawplugindata.id)) throw new ODPluginError("Failed to load plugin, this id already exists in another plugin")
+            if (opendiscord.plugins.exists(rawplugindata.id)) throw new api.ODPluginError("Failed to load plugin, this id already exists in another plugin")
 
             //plugin.json is valid => load plugin
             const plugin = new api.ODPlugin(p,rawplugindata)
