@@ -28,6 +28,7 @@ const fs = require("fs")
 const ts = require("typescript")
 const {createHash,Hash} = require("crypto")
 const nodepath = require('path')
+const ansis = require("ansis")
 
 /** ## What is this?
  * This is a function which compares `./src/` with a hash stored in `./dist/hash.txt`.
@@ -84,6 +85,51 @@ function saveNewCompilationHash(){
 }
 
 if (!process.argv.includes("--no-compile")){
+    const requiredDependencies = new Set()
+    if (fs.existsSync("./plugins")){
+        console.log("OT: Reading plugin.json files...")
+        for (const pluginDir of fs.readdirSync("./plugins")){
+            if (pluginDir === ".DS_Store") continue
+            const pluginPath = nodepath.join("./plugins", pluginDir)
+            if (!fs.statSync(pluginPath).isDirectory()) continue
+            
+            const pluginJsonPath = nodepath.join(pluginPath, "plugin.json")
+            if (fs.existsSync(pluginJsonPath)){
+                try{
+                    const pluginData = JSON.parse(fs.readFileSync(pluginJsonPath).toString())
+                    if (pluginData.npmDependencies && Array.isArray(pluginData.npmDependencies)){
+                        pluginData.npmDependencies.forEach((dep) => {
+                            if (typeof dep === "string" && dep.trim()){
+                                requiredDependencies.add(dep.trim())
+                            }
+                        })
+                    }
+                }catch(err){
+                    // skip invalid plugin.json files, will be caught later
+                }
+            }
+        }
+        
+        if (requiredDependencies.size > 0){
+            console.log("OT: Checking plugin npm dependencies...")
+            /**@type {string[]} */
+            const missingDeps = []
+            for (const dep of requiredDependencies){
+                try{
+                    require.resolve(dep)
+                }catch(err){
+                    missingDeps.push(dep)
+                }
+            }
+            
+            if (missingDeps.length > 0){
+                console.log(ansis.red("OT: ❌ Fatal Error --> Missing npm dependencies required by plugins:\n\n")+ansis.cyan(missingDeps.map((dep) => "  - "+dep).join("\n")+"\n"))
+                console.log("OT: Please install missing dependencies using the following command:\n> "+ansis.bold.green("npm install " + missingDeps.join(" "))+"\n")
+                process.exit(1)
+            }
+        }
+    }
+    
     if (requiresCompilation()){
         console.log("OT: Compilation Required...")
 
