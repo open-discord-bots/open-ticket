@@ -2,7 +2,7 @@
 <img src="https://apis.dj-dj.be/cdn/openticket/logo.png" alt="Open Ticket" width="650px"><br>
 <span align="center"><b>The most advanced self-hosted ticket bot for Discord</b></span><br>
 <sub align="center">Related Projects:</sub><br>
-<img src="https://apis.dj-dj.be/cdn/opendiscord/logo.png" alt="Open Discord" height="55px"><br><br>
+<a href="https://odplugins.dj-dj.be"><img src="https://apis.dj-dj.be/cdn/opendiscord/logo.png" alt="Open Discord" height="55px"></a><br><br>
 <a href="https://discord.com/invite/26vT9wt3n3"><img alt="Discord Invite Link" src="https://img.shields.io/badge/discord-support%20server-5865F2.svg?style=flat-square&logo=discord"></img></a>
 <a href="https://github.com/open-discord-bots/open-ticket/releases/tag/v4.1.3"><img alt="Open Ticket Version" src="https://img.shields.io/badge/version-4.1.3-brightgreen.svg?style=flat-square"></img></a>
 <a href="https://otdocs.dj-dj.be"><img alt="Open Ticket Documentation" src="https://img.shields.io/badge/discord.js-v14-CB3837.svg?style=flat-square&logo=npm"></img></a>
