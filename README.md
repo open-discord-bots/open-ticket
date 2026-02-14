@@ -15,11 +15,14 @@
 </p>
 
 <p align="center">
-Open Ticket is the most advanced & customisable discord ticket bot available! You are able to customise up to 300+ settings and aspects! This includes <code>Html Transcripts</code>, <code>Advanced Plugins</code>, <code>Custom Embeds</code>, <code>Questions/Modals</code>, <code>Stats</code> & more!
-The bot is translated in more than <code>36 Languages</code> and has been battle tested in large Discord servers! If you need any help, feel free to join our <a href="https://discord.dj-dj.be">discord server</a>!
+Open Ticket is the most <b>advanced and customizable</b> Discord ticket bot available. With <b>350+ configurable settings</b>, you have full control over every aspect of your ticket system!
+From <a href="https://t.dj-dj.be"><code>HTML transcripts</code></a> and <a href="#-plugins"><code>Advanced Plugins</code></a> to <code>Claiming & Pinning</code>, <code>Questions & Modals</code>, <code>Detailed Statistics</code>, and much more.<br><br>
+The bot is fully translated into <b>36+ languages</b> and has been battle-tested in large Discord servers.<br>
+Need help or want to get involved? Feel free to join our <a href="https://discord.dj-dj.be"><b>Discord server</b></a>.
 </p>
 
-<h3 align="center"><b>⭐️ Help us grow by giving a star! ⭐️</b></h3>
+<h3 align="center"><b>⭐️ Support Open Ticket’s growth by starring this repo! ⭐️</b></h3>
+<p align="center"><sup>❤️ Love Open Ticket? <a href="https://github.com/sponsors/DJj123dj">Sponsorships</a> help fuel our HTML transcript servers and future features! ❤️</sup></p>
 
 ---
 > **[-> Navigate to (⏱️ Quick Setup)](#️-quick-start-using-cli)**  
