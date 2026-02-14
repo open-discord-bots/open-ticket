@@ -1,14 +1,8 @@
-> ### 📌 Open Ticket Quick Links
-> - [⏱️ Quick Setup](#️-quick-setup-using-cli)
-> - [📔 Documentation](https://otdocs.dj-dj.be)
-> - [🧩 Available Plugins](#-plugins)
-> - [📞 Discord Server](https://discord.dj-dj.be)
----
-
 <p align="center">
-<img src="https://apis.dj-dj.be/cdn/openticket/logo.png" alt="Open Ticket" width="650px">
-<br>Powered By<br>
-<img src="https://apis.dj-dj.be/cdn/opendiscord/logo.png" alt="Open Ticket" width="170px"><br>
+<img src="https://apis.dj-dj.be/cdn/openticket/logo.png" alt="Open Ticket" width="650px"><br>
+<span align="center"><b>The most advanced self-hosted ticket bot for Discord</b></span><br>
+<sub align="center">Related Projects:</sub><br>
+<img src="https://apis.dj-dj.be/cdn/opendiscord/logo.png" alt="Open Discord" height="55px"><br><br>
 <a href="https://discord.com/invite/26vT9wt3n3"><img alt="Discord Invite Link" src="https://img.shields.io/badge/discord-support%20server-5865F2.svg?style=flat-square&logo=discord"></img></a>
 <a href="https://github.com/open-discord-bots/open-ticket/releases/tag/v4.1.3"><img alt="Open Ticket Version" src="https://img.shields.io/badge/version-4.1.3-brightgreen.svg?style=flat-square"></img></a>
 <a href="https://otdocs.dj-dj.be"><img alt="Open Ticket Documentation" src="https://img.shields.io/badge/discord.js-v14-CB3837.svg?style=flat-square&logo=npm"></img></a>
@@ -26,6 +20,11 @@ The bot is translated in more than <code>36 Languages</code> and has been battle
 </p>
 
 <h3 align="center"><b>⭐️ Help us grow by giving a star! ⭐️</b></h3>
+
+---
+> **[-> Navigate to (⏱️ Quick Setup)](#️-quick-start-using-cli)**  
+> **[-> Navigate to (📚 Documentation)](https://otdocs.dj-dj.be)**  
+> **[-> Navigate to (📞 Support Server)](https://discord.dj-dj.be)**
 
 ### 📌 Features
 - **⏳ Quick Setup** - Using the interactive Quick Setup CLI, you can **configure Open Ticket in less than 5min!**
@@ -61,15 +60,28 @@ The bot is translated in more than <code>36 Languages</code> and has been battle
   - **🎨 Customisation** - Yep, you heard it right. Even more customisation!
   - **😁 And so much more...**
 
-> ### 📦 Resources
-> These resources will help with configuration and usage of the bot:<br>
-> <!--<a href="https://openticket.dj-dj.be/message.html?msg=The%20current%20tutorial%20is%20outdated,%20we%27re%20still%20working%20on%20a%20new%20one!"><img src="https://apis.dj-dj.be/cdn/openticket/open-ticket-tutorial.png" alt="Open Ticket Tutorial" width="180px"></a>-->
-> <a href="https://otdocs.dj-dj.be"><img src="https://apis.dj-dj.be/cdn/openticket/open-ticket-docs.png" alt="Open Ticket Docs" width="180px"></a>
-> <a href="https://github.com/open-discord-bots/plugins"><img src="https://apis.dj-dj.be/cdn/openticket/open-ticket-plugins.png" alt="Open Ticket Plugins" width="180px"></a>
+### ⏱️ Quick Start (Using Interactive CLI Tool)
+> 1. Download the latest version of Open Ticket on [Github](https://github.com/open-discord-bots/open-ticket).
+> 2. Make sure Node.js & Npm are installed using `node -v` (minimum `v20`).
+> 3. Install any required dependencies using `npm install`.
+> 4. Start the **Quick Setup CLI** using `npm run setup`.
+> 5. Click on `> ⏱️ Quick Setup` and follow the instructions.
+> 6. Start the bot using `npm start` or `node index.js`
+>    - If required, the bot will give a report of errors that must be solved.
+>    - Follow the instructions and restart the bot.
+> 7. Enjoy using Open Ticket!
+>
+> #### 🚦 Navigation
+> **[-> Navigate to (📚 Documentation)](https://otdocs.dj-dj.be)**  
+> **[-> Navigate to (📞 Support Server)](https://discord.dj-dj.be)**  
+> **[-> Navigate to (🧩 Download Plugins)](https://odplugins.dj-dj.be)**
+>
+> #### 🖥️ Recommended Hosting
+> - **A VPS (Virtual Private Server)** - Extra customisation & more stability. Recommended for most servers.
+> - **Any Pterodactyl-Based Panel** - Easy installation & configuration.
 
 ### ❤️ Sponsors
-A big thanks to all our sponsors! Without them, it wouldn't be possible to create this project!
-
+Huge thanks to our sponsors for making this project possible. Your support means everything to us.
 <table>
 <tr>
 <td><img src="https://github.com/guillee3.png" alt="Profile Picture" width="100px"></td>
@@ -89,24 +101,6 @@ A big thanks to all our sponsors! Without them, it wouldn't be possible to creat
 <img src="https://github.com/BENZORICH.png" alt="BENZORICH" width="40px">
 </a>
 
-### ⏱️ Quick Setup (Using CLI)
-> 1. Download the latest version of Open Ticket on [Github](https://github.com/open-discord-bots/open-ticket).
-> 2. Make sure node.js & npm are installed using `node -v` (minimum `v20`).
-> 3. Install any required dependencies using `npm install`.
-> 4. Start the **Quick Setup CLI** using `npm run setup`.
-> 5. Click on `> ⏱️ Quick Setup` and follow the instructions.
-> 6. Start the bot using `npm start` or `node index.js`
->    - The bot will let you know any existing config errors.
->    - Fix these errors and restart the bot.
-> 7. Enjoy using Open Ticket!
-> ### [📔 Visit Documentation](https://otdocs.dj-dj.be)
->
-> ### 🖥️ Recommended Hostings
-> - **Any Pterodactyl-Based Panel** - Easy installation & configuration.
-> - **A Virtual Private Server (VPS)** - Extra customisation & more stability. Recommended for large servers.
-> 
-> *❤️ Want to display your hosting here? Contact us in our [Discord server](https://discord.dj-dj.be)!*
-
 ## 📸 Preview
 <img alt="An example of a panel." src="https://apis.dj-dj.be/cdn/openticket/preview-v4/panel-examples.png">
 <img alt="An example of a ticket message." src="https://apis.dj-dj.be/cdn/openticket/preview-v4/ticket-example.png">
@@ -114,7 +108,7 @@ A big thanks to all our sponsors! Without them, it wouldn't be possible to creat
 
 ## 🛠️ Contributors
 ### 🖥️ Team & Contributors
-A list of people that contributed or provided support for Open Ticket & Open Discord.
+A list of amazing people who have contributed or provided supported for **Open Ticket** and **Open Discord**.
 <table>
 <tr>
 <td align="center"><img src="https://github.com/DJj123dj.png" alt="Profile Picture" width="80px"></td>
@@ -122,6 +116,7 @@ A list of people that contributed or provided support for Open Ticket & Open Dis
 <td align="center"><img src="https://github.com/smetsliam.png" alt="Profile Picture" width="80px"></td>
 <td align="center"><img src="https://github.com/FrankVissers.png" alt="Profile Picture" width="80px"></td>
 <td align="center"><img src="https://github.com/Sank34.png" alt="Profile Picture" width="80px"></td>
+<td align="center"><img src="https://github.com/SKaranjaN.png" alt="Profile Picture" width="80px"></td>
 </tr>
 <tr>
 <th><a href="https://github.com/DJj123dj">💻🧩💬 DJj123dj</a></th>
@@ -129,6 +124,7 @@ A list of people that contributed or provided support for Open Ticket & Open Dis
 <th><a href="https://github.com/smetsliam">💬 smetsliam</a></th>
 <th><a href="https://github.com/FrankVissers">💬 Frank Vissers</a></th>
 <th><a href="https://github.com/Sank34">💬 Sanke</a></th>
+<th><a href="https://github.com/SKaranjaN">🧩 SKaranjaN</a></th>
 </tr>
 </table>
 
@@ -144,28 +140,28 @@ With the amazing support of our translators, we've been able to translate Open T
 |----|---------------------|--------------------------------|
 |🟢   |🇬🇧 English            |djj123dj                       |
 |🟢   |🇳🇱 Dutch              |djj123dj                       |
-|🟢   |❓ Catalan            |guillee3                       |
-|🟢   |🇮🇩 Indonesian         |erxg                           |
-|🟢   |🇮🇳 Hindi              |challenger_nova                |
 |🟢   |🇩🇪 German             |benzorich                      |
-|🟢   |🇮🇹 Italian            |fraden1mvp. & imperatorix_17   |
-|🟢   |🇹🇭 Thai               |modshd                         |
-|🟢   |🇱🇹 Lithuanian         |tsgindrius                     |
 |🟢   |🇫🇷 French             |guillee.3                      |
-|🟠   |🇪🇸 Spanish            |redactado & josuens            |
-|🟠   |🇵🇹 Portuguese         |quiradon                       |
-|🟠   |🇨🇿 Czech              |spyeye_                        |
-|🟠   |🇭🇺 Hungarian          |kornel0706                     |
-|🟠   |🇷🇴 Romanian           |sankedev                       |
-|🟠   |🇺🇦 Ukrainian          |anderskiy                      |
-|🟠   |🇩🇰 Danish             |the_gamer                      |
-|🟠   |🇹🇷 Turkish            |palestinian                    |
-|🟠   |🇦🇪 Arabic             |palestinian                    |
-|🟠   |🇵🇱 Polish             |danoglez                       |
-|🟠   |🇳🇴 Norwegian          |NoOneNook                      |
-|🟠   |🇸🇪 Swedish            |NoOneNook                      |
-|🟠   |🇮🇷 Persian            |dysashop & zhavis              |
-|🟠   |🇧🇩 Bengali            |HanumeshGupta                  |
+|🟢   |🇪🇸 Spanish            |redactado & josuens            |
+|🟢   |🇵🇹 Portuguese         |quiradon                       |
+|🟢   |🇮🇹 Italian            |fraden1mvp. & imperatorix_17   |
+|🟢   |🇸🇪 Swedish            |NoOneNook                      |
+|🟢   |🇳🇴 Norwegian          |NoOneNook                      |
+|🟢   |🇹🇭 Thai               |modshd                         |
+|🟢   |🇮🇳 Hindi              |challenger_nova                |
+|🟢   |🇭🇺 Hungarian          |kornel0706                     |
+|🟢   |🇮🇩 Indonesian         |erxg                           |
+|🟢   |🇱🇹 Lithuanian         |tsgindrius                     |
+|🟢   |🇺🇦 Ukrainian          |anderskiy                      |
+|🟢   |🇨🇿 Czech              |spyeye_                        |
+|🟢   |🇷🇴 Romanian           |sankedev                       |
+|🟢   |🇩🇰 Danish             |the_gamer                      |
+|🟢   |🇹🇷 Turkish            |palestinian                    |
+|🟢   |🇦🇪 Arabic             |palestinian                    |
+|🟢   |🇵🇱 Polish             |danoglez                       |
+|🟢   |🇮🇷 Persian            |dysashop & zhavis              |
+|🟢   |🇧🇩 Bengali            |HanumeshGupta                  |
+|🟢   |❓ Catalan            |guillee3                       |
 |🤖   |🇪🇪 Estonian           |iamnotmega                     |
 |🤖   |🇫🇮 Finnish            |iamnotmega                     |
 |🤖   |🇯🇵 Japanese           |HanumeshGupta                  |
@@ -175,9 +171,9 @@ With the amazing support of our translators, we've been able to translate Open T
 |🤖   |🇮🇳 Tamil              |HanumeshGupta                  |
 |🤖   |🇨🇳 Simplified Chinese |HanumeshGupta                  |
 |🤖   |❓ Kurdish            |HanumeshGupta                  |
-|🤖⏳ |🇷🇺 Russian            |NoOneNook                      |
-|🤖⏳ |🇱🇻 Latvian            |NoOneNook                      |
-|🤖⏳ |🇻🇳 Vietnamese         |ngocdiep2006                   |
+|🟠   |🇷🇺 Russian            |NoOneNook                      |
+|🟠   |🇱🇻 Latvian            |NoOneNook                      |
+|🟠   |🇻🇳 Vietnamese         |ngocdiep2006                   |
 |🔴   |🇨🇳 Traditional Chinese|[⭐ Contribute!](.github/CONTRIBUTING.md)|
 <!--[⭐ Contribute!](.github/CONTRIBUTING.md) -->
 
