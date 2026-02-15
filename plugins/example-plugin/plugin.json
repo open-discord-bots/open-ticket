@@ -3,7 +3,7 @@
     "id":"example-plugin",
     "version":"1.0.0",
     "startFile":"index.ts",
-    "supportedVersions":["OTv4.0.x","OTv4.1.x"],
+    "supportedVersions":["OTv4.0.x","OTv4.1.x","OTv4.2.x"],
 
     "enabled":false,
     "priority":0,
