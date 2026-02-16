@@ -1,8 +1,8 @@
 {
     "_TRANSLATION":{
-        "otversion":"v4.1.2",
+        "otversion":"v4.1.3",
         "translators":["spyeye_"],
-        "lastedited":"21/08/2024",
+        "lastedited":"16/02/2026",
         "language":"Czech",
         "automated":false
     },
@@ -31,7 +31,15 @@
             "stringContains":"Tento string musí obsahovat {0}!",
             "stringChoices":"Tento string může být pouze jednou z následujících možností: {0}!",
             "stringRegex":"Tento string je neplatný!",
-
+            "stringInvertedContains":"Tento řetězec nesmí obsahovat {0}!",
+            "stringLowercase":"Tento řetězec musí být napsán pouze malými písmeny!",
+            "stringUppercase":"Tento řetězec musí být napsán pouze velkými písmeny!",
+            "stringSpecialCharacters":"Tento řetězec nesmí obsahovat žádné speciální znaky! (pouze a-z, 0-9 a mezery)",
+            "stringNoSpaces":"Tento řetězec nesmí obsahovat mezery!",
+            "stringCapitalWord":"Doporučuje se, aby každé slovo v tomto řetězci začínalo velkým písmenem!",
+            "stringCapitalSentence":"Zdá se, že některé věty v tomto řetězci nezačínají velkým písmenem!",
+            "stringPunctuation":"Zdá se, že věta v tomto řetězci nekončí interpunkčním znaménkem!",
+            
             "numberTooShort":"Toto číslo nesmí být kratší než {0} znaků!",
             "numberTooLong":"Toto číslo nesmí být delší než {0} znaků.!",
             "numberLengthInvalid":"Toto číslo musí mít délku {0} znaků.!",
@@ -48,10 +56,12 @@
             "numberNegative":"Toto číslo nemůže být záporné!",
             "numberPositive":"Toto číslo nemůže být kladné!",
             "numberZero":"Toto číslo nemůže být nula!",
-
+            "numberNan":"Toto číslo nemůže být NaN (není číslo)!",
+            "numberInvertedContains":"Toto číslo nesmí obsahovat {0}!",
+            
             "booleanTrue":"Tento boolean nemůže být true!",
             "booleanFalse":"Tento boolean nemůže být false!",
-
+            
             "arrayEmptyDisabled":"Toto pole nesmí být prázdné.!",
             "arrayEmptyRequired":"Toto pole musí být prázdné!",
             "arrayTooShort":"Toto pole musí mít délku alespoň {0}!",
@@ -59,7 +69,7 @@
             "arrayLengthInvalid":"Toto pole musí mít délku {0}!",
             "arrayInvalidTypes":"Toto pole může obsahovat pouze následující typy: {0}!",
             "arrayDouble":"Toto pole neumožňuje zadat stejnou hodnotu dvakrát.!",
-
+            
             "discordInvalidId":"Toto je neplatné discord {0} id!",
             "discordInvalidIdOptions":"Toto je neplatné Discord ID {0}! Můžete také použít jeden z těchto: {1}!",
             "discordInvalidToken":"Toto je neplatný discord token (syntakticky)!",
@@ -76,7 +86,7 @@
             "urlInvalidPath":"Tato url má neplatnou cestu!",
             "idNotUnique":"Toto id není jedinečné, místo něj použijte jiné id!",
             "idNonExistent":"Id {0} neexistuje!",
-
+            
             "invalidType":"Toto nastavení musí být typu: {0}!",
             "propertyMissing":"U tohoto objektu chybí vlastnost {0}!",
             "propertyOptional":"Vlastnost {0} je v tomto objektu nepovinná!",
@@ -84,12 +94,13 @@
             "nullInvalid":"Tato vlastnost nemůže být nulová!",
             "switchInvalidType":"Musí se jednat o jeden z následujících typů: {0}!",
             "objectSwitchInvalid":"Tento objekt musí být jednoho z následujících typů: {0}!",
-
+            
             "invalidLanguage":"Jedná se o neplatný jazyk!",
             "invalidButton":"Toto tlačítko musí mít alespoň {0} nebo {1}!",
             "unusedOption":"Možnost {0} se nikde nepoužívá!",
             "unusedQuestion":"Otázka {0} není nikde použita!",
-            "dropdownOption":"Panel s povoleným rozevíracím seznamem může obsahovat pouze možnosti typu „ticketu“!"
+            "dropdownOption":"Panel s povoleným rozevíracím seznamem může obsahovat pouze možnosti typu „ticketu“!",
+            "customInvalidVersion":"Verze uvedená ve vaší konfiguraci neodpovídá! Ujistěte se, že jste konfiguraci aktualizovali na nejnovější verzi!"
         }
     },
     "actions":{
@@ -132,6 +143,7 @@
             "blacklistAddDm":"Přidán na blacklistu",
             "blacklistRemoveDm":"Odebrán z blacklistu",
             "clear":"Tickety vyčištěny",
+            "clearTickets":"Vymazat tikety",
             "roles":"Role aktualizovány",
             
             "autoclose":"Ticket automaticky uzavřen",
@@ -139,7 +151,12 @@
             "autocloseDisabled":"Automatické uzavření zakázáno",
             "autodelete":"Ticket automaticky vymazán",
             "autodeleteEnabled":"Automatické mazání povoleno",
-            "autodeleteDisabled":"Automatické mazání zakázáno"
+            "autodeleteDisabled":"Automatické mazání zakázáno",
+            
+            "topicSet":"Téma změněno",
+            "prioritySet":"Priorita změněna",
+            "priorityGet":"Priorita tiketu",
+            "transfer":"Ticket přenesen"
         },
         "descriptions":{
             "create":"Tvůj ticket byl vytvořen. Klikni na tlačítko pod zprávou pro zobrazení!",
@@ -154,7 +171,7 @@
             "move":"Ticket byl úspěšně přesunut do {0}!",
             "add":"{0} byl úspěšně přidán do ticketu!",
             "remove":"{0} byl úspěšně odstraněn z ticketu!",
-
+            
             "helpExplanation":"`<name>` => povinný parametr\n`[name]` => nepovinný parametr",
             "statsReset":"Statistiky bota byly úspěšně resetovány!",
             "statsError":"Nelze zobrazit statistiky ticketu!\n{0} není ticket!",
@@ -167,7 +184,7 @@
             "clearVerify":"Opravdu chcete smazat více ticketů?\nTuto akci nelze vrátit zpět!",
             "clearReady":"{0} ticketů bylo úspěšně smazány!",
             "rolesEmpty":"Žádné role nebyly aktualizovány!",
-
+            
             "autocloseLeave":"Tento ticket byl automaticky uzavřen, protože jeho autor opustil server.!",
             "autocloseTimeout":"Tento ticket byl automaticky uzavřen, protože byl neaktivní déle než `{0}h`!",
             "autodeleteLeave":"Tento ticket byl automaticky smazán, protože jeho autor opustil server!",
@@ -176,11 +193,16 @@
             "autocloseDisabled":"U tohoto ticketu bylo vypnuto automatické zavírání!\nUž se nebude automaticky zavírat!",
             "autodeleteEnabled":"U tohoto ticketu bylo povoleno automatické mazání!\nBude smazán, pokud je neaktivní déle než `{0} dní`!",
             "autodeleteDisabled":"Automatické mazání bylo v tomto zakázáno!\nUž se nebude automaticky mazat!",
-
+            
             "ticketMessageLimit":"Současně lze vytvořit pouze {0} ticketu!",
             "ticketMessageAutoclose":"Tento ticket se automaticky uzavře, pokud je neaktivní po dobu {0}h!",
             "ticketMessageAutodelete":"Tento ticket bude automaticky smazán, pokud bude neaktivní po dobu {0} dnů!",
-            "panelReady":"Panel najdete níže!\nTuto zprávu lze nyní smazat!"
+            "panelReady":"Panel je k dispozici ve zprávě následně!\nTato zpráva může být nyní smazána!",
+            
+            "topicSet":"Téma kanálu bylo úspěšně změněno {0}!",
+            "prioritySet":"Priorita tiketu byla úspěšně změněna na {0} {1}!",
+            "priorityGet":"Aktuální priorita tohoto tiketu je {0}.",
+            "transfer":"Vlastnictví tiketu bylo úspěšně převedeno z {0} na {1} {2}!"
         },
         "modal":{
             "closePlaceholder":"Proč jste tento ticket uzavřel?",
@@ -215,12 +237,19 @@
             "addDm":"{0} byl přidán do tvého ticketu na našem serveru!",
             "removeLog":"{0} byl odstraněn z tohoto ticketu uživatelem {1}!",
             "removeDm":"{0} byl odstraněn z tvého ticketu na našem serveru!",
-
+            
             "blacklistAddLog":"{0} byl přidán na blacklist uživatelem {1}!",
             "blacklistRemoveLog":"{0} byl odstraněn z blacklistu uživatelem {1}!",
             "blacklistAddDm":"Byl jsi přidán na blacklist na našem serveru!\nOd teď nemůžeš vytvářet tickety!",
             "blacklistRemoveDm":"Byl jsi odstraněn z blacklistu na našem serveru!\nNyní můžeš opět vytvářet tickety!",
-            "clearLog":"{0} ticketů bylo smazáno uživatelem {1}!"
+            "clearLog":"{0} ticketů bylo smazáno uživatelem {1}!",
+            
+            "transferLog":"Vlastnictví tohoto tiketu bylo převedeno z {0} na {1} {2}!",
+            "transferDm":"Vlastnictví vašeho tiketu bylo převedeno z {0} na {1} na našem serveru!",
+            "prioritySetLog":"Priorita tohoto tiketu byla změněna na {0} {1}!",
+            "prioritySetDm":"Priorita vašeho tiketu byla změněna na {0} na našem serveru!",
+            "roleUpdateLog":"{0} aktualizoval své role!",
+            "roleUpdateDm":"Vaše role na našem serveru byly aktualizovány!"
         }
     },
     "transcripts":{
@@ -229,7 +258,7 @@
             "ready":"Přepis vytvořen",
             "textFileDescription":"Toto je textový přepis smazaného ticketu!",
             "htmlProgress":"Prosím, počkejte, zatímco se zpracovává HTML přepis...",
-
+            
             "createdChannel":"Na serveru byl vytvořen nový přepis {0}!",
             "createdCreator":"Byl vytvořen nový přepis {0} pro jeden z tvých ticketů!",
             "createdParticipant":"Byl vytvořen nový přepis {0} v jednom z ticketů, kterých ses účastnil!",
@@ -241,7 +270,19 @@
             "retry":"Zkusit Znovu",
             "continue":"Vymazat bez přepisu",
             "backup":"Vytvořit záložní přepis",
-            "error":"Při pokusu o vytvoření přepisu se něco pokazilo.\nCo chcete udělat?\n\nTento ticket nebude smazán, dokud nekliknete na jedno z těchto tlačítek."
+            "error":"Při pokusu o vytvoření přepisu se něco pokazilo.\nCo chcete udělat?\n\nTento ticket nebude smazán, dokud nekliknete na jedno z těchto tlačítek.",
+            "title":"Chyba přepisu"
+        },
+        "text":{
+            "messagesTitle":"ZPRÁVY",
+            "embedTitle":"EMBED",
+            "fileTitle":"SOUBOR",
+            "fieldsTitle":"POLE",
+            "reactionsTitle":"REAKCE",
+            "statsTitle":"STATISTIKY",
+            "emptyContent":"<obsah prázdný>",
+            "noTitle":"<bez názvu>",
+            "noDesc":"<bez popisu>"
         }
     },
     "errors":{
@@ -257,7 +298,8 @@
             "unknownPanel":"Neznámý panel",
             "notInGuild":"Nejsi na serveru",
             "channelRename":"Nepodařilo se přejmenovat kanál",
-            "busy":"Ticket je zaneprázdněn"
+            "busy":"Ticket je zaneprázdněn",
+            "permissionError":"Chyba oprávnění"
         },
         "descriptions":{
             "askForInfo":"Pro více informací kontaktuj vlastníka tohoto bota!",
@@ -280,7 +322,10 @@
             "notInGuild":"Tento {0} nefunguje v DM! Zkus to znovu na serveru!",
             "channelRename":"Kvůli ratelimitům Discordu není momentálně možné, aby bot přejmenoval kanál. Kanál bude automaticky přejmenován do 10 minut, pokud nedojde k restartu bota.",
             "channelRenameSource":"Zdroj této chyby je: {0}",
-            "busy":"Nelze použít tento {0}!\nTicket je momentálně zpracováván botem.\n\nZkus to prosím znovu za několik sekund!"
+            "busy":"Nelze použít tento {0}!\nTicket je momentálně zpracováván botem.\n\nZkus to prosím znovu za několik sekund!",
+            "closeBeforeMessage":"Tento tiket nelze uzavřít/smazat, dokud uživatel neodešle zprávu.",
+            "closeBeforeAdminMessage":"Tento tiket nelze uzavřít/smazat, dokud admin tiketu nebo člen podpory neodešle zprávu.",
+            "unableToCreateTicket":"Nemůžete vytvořit tiket."
         },
         "optionInvalidReasons":{
             "stringRegex":"Hodnota neodpovídá vzoru!",
@@ -331,7 +376,6 @@
             "added":"Přidáno",
             "removed":"Odstraněno",
             "filter":"Filtr",
-            "claimedBy":"Přiděleno uživatelem {0}",
             "method":"Metoda",
             "type":"Typ",
             "blacklisted":"Na blacklistu",
@@ -352,10 +396,30 @@
             "version":"Verze",
             "name":"Jméno",
             "role":"Role",
-            "status":"Stav",
+            "status":"STAV",
             "claimed":"Přiděleno",
             "pinned":"Připnuto",
-            "creationDate":"Datum vytvoření"
+            "creationDate":"Datum vytvoření",
+            
+            "noone":"Nikdo",
+            "open":"OTEVŘENO",
+            "closed":"UZAVŘENO",
+            "priority":"PRIORITA",
+            "participants":"ÚČASTNÍCI",
+            "yes":"Ano",
+            "no":"Ne",
+            "option":"Možnost",
+            "topic":"Téma",
+            "uptime":"Doba provozu systému",
+            "messages":"Zprávy",
+            "embeds":"Embeds",
+            "files":"Soubory",
+            "components":"Komponenty",
+            "cooldown":"Cooldown",
+            "maxTickets":"Maximální tikety",
+            "admins":"Admini",
+            "roles":"Role",
+            "size":"Velikost"
         },
         "lowercase":{
             "text":"text",
@@ -384,6 +448,7 @@
         "unclaim":"Odeber přidělení ticketu.",
         "pin":"Připni ticket.",
         "unpin":"Odepni ticket.",
+        
         "move":"Přesuň ticket.",
         "moveId":"Identifikátor možnost, na který chceš přesunout.",
         "rename":"Přejmenuj ticket.",
@@ -392,6 +457,7 @@
         "addUser":"Uživatel k přidání.",
         "remove":"Odstraň uživatele z ticketu.",
         "removeUser":"Uživatel k odstranění.",
+        
         "blacklist":"Spravuj blacklist ticketů.",
         "blacklistView":"Zobraz seznam aktuálního blacklistu.",
         "blacklistAdd":"Přidej uživatele na blacklist.",
@@ -405,6 +471,7 @@
         "statsUserUser":"Uživatel, jehož statistiky chceš zobrazit.",
         "statsTicket":"Zobraz statistiky ticketu na serveru.",
         "statsTicketTicket":"Ticket, jehož statistiky chceš zobrazit.",
+        
         "clear":"Smaž více ticketů najednou. Lze zadat volitelný filtr.",
         "clearFilter":"Filtr pro vymazání tiketů.",
         "clearFilters":{
@@ -417,6 +484,7 @@
             "unpin":"Nepřipnuté",
             "autoclose":"Automaticky uzavřené"
         },
+        
         "autoclose":"Spravuj automatické uzavření ticketu.",
         "autocloseDisable":"Deaktivuj automatické uzavření v tomto ticketu.",
         "autocloseEnable":"Aktivuj automatické uzavření v tomto ticketu.",
@@ -424,7 +492,19 @@
         "autodelete":"Spravuj automatické smazání ticketu.",
         "autodeleteDisable":"Deaktivuj automatické smazání v tomto ticketu.",
         "autodeleteEnable":"Aktivuj automatické smazání v tomto ticketu.",
-        "autodeleteEnableTime":"Počet dnů neaktivity, po kterých se ticket smaže."
+        "autodeleteEnableTime":"Počet dnů neaktivity, po kterých se ticket smaže.",
+        
+        "topic":"Spravujte téma kanálu tiketu.",
+        "topicSet":"Nastavte téma kanálu tiketu.",
+        "topicValue":"Nové téma kanálu.",
+        "topicList":"Získejte seznam všech tiketů s jejich tématy a statistikami.",
+        "priority":"Spravujte prioritu tiketu.",
+        "prioritySet":"Nastavte prioritu tiketu.",
+        "priorityValue":"Priorita kanálu.",
+        "priorityGet":"Získejte prioritu tiketu.",
+        "priorityList":"Získejte seznam všech tiketů s jejich prioritou.",
+        "transfer":"Přeneste vlastnictví tiketu od jednoho uživatele k druhému.",
+        "transferUser":"Uživatel, na kterého se přenáší."
     },
     "helpMenu":{
         "help":"Získej seznam všech dostupných příkazů.",
@@ -452,7 +532,16 @@
         "autocloseDisable":"Deaktivuj automatické uzavření v tomto ticketu.",
         "autocloseEnable":"Aktivuj automatické uzavření v tomto ticketu.",
         "autodeleteDisable":"Deaktivuj automatické smazání v tomto ticketu.",
-        "autodeleteEnable":"Aktivuj automatické smazání v tomto ticketu."
+        "autodeleteEnable":"Aktivuj automatické smazání v tomto ticketu.",
+        "categories":{
+            "general":"Obecné příkazy",
+            "basicTicket":"Základní příkazy tiketu",
+            "advancedTicket":"Pokročilé příkazy tiketu",
+            "userTicket":"Příkazy uživatelského tiketu",
+            "admin":"Admin příkazy",
+            "advanced":"Pokročilé příkazy",
+            "extra":"Extra příkazy"
+        }
     },
     "stats":{
         "scopes":{
@@ -460,7 +549,8 @@
             "system":"Statistiky systému",
             "user":"Statistiky uživatele",
             "ticket":"Statistiky ticketu",
-            "participants":"Účastníci"
+            "participants":"Účastníci",
+            "messages":"Zprávy"
         },
         "properties":{
             "ticketsCreated":"Vytvořené tickety",
@@ -472,7 +562,47 @@
             "ticketsPinned":"Připnuté tickety",
             "ticketsMoved":"Přesunuté tickety",
             "usersBlacklisted":"Uživatelé na blacklistu",
-            "transcriptsCreated":"Vytvořené přepisy"
+            "transcriptsCreated":"Vytvořené přepisy",
+            "ticketsAutodeleted":"Automaticky smazané tikety",
+            "ticketsTransferred":"Přenesené tikety",
+            "ticketVolume":"Objem tiketů",
+            "averageTickets":"Průměr tiketů/uživatel",
+            "currentTickets":"Aktuální tikety",
+            "age":"Věk tiketu",
+            "responseTime":"Doba odezvy",
+            "resolutionTime":"Doba vyřešení",
+            "createdOn":"Vytvořeno dne",
+            "createdBy":"Vytvořil",
+            "closedOn":"Uzavřeno dne",
+            "closedBy":"Uzavřel",
+            "claimedOn":"Převzato dne",
+            "claimedBy":"Převzal",
+            "pinnedOn":"Připnuto dne",
+            "pinnedBy":"Připnul",
+            "deletedOn":"Smazáno dne",
+            "deletedBy":"Smazal"
+        },
+        "roles":{
+            "developer":"Vývojář",
+            "serverOwner":"Vlastník serveru",
+            "serverAdmin":"Server Admin",
+            "moderator":"Moderátorský tým",
+            "support":"Podpůrný tým",
+            "member":"Člen"
         }
+    },
+    "panel":{
+        "selectTicket":"Vyberte svůj tiket",
+        "selectRole":"Vyberte svou roli",
+        "selectOption":"Vyberte svou možnost"
+    },
+    "priorities":{
+        "urgent":"Naléhavé",
+        "veryHigh":"Velmi vysoké",
+        "high":"Vysoké",
+        "normal":"Normální",
+        "low":"Nízké",
+        "veryLow":"Velmi nízké",
+        "none":"Žádné"
     }
 }

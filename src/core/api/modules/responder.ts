@@ -1071,15 +1071,9 @@ export class ODModalResponderInstance {
     async reply(msg:ODMessageBuildResult): Promise<ODMessageBuildSentResult<boolean>> {
         try{
             const msgFlags: number[] = msg.ephemeral ? [discord.MessageFlags.Ephemeral] : []
-            if (this.interaction.replied || this.interaction.deferred){
-                const sent = await this.interaction.editReply(Object.assign(msg.message,{flags:msgFlags}))
-                this.didReply = true
-                return {success:true,message:sent}
-            }else{
-                const sent = await this.interaction.reply(Object.assign(msg.message,{flags:msgFlags}))
-                this.didReply = true
-                return {success:true,message:await sent.fetch()}
-            }
+            const sent = await this.interaction.followUp(Object.assign(msg.message,{flags:msgFlags}))
+            this.didReply = true
+            return {success:true,message:sent}
         }catch{
             return {success:false,message:null}
         }
@@ -1092,7 +1086,11 @@ export class ODModalResponderInstance {
                 const sent = await this.interaction.editReply(Object.assign(msg.message,{flags:msgFlags}))
                 this.didReply = true
                 return {success:true,message:await sent.fetch()}
-            }else throw new ODSystemError("Unable to update modal interaction!")
+            }else{
+                const sent = await this.interaction.reply(Object.assign(msg.message,{flags:msgFlags}))
+                this.didReply = true
+                return {success:true,message:await sent.fetch()}
+            }
         }catch{
             return {success:false,message:null}
         }

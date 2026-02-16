@@ -142,4 +142,6 @@ export const migrations = [
     //MIGRATE TO v4.1.2
     new utilities.ODVersionMigration(api.ODVersion.fromString("opendiscord:version","v4.1.2"),async () => {},async () => {}),
 
+    //MIGRATE TO v4.1.3
+    new utilities.ODVersionMigration(api.ODVersion.fromString("opendiscord:version","v4.1.3"),async () => {},async () => {}),
 ]

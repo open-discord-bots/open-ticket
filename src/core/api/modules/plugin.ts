@@ -55,6 +55,11 @@ export interface ODPluginData {
     version:string,
     /**The location of the start file of the plugin relative to the rootDir of the plugin */
     startFile:string,
+    /**A list of compatible versions. (e.g. `["OTv4.0.x", "OMv1.x.x"]`) (optional, will be required in future version)
+     * - `OT` --> Open Ticket support
+     * - `OM` --> Open Moderation support
+     */
+    supportedVersions?:string[],
 
     /**Is this plugin enabled? */
     enabled:boolean,
@@ -78,8 +83,10 @@ export interface ODPluginData {
  * Additional details in the `plugin.json` file from a plugin.
  */
 export interface ODPluginDetails {
-    /**The author of the plugin. */
+    /**The main author of the plugin. Additional contributors can be specified in `contributors`. */
     author:string,
+    /**A list of plugin contributors. (optional, will be required in future version) */
+    contributors?:string[],
     /**A short description of this plugin. */
     shortDescription:string,
     /**A large description of this plugin. */
@@ -121,7 +128,7 @@ export class ODPlugin extends ODManagerData {
     /**Did this plugin crash? (A reason is available in the `crashReason`) */
     crashed: boolean
     /**The reason which caused this plugin to crash. */
-    crashReason: null|"incompatible.plugin"|"missing.plugin"|"missing.dependency"|"executed" = null
+    crashReason: null|"incompatible.plugin"|"missing.plugin"|"missing.dependency"|"incompatible.version"|"executed" = null
     
     constructor(dir:string, jsondata:ODPluginData){
         super(jsondata.id)
@@ -211,6 +218,10 @@ export class ODPlugin extends ODManagerData {
         })
         
         return incompatible
+    }
+    /**Get a list of all authors & contributors of this plugin. */
+    getAuthors(): string[] {
+        return [this.details.author,...(this.details.contributors ?? [])]
     }
 }
 
