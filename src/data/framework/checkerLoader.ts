@@ -231,12 +231,12 @@ export const defaultGeneralStructure = new api.ODCheckerObjectStructure("opendis
             const lt = checker.locationTraceDeref(locationTrace)
 
             if (typeof value != "string") return false
-            else if (!opendiscord.defaults.getDefault("languageList").includes(value)){
+            else if (!opendiscord.sharedFuses.getFuse("languageList").includes(value)){
                 checker.createMessage("opendiscord:invalid-language","error","This is an invalid language!",lt,null,[],locationId,locationDocs)
                 return false
             }else return true
         },
-        cliAutocompleteList:opendiscord.defaults.getDefault("languageList"),
+        cliAutocompleteList:opendiscord.sharedFuses.getFuse("languageList"),
         cliDisplayName:"Language",
         cliDisplayDescription:"The language of the bot. Visit README.md for a list of available translations."
     })},

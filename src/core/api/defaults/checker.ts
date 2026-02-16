@@ -1,9 +1,8 @@
 ///////////////////////////////////////
 //DEFAULT CONFIG CHECKER MODULE
 ///////////////////////////////////////
-import { ODLanguageManager_Default } from "../api"
-import { ODValidId } from "../modules/base"
-import { ODCheckerManager, ODChecker, ODCheckerTranslationRegister, ODCheckerRenderer, ODCheckerFunctionManager, ODCheckerResult, ODCheckerFunction } from "../modules/checker"
+import * as api from "@open-discord-bots/framework/api"
+import { ODLanguageManager_Default } from "./language"
 import ansis from "ansis"
 
 /**## ODCheckerManagerIds_Default `interface`
@@ -11,11 +10,11 @@ import ansis from "ansis"
  * It's used to generate typescript declarations for this class.
  */
 export interface ODCheckerManagerIds_Default {
-    "opendiscord:general":ODChecker,
-    "opendiscord:questions":ODChecker,
-    "opendiscord:options":ODChecker,
-    "opendiscord:panels":ODChecker,
-    "opendiscord:transcripts":ODChecker
+    "opendiscord:general":api.ODChecker,
+    "opendiscord:questions":api.ODChecker,
+    "opendiscord:options":api.ODChecker,
+    "opendiscord:panels":api.ODChecker,
+    "opendiscord:transcripts":api.ODChecker
 }
 
 /**## ODCheckerManager_Default `default_class`
@@ -24,29 +23,29 @@ export interface ODCheckerManagerIds_Default {
  * 
  * This default class is made for the global variable `opendiscord.checkers`!
  */
-export class ODCheckerManager_Default extends ODCheckerManager {
+export class ODCheckerManager_Default extends api.ODCheckerManager {
     declare translation: ODCheckerTranslationRegister_Default
     declare renderer: ODCheckerRenderer_Default
     declare functions: ODCheckerFunctionManager_Default
 
     get<CheckerId extends keyof ODCheckerManagerIds_Default>(id:CheckerId): ODCheckerManagerIds_Default[CheckerId]
-    get(id:ODValidId): ODChecker|null
+    get(id:api.ODValidId): api.ODChecker|null
     
-    get(id:ODValidId): ODChecker|null {
+    get(id:api.ODValidId): api.ODChecker|null {
         return super.get(id)
     }
 
     remove<CheckerId extends keyof ODCheckerManagerIds_Default>(id:CheckerId): ODCheckerManagerIds_Default[CheckerId]
-    remove(id:ODValidId): ODChecker|null
+    remove(id:api.ODValidId): api.ODChecker|null
     
-    remove(id:ODValidId): ODChecker|null {
+    remove(id:api.ODValidId): api.ODChecker|null {
         return super.remove(id)
     }
 
     exists(id:keyof ODCheckerManagerIds_Default): boolean
-    exists(id:ODValidId): boolean
+    exists(id:api.ODValidId): boolean
     
-    exists(id:ODValidId): boolean {
+    exists(id:api.ODValidId): boolean {
         return super.exists(id)
     }
 }
@@ -57,7 +56,7 @@ export class ODCheckerManager_Default extends ODCheckerManager {
  * 
  * This default class is made for the global variable `opendiscord.checkers.renderer`!
  */
-export class ODCheckerRenderer_Default extends ODCheckerRenderer {
+export class ODCheckerRenderer_Default extends api.ODCheckerRenderer {
     extraHeaderText: string[] = []
     extraFooterText: string[] = []
     extraTopText: string[] = []
@@ -72,7 +71,7 @@ export class ODCheckerRenderer_Default extends ODCheckerRenderer {
     disableHeader: boolean = false
     disableFooter: boolean = false
 
-    getComponents(compact:boolean, renderEmpty:boolean, translation:ODCheckerTranslationRegister_Default, data:ODCheckerResult): string[] {
+    getComponents(compact:boolean, renderEmpty:boolean, translation:ODCheckerTranslationRegister_Default, data:api.ODCheckerResult): string[] {
         const tm = translation
         const t = {
             headerOpenticket:tm.get("other","opendiscord:header-openticket") ?? "OPEN TICKET",
@@ -312,7 +311,7 @@ export type ODCheckerTranslationRegisterMessageIds_Default = (
  * 
  * This default class is made for the global variable `opendiscord.checkers.translation`!
  */
-export class ODCheckerTranslationRegister_Default extends ODCheckerTranslationRegister {
+export class ODCheckerTranslationRegister_Default extends api.ODCheckerTranslationRegister {
     get(type:"other", id:ODCheckerTranslationRegisterOtherIds_Default): string
     get(type:"message", id:ODCheckerTranslationRegisterMessageIds_Default): string
     get(type:"message"|"other", id:string): string|null
@@ -350,9 +349,9 @@ export class ODCheckerTranslationRegister_Default extends ODCheckerTranslationRe
  * It's used to generate typescript declarations for this class.
  */
 export interface ODCheckerFunctionManagerIds_Default {
-    "opendiscord:unused-options":ODCheckerFunction,
-    "opendiscord:unused-questions":ODCheckerFunction,
-    "opendiscord:dropdown-options":ODCheckerFunction
+    "opendiscord:unused-options":api.ODCheckerFunction,
+    "opendiscord:unused-questions":api.ODCheckerFunction,
+    "opendiscord:dropdown-options":api.ODCheckerFunction
 }
 
 /**## ODCheckerFunctionManager_Default `default_class`
@@ -361,25 +360,25 @@ export interface ODCheckerFunctionManagerIds_Default {
  * 
  * This default class is made for the global variable `opendiscord.checkers.functions`!
  */
-export class ODCheckerFunctionManager_Default extends ODCheckerFunctionManager {
+export class ODCheckerFunctionManager_Default extends api.ODCheckerFunctionManager {
     get<CheckerFunctionId extends keyof ODCheckerFunctionManagerIds_Default>(id:CheckerFunctionId): ODCheckerFunctionManagerIds_Default[CheckerFunctionId]
-    get(id:ODValidId): ODCheckerFunction|null
+    get(id:api.ODValidId): api.ODCheckerFunction|null
     
-    get(id:ODValidId): ODCheckerFunction|null {
+    get(id:api.ODValidId): api.ODCheckerFunction|null {
         return super.get(id)
     }
 
     remove<CheckerFunctionId extends keyof ODCheckerFunctionManagerIds_Default>(id:CheckerFunctionId): ODCheckerFunctionManagerIds_Default[CheckerFunctionId]
-    remove(id:ODValidId): ODCheckerFunction|null
+    remove(id:api.ODValidId): api.ODCheckerFunction|null
     
-    remove(id:ODValidId): ODCheckerFunction|null {
+    remove(id:api.ODValidId): api.ODCheckerFunction|null {
         return super.remove(id)
     }
 
     exists(id:keyof ODCheckerFunctionManagerIds_Default): boolean
-    exists(id:ODValidId): boolean
+    exists(id:api.ODValidId): boolean
 
-    exists(id:ODValidId): boolean {
+    exists(id:api.ODValidId): boolean {
         return super.exists(id)
     }
 }

@@ -1,8 +1,7 @@
 ///////////////////////////////////////
 //DEFAULT PERMISSION MODULE
 ///////////////////////////////////////
-import { ODDebugger } from "../modules/console"
-import { ODPermissionManager } from "../modules/permission"
+import * as api from "@open-discord-bots/framework/api"
 import { ODClientManager_Default } from "./client"
 
 /**## ODPermissionManager_Default `default_class`
@@ -11,8 +10,8 @@ import { ODClientManager_Default } from "./client"
  * 
  * This default class is made for the global variable `opendiscord.permissions`!
  */
-export class ODPermissionManager_Default extends ODPermissionManager {
-    constructor(debug:ODDebugger,client:ODClientManager_Default){
+export class ODPermissionManager_Default extends api.ODPermissionManager {
+    constructor(debug:api.ODDebugger,client:ODClientManager_Default){
         super(debug,client,true)
     }
 }

@@ -1,14 +1,12 @@
 ///////////////////////////////////////
 //DEFAULT ACTION MODULE
 ///////////////////////////////////////
-import { ODValidId } from "../modules/base"
-import { ODAction, ODActionManager } from "../modules/action"
+import * as api from "@open-discord-bots/framework/api"
 import { ODWorkerManager_Default } from "./worker"
 import * as discord from "discord.js"
 import { ODRoleOption, ODTicketOption } from "../openticket/option"
 import { ODTicket, ODTicketClearFilter } from "../openticket/ticket"
 import { ODTranscriptCompiler, ODTranscriptCompilerCompileResult } from "../openticket/transcript"
-import { ODMessageBuildSentResult } from "../modules/builder"
 import { ODRole, ODRoleUpdateMode, ODRoleUpdateResult } from "../openticket/role"
 import { ODPriorityLevel } from "../openticket/priority"
 
@@ -26,7 +24,7 @@ export interface ODActionManagerIds_Default {
     "opendiscord:create-transcript":{
         source:"slash"|"text"|"ticket-message"|"reopen-message"|"close-message"|"autoclose-message"|"autodelete"|"clear"|"other",
         params:{guild:discord.Guild,channel:discord.GuildTextBasedChannel,user:discord.User,ticket:ODTicket},
-        result:{compiler:ODTranscriptCompiler<any,object|null>, success:boolean, result:ODTranscriptCompilerCompileResult<any>, errorReason:string|null, pendingMessage:ODMessageBuildSentResult<true>|null, initData:object|null, participants:{user:discord.User,role:"creator"|"participant"|"admin"}[]},
+        result:{compiler:ODTranscriptCompiler<any,object|null>, success:boolean, result:ODTranscriptCompilerCompileResult<any>, errorReason:string|null, pendingMessage:api.ODMessageBuildSentResult<true>|null, initData:object|null, participants:{user:discord.User,role:"creator"|"participant"|"admin"}[]},
         workers:"opendiscord:select-compiler"|"opendiscord:init-transcript"|"opendiscord:compile-transcript"|"opendiscord:ready-transcript"|"opendiscord:logs"
     },
     "opendiscord:create-ticket":{
@@ -139,25 +137,25 @@ export interface ODActionManagerIds_Default {
  * 
  * This default class is made for the global variable `opendiscord.actions`!
  */
-export class ODActionManager_Default extends ODActionManager {
+export class ODActionManager_Default extends api.ODActionManager {
     get<ActionId extends keyof ODActionManagerIds_Default>(id:ActionId): ODAction_Default<ODActionManagerIds_Default[ActionId]["source"],ODActionManagerIds_Default[ActionId]["params"],ODActionManagerIds_Default[ActionId]["result"],ODActionManagerIds_Default[ActionId]["workers"]>
-    get(id:ODValidId): ODAction<string,any,any>|null
+    get(id:api.ODValidId): api.ODAction<string,any,any>|null
     
-    get(id:ODValidId): ODAction<string,any,any>|null {
+    get(id:api.ODValidId): api.ODAction<string,any,any>|null {
         return super.get(id)
     }
 
     remove<ActionId extends keyof ODActionManagerIds_Default>(id:ActionId): ODAction_Default<ODActionManagerIds_Default[ActionId]["source"],ODActionManagerIds_Default[ActionId]["params"],ODActionManagerIds_Default[ActionId]["result"],ODActionManagerIds_Default[ActionId]["workers"]>
-    remove(id:ODValidId): ODAction<string,any,any>|null
+    remove(id:api.ODValidId): api.ODAction<string,any,any>|null
     
-    remove(id:ODValidId): ODAction<string,any,any>|null {
+    remove(id:api.ODValidId): api.ODAction<string,any,any>|null {
         return super.remove(id)
     }
 
     exists(id:keyof ODActionManagerIds_Default): boolean
-    exists(id:ODValidId): boolean
+    exists(id:api.ODValidId): boolean
     
-    exists(id:ODValidId): boolean {
+    exists(id:api.ODValidId): boolean {
         return super.exists(id)
     }
 }
@@ -168,6 +166,6 @@ export class ODActionManager_Default extends ODActionManager {
  * 
  * This default class is made for the default `ODAction`'s!
  */
-export class ODAction_Default<Source extends string, Params extends object, Result extends object, WorkerIds extends string> extends ODAction<Source,Params,Result> {
+export class ODAction_Default<Source extends string, Params extends object, Result extends object, WorkerIds extends string> extends api.ODAction<Source,Params,Result> {
     declare workers: ODWorkerManager_Default<Result,Source,Params,WorkerIds>
 }

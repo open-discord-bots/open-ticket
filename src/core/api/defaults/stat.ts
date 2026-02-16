@@ -1,8 +1,7 @@
 ///////////////////////////////////////
 //DEFAULT SESSION MODULE
 ///////////////////////////////////////
-import { ODValidId } from "../modules/base"
-import { ODStatScope, ODStatGlobalScope, ODStatsManager, ODStat, ODBasicStat, ODDynamicStat, ODValidStatValue, ODStatScopeSetMode } from "../modules/stat"
+import * as api from "@open-discord-bots/framework/api"
 
 /**## ODStatsManagerIds_Default `interface`
  * This interface is a list of ids available in the `ODStatsManager_Default` class.
@@ -23,25 +22,25 @@ export interface ODStatsManagerIds_Default {
  * 
  * This default class is made for the global variable `opendiscord.stats`!
  */
-export class ODStatsManager_Default extends ODStatsManager {
+export class ODStatsManager_Default extends api.ODStatsManager {
     get<StatsId extends keyof ODStatsManagerIds_Default>(id:StatsId): ODStatsManagerIds_Default[StatsId]
-    get(id:ODValidId): ODStatScope|null
+    get(id:api.ODValidId): api.ODStatScope|null
     
-    get(id:ODValidId): ODStatScope|null {
+    get(id:api.ODValidId): api.ODStatScope|null {
         return super.get(id)
     }
 
     remove<StatsId extends keyof ODStatsManagerIds_Default>(id:StatsId): ODStatsManagerIds_Default[StatsId]
-    remove(id:ODValidId): ODStatScope|null
+    remove(id:api.ODValidId): api.ODStatScope|null
     
-    remove(id:ODValidId): ODStatScope|null {
+    remove(id:api.ODValidId): api.ODStatScope|null {
         return super.remove(id)
     }
 
     exists(id:keyof ODStatsManagerIds_Default): boolean
-    exists(id:ODValidId): boolean
+    exists(id:api.ODValidId): boolean
     
-    exists(id:ODValidId): boolean {
+    exists(id:api.ODValidId): boolean {
         return super.exists(id)
     }
 }
@@ -51,20 +50,20 @@ export class ODStatsManager_Default extends ODStatsManager {
  * It's used to generate typescript declarations for this class.
  */
 export interface ODStatGlobalScopeIds_DefaultGlobal {
-    "opendiscord:tickets-created":ODBasicStat,
-    "opendiscord:tickets-closed":ODBasicStat,
-    "opendiscord:tickets-deleted":ODBasicStat,
-    "opendiscord:tickets-reopened":ODBasicStat,
-    "opendiscord:tickets-autoclosed":ODBasicStat,
-    "opendiscord:tickets-autodeleted":ODBasicStat,
-    "opendiscord:tickets-claimed":ODBasicStat,
-    "opendiscord:tickets-pinned":ODBasicStat,
-    "opendiscord:tickets-moved":ODBasicStat,
-    "opendiscord:tickets-transferred":ODBasicStat,
-    "opendiscord:users-blacklisted":ODBasicStat,
-    "opendiscord:transcripts-created":ODBasicStat,
-    "opendiscord:ticket-volume":ODDynamicStat,
-    "opendiscord:average-tickets":ODDynamicStat,
+    "opendiscord:tickets-created":api.ODBasicStat,
+    "opendiscord:tickets-closed":api.ODBasicStat,
+    "opendiscord:tickets-deleted":api.ODBasicStat,
+    "opendiscord:tickets-reopened":api.ODBasicStat,
+    "opendiscord:tickets-autoclosed":api.ODBasicStat,
+    "opendiscord:tickets-autodeleted":api.ODBasicStat,
+    "opendiscord:tickets-claimed":api.ODBasicStat,
+    "opendiscord:tickets-pinned":api.ODBasicStat,
+    "opendiscord:tickets-moved":api.ODBasicStat,
+    "opendiscord:tickets-transferred":api.ODBasicStat,
+    "opendiscord:users-blacklisted":api.ODBasicStat,
+    "opendiscord:transcripts-created":api.ODBasicStat,
+    "opendiscord:ticket-volume":api.ODDynamicStat,
+    "opendiscord:average-tickets":api.ODDynamicStat,
 }
 
 /**## ODStatGlobalScope_DefaultGlobal `default_class`
@@ -73,53 +72,53 @@ export interface ODStatGlobalScopeIds_DefaultGlobal {
  * 
  * This default class is made for the `opendiscord:global` category in `opendiscord.stats`!
  */
-export class ODStatGlobalScope_DefaultGlobal extends ODStatGlobalScope {
+export class ODStatGlobalScope_DefaultGlobal extends api.ODStatGlobalScope {
     get<StatsId extends keyof ODStatGlobalScopeIds_DefaultGlobal>(id:StatsId): ODStatGlobalScopeIds_DefaultGlobal[StatsId]
-    get(id:ODValidId): ODStat|null
+    get(id:api.ODValidId): api.ODStat|null
     
-    get(id:ODValidId): ODStat|null {
+    get(id:api.ODValidId): api.ODStat|null {
         return super.get(id)
     }
 
     remove<StatsId extends keyof ODStatGlobalScopeIds_DefaultGlobal>(id:StatsId): ODStatGlobalScopeIds_DefaultGlobal[StatsId]
-    remove(id:ODValidId): ODStat|null
+    remove(id:api.ODValidId): api.ODStat|null
     
-    remove(id:ODValidId): ODStat|null {
+    remove(id:api.ODValidId): api.ODStat|null {
         return super.remove(id)
     }
 
     exists(id:keyof ODStatGlobalScopeIds_DefaultGlobal): boolean
-    exists(id:ODValidId): boolean
+    exists(id:api.ODValidId): boolean
     
-    exists(id:ODValidId): boolean {
+    exists(id:api.ODValidId): boolean {
         return super.exists(id)
     }
 
-    getStat<StatsId extends keyof ODStatGlobalScopeIds_DefaultGlobal>(id:StatsId): Promise<ODValidStatValue|null>
-    getStat(id:ODValidId): Promise<ODValidStatValue|null>
+    getStat<StatsId extends keyof ODStatGlobalScopeIds_DefaultGlobal>(id:StatsId): Promise<api.ODValidStatValue|null>
+    getStat(id:api.ODValidId): Promise<api.ODValidStatValue|null>
 
-    getStat(id:ODValidId): Promise<ODValidStatValue|null> {
+    getStat(id:api.ODValidId): Promise<api.ODValidStatValue|null> {
         return super.getStat(id)
     }
 
-    getAllStats<StatsId extends keyof ODStatGlobalScopeIds_DefaultGlobal>(id:StatsId): Promise<{id:string,value:ODValidStatValue}[]>
-    getAllStats(id:ODValidId): Promise<{id:string,value:ODValidStatValue}[]>
+    getAllStats<StatsId extends keyof ODStatGlobalScopeIds_DefaultGlobal>(id:StatsId): Promise<{id:string,value:api.ODValidStatValue}[]>
+    getAllStats(id:api.ODValidId): Promise<{id:string,value:api.ODValidStatValue}[]>
 
-    getAllStats(id:ODValidId): Promise<{id:string,value:ODValidStatValue}[]> {
+    getAllStats(id:api.ODValidId): Promise<{id:string,value:api.ODValidStatValue}[]> {
         return super.getAllStats(id)
     }
 
-    setStat<StatsId extends keyof ODStatGlobalScopeIds_DefaultGlobal>(id:StatsId, value:ODValidStatValue, mode:ODStatScopeSetMode): Promise<boolean>
-    setStat(id:ODValidId, value:ODValidStatValue, mode:ODStatScopeSetMode): Promise<boolean>
+    setStat<StatsId extends keyof ODStatGlobalScopeIds_DefaultGlobal>(id:StatsId, value:api.ODValidStatValue, mode:api.ODStatScopeSetMode): Promise<boolean>
+    setStat(id:api.ODValidId, value:api.ODValidStatValue, mode:api.ODStatScopeSetMode): Promise<boolean>
 
-    setStat(id:ODValidId, value:ODValidStatValue, mode:ODStatScopeSetMode): Promise<boolean> {
+    setStat(id:api.ODValidId, value:api.ODValidStatValue, mode:api.ODStatScopeSetMode): Promise<boolean> {
         return super.setStat(id,value,mode)
     }
 
-    resetStat<StatsId extends keyof ODStatGlobalScopeIds_DefaultGlobal>(id:ODValidId): Promise<ODValidStatValue|null>
-    resetStat(id:ODValidId): Promise<ODValidStatValue|null>
+    resetStat<StatsId extends keyof ODStatGlobalScopeIds_DefaultGlobal>(id:api.ODValidId): Promise<api.ODValidStatValue|null>
+    resetStat(id:api.ODValidId): Promise<api.ODValidStatValue|null>
 
-    resetStat(id:ODValidId): Promise<ODValidStatValue|null> {
+    resetStat(id:api.ODValidId): Promise<api.ODValidStatValue|null> {
         return super.resetStat(id)
     }
 }
@@ -129,9 +128,9 @@ export class ODStatGlobalScope_DefaultGlobal extends ODStatGlobalScope {
  * It's used to generate typescript declarations for this class.
  */
 export interface ODStatGlobalScopeIds_DefaultSystem {
-    "opendiscord:startup-date":ODDynamicStat,
-    "opendiscord:system-uptime":ODDynamicStat,
-    "opendiscord:version":ODDynamicStat
+    "opendiscord:startup-date":api.ODDynamicStat,
+    "opendiscord:system-uptime":api.ODDynamicStat,
+    "opendiscord:version":api.ODDynamicStat
 }
 
 /**## ODStatGlobalScope_DefaultSystem `default_class`
@@ -140,53 +139,53 @@ export interface ODStatGlobalScopeIds_DefaultSystem {
  * 
  * This default class is made for the `opendiscord:system` category in `opendiscord.stats`!
  */
-export class ODStatGlobalScope_DefaultSystem extends ODStatGlobalScope {
+export class ODStatGlobalScope_DefaultSystem extends api.ODStatGlobalScope {
     get<StatsId extends keyof ODStatGlobalScopeIds_DefaultSystem>(id:StatsId): ODStatGlobalScopeIds_DefaultSystem[StatsId]
-    get(id:ODValidId): ODStat|null
+    get(id:api.ODValidId): api.ODStat|null
     
-    get(id:ODValidId): ODStat|null {
+    get(id:api.ODValidId): api.ODStat|null {
         return super.get(id)
     }
 
     remove<StatsId extends keyof ODStatGlobalScopeIds_DefaultSystem>(id:StatsId): ODStatGlobalScopeIds_DefaultSystem[StatsId]
-    remove(id:ODValidId): ODStat|null
+    remove(id:api.ODValidId): api.ODStat|null
     
-    remove(id:ODValidId): ODStat|null {
+    remove(id:api.ODValidId): api.ODStat|null {
         return super.remove(id)
     }
 
     exists(id:keyof ODStatGlobalScopeIds_DefaultSystem): boolean
-    exists(id:ODValidId): boolean
+    exists(id:api.ODValidId): boolean
     
-    exists(id:ODValidId): boolean {
+    exists(id:api.ODValidId): boolean {
         return super.exists(id)
     }
 
-    getStat<StatsId extends keyof ODStatGlobalScopeIds_DefaultSystem>(id:StatsId): Promise<ODValidStatValue|null>
-    getStat(id:ODValidId): Promise<ODValidStatValue|null>
+    getStat<StatsId extends keyof ODStatGlobalScopeIds_DefaultSystem>(id:StatsId): Promise<api.ODValidStatValue|null>
+    getStat(id:api.ODValidId): Promise<api.ODValidStatValue|null>
 
-    getStat(id:ODValidId): Promise<ODValidStatValue|null> {
+    getStat(id:api.ODValidId): Promise<api.ODValidStatValue|null> {
         return super.getStat(id)
     }
 
-    getAllStats<StatsId extends keyof ODStatGlobalScopeIds_DefaultSystem>(id:StatsId): Promise<{id:string,value:ODValidStatValue}[]>
-    getAllStats(id:ODValidId): Promise<{id:string,value:ODValidStatValue}[]>
+    getAllStats<StatsId extends keyof ODStatGlobalScopeIds_DefaultSystem>(id:StatsId): Promise<{id:string,value:api.ODValidStatValue}[]>
+    getAllStats(id:api.ODValidId): Promise<{id:string,value:api.ODValidStatValue}[]>
 
-    getAllStats(id:ODValidId): Promise<{id:string,value:ODValidStatValue}[]> {
+    getAllStats(id:api.ODValidId): Promise<{id:string,value:api.ODValidStatValue}[]> {
         return super.getAllStats(id)
     }
 
-    setStat<StatsId extends keyof ODStatGlobalScopeIds_DefaultSystem>(id:StatsId, value:ODValidStatValue, mode:ODStatScopeSetMode): Promise<boolean>
-    setStat(id:ODValidId, value:ODValidStatValue, mode:ODStatScopeSetMode): Promise<boolean>
+    setStat<StatsId extends keyof ODStatGlobalScopeIds_DefaultSystem>(id:StatsId, value:api.ODValidStatValue, mode:api.ODStatScopeSetMode): Promise<boolean>
+    setStat(id:api.ODValidId, value:api.ODValidStatValue, mode:api.ODStatScopeSetMode): Promise<boolean>
 
-    setStat(id:ODValidId, value:ODValidStatValue, mode:ODStatScopeSetMode): Promise<boolean> {
+    setStat(id:api.ODValidId, value:api.ODValidStatValue, mode:api.ODStatScopeSetMode): Promise<boolean> {
         return super.setStat(id,value,mode)
     }
 
-    resetStat<StatsId extends keyof ODStatGlobalScopeIds_DefaultSystem>(id:ODValidId): Promise<ODValidStatValue|null>
-    resetStat(id:ODValidId): Promise<ODValidStatValue|null>
+    resetStat<StatsId extends keyof ODStatGlobalScopeIds_DefaultSystem>(id:api.ODValidId): Promise<api.ODValidStatValue|null>
+    resetStat(id:api.ODValidId): Promise<api.ODValidStatValue|null>
 
-    resetStat(id:ODValidId): Promise<ODValidStatValue|null> {
+    resetStat(id:api.ODValidId): Promise<api.ODValidStatValue|null> {
         return super.resetStat(id)
     }
 }
@@ -196,19 +195,19 @@ export class ODStatGlobalScope_DefaultSystem extends ODStatGlobalScope {
  * It's used to generate typescript declarations for this class.
  */
 export interface ODStatScopeIds_DefaultUser {
-    "opendiscord:name":ODDynamicStat,
-    "opendiscord:role":ODDynamicStat,
-    "opendiscord:tickets-created":ODBasicStat,
-    "opendiscord:tickets-closed":ODBasicStat,
-    "opendiscord:tickets-deleted":ODBasicStat,
-    "opendiscord:tickets-reopened":ODBasicStat,
-    "opendiscord:tickets-claimed":ODBasicStat,
-    "opendiscord:tickets-pinned":ODBasicStat,
-    "opendiscord:tickets-moved":ODBasicStat,
-    "opendiscord:tickets-transferred":ODBasicStat,
-    "opendiscord:users-blacklisted":ODBasicStat,
-    "opendiscord:transcripts-created":ODBasicStat,
-    "opendiscord:current-tickets":ODDynamicStat,
+    "opendiscord:name":api.ODDynamicStat,
+    "opendiscord:role":api.ODDynamicStat,
+    "opendiscord:tickets-created":api.ODBasicStat,
+    "opendiscord:tickets-closed":api.ODBasicStat,
+    "opendiscord:tickets-deleted":api.ODBasicStat,
+    "opendiscord:tickets-reopened":api.ODBasicStat,
+    "opendiscord:tickets-claimed":api.ODBasicStat,
+    "opendiscord:tickets-pinned":api.ODBasicStat,
+    "opendiscord:tickets-moved":api.ODBasicStat,
+    "opendiscord:tickets-transferred":api.ODBasicStat,
+    "opendiscord:users-blacklisted":api.ODBasicStat,
+    "opendiscord:transcripts-created":api.ODBasicStat,
+    "opendiscord:current-tickets":api.ODDynamicStat,
 }
 
 /**## ODStatScope_DefaultUser `default_class`
@@ -217,53 +216,53 @@ export interface ODStatScopeIds_DefaultUser {
  * 
  * This default class is made for the `opendiscord:user` category in `opendiscord.stats`!
  */
-export class ODStatScope_DefaultUser extends ODStatScope {
+export class ODStatScope_DefaultUser extends api.ODStatScope {
     get<StatsId extends keyof ODStatScopeIds_DefaultUser>(id:StatsId): ODStatScopeIds_DefaultUser[StatsId]
-    get(id:ODValidId): ODStat|null
+    get(id:api.ODValidId): api.ODStat|null
     
-    get(id:ODValidId): ODStat|null {
+    get(id:api.ODValidId): api.ODStat|null {
         return super.get(id)
     }
 
     remove<StatsId extends keyof ODStatScopeIds_DefaultUser>(id:StatsId): ODStatScopeIds_DefaultUser[StatsId]
-    remove(id:ODValidId): ODStat|null
+    remove(id:api.ODValidId): api.ODStat|null
     
-    remove(id:ODValidId): ODStat|null {
+    remove(id:api.ODValidId): api.ODStat|null {
         return super.remove(id)
     }
 
     exists(id:keyof ODStatScopeIds_DefaultUser): boolean
-    exists(id:ODValidId): boolean
+    exists(id:api.ODValidId): boolean
     
-    exists(id:ODValidId): boolean {
+    exists(id:api.ODValidId): boolean {
         return super.exists(id)
     }
 
-    getStat<StatsId extends keyof ODStatScopeIds_DefaultUser>(id:StatsId, scopeId:string): Promise<ODValidStatValue|null>
-    getStat(id:ODValidId, scopeId:string): Promise<ODValidStatValue|null>
+    getStat<StatsId extends keyof ODStatScopeIds_DefaultUser>(id:StatsId, scopeId:string): Promise<api.ODValidStatValue|null>
+    getStat(id:api.ODValidId, scopeId:string): Promise<api.ODValidStatValue|null>
 
-    getStat(id:ODValidId, scopeId:string): Promise<ODValidStatValue|null> {
+    getStat(id:api.ODValidId, scopeId:string): Promise<api.ODValidStatValue|null> {
         return super.getStat(id,scopeId)
     }
 
-    getAllStats<StatsId extends keyof ODStatScopeIds_DefaultUser>(id:StatsId): Promise<{id:string,value:ODValidStatValue}[]>
-    getAllStats(id:ODValidId): Promise<{id:string,value:ODValidStatValue}[]>
+    getAllStats<StatsId extends keyof ODStatScopeIds_DefaultUser>(id:StatsId): Promise<{id:string,value:api.ODValidStatValue}[]>
+    getAllStats(id:api.ODValidId): Promise<{id:string,value:api.ODValidStatValue}[]>
 
-    getAllStats(id:ODValidId): Promise<{id:string,value:ODValidStatValue}[]> {
+    getAllStats(id:api.ODValidId): Promise<{id:string,value:api.ODValidStatValue}[]> {
         return super.getAllStats(id)
     }
 
-    setStat<StatsId extends keyof ODStatScopeIds_DefaultUser>(id:StatsId, scopeId:string, value:ODValidStatValue, mode:ODStatScopeSetMode): Promise<boolean>
-    setStat(id:ODValidId, scopeId:string, value:ODValidStatValue, mode:ODStatScopeSetMode): Promise<boolean>
+    setStat<StatsId extends keyof ODStatScopeIds_DefaultUser>(id:StatsId, scopeId:string, value:api.ODValidStatValue, mode:api.ODStatScopeSetMode): Promise<boolean>
+    setStat(id:api.ODValidId, scopeId:string, value:api.ODValidStatValue, mode:api.ODStatScopeSetMode): Promise<boolean>
 
-    setStat(id:ODValidId, scopeId:string, value:ODValidStatValue, mode:ODStatScopeSetMode): Promise<boolean> {
+    setStat(id:api.ODValidId, scopeId:string, value:api.ODValidStatValue, mode:api.ODStatScopeSetMode): Promise<boolean> {
         return super.setStat(id,scopeId,value,mode)
     }
 
-    resetStat<StatsId extends keyof ODStatScopeIds_DefaultUser>(id:ODValidId, scopeId:string): Promise<ODValidStatValue|null>
-    resetStat(id:ODValidId, scopeId:string): Promise<ODValidStatValue|null>
+    resetStat<StatsId extends keyof ODStatScopeIds_DefaultUser>(id:api.ODValidId, scopeId:string): Promise<api.ODValidStatValue|null>
+    resetStat(id:api.ODValidId, scopeId:string): Promise<api.ODValidStatValue|null>
 
-    resetStat(id:ODValidId, scopeId:string): Promise<ODValidStatValue|null> {
+    resetStat(id:api.ODValidId, scopeId:string): Promise<api.ODValidStatValue|null> {
         return super.resetStat(id,scopeId)
     }
 }
@@ -273,15 +272,15 @@ export class ODStatScope_DefaultUser extends ODStatScope {
  * It's used to generate typescript declarations for this class.
  */
 export interface ODStatScopeIds_DefaultTicket {
-    "opendiscord:name":ODDynamicStat,
-    "opendiscord:status":ODDynamicStat,
-    "opendiscord:claimed":ODDynamicStat,
-    "opendiscord:pinned":ODDynamicStat,
-    "opendiscord:creation-date":ODDynamicStat,
-    "opendiscord:creator":ODDynamicStat,
-    "opendiscord:ticket-age":ODDynamicStat,
-    "opendiscord:response-time":ODDynamicStat,
-    "opendiscord:resolution-time":ODDynamicStat,
+    "opendiscord:name":api.ODDynamicStat,
+    "opendiscord:status":api.ODDynamicStat,
+    "opendiscord:claimed":api.ODDynamicStat,
+    "opendiscord:pinned":api.ODDynamicStat,
+    "opendiscord:creation-date":api.ODDynamicStat,
+    "opendiscord:creator":api.ODDynamicStat,
+    "opendiscord:ticket-age":api.ODDynamicStat,
+    "opendiscord:response-time":api.ODDynamicStat,
+    "opendiscord:resolution-time":api.ODDynamicStat,
 }
 
 /**## ODStatScope_DefaultTicket `default_class`
@@ -290,53 +289,53 @@ export interface ODStatScopeIds_DefaultTicket {
  * 
  * This default class is made for the `opendiscord:ticket` category in `opendiscord.stats`!
  */
-export class ODStatScope_DefaultTicket extends ODStatScope {
+export class ODStatScope_DefaultTicket extends api.ODStatScope {
     get<StatsId extends keyof ODStatScopeIds_DefaultTicket>(id:StatsId): ODStatScopeIds_DefaultTicket[StatsId]
-    get(id:ODValidId): ODStat|null
+    get(id:api.ODValidId): api.ODStat|null
     
-    get(id:ODValidId): ODStat|null {
+    get(id:api.ODValidId): api.ODStat|null {
         return super.get(id)
     }
 
     remove<StatsId extends keyof ODStatScopeIds_DefaultTicket>(id:StatsId): ODStatScopeIds_DefaultTicket[StatsId]
-    remove(id:ODValidId): ODStat|null
+    remove(id:api.ODValidId): api.ODStat|null
     
-    remove(id:ODValidId): ODStat|null {
+    remove(id:api.ODValidId): api.ODStat|null {
         return super.remove(id)
     }
 
     exists(id:keyof ODStatScopeIds_DefaultTicket): boolean
-    exists(id:ODValidId): boolean
+    exists(id:api.ODValidId): boolean
     
-    exists(id:ODValidId): boolean {
+    exists(id:api.ODValidId): boolean {
         return super.exists(id)
     }
 
-    getStat<StatsId extends keyof ODStatScopeIds_DefaultTicket>(id:StatsId, scopeId:string): Promise<ODValidStatValue|null>
-    getStat(id:ODValidId, scopeId:string): Promise<ODValidStatValue|null>
+    getStat<StatsId extends keyof ODStatScopeIds_DefaultTicket>(id:StatsId, scopeId:string): Promise<api.ODValidStatValue|null>
+    getStat(id:api.ODValidId, scopeId:string): Promise<api.ODValidStatValue|null>
 
-    getStat(id:ODValidId, scopeId:string): Promise<ODValidStatValue|null> {
+    getStat(id:api.ODValidId, scopeId:string): Promise<api.ODValidStatValue|null> {
         return super.getStat(id,scopeId)
     }
 
-    getAllStats<StatsId extends keyof ODStatScopeIds_DefaultTicket>(id:StatsId): Promise<{id:string,value:ODValidStatValue}[]>
-    getAllStats(id:ODValidId): Promise<{id:string,value:ODValidStatValue}[]>
+    getAllStats<StatsId extends keyof ODStatScopeIds_DefaultTicket>(id:StatsId): Promise<{id:string,value:api.ODValidStatValue}[]>
+    getAllStats(id:api.ODValidId): Promise<{id:string,value:api.ODValidStatValue}[]>
 
-    getAllStats(id:ODValidId): Promise<{id:string,value:ODValidStatValue}[]> {
+    getAllStats(id:api.ODValidId): Promise<{id:string,value:api.ODValidStatValue}[]> {
         return super.getAllStats(id)
     }
 
-    setStat<StatsId extends keyof ODStatScopeIds_DefaultTicket>(id:StatsId, scopeId:string, value:ODValidStatValue, mode:ODStatScopeSetMode): Promise<boolean>
-    setStat(id:ODValidId, scopeId:string, value:ODValidStatValue, mode:ODStatScopeSetMode): Promise<boolean>
+    setStat<StatsId extends keyof ODStatScopeIds_DefaultTicket>(id:StatsId, scopeId:string, value:api.ODValidStatValue, mode:api.ODStatScopeSetMode): Promise<boolean>
+    setStat(id:api.ODValidId, scopeId:string, value:api.ODValidStatValue, mode:api.ODStatScopeSetMode): Promise<boolean>
 
-    setStat(id:ODValidId, scopeId:string, value:ODValidStatValue, mode:ODStatScopeSetMode): Promise<boolean> {
+    setStat(id:api.ODValidId, scopeId:string, value:api.ODValidStatValue, mode:api.ODStatScopeSetMode): Promise<boolean> {
         return super.setStat(id,scopeId,value,mode)
     }
 
-    resetStat<StatsId extends keyof ODStatScopeIds_DefaultTicket>(id:ODValidId, scopeId:string): Promise<ODValidStatValue|null>
-    resetStat(id:ODValidId, scopeId:string): Promise<ODValidStatValue|null>
+    resetStat<StatsId extends keyof ODStatScopeIds_DefaultTicket>(id:api.ODValidId, scopeId:string): Promise<api.ODValidStatValue|null>
+    resetStat(id:api.ODValidId, scopeId:string): Promise<api.ODValidStatValue|null>
 
-    resetStat(id:ODValidId, scopeId:string): Promise<ODValidStatValue|null> {
+    resetStat(id:api.ODValidId, scopeId:string): Promise<api.ODValidStatValue|null> {
         return super.resetStat(id,scopeId)
     }
 }
@@ -346,7 +345,7 @@ export class ODStatScope_DefaultTicket extends ODStatScope {
  * It's used to generate typescript declarations for this class.
  */
 export interface ODStatScopeIds_DefaultParticipants {
-    "opendiscord:participants":ODDynamicStat
+    "opendiscord:participants":api.ODDynamicStat
 }
 
 /**## ODStatScope_DefaultParticipants `default_class`
@@ -355,53 +354,53 @@ export interface ODStatScopeIds_DefaultParticipants {
  * 
  * This default class is made for the `opendiscord:participants` category in `opendiscord.stats`!
  */
-export class ODStatScope_DefaultParticipants extends ODStatScope {
+export class ODStatScope_DefaultParticipants extends api.ODStatScope {
     get<StatsId extends keyof ODStatScopeIds_DefaultParticipants>(id:StatsId): ODStatScopeIds_DefaultParticipants[StatsId]
-    get(id:ODValidId): ODStat|null
+    get(id:api.ODValidId): api.ODStat|null
     
-    get(id:ODValidId): ODStat|null {
+    get(id:api.ODValidId): api.ODStat|null {
         return super.get(id)
     }
 
     remove<StatsId extends keyof ODStatScopeIds_DefaultParticipants>(id:StatsId): ODStatScopeIds_DefaultParticipants[StatsId]
-    remove(id:ODValidId): ODStat|null
+    remove(id:api.ODValidId): api.ODStat|null
     
-    remove(id:ODValidId): ODStat|null {
+    remove(id:api.ODValidId): api.ODStat|null {
         return super.remove(id)
     }
 
     exists(id:keyof ODStatScopeIds_DefaultParticipants): boolean
-    exists(id:ODValidId): boolean
+    exists(id:api.ODValidId): boolean
     
-    exists(id:ODValidId): boolean {
+    exists(id:api.ODValidId): boolean {
         return super.exists(id)
     }
 
-    getStat<StatsId extends keyof ODStatScopeIds_DefaultParticipants>(id:StatsId, scopeId:string): Promise<ODValidStatValue|null>
-    getStat(id:ODValidId, scopeId:string): Promise<ODValidStatValue|null>
+    getStat<StatsId extends keyof ODStatScopeIds_DefaultParticipants>(id:StatsId, scopeId:string): Promise<api.ODValidStatValue|null>
+    getStat(id:api.ODValidId, scopeId:string): Promise<api.ODValidStatValue|null>
 
-    getStat(id:ODValidId, scopeId:string): Promise<ODValidStatValue|null> {
+    getStat(id:api.ODValidId, scopeId:string): Promise<api.ODValidStatValue|null> {
         return super.getStat(id,scopeId)
     }
 
-    getAllStats<StatsId extends keyof ODStatScopeIds_DefaultParticipants>(id:StatsId): Promise<{id:string,value:ODValidStatValue}[]>
-    getAllStats(id:ODValidId): Promise<{id:string,value:ODValidStatValue}[]>
+    getAllStats<StatsId extends keyof ODStatScopeIds_DefaultParticipants>(id:StatsId): Promise<{id:string,value:api.ODValidStatValue}[]>
+    getAllStats(id:api.ODValidId): Promise<{id:string,value:api.ODValidStatValue}[]>
 
-    getAllStats(id:ODValidId): Promise<{id:string,value:ODValidStatValue}[]> {
+    getAllStats(id:api.ODValidId): Promise<{id:string,value:api.ODValidStatValue}[]> {
         return super.getAllStats(id)
     }
 
-    setStat<StatsId extends keyof ODStatScopeIds_DefaultParticipants>(id:StatsId, scopeId:string, value:ODValidStatValue, mode:ODStatScopeSetMode): Promise<boolean>
-    setStat(id:ODValidId, scopeId:string, value:ODValidStatValue, mode:ODStatScopeSetMode): Promise<boolean>
+    setStat<StatsId extends keyof ODStatScopeIds_DefaultParticipants>(id:StatsId, scopeId:string, value:api.ODValidStatValue, mode:api.ODStatScopeSetMode): Promise<boolean>
+    setStat(id:api.ODValidId, scopeId:string, value:api.ODValidStatValue, mode:api.ODStatScopeSetMode): Promise<boolean>
 
-    setStat(id:ODValidId, scopeId:string, value:ODValidStatValue, mode:ODStatScopeSetMode): Promise<boolean> {
+    setStat(id:api.ODValidId, scopeId:string, value:api.ODValidStatValue, mode:api.ODStatScopeSetMode): Promise<boolean> {
         return super.setStat(id,scopeId,value,mode)
     }
 
-    resetStat<StatsId extends keyof ODStatScopeIds_DefaultParticipants>(id:ODValidId, scopeId:string): Promise<ODValidStatValue|null>
-    resetStat(id:ODValidId, scopeId:string): Promise<ODValidStatValue|null>
+    resetStat<StatsId extends keyof ODStatScopeIds_DefaultParticipants>(id:api.ODValidId, scopeId:string): Promise<api.ODValidStatValue|null>
+    resetStat(id:api.ODValidId, scopeId:string): Promise<api.ODValidStatValue|null>
 
-    resetStat(id:ODValidId, scopeId:string): Promise<ODValidStatValue|null> {
+    resetStat(id:api.ODValidId, scopeId:string): Promise<api.ODValidStatValue|null> {
         return super.resetStat(id,scopeId)
     }
 }
@@ -411,7 +410,7 @@ export class ODStatScope_DefaultParticipants extends ODStatScope {
  * It's used to generate typescript declarations for this class.
  */
 export interface ODStatScopeIds_DefaultMessages {
-    "opendiscord:count":ODDynamicStat
+    "opendiscord:count":api.ODDynamicStat
 }
 
 /**## ODStatScope_DefaultMessages `default_class`
@@ -420,53 +419,53 @@ export interface ODStatScopeIds_DefaultMessages {
  * 
  * This default class is made for the `opendiscord:participants` category in `opendiscord.stats`!
  */
-export class ODStatScope_DefaultMessages extends ODStatScope {
+export class ODStatScope_DefaultMessages extends api.ODStatScope {
     get<StatsId extends keyof ODStatScopeIds_DefaultMessages>(id:StatsId): ODStatScopeIds_DefaultMessages[StatsId]
-    get(id:ODValidId): ODStat|null
+    get(id:api.ODValidId): api.ODStat|null
     
-    get(id:ODValidId): ODStat|null {
+    get(id:api.ODValidId): api.ODStat|null {
         return super.get(id)
     }
 
     remove<StatsId extends keyof ODStatScopeIds_DefaultMessages>(id:StatsId): ODStatScopeIds_DefaultMessages[StatsId]
-    remove(id:ODValidId): ODStat|null
+    remove(id:api.ODValidId): api.ODStat|null
     
-    remove(id:ODValidId): ODStat|null {
+    remove(id:api.ODValidId): api.ODStat|null {
         return super.remove(id)
     }
 
     exists(id:keyof ODStatScopeIds_DefaultMessages): boolean
-    exists(id:ODValidId): boolean
+    exists(id:api.ODValidId): boolean
     
-    exists(id:ODValidId): boolean {
+    exists(id:api.ODValidId): boolean {
         return super.exists(id)
     }
 
-    getStat<StatsId extends keyof ODStatScopeIds_DefaultMessages>(id:StatsId, scopeId:string): Promise<ODValidStatValue|null>
-    getStat(id:ODValidId, scopeId:string): Promise<ODValidStatValue|null>
+    getStat<StatsId extends keyof ODStatScopeIds_DefaultMessages>(id:StatsId, scopeId:string): Promise<api.ODValidStatValue|null>
+    getStat(id:api.ODValidId, scopeId:string): Promise<api.ODValidStatValue|null>
 
-    getStat(id:ODValidId, scopeId:string): Promise<ODValidStatValue|null> {
+    getStat(id:api.ODValidId, scopeId:string): Promise<api.ODValidStatValue|null> {
         return super.getStat(id,scopeId)
     }
 
-    getAllStats<StatsId extends keyof ODStatScopeIds_DefaultMessages>(id:StatsId): Promise<{id:string,value:ODValidStatValue}[]>
-    getAllStats(id:ODValidId): Promise<{id:string,value:ODValidStatValue}[]>
+    getAllStats<StatsId extends keyof ODStatScopeIds_DefaultMessages>(id:StatsId): Promise<{id:string,value:api.ODValidStatValue}[]>
+    getAllStats(id:api.ODValidId): Promise<{id:string,value:api.ODValidStatValue}[]>
 
-    getAllStats(id:ODValidId): Promise<{id:string,value:ODValidStatValue}[]> {
+    getAllStats(id:api.ODValidId): Promise<{id:string,value:api.ODValidStatValue}[]> {
         return super.getAllStats(id)
     }
 
-    setStat<StatsId extends keyof ODStatScopeIds_DefaultMessages>(id:StatsId, scopeId:string, value:ODValidStatValue, mode:ODStatScopeSetMode): Promise<boolean>
-    setStat(id:ODValidId, scopeId:string, value:ODValidStatValue, mode:ODStatScopeSetMode): Promise<boolean>
+    setStat<StatsId extends keyof ODStatScopeIds_DefaultMessages>(id:StatsId, scopeId:string, value:api.ODValidStatValue, mode:api.ODStatScopeSetMode): Promise<boolean>
+    setStat(id:api.ODValidId, scopeId:string, value:api.ODValidStatValue, mode:api.ODStatScopeSetMode): Promise<boolean>
 
-    setStat(id:ODValidId, scopeId:string, value:ODValidStatValue, mode:ODStatScopeSetMode): Promise<boolean> {
+    setStat(id:api.ODValidId, scopeId:string, value:api.ODValidStatValue, mode:api.ODStatScopeSetMode): Promise<boolean> {
         return super.setStat(id,scopeId,value,mode)
     }
 
-    resetStat<StatsId extends keyof ODStatScopeIds_DefaultMessages>(id:ODValidId, scopeId:string): Promise<ODValidStatValue|null>
-    resetStat(id:ODValidId, scopeId:string): Promise<ODValidStatValue|null>
+    resetStat<StatsId extends keyof ODStatScopeIds_DefaultMessages>(id:api.ODValidId, scopeId:string): Promise<api.ODValidStatValue|null>
+    resetStat(id:api.ODValidId, scopeId:string): Promise<api.ODValidStatValue|null>
 
-    resetStat(id:ODValidId, scopeId:string): Promise<ODValidStatValue|null> {
+    resetStat(id:api.ODValidId, scopeId:string): Promise<api.ODValidStatValue|null> {
         return super.resetStat(id,scopeId)
     }
 }

@@ -1,8 +1,7 @@
 ///////////////////////////////////////
 //DEFAULT HELP MODULE
 ///////////////////////////////////////
-import { ODValidId } from "../modules/base"
-import { ODHelpMenuCategory, ODHelpMenuCommandComponent, ODHelpMenuComponent, ODHelpMenuManager } from "../modules/helpmenu"
+import * as api from "@open-discord-bots/framework/api"
 
 /** (CONTRIBUTOR GUIDE) HOW TO ADD NEW COMMANDS?
  * - Register the command in loadAllSlashCommands() & loadAllTextCommands() in (./src/data/framework/commandLoader.ts)
@@ -34,25 +33,25 @@ export interface ODHelpMenuManagerIds_Default {
  * 
  * This default class is made for the global variable `opendiscord.helpmenu`!
  */
-export class ODHelpMenuManager_Default extends ODHelpMenuManager {
+export class ODHelpMenuManager_Default extends api.ODHelpMenuManager {
     get<HelpMenuCategoryId extends keyof ODHelpMenuManagerIds_Default>(id:HelpMenuCategoryId): ODHelpMenuManagerIds_Default[HelpMenuCategoryId]
-    get(id:ODValidId): ODHelpMenuCategory|null
+    get(id:api.ODValidId): api.ODHelpMenuCategory|null
     
-    get(id:ODValidId): ODHelpMenuCategory|null {
+    get(id:api.ODValidId): api.ODHelpMenuCategory|null {
         return super.get(id)
     }
 
     remove<HelpMenuCategoryId extends keyof ODHelpMenuManagerIds_Default>(id:HelpMenuCategoryId): ODHelpMenuManagerIds_Default[HelpMenuCategoryId]
-    remove(id:ODValidId): ODHelpMenuCategory|null
+    remove(id:api.ODValidId): api.ODHelpMenuCategory|null
     
-    remove(id:ODValidId): ODHelpMenuCategory|null {
+    remove(id:api.ODValidId): api.ODHelpMenuCategory|null {
         return super.remove(id)
     }
 
     exists(id:keyof ODHelpMenuManagerIds_Default): boolean
-    exists(id:ODValidId): boolean
+    exists(id:api.ODValidId): boolean
     
-    exists(id:ODValidId): boolean {
+    exists(id:api.ODValidId): boolean {
         return super.exists(id)
     }
 }
@@ -62,8 +61,8 @@ export class ODHelpMenuManager_Default extends ODHelpMenuManager {
  * It's used to generate typescript declarations for this class.
  */
 export interface ODHelpMenuManagerCategoryIds_DefaultGeneral {
-    "opendiscord:help":ODHelpMenuCommandComponent,
-    "opendiscord:ticket":ODHelpMenuCommandComponent|null
+    "opendiscord:help":api.ODHelpMenuCommandComponent,
+    "opendiscord:ticket":api.ODHelpMenuCommandComponent|null
 }
 
 /**## ODHelpMenuCategory_DefaultGeneral `default_class`
@@ -72,25 +71,25 @@ export interface ODHelpMenuManagerCategoryIds_DefaultGeneral {
  * 
  * This default class is made for the `opendiscord:general` category in `opendiscord.helpmenu`!
  */
-export class ODHelpMenuCategory_DefaultGeneral extends ODHelpMenuCategory {
+export class ODHelpMenuCategory_DefaultGeneral extends api.ODHelpMenuCategory {
     get<HelpMenuCategoryId extends keyof ODHelpMenuManagerCategoryIds_DefaultGeneral>(id:HelpMenuCategoryId): ODHelpMenuManagerCategoryIds_DefaultGeneral[HelpMenuCategoryId]
-    get(id:ODValidId): ODHelpMenuComponent|null
+    get(id:api.ODValidId): api.ODHelpMenuComponent|null
     
-    get(id:ODValidId): ODHelpMenuComponent|null {
+    get(id:api.ODValidId): api.ODHelpMenuComponent|null {
         return super.get(id)
     }
 
     remove<HelpMenuCategoryId extends keyof ODHelpMenuManagerCategoryIds_DefaultGeneral>(id:HelpMenuCategoryId): ODHelpMenuManagerCategoryIds_DefaultGeneral[HelpMenuCategoryId]
-    remove(id:ODValidId): ODHelpMenuComponent|null
+    remove(id:api.ODValidId): api.ODHelpMenuComponent|null
     
-    remove(id:ODValidId): ODHelpMenuComponent|null {
+    remove(id:api.ODValidId): api.ODHelpMenuComponent|null {
         return super.remove(id)
     }
 
     exists(id:keyof ODHelpMenuManagerCategoryIds_DefaultGeneral): boolean
-    exists(id:ODValidId): boolean
+    exists(id:api.ODValidId): boolean
     
-    exists(id:ODValidId): boolean {
+    exists(id:api.ODValidId): boolean {
         return super.exists(id)
     }
 }
@@ -100,9 +99,9 @@ export class ODHelpMenuCategory_DefaultGeneral extends ODHelpMenuCategory {
  * It's used to generate typescript declarations for this class.
  */
 export interface ODHelpMenuManagerCategoryIds_DefaultTicketBasic {
-    "opendiscord:close":ODHelpMenuCommandComponent,
-    "opendiscord:delete":ODHelpMenuCommandComponent,
-    "opendiscord:reopen":ODHelpMenuCommandComponent
+    "opendiscord:close":api.ODHelpMenuCommandComponent,
+    "opendiscord:delete":api.ODHelpMenuCommandComponent,
+    "opendiscord:reopen":api.ODHelpMenuCommandComponent
 }
 
 /**## ODHelpMenuCategory_DefaultTicketBasic `default_class`
@@ -111,25 +110,25 @@ export interface ODHelpMenuManagerCategoryIds_DefaultTicketBasic {
  * 
  * This default class is made for the `opendiscord:ticket` category in `opendiscord.helpmenu`!
  */
-export class ODHelpMenuCategory_DefaultTicketBasic extends ODHelpMenuCategory {
+export class ODHelpMenuCategory_DefaultTicketBasic extends api.ODHelpMenuCategory {
     get<HelpMenuCategoryId extends keyof ODHelpMenuManagerCategoryIds_DefaultTicketBasic>(id:HelpMenuCategoryId): ODHelpMenuManagerCategoryIds_DefaultTicketBasic[HelpMenuCategoryId]
-    get(id:ODValidId): ODHelpMenuComponent|null
+    get(id:api.ODValidId): api.ODHelpMenuComponent|null
     
-    get(id:ODValidId): ODHelpMenuComponent|null {
+    get(id:api.ODValidId): api.ODHelpMenuComponent|null {
         return super.get(id)
     }
 
     remove<HelpMenuCategoryId extends keyof ODHelpMenuManagerCategoryIds_DefaultTicketBasic>(id:HelpMenuCategoryId): ODHelpMenuManagerCategoryIds_DefaultTicketBasic[HelpMenuCategoryId]
-    remove(id:ODValidId): ODHelpMenuComponent|null
+    remove(id:api.ODValidId): api.ODHelpMenuComponent|null
     
-    remove(id:ODValidId): ODHelpMenuComponent|null {
+    remove(id:api.ODValidId): api.ODHelpMenuComponent|null {
         return super.remove(id)
     }
 
     exists(id:keyof ODHelpMenuManagerCategoryIds_DefaultTicketBasic): boolean
-    exists(id:ODValidId): boolean
+    exists(id:api.ODValidId): boolean
     
-    exists(id:ODValidId): boolean {
+    exists(id:api.ODValidId): boolean {
         return super.exists(id)
     }
 }
@@ -139,10 +138,10 @@ export class ODHelpMenuCategory_DefaultTicketBasic extends ODHelpMenuCategory {
  * It's used to generate typescript declarations for this class.
  */
 export interface ODHelpMenuManagerCategoryIds_DefaultTicketAdvanced {
-    "opendiscord:pin":ODHelpMenuCommandComponent,
-    "opendiscord:unpin":ODHelpMenuCommandComponent,
-    "opendiscord:move":ODHelpMenuCommandComponent,
-    "opendiscord:rename":ODHelpMenuCommandComponent
+    "opendiscord:pin":api.ODHelpMenuCommandComponent,
+    "opendiscord:unpin":api.ODHelpMenuCommandComponent,
+    "opendiscord:move":api.ODHelpMenuCommandComponent,
+    "opendiscord:rename":api.ODHelpMenuCommandComponent
 }
 
 /**## ODHelpMenuCategory_DefaultTicketAdvanced `default_class`
@@ -151,25 +150,25 @@ export interface ODHelpMenuManagerCategoryIds_DefaultTicketAdvanced {
  * 
  * This default class is made for the `opendiscord:ticket` category in `opendiscord.helpmenu`!
  */
-export class ODHelpMenuCategory_DefaultTicketAdvanced extends ODHelpMenuCategory {
+export class ODHelpMenuCategory_DefaultTicketAdvanced extends api.ODHelpMenuCategory {
     get<HelpMenuCategoryId extends keyof ODHelpMenuManagerCategoryIds_DefaultTicketAdvanced>(id:HelpMenuCategoryId): ODHelpMenuManagerCategoryIds_DefaultTicketAdvanced[HelpMenuCategoryId]
-    get(id:ODValidId): ODHelpMenuComponent|null
+    get(id:api.ODValidId): api.ODHelpMenuComponent|null
     
-    get(id:ODValidId): ODHelpMenuComponent|null {
+    get(id:api.ODValidId): api.ODHelpMenuComponent|null {
         return super.get(id)
     }
 
     remove<HelpMenuCategoryId extends keyof ODHelpMenuManagerCategoryIds_DefaultTicketAdvanced>(id:HelpMenuCategoryId): ODHelpMenuManagerCategoryIds_DefaultTicketAdvanced[HelpMenuCategoryId]
-    remove(id:ODValidId): ODHelpMenuComponent|null
+    remove(id:api.ODValidId): api.ODHelpMenuComponent|null
     
-    remove(id:ODValidId): ODHelpMenuComponent|null {
+    remove(id:api.ODValidId): api.ODHelpMenuComponent|null {
         return super.remove(id)
     }
 
     exists(id:keyof ODHelpMenuManagerCategoryIds_DefaultTicketAdvanced): boolean
-    exists(id:ODValidId): boolean
+    exists(id:api.ODValidId): boolean
     
-    exists(id:ODValidId): boolean {
+    exists(id:api.ODValidId): boolean {
         return super.exists(id)
     }
 }
@@ -179,11 +178,11 @@ export class ODHelpMenuCategory_DefaultTicketAdvanced extends ODHelpMenuCategory
  * It's used to generate typescript declarations for this class.
  */
 export interface ODHelpMenuManagerCategoryIds_DefaultTicketUser {
-    "opendiscord:claim":ODHelpMenuCommandComponent,
-    "opendiscord:unclaim":ODHelpMenuCommandComponent,
-    "opendiscord:add":ODHelpMenuCommandComponent,
-    "opendiscord:remove":ODHelpMenuCommandComponent,
-    "opendiscord:transfer":ODHelpMenuCommandComponent,
+    "opendiscord:claim":api.ODHelpMenuCommandComponent,
+    "opendiscord:unclaim":api.ODHelpMenuCommandComponent,
+    "opendiscord:add":api.ODHelpMenuCommandComponent,
+    "opendiscord:remove":api.ODHelpMenuCommandComponent,
+    "opendiscord:transfer":api.ODHelpMenuCommandComponent,
 }
 
 /**## ODHelpMenuCategory_DefaultTicketUser `default_class`
@@ -192,25 +191,25 @@ export interface ODHelpMenuManagerCategoryIds_DefaultTicketUser {
  * 
  * This default class is made for the `opendiscord:ticket` category in `opendiscord.helpmenu`!
  */
-export class ODHelpMenuCategory_DefaultTicketUser extends ODHelpMenuCategory {
+export class ODHelpMenuCategory_DefaultTicketUser extends api.ODHelpMenuCategory {
     get<HelpMenuCategoryId extends keyof ODHelpMenuManagerCategoryIds_DefaultTicketUser>(id:HelpMenuCategoryId): ODHelpMenuManagerCategoryIds_DefaultTicketUser[HelpMenuCategoryId]
-    get(id:ODValidId): ODHelpMenuComponent|null
+    get(id:api.ODValidId): api.ODHelpMenuComponent|null
     
-    get(id:ODValidId): ODHelpMenuComponent|null {
+    get(id:api.ODValidId): api.ODHelpMenuComponent|null {
         return super.get(id)
     }
 
     remove<HelpMenuCategoryId extends keyof ODHelpMenuManagerCategoryIds_DefaultTicketUser>(id:HelpMenuCategoryId): ODHelpMenuManagerCategoryIds_DefaultTicketUser[HelpMenuCategoryId]
-    remove(id:ODValidId): ODHelpMenuComponent|null
+    remove(id:api.ODValidId): api.ODHelpMenuComponent|null
     
-    remove(id:ODValidId): ODHelpMenuComponent|null {
+    remove(id:api.ODValidId): api.ODHelpMenuComponent|null {
         return super.remove(id)
     }
 
     exists(id:keyof ODHelpMenuManagerCategoryIds_DefaultTicketUser): boolean
-    exists(id:ODValidId): boolean
+    exists(id:api.ODValidId): boolean
     
-    exists(id:ODValidId): boolean {
+    exists(id:api.ODValidId): boolean {
         return super.exists(id)
     }
 }
@@ -220,11 +219,11 @@ export class ODHelpMenuCategory_DefaultTicketUser extends ODHelpMenuCategory {
  * It's used to generate typescript declarations for this class.
  */
 export interface ODHelpMenuManagerCategoryIds_DefaultAdmin {
-    "opendiscord:panel":ODHelpMenuCommandComponent,
-    "opendiscord:blacklist-view":ODHelpMenuCommandComponent,
-    "opendiscord:blacklist-add":ODHelpMenuCommandComponent,
-    "opendiscord:blacklist-remove":ODHelpMenuCommandComponent,
-    "opendiscord:blacklist-get":ODHelpMenuCommandComponent
+    "opendiscord:panel":api.ODHelpMenuCommandComponent,
+    "opendiscord:blacklist-view":api.ODHelpMenuCommandComponent,
+    "opendiscord:blacklist-add":api.ODHelpMenuCommandComponent,
+    "opendiscord:blacklist-remove":api.ODHelpMenuCommandComponent,
+    "opendiscord:blacklist-get":api.ODHelpMenuCommandComponent
 }
 
 /**## ODHelpMenuCategory_DefaultAdmin `default_class`
@@ -233,25 +232,25 @@ export interface ODHelpMenuManagerCategoryIds_DefaultAdmin {
  * 
  * This default class is made for the `opendiscord:admin` category in `opendiscord.helpmenu`!
  */
-export class ODHelpMenuCategory_DefaultAdmin extends ODHelpMenuCategory {
+export class ODHelpMenuCategory_DefaultAdmin extends api.ODHelpMenuCategory {
     get<HelpMenuCategoryId extends keyof ODHelpMenuManagerCategoryIds_DefaultAdmin>(id:HelpMenuCategoryId): ODHelpMenuManagerCategoryIds_DefaultAdmin[HelpMenuCategoryId]
-    get(id:ODValidId): ODHelpMenuComponent|null
+    get(id:api.ODValidId): api.ODHelpMenuComponent|null
     
-    get(id:ODValidId): ODHelpMenuComponent|null {
+    get(id:api.ODValidId): api.ODHelpMenuComponent|null {
         return super.get(id)
     }
 
     remove<HelpMenuCategoryId extends keyof ODHelpMenuManagerCategoryIds_DefaultAdmin>(id:HelpMenuCategoryId): ODHelpMenuManagerCategoryIds_DefaultAdmin[HelpMenuCategoryId]
-    remove(id:ODValidId): ODHelpMenuComponent|null
+    remove(id:api.ODValidId): api.ODHelpMenuComponent|null
     
-    remove(id:ODValidId): ODHelpMenuComponent|null {
+    remove(id:api.ODValidId): api.ODHelpMenuComponent|null {
         return super.remove(id)
     }
 
     exists(id:keyof ODHelpMenuManagerCategoryIds_DefaultAdmin): boolean
-    exists(id:ODValidId): boolean
+    exists(id:api.ODValidId): boolean
     
-    exists(id:ODValidId): boolean {
+    exists(id:api.ODValidId): boolean {
         return super.exists(id)
     }
 }
@@ -261,16 +260,16 @@ export class ODHelpMenuCategory_DefaultAdmin extends ODHelpMenuCategory {
  * It's used to generate typescript declarations for this class.
  */
 export interface ODHelpMenuManagerCategoryIds_DefaultAdvanced {
-    "opendiscord:stats-global":ODHelpMenuCommandComponent,
-    "opendiscord:stats-reset":ODHelpMenuCommandComponent,
-    "opendiscord:stats-ticket":ODHelpMenuCommandComponent,
-    "opendiscord:stats-user":ODHelpMenuCommandComponent,
-    "opendiscord:autoclose-disable":ODHelpMenuCommandComponent,
-    "opendiscord:autoclose-enable":ODHelpMenuCommandComponent,
-    "opendiscord:autodelete-disable":ODHelpMenuCommandComponent,
-    "opendiscord:autodelete-enable":ODHelpMenuCommandComponent,
-    "opendiscord:topic-set":ODHelpMenuCommandComponent,
-    "opendiscord:priority-set":ODHelpMenuCommandComponent,
+    "opendiscord:stats-global":api.ODHelpMenuCommandComponent,
+    "opendiscord:stats-reset":api.ODHelpMenuCommandComponent,
+    "opendiscord:stats-ticket":api.ODHelpMenuCommandComponent,
+    "opendiscord:stats-user":api.ODHelpMenuCommandComponent,
+    "opendiscord:autoclose-disable":api.ODHelpMenuCommandComponent,
+    "opendiscord:autoclose-enable":api.ODHelpMenuCommandComponent,
+    "opendiscord:autodelete-disable":api.ODHelpMenuCommandComponent,
+    "opendiscord:autodelete-enable":api.ODHelpMenuCommandComponent,
+    "opendiscord:topic-set":api.ODHelpMenuCommandComponent,
+    "opendiscord:priority-set":api.ODHelpMenuCommandComponent,
 }
 
 /**## ODHelpMenuCategory_DefaultAdvanced `default_class`
@@ -279,25 +278,25 @@ export interface ODHelpMenuManagerCategoryIds_DefaultAdvanced {
  * 
  * This default class is made for the `opendiscord:advanced` category in `opendiscord.helpmenu`!
  */
-export class ODHelpMenuCategory_DefaultAdvanced extends ODHelpMenuCategory {
+export class ODHelpMenuCategory_DefaultAdvanced extends api.ODHelpMenuCategory {
     get<HelpMenuCategoryId extends keyof ODHelpMenuManagerCategoryIds_DefaultAdvanced>(id:HelpMenuCategoryId): ODHelpMenuManagerCategoryIds_DefaultAdvanced[HelpMenuCategoryId]
-    get(id:ODValidId): ODHelpMenuComponent|null
+    get(id:api.ODValidId): api.ODHelpMenuComponent|null
     
-    get(id:ODValidId): ODHelpMenuComponent|null {
+    get(id:api.ODValidId): api.ODHelpMenuComponent|null {
         return super.get(id)
     }
 
     remove<HelpMenuCategoryId extends keyof ODHelpMenuManagerCategoryIds_DefaultAdvanced>(id:HelpMenuCategoryId): ODHelpMenuManagerCategoryIds_DefaultAdvanced[HelpMenuCategoryId]
-    remove(id:ODValidId): ODHelpMenuComponent|null
+    remove(id:api.ODValidId): api.ODHelpMenuComponent|null
     
-    remove(id:ODValidId): ODHelpMenuComponent|null {
+    remove(id:api.ODValidId): api.ODHelpMenuComponent|null {
         return super.remove(id)
     }
 
     exists(id:keyof ODHelpMenuManagerCategoryIds_DefaultAdvanced): boolean
-    exists(id:ODValidId): boolean
+    exists(id:api.ODValidId): boolean
     
-    exists(id:ODValidId): boolean {
+    exists(id:api.ODValidId): boolean {
         return super.exists(id)
     }
 }
@@ -314,25 +313,25 @@ export interface ODHelpMenuManagerCategoryIds_DefaultExtra {}
  * 
  * This default class is made for the `opendiscord:general` category in `opendiscord.helpmenu`!
  */
-export class ODHelpMenuCategory_DefaultExtra extends ODHelpMenuCategory {
+export class ODHelpMenuCategory_DefaultExtra extends api.ODHelpMenuCategory {
     get<HelpMenuCategoryId extends keyof ODHelpMenuManagerCategoryIds_DefaultExtra>(id:HelpMenuCategoryId): ODHelpMenuManagerCategoryIds_DefaultExtra[HelpMenuCategoryId]
-    get(id:ODValidId): ODHelpMenuComponent|null
+    get(id:api.ODValidId): api.ODHelpMenuComponent|null
     
-    get(id:ODValidId): ODHelpMenuComponent|null {
+    get(id:api.ODValidId): api.ODHelpMenuComponent|null {
         return super.get(id)
     }
 
     remove<HelpMenuCategoryId extends keyof ODHelpMenuManagerCategoryIds_DefaultExtra>(id:HelpMenuCategoryId): ODHelpMenuManagerCategoryIds_DefaultExtra[HelpMenuCategoryId]
-    remove(id:ODValidId): ODHelpMenuComponent|null
+    remove(id:api.ODValidId): api.ODHelpMenuComponent|null
     
-    remove(id:ODValidId): ODHelpMenuComponent|null {
+    remove(id:api.ODValidId): api.ODHelpMenuComponent|null {
         return super.remove(id)
     }
 
     exists(id:keyof ODHelpMenuManagerCategoryIds_DefaultExtra): boolean
-    exists(id:ODValidId): boolean
+    exists(id:api.ODValidId): boolean
     
-    exists(id:ODValidId): boolean {
+    exists(id:api.ODValidId): boolean {
         return super.exists(id)
     }
 }

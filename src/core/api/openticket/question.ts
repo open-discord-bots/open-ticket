@@ -1,8 +1,7 @@
 ///////////////////////////////////////
 //OPENTICKET OPTION MODULE
 ///////////////////////////////////////
-import { ODId, ODManager, ODValidJsonType, ODValidId, ODVersion, ODManagerData } from "../modules/base"
-import { ODDebugger } from "../modules/console"
+import * as api from "@open-discord-bots/framework/api"
 
 /**## ODQuestionManager `class`
  * This is an Open Ticket question manager.
@@ -11,11 +10,11 @@ import { ODDebugger } from "../modules/console"
  * 
  * Questions are not stored in the database and will be parsed from the config every startup.
  */
-export class ODQuestionManager extends ODManager<ODQuestion> {
+export class ODQuestionManager extends api.ODManager<ODQuestion> {
     /**A reference to the Open Ticket debugger. */
-    #debug: ODDebugger
+    #debug: api.ODDebugger
 
-    constructor(debug:ODDebugger){
+    constructor(debug:api.ODDebugger){
         super(debug,"question")
         this.#debug = debug
     }
@@ -33,7 +32,7 @@ export interface ODQuestionDataJson {
     /**The id of this property. */
     id:string,
     /**The value of this property. */
-    value:ODValidJsonType
+    value:api.ODValidJsonType
 }
 
 /**## ODQuestionDataJson `interface`
@@ -57,15 +56,15 @@ export interface ODQuestionJson {
  * 
  * Use `ODShortQuestion` or `ODParagraphQuestion` instead!
  */
-export class ODQuestion extends ODManager<ODQuestionData<ODValidJsonType>> {
+export class ODQuestion extends api.ODManager<ODQuestionData<api.ODValidJsonType>> {
     /**The id of this question. (from the config) */
-    id:ODId
+    id:api.ODId
     /**The type of this question (e.g. `opendiscord:short` or `opendiscord:paragraph`) */
     type: string
 
-    constructor(id:ODValidId, type:string, data:ODQuestionData<ODValidJsonType>[]){
+    constructor(id:api.ODValidId, type:string, data:ODQuestionData<api.ODValidJsonType>[]){
         super()
-        this.id = new ODId(id)
+        this.id = new api.ODId(id)
         this.type = type
         data.forEach((data) => {
             this.add(data)
@@ -73,7 +72,7 @@ export class ODQuestion extends ODManager<ODQuestionData<ODValidJsonType>> {
     }
 
     /**Convert this question to a JSON object for storing this question in the database. */
-    toJson(version:ODVersion): ODQuestionJson {
+    toJson(version:api.ODVersion): ODQuestionJson {
         const data = this.getAll().map((data) => {
             return {
                 id:data.id.toString(),
@@ -102,11 +101,11 @@ export class ODQuestion extends ODManager<ODQuestionData<ODValidJsonType>> {
  * 
  * When this property is edited, the database will be updated automatically.
  */
-export class ODQuestionData<DataType extends ODValidJsonType> extends ODManagerData {
+export class ODQuestionData<DataType extends api.ODValidJsonType> extends api.ODManagerData {
     /**The value of this property. */
     #value: DataType
 
-    constructor(id:ODValidId, value:DataType){
+    constructor(id:api.ODValidId, value:DataType){
         super(id)
         this.#value = value
     }
@@ -149,28 +148,28 @@ export interface ODShortQuestionIds {
 export class ODShortQuestion extends ODQuestion {
     type: "opendiscord:short" = "opendiscord:short"
 
-    constructor(id:ODValidId, data:ODQuestionData<ODValidJsonType>[]){
+    constructor(id:api.ODValidId, data:ODQuestionData<api.ODValidJsonType>[]){
         super(id,"opendiscord:short",data)
     }
 
     get<QuestionId extends keyof ODShortQuestionIds>(id:QuestionId): ODShortQuestionIds[QuestionId]
-    get(id:ODValidId): ODQuestionData<ODValidJsonType>|null
+    get(id:api.ODValidId): ODQuestionData<api.ODValidJsonType>|null
     
-    get(id:ODValidId): ODQuestionData<ODValidJsonType>|null {
+    get(id:api.ODValidId): ODQuestionData<api.ODValidJsonType>|null {
         return super.get(id)
     }
 
     remove<QuestionId extends keyof ODShortQuestionIds>(id:QuestionId): ODShortQuestionIds[QuestionId]
-    remove(id:ODValidId): ODQuestionData<ODValidJsonType>|null
+    remove(id:api.ODValidId): ODQuestionData<api.ODValidJsonType>|null
     
-    remove(id:ODValidId): ODQuestionData<ODValidJsonType>|null {
+    remove(id:api.ODValidId): ODQuestionData<api.ODValidJsonType>|null {
         return super.remove(id)
     }
 
     exists(id:keyof ODShortQuestionIds): boolean
-    exists(id:ODValidId): boolean
+    exists(id:api.ODValidId): boolean
     
-    exists(id:ODValidId): boolean {
+    exists(id:api.ODValidId): boolean {
         return super.exists(id)
     }
 
@@ -203,28 +202,28 @@ export interface ODParagraphQuestionIds {
 export class ODParagraphQuestion extends ODQuestion {
     type: "opendiscord:paragraph" = "opendiscord:paragraph"
 
-    constructor(id:ODValidId, data:ODQuestionData<ODValidJsonType>[]){
+    constructor(id:api.ODValidId, data:ODQuestionData<api.ODValidJsonType>[]){
         super(id,"opendiscord:paragraph",data)
     }
 
     get<QuestionId extends keyof ODParagraphQuestionIds>(id:QuestionId): ODParagraphQuestionIds[QuestionId]
-    get(id:ODValidId): ODQuestionData<ODValidJsonType>|null
+    get(id:api.ODValidId): ODQuestionData<api.ODValidJsonType>|null
     
-    get(id:ODValidId): ODQuestionData<ODValidJsonType>|null {
+    get(id:api.ODValidId): ODQuestionData<api.ODValidJsonType>|null {
         return super.get(id)
     }
 
     remove<QuestionId extends keyof ODParagraphQuestionIds>(id:QuestionId): ODParagraphQuestionIds[QuestionId]
-    remove(id:ODValidId): ODQuestionData<ODValidJsonType>|null
+    remove(id:api.ODValidId): ODQuestionData<api.ODValidJsonType>|null
     
-    remove(id:ODValidId): ODQuestionData<ODValidJsonType>|null {
+    remove(id:api.ODValidId): ODQuestionData<api.ODValidJsonType>|null {
         return super.remove(id)
     }
 
     exists(id:keyof ODParagraphQuestionIds): boolean
-    exists(id:ODValidId): boolean
+    exists(id:api.ODValidId): boolean
     
-    exists(id:ODValidId): boolean {
+    exists(id:api.ODValidId): boolean {
         return super.exists(id)
     }
 

@@ -1,8 +1,7 @@
 ///////////////////////////////////////
 //OPENTICKET TICKET MODULE
 ///////////////////////////////////////
-import { ODId, ODManager, ODValidJsonType, ODValidId, ODVersion, ODManagerData } from "../modules/base"
-import { ODDebugger } from "../modules/console"
+import * as api from "@open-discord-bots/framework/api"
 import { ODClientManager_Default } from "../defaults/client"
 import { ODTicketOption } from "./option"
 import * as discord from "discord.js"
@@ -14,15 +13,15 @@ import * as discord from "discord.js"
  * 
  * All tickets which are added, removed or modified in this manager will be updated automatically in the database.
  */
-export class ODTicketManager extends ODManager<ODTicket> {
+export class ODTicketManager extends api.ODManager<ODTicket> {
     /**A reference to the main server of the bot */
     #guild: discord.Guild|null = null
     /**A reference to the Open Ticket client manager. */
     #client: ODClientManager_Default
     /**A reference to the Open Ticket debugger. */
-    #debug: ODDebugger
+    #debug: api.ODDebugger
 
-    constructor(debug:ODDebugger, client:ODClientManager_Default){
+    constructor(debug:api.ODDebugger, client:ODClientManager_Default){
         super(debug,"ticket")
         this.#debug = debug
         this.#client = client
@@ -132,7 +131,7 @@ export interface ODTicketDataJson {
     /**The id of this property. */
     id:string,
     /**The value of this property. */
-    value:ODValidJsonType
+    value:api.ODValidJsonType
 }
 
 /**## ODTicketDataJson `interface`
@@ -200,15 +199,15 @@ export interface ODTicketIds {
  * 
  * These properties contain the current state of the ticket & are used by actions like claiming, pinning, closing, ...
  */
-export class ODTicket extends ODManager<ODTicketData<ODValidJsonType>> {
+export class ODTicket extends api.ODManager<ODTicketData<api.ODValidJsonType>> {
     /**The id of this ticket. (discord channel id) */
-    id:ODId
+    id:api.ODId
     /**The option related to this ticket. */
     #option: ODTicketOption
 
-    constructor(id:ODValidId, option:ODTicketOption, data:ODTicketData<ODValidJsonType>[]){
+    constructor(id:api.ODValidId, option:ODTicketOption, data:ODTicketData<api.ODValidJsonType>[]){
         super()
-        this.id = new ODId(id)
+        this.id = new api.ODId(id)
         this.#option = option
         data.forEach((data) => {
             this.add(data)
@@ -225,7 +224,7 @@ export class ODTicket extends ODManager<ODTicketData<ODValidJsonType>> {
     }
     
     /**Convert this ticket to a JSON object for storing this ticket in the database. */
-    toJson(version:ODVersion): ODTicketJson {
+    toJson(version:api.ODVersion): ODTicketJson {
         const data = this.getAll().map((data) => {
             return {
                 id:data.id.toString(),
@@ -247,23 +246,23 @@ export class ODTicket extends ODManager<ODTicketData<ODValidJsonType>> {
     }
 
     get<OptionId extends keyof ODTicketIds>(id:OptionId): ODTicketIds[OptionId]
-    get(id:ODValidId): ODTicketData<ODValidJsonType>|null
+    get(id:api.ODValidId): ODTicketData<api.ODValidJsonType>|null
     
-    get(id:ODValidId): ODTicketData<ODValidJsonType>|null {
+    get(id:api.ODValidId): ODTicketData<api.ODValidJsonType>|null {
         return super.get(id)
     }
 
     remove<OptionId extends keyof ODTicketIds>(id:OptionId): ODTicketIds[OptionId]
-    remove(id:ODValidId): ODTicketData<ODValidJsonType>|null
+    remove(id:api.ODValidId): ODTicketData<api.ODValidJsonType>|null
     
-    remove(id:ODValidId): ODTicketData<ODValidJsonType>|null {
+    remove(id:api.ODValidId): ODTicketData<api.ODValidJsonType>|null {
         return super.remove(id)
     }
 
     exists(id:keyof ODTicketIds): boolean
-    exists(id:ODValidId): boolean
+    exists(id:api.ODValidId): boolean
     
-    exists(id:ODValidId): boolean {
+    exists(id:api.ODValidId): boolean {
         return super.exists(id)
     }
 }
@@ -275,11 +274,11 @@ export class ODTicket extends ODManager<ODTicketData<ODValidJsonType>> {
  * 
  * When this property is edited, the database will be updated automatically.
  */
-export class ODTicketData<DataType extends ODValidJsonType> extends ODManagerData {
+export class ODTicketData<DataType extends api.ODValidJsonType> extends api.ODManagerData {
     /**The value of this property. */
     #value: DataType
 
-    constructor(id:ODValidId, value:DataType){
+    constructor(id:api.ODValidId, value:DataType){
         super(id)
         this.#value = value
     }

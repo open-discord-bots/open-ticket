@@ -6,7 +6,7 @@ import * as discord from "discord.js"
 //// Enable it in the plugin.json file!  ////
 /////////////////////////////////////////////
 
-if (utilities.project != "openticket") throw new api.ODPluginError("This plugin only works in Open Ticket!")
+if (opendiscord.project != "openticket") throw new api.ODPluginError("This plugin only works in Open Ticket!")
 
 //Add Typescript autocomplete support for plugin data. (!!!OPTIONAL!!!)
 declare module "#opendiscord-types" {

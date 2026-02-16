@@ -1,19 +1,16 @@
 ///////////////////////////////////////
 //DEFAULT BUILDER MODULE
 ///////////////////////////////////////
-import { ODValidButtonColor, ODValidId } from "../modules/base"
-import { ODBuilderManager, ODButton, ODButtonInstance, ODButtonManager, ODDropdown, ODDropdownInstance, ODDropdownManager, ODEmbed, ODEmbedInstance, ODEmbedManager, ODFile, ODFileInstance, ODFileManager, ODMessage, ODMessageInstance, ODMessageManager, ODModal, ODModalInstance, ODModalManager } from "../modules/builder"
+import * as api from "@open-discord-bots/framework/api"
 import { ODWorkerManager_Default } from "./worker"
-import { ODTicket, ODTicketClearFilter } from "../openticket/ticket"
-import { ODPermissionEmbedType } from "../defaults/permission"
-import { ODTextCommandErrorInvalidOption, ODTextCommandErrorMissingOption, ODTextCommandErrorUnknownCommand } from "../modules/client"
-import { ODPanel } from "../openticket/panel"
-import { ODRoleOption, ODTicketOption, ODWebsiteOption } from "../openticket/option"
-import { ODVerifyBar } from "../modules/verifybar"
-import * as discord from "discord.js"
+import { ODPermissionEmbedType } from "./permission"
 import { ODTranscriptCompiler, ODTranscriptCompilerCompileResult } from "../openticket/transcript"
+import { ODRoleOption, ODTicketOption, ODWebsiteOption } from "../openticket/option"
+import { ODTicket, ODTicketClearFilter } from "../openticket/ticket"
 import { ODRole, ODRoleUpdateResult } from "../openticket/role"
 import { ODPriorityLevel } from "../openticket/priority"
+import { ODPanel } from "../openticket/panel"
+import * as discord from "discord.js"
 
 /**## ODBuilderManager_Default `default_class`
  * This is a special class that adds type definitions & typescript to the ODBuilderManager class.
@@ -21,7 +18,7 @@ import { ODPriorityLevel } from "../openticket/priority"
  * 
  * This default class is made for the global variable `opendiscord.builders`!
  */
-export class ODBuilderManager_Default extends ODBuilderManager {
+export class ODBuilderManager_Default extends api.ODBuilderManager {
     declare buttons: ODButtonManager_Default
     declare dropdowns: ODDropdownManager_Default
     declare files: ODFileManager_Default
@@ -35,8 +32,8 @@ export class ODBuilderManager_Default extends ODBuilderManager {
  * It's used to generate typescript declarations for this class.
  */
 export interface ODButtonManagerIds_Default {
-    "opendiscord:verifybar-success":{source:"verifybar"|"other",params:{guild:discord.Guild|null,channel:discord.TextBasedChannel,user:discord.User,verifybar:ODVerifyBar,customData?:string,customColor?:ODValidButtonColor,customLabel?:string,customEmoji?:string},workers:"opendiscord:verifybar-success"},
-    "opendiscord:verifybar-failure":{source:"verifybar"|"other",params:{guild:discord.Guild|null,channel:discord.TextBasedChannel,user:discord.User,verifybar:ODVerifyBar,customData?:string,customColor?:ODValidButtonColor,customLabel?:string,customEmoji?:string},workers:"opendiscord:verifybar-failure"},
+    "opendiscord:verifybar-success":{source:"verifybar"|"other",params:{guild:discord.Guild|null,channel:discord.TextBasedChannel,user:discord.User,verifybar:api.ODVerifyBar,customData?:string,customColor?:api.ODValidButtonColor,customLabel?:string,customEmoji?:string},workers:"opendiscord:verifybar-success"},
+    "opendiscord:verifybar-failure":{source:"verifybar"|"other",params:{guild:discord.Guild|null,channel:discord.TextBasedChannel,user:discord.User,verifybar:api.ODVerifyBar,customData?:string,customColor?:api.ODValidButtonColor,customLabel?:string,customEmoji?:string},workers:"opendiscord:verifybar-failure"},
 
     "opendiscord:error-ticket-deprecated-transcript":{source:"slash"|"text"|"button"|"dropdown"|"modal"|"other",params:{},workers:"opendiscord:error-ticket-deprecated-transcript"},
     
@@ -72,32 +69,32 @@ export interface ODButtonManagerIds_Default {
  * 
  * This default class is made for the global variable `opendiscord.builders.buttons`!
  */
-export class ODButtonManager_Default extends ODButtonManager {
+export class ODButtonManager_Default extends api.ODButtonManager {
     get<ButtonId extends keyof ODButtonManagerIds_Default>(id:ButtonId): ODButton_Default<ODButtonManagerIds_Default[ButtonId]["source"],ODButtonManagerIds_Default[ButtonId]["params"],ODButtonManagerIds_Default[ButtonId]["workers"]>
-    get(id:ODValidId): ODButton<string,any>|null
+    get(id:api.ODValidId): api.ODButton<string,any>|null
     
-    get(id:ODValidId): ODButton<string,any>|null {
+    get(id:api.ODValidId): api.ODButton<string,any>|null {
         return super.get(id)
     }
 
     remove<ButtonId extends keyof ODButtonManagerIds_Default>(id:ButtonId): ODButton_Default<ODButtonManagerIds_Default[ButtonId]["source"],ODButtonManagerIds_Default[ButtonId]["params"],ODButtonManagerIds_Default[ButtonId]["workers"]>
-    remove(id:ODValidId): ODButton<string,any>|null
+    remove(id:api.ODValidId): api.ODButton<string,any>|null
     
-    remove(id:ODValidId): ODButton<string,any>|null {
+    remove(id:api.ODValidId): api.ODButton<string,any>|null {
         return super.remove(id)
     }
 
     exists(id:keyof ODButtonManagerIds_Default): boolean
-    exists(id:ODValidId): boolean
+    exists(id:api.ODValidId): boolean
     
-    exists(id:ODValidId): boolean {
+    exists(id:api.ODValidId): boolean {
         return super.exists(id)
     }
 
     getSafe<ButtonId extends keyof ODButtonManagerIds_Default>(id:ButtonId): ODButton_Default<ODButtonManagerIds_Default[ButtonId]["source"],ODButtonManagerIds_Default[ButtonId]["params"],ODButtonManagerIds_Default[ButtonId]["workers"]>
-    getSafe(id:ODValidId): ODButton<string,any>
+    getSafe(id:api.ODValidId): api.ODButton<string,any>
     
-    getSafe(id:ODValidId): ODButton<string,any> {
+    getSafe(id:api.ODValidId): api.ODButton<string,any> {
         return super.getSafe(id)
     }
 }
@@ -108,8 +105,8 @@ export class ODButtonManager_Default extends ODButtonManager {
  * 
  * This default class is made for the default `ODButton`'s!
  */
-export class ODButton_Default<Source extends string, Params, WorkerIds extends string> extends ODButton<Source,Params> {
-    declare workers: ODWorkerManager_Default<ODButtonInstance,Source,Params,WorkerIds>
+export class ODButton_Default<Source extends string, Params, WorkerIds extends string> extends api.ODButton<Source,Params> {
+    declare workers: ODWorkerManager_Default<api.ODButtonInstance,Source,Params,WorkerIds>
 }
 
 /**## ODDropdownManagerIds_Default `interface`
@@ -126,32 +123,32 @@ export interface ODDropdownManagerIds_Default {
  * 
  * This default class is made for the global variable `opendiscord.builders.dropdowns`!
  */
-export class ODDropdownManager_Default extends ODDropdownManager {
+export class ODDropdownManager_Default extends api.ODDropdownManager {
     get<DropdownId extends keyof ODDropdownManagerIds_Default>(id:DropdownId): ODDropdown_Default<ODDropdownManagerIds_Default[DropdownId]["source"],ODDropdownManagerIds_Default[DropdownId]["params"],ODDropdownManagerIds_Default[DropdownId]["workers"]>
-    get(id:ODValidId): ODDropdown<string,any>|null
+    get(id:api.ODValidId): api.ODDropdown<string,any>|null
     
-    get(id:ODValidId): ODDropdown<string,any>|null {
+    get(id:api.ODValidId): api.ODDropdown<string,any>|null {
         return super.get(id)
     }
 
     remove<DropdownId extends keyof ODDropdownManagerIds_Default>(id:DropdownId): ODDropdown_Default<ODDropdownManagerIds_Default[DropdownId]["source"],ODDropdownManagerIds_Default[DropdownId]["params"],ODDropdownManagerIds_Default[DropdownId]["workers"]>
-    remove(id:ODValidId): ODDropdown<string,any>|null
+    remove(id:api.ODValidId): api.ODDropdown<string,any>|null
     
-    remove(id:ODValidId): ODDropdown<string,any>|null {
+    remove(id:api.ODValidId): api.ODDropdown<string,any>|null {
         return super.remove(id)
     }
 
     exists(id:keyof ODDropdownManagerIds_Default): boolean
-    exists(id:ODValidId): boolean
+    exists(id:api.ODValidId): boolean
     
-    exists(id:ODValidId): boolean {
+    exists(id:api.ODValidId): boolean {
         return super.exists(id)
     }
 
     getSafe<DropdownId extends keyof ODDropdownManagerIds_Default>(id:DropdownId): ODDropdown_Default<ODDropdownManagerIds_Default[DropdownId]["source"],ODDropdownManagerIds_Default[DropdownId]["params"],ODDropdownManagerIds_Default[DropdownId]["workers"]>
-    getSafe(id:ODValidId): ODDropdown<string,any>
+    getSafe(id:api.ODValidId): api.ODDropdown<string,any>
     
-    getSafe(id:ODValidId): ODDropdown<string,any> {
+    getSafe(id:api.ODValidId): api.ODDropdown<string,any> {
         return super.getSafe(id)
     }
 }
@@ -162,8 +159,8 @@ export class ODDropdownManager_Default extends ODDropdownManager {
  * 
  * This default class is made for the default `ODDropdown`'s!
  */
-export class ODDropdown_Default<Source extends string, Params, WorkerIds extends string> extends ODDropdown<Source,Params> {
-    declare workers: ODWorkerManager_Default<ODDropdownInstance,Source,Params,WorkerIds>
+export class ODDropdown_Default<Source extends string, Params, WorkerIds extends string> extends api.ODDropdown<Source,Params> {
+    declare workers: ODWorkerManager_Default<api.ODDropdownInstance,Source,Params,WorkerIds>
 }
 
 /**## ODFileManagerIds_Default `interface`
@@ -180,32 +177,32 @@ export interface ODFileManagerIds_Default {
  * 
  * This default class is made for the global variable `opendiscord.builders.files`!
  */
-export class ODFileManager_Default extends ODFileManager {
+export class ODFileManager_Default extends api.ODFileManager {
     get<FileId extends keyof ODFileManagerIds_Default>(id:FileId): ODFile_Default<ODFileManagerIds_Default[FileId]["source"],ODFileManagerIds_Default[FileId]["params"],ODFileManagerIds_Default[FileId]["workers"]>
-    get(id:ODValidId): ODFile<string,any>|null
+    get(id:api.ODValidId): api.ODFile<string,any>|null
     
-    get(id:ODValidId): ODFile<string,any>|null {
+    get(id:api.ODValidId): api.ODFile<string,any>|null {
         return super.get(id)
     }
 
     remove<FileId extends keyof ODFileManagerIds_Default>(id:FileId): ODFile_Default<ODFileManagerIds_Default[FileId]["source"],ODFileManagerIds_Default[FileId]["params"],ODFileManagerIds_Default[FileId]["workers"]>
-    remove(id:ODValidId): ODFile<string,any>|null
+    remove(id:api.ODValidId): api.ODFile<string,any>|null
     
-    remove(id:ODValidId): ODFile<string,any>|null {
+    remove(id:api.ODValidId): api.ODFile<string,any>|null {
         return super.remove(id)
     }
 
     exists(id:keyof ODFileManagerIds_Default): boolean
-    exists(id:ODValidId): boolean
+    exists(id:api.ODValidId): boolean
     
-    exists(id:ODValidId): boolean {
+    exists(id:api.ODValidId): boolean {
         return super.exists(id)
     }
 
     getSafe<FileId extends keyof ODFileManagerIds_Default>(id:FileId): ODFile_Default<ODFileManagerIds_Default[FileId]["source"],ODFileManagerIds_Default[FileId]["params"],ODFileManagerIds_Default[FileId]["workers"]>
-    getSafe(id:ODValidId): ODFile<string,any>
+    getSafe(id:api.ODValidId): api.ODFile<string,any>
     
-    getSafe(id:ODValidId): ODFile<string,any> {
+    getSafe(id:api.ODValidId): api.ODFile<string,any> {
         return super.getSafe(id)
     }
 }
@@ -216,8 +213,8 @@ export class ODFileManager_Default extends ODFileManager {
  * 
  * This default class is made for the default `ODFile`'s!
  */
-export class ODFile_Default<Source extends string, Params, WorkerIds extends string> extends ODFile<Source,Params> {
-    declare workers: ODWorkerManager_Default<ODFileInstance,Source,Params,WorkerIds>
+export class ODFile_Default<Source extends string, Params, WorkerIds extends string> extends api.ODFile<Source,Params> {
+    declare workers: ODWorkerManager_Default<api.ODFileInstance,Source,Params,WorkerIds>
 }
 
 /**## ODEmbedManagerIds_Default `interface`
@@ -226,9 +223,9 @@ export class ODFile_Default<Source extends string, Params, WorkerIds extends str
  */
 export interface ODEmbedManagerIds_Default {
     "opendiscord:error":{source:"slash"|"text"|"button"|"dropdown"|"modal"|"other",params:{guild:discord.Guild|null,channel:discord.TextBasedChannel,user:discord.User,error:string,layout:"simple"|"advanced",customTitle?:string},workers:"opendiscord:error"},
-    "opendiscord:error-option-missing":{source:"slash"|"text"|"other",params:{guild:discord.Guild|null,channel:discord.TextBasedChannel,user:discord.User,error:ODTextCommandErrorMissingOption},workers:"opendiscord:error-option-missing"},
-    "opendiscord:error-option-invalid":{source:"slash"|"text"|"other",params:{guild:discord.Guild|null,channel:discord.TextBasedChannel,user:discord.User,error:ODTextCommandErrorInvalidOption},workers:"opendiscord:error-option-invalid"},
-    "opendiscord:error-unknown-command":{source:"slash"|"text"|"other",params:{guild:discord.Guild|null,channel:discord.TextBasedChannel,user:discord.User,error:ODTextCommandErrorUnknownCommand},workers:"opendiscord:error-unknown-command"},
+    "opendiscord:error-option-missing":{source:"slash"|"text"|"other",params:{guild:discord.Guild|null,channel:discord.TextBasedChannel,user:discord.User,error:api.ODTextCommandErrorMissingOption},workers:"opendiscord:error-option-missing"},
+    "opendiscord:error-option-invalid":{source:"slash"|"text"|"other",params:{guild:discord.Guild|null,channel:discord.TextBasedChannel,user:discord.User,error:api.ODTextCommandErrorInvalidOption},workers:"opendiscord:error-option-invalid"},
+    "opendiscord:error-unknown-command":{source:"slash"|"text"|"other",params:{guild:discord.Guild|null,channel:discord.TextBasedChannel,user:discord.User,error:api.ODTextCommandErrorUnknownCommand},workers:"opendiscord:error-unknown-command"},
     "opendiscord:error-no-permissions":{source:"slash"|"text"|"button"|"dropdown"|"modal"|"other",params:{guild:discord.Guild|null,channel:discord.TextBasedChannel,user:discord.User,permissions:ODPermissionEmbedType[]},workers:"opendiscord:error-no-permissions"},
     "opendiscord:error-no-permissions-cooldown":{source:"slash"|"text"|"button"|"dropdown"|"modal"|"other",params:{guild:discord.Guild|null,channel:discord.TextBasedChannel,user:discord.User,until?:Date},workers:"opendiscord:error-no-permissions-cooldown"},
     "opendiscord:error-no-permissions-blacklisted":{source:"slash"|"text"|"button"|"dropdown"|"modal"|"other",params:{guild:discord.Guild|null,channel:discord.TextBasedChannel,user:discord.User},workers:"opendiscord:error-no-permissions-blacklisted"},
@@ -308,32 +305,32 @@ export interface ODEmbedManagerIds_Default {
  * 
  * This default class is made for the global variable `opendiscord.builders.embeds`!
  */
-export class ODEmbedManager_Default extends ODEmbedManager {
+export class ODEmbedManager_Default extends api.ODEmbedManager {
     get<EmbedId extends keyof ODEmbedManagerIds_Default>(id:EmbedId): ODEmbed_Default<ODEmbedManagerIds_Default[EmbedId]["source"],ODEmbedManagerIds_Default[EmbedId]["params"],ODEmbedManagerIds_Default[EmbedId]["workers"]>
-    get(id:ODValidId): ODEmbed<string,any>|null
+    get(id:api.ODValidId): api.ODEmbed<string,any>|null
     
-    get(id:ODValidId): ODEmbed<string,any>|null {
+    get(id:api.ODValidId): api.ODEmbed<string,any>|null {
         return super.get(id)
     }
 
     remove<EmbedId extends keyof ODEmbedManagerIds_Default>(id:EmbedId): ODEmbed_Default<ODEmbedManagerIds_Default[EmbedId]["source"],ODEmbedManagerIds_Default[EmbedId]["params"],ODEmbedManagerIds_Default[EmbedId]["workers"]>
-    remove(id:ODValidId): ODEmbed<string,any>|null
+    remove(id:api.ODValidId): api.ODEmbed<string,any>|null
     
-    remove(id:ODValidId): ODEmbed<string,any>|null {
+    remove(id:api.ODValidId): api.ODEmbed<string,any>|null {
         return super.remove(id)
     }
 
     exists(id:keyof ODEmbedManagerIds_Default): boolean
-    exists(id:ODValidId): boolean
+    exists(id:api.ODValidId): boolean
     
-    exists(id:ODValidId): boolean {
+    exists(id:api.ODValidId): boolean {
         return super.exists(id)
     }
 
     getSafe<EmbedId extends keyof ODEmbedManagerIds_Default>(id:EmbedId): ODEmbed_Default<ODEmbedManagerIds_Default[EmbedId]["source"],ODEmbedManagerIds_Default[EmbedId]["params"],ODEmbedManagerIds_Default[EmbedId]["workers"]>
-    getSafe(id:ODValidId): ODEmbed<string,any>
+    getSafe(id:api.ODValidId): api.ODEmbed<string,any>
     
-    getSafe(id:ODValidId): ODEmbed<string,any> {
+    getSafe(id:api.ODValidId): api.ODEmbed<string,any> {
         return super.getSafe(id)
     }
 }
@@ -344,8 +341,8 @@ export class ODEmbedManager_Default extends ODEmbedManager {
  * 
  * This default class is made for the default `ODEmbed`'s!
  */
-export class ODEmbed_Default<Source extends string, Params, WorkerIds extends string> extends ODEmbed<Source,Params> {
-    declare workers: ODWorkerManager_Default<ODEmbedInstance,Source,Params,WorkerIds>
+export class ODEmbed_Default<Source extends string, Params, WorkerIds extends string> extends api.ODEmbed<Source,Params> {
+    declare workers: ODWorkerManager_Default<api.ODEmbedInstance,Source,Params,WorkerIds>
 }
 
 /**## ODMessageManagerIds_Default `interface`
@@ -353,19 +350,19 @@ export class ODEmbed_Default<Source extends string, Params, WorkerIds extends st
  * It's used to generate typescript declarations for this class.
  */
 export interface ODMessageManagerIds_Default {
-    "opendiscord:verifybar-ticket-message":{source:"verifybar",params:{guild:discord.Guild|null,channel:discord.TextBasedChannel,user:discord.User,verifybar:ODVerifyBar,originalMessage:discord.Message<boolean>},workers:"opendiscord:verifybar-ticket-message"},
-    "opendiscord:verifybar-close-message":{source:"verifybar",params:{guild:discord.Guild|null,channel:discord.TextBasedChannel,user:discord.User,verifybar:ODVerifyBar,originalMessage:discord.Message<boolean>},workers:"opendiscord:verifybar-close-message"},
-    "opendiscord:verifybar-reopen-message":{source:"verifybar",params:{guild:discord.Guild|null,channel:discord.TextBasedChannel,user:discord.User,verifybar:ODVerifyBar,originalMessage:discord.Message<boolean>},workers:"opendiscord:verifybar-reopen-message"},
-    "opendiscord:verifybar-claim-message":{source:"verifybar",params:{guild:discord.Guild|null,channel:discord.TextBasedChannel,user:discord.User,verifybar:ODVerifyBar,originalMessage:discord.Message<boolean>},workers:"opendiscord:verifybar-claim-message"},
-    "opendiscord:verifybar-unclaim-message":{source:"verifybar",params:{guild:discord.Guild|null,channel:discord.TextBasedChannel,user:discord.User,verifybar:ODVerifyBar,originalMessage:discord.Message<boolean>},workers:"opendiscord:verifybar-unclaim-message"},
-    "opendiscord:verifybar-pin-message":{source:"verifybar",params:{guild:discord.Guild|null,channel:discord.TextBasedChannel,user:discord.User,verifybar:ODVerifyBar,originalMessage:discord.Message<boolean>},workers:"opendiscord:verifybar-pin-message"},
-    "opendiscord:verifybar-unpin-message":{source:"verifybar",params:{guild:discord.Guild|null,channel:discord.TextBasedChannel,user:discord.User,verifybar:ODVerifyBar,originalMessage:discord.Message<boolean>},workers:"opendiscord:verifybar-unpin-message"}
-    "opendiscord:verifybar-autoclose-message":{source:"verifybar",params:{guild:discord.Guild|null,channel:discord.TextBasedChannel,user:discord.User,verifybar:ODVerifyBar,originalMessage:discord.Message<boolean>},workers:"opendiscord:verifybar-autoclose-message"}
+    "opendiscord:verifybar-ticket-message":{source:"verifybar",params:{guild:discord.Guild|null,channel:discord.TextBasedChannel,user:discord.User,verifybar:api.ODVerifyBar,originalMessage:discord.Message<boolean>},workers:"opendiscord:verifybar-ticket-message"},
+    "opendiscord:verifybar-close-message":{source:"verifybar",params:{guild:discord.Guild|null,channel:discord.TextBasedChannel,user:discord.User,verifybar:api.ODVerifyBar,originalMessage:discord.Message<boolean>},workers:"opendiscord:verifybar-close-message"},
+    "opendiscord:verifybar-reopen-message":{source:"verifybar",params:{guild:discord.Guild|null,channel:discord.TextBasedChannel,user:discord.User,verifybar:api.ODVerifyBar,originalMessage:discord.Message<boolean>},workers:"opendiscord:verifybar-reopen-message"},
+    "opendiscord:verifybar-claim-message":{source:"verifybar",params:{guild:discord.Guild|null,channel:discord.TextBasedChannel,user:discord.User,verifybar:api.ODVerifyBar,originalMessage:discord.Message<boolean>},workers:"opendiscord:verifybar-claim-message"},
+    "opendiscord:verifybar-unclaim-message":{source:"verifybar",params:{guild:discord.Guild|null,channel:discord.TextBasedChannel,user:discord.User,verifybar:api.ODVerifyBar,originalMessage:discord.Message<boolean>},workers:"opendiscord:verifybar-unclaim-message"},
+    "opendiscord:verifybar-pin-message":{source:"verifybar",params:{guild:discord.Guild|null,channel:discord.TextBasedChannel,user:discord.User,verifybar:api.ODVerifyBar,originalMessage:discord.Message<boolean>},workers:"opendiscord:verifybar-pin-message"},
+    "opendiscord:verifybar-unpin-message":{source:"verifybar",params:{guild:discord.Guild|null,channel:discord.TextBasedChannel,user:discord.User,verifybar:api.ODVerifyBar,originalMessage:discord.Message<boolean>},workers:"opendiscord:verifybar-unpin-message"}
+    "opendiscord:verifybar-autoclose-message":{source:"verifybar",params:{guild:discord.Guild|null,channel:discord.TextBasedChannel,user:discord.User,verifybar:api.ODVerifyBar,originalMessage:discord.Message<boolean>},workers:"opendiscord:verifybar-autoclose-message"}
     
     "opendiscord:error":{source:"slash"|"text"|"button"|"dropdown"|"modal"|"other",params:{guild:discord.Guild|null,channel:discord.TextBasedChannel,user:discord.User,error:string,layout:"simple"|"advanced",customTitle?:string},workers:"opendiscord:error"},
-    "opendiscord:error-option-missing":{source:"slash"|"text"|"other",params:{guild:discord.Guild|null,channel:discord.TextBasedChannel,user:discord.User,error:ODTextCommandErrorMissingOption},workers:"opendiscord:error-option-missing"},
-    "opendiscord:error-option-invalid":{source:"slash"|"text"|"other",params:{guild:discord.Guild|null,channel:discord.TextBasedChannel,user:discord.User,error:ODTextCommandErrorInvalidOption},workers:"opendiscord:error-option-invalid"},
-    "opendiscord:error-unknown-command":{source:"slash"|"text"|"other",params:{guild:discord.Guild|null,channel:discord.TextBasedChannel,user:discord.User,error:ODTextCommandErrorUnknownCommand},workers:"opendiscord:error-unknown-command"},
+    "opendiscord:error-option-missing":{source:"slash"|"text"|"other",params:{guild:discord.Guild|null,channel:discord.TextBasedChannel,user:discord.User,error:api.ODTextCommandErrorMissingOption},workers:"opendiscord:error-option-missing"},
+    "opendiscord:error-option-invalid":{source:"slash"|"text"|"other",params:{guild:discord.Guild|null,channel:discord.TextBasedChannel,user:discord.User,error:api.ODTextCommandErrorInvalidOption},workers:"opendiscord:error-option-invalid"},
+    "opendiscord:error-unknown-command":{source:"slash"|"text"|"other",params:{guild:discord.Guild|null,channel:discord.TextBasedChannel,user:discord.User,error:api.ODTextCommandErrorUnknownCommand},workers:"opendiscord:error-unknown-command"},
     "opendiscord:error-no-permissions":{source:"slash"|"text"|"button"|"dropdown"|"modal"|"other",params:{guild:discord.Guild|null,channel:discord.TextBasedChannel,user:discord.User,permissions:ODPermissionEmbedType[]},workers:"opendiscord:error-no-permissions"},
     "opendiscord:error-no-permissions-cooldown":{source:"slash"|"text"|"button"|"dropdown"|"modal"|"other",params:{guild:discord.Guild|null,channel:discord.TextBasedChannel,user:discord.User,until?:Date},workers:"opendiscord:error-no-permissions-cooldown"},
     "opendiscord:error-no-permissions-blacklisted":{source:"slash"|"text"|"button"|"dropdown"|"modal"|"other",params:{guild:discord.Guild|null,channel:discord.TextBasedChannel,user:discord.User},workers:"opendiscord:error-no-permissions-blacklisted"},
@@ -447,32 +444,32 @@ export interface ODMessageManagerIds_Default {
  * 
  * This default class is made for the global variable `opendiscord.builders.messages`!
  */
-export class ODMessageManager_Default extends ODMessageManager {
+export class ODMessageManager_Default extends api.ODMessageManager {
     get<MessageId extends keyof ODMessageManagerIds_Default>(id:MessageId): ODMessage_Default<ODMessageManagerIds_Default[MessageId]["source"],ODMessageManagerIds_Default[MessageId]["params"],ODMessageManagerIds_Default[MessageId]["workers"]>
-    get(id:ODValidId): ODMessage<string,any>|null
+    get(id:api.ODValidId): api.ODMessage<string,any>|null
     
-    get(id:ODValidId): ODMessage<string,any>|null {
+    get(id:api.ODValidId): api.ODMessage<string,any>|null {
         return super.get(id)
     }
 
     remove<MessageId extends keyof ODMessageManagerIds_Default>(id:MessageId): ODMessage_Default<ODMessageManagerIds_Default[MessageId]["source"],ODMessageManagerIds_Default[MessageId]["params"],ODMessageManagerIds_Default[MessageId]["workers"]>
-    remove(id:ODValidId): ODMessage<string,any>|null
+    remove(id:api.ODValidId): api.ODMessage<string,any>|null
     
-    remove(id:ODValidId): ODMessage<string,any>|null {
+    remove(id:api.ODValidId): api.ODMessage<string,any>|null {
         return super.remove(id)
     }
 
     exists(id:keyof ODMessageManagerIds_Default): boolean
-    exists(id:ODValidId): boolean
+    exists(id:api.ODValidId): boolean
     
-    exists(id:ODValidId): boolean {
+    exists(id:api.ODValidId): boolean {
         return super.exists(id)
     }
 
     getSafe<MessageId extends keyof ODMessageManagerIds_Default>(id:MessageId): ODMessage_Default<ODMessageManagerIds_Default[MessageId]["source"],ODMessageManagerIds_Default[MessageId]["params"],ODMessageManagerIds_Default[MessageId]["workers"]>
-    getSafe(id:ODValidId): ODMessage<string,any>
+    getSafe(id:api.ODValidId): api.ODMessage<string,any>
     
-    getSafe(id:ODValidId): ODMessage<string,any> {
+    getSafe(id:api.ODValidId): api.ODMessage<string,any> {
         return super.getSafe(id)
     }
 }
@@ -483,8 +480,8 @@ export class ODMessageManager_Default extends ODMessageManager {
  * 
  * This default class is made for the default `ODMessage`'s!
  */
-export class ODMessage_Default<Source extends string, Params, WorkerIds extends string> extends ODMessage<Source,Params> {
-    declare workers: ODWorkerManager_Default<ODMessageInstance,Source,Params,WorkerIds>
+export class ODMessage_Default<Source extends string, Params, WorkerIds extends string> extends api.ODMessage<Source,Params> {
+    declare workers: ODWorkerManager_Default<api.ODMessageInstance,Source,Params,WorkerIds>
 }
 
 /**## ODModalManagerIds_Default `interface`
@@ -508,32 +505,32 @@ export interface ODModalManagerIds_Default {
  * 
  * This default class is made for the global variable `opendiscord.builders.modals`!
  */
-export class ODModalManager_Default extends ODModalManager {
+export class ODModalManager_Default extends api.ODModalManager {
     get<ModalId extends keyof ODModalManagerIds_Default>(id:ModalId): ODModal_Default<ODModalManagerIds_Default[ModalId]["source"],ODModalManagerIds_Default[ModalId]["params"],ODModalManagerIds_Default[ModalId]["workers"]>
-    get(id:ODValidId): ODModal<string,any>|null
+    get(id:api.ODValidId): api.ODModal<string,any>|null
     
-    get(id:ODValidId): ODModal<string,any>|null {
+    get(id:api.ODValidId): api.ODModal<string,any>|null {
         return super.get(id)
     }
 
     remove<ModalId extends keyof ODModalManagerIds_Default>(id:ModalId): ODModal_Default<ODModalManagerIds_Default[ModalId]["source"],ODModalManagerIds_Default[ModalId]["params"],ODModalManagerIds_Default[ModalId]["workers"]>
-    remove(id:ODValidId): ODModal<string,any>|null
+    remove(id:api.ODValidId): api.ODModal<string,any>|null
     
-    remove(id:ODValidId): ODModal<string,any>|null {
+    remove(id:api.ODValidId): api.ODModal<string,any>|null {
         return super.remove(id)
     }
 
     exists(id:keyof ODModalManagerIds_Default): boolean
-    exists(id:ODValidId): boolean
+    exists(id:api.ODValidId): boolean
     
-    exists(id:ODValidId): boolean {
+    exists(id:api.ODValidId): boolean {
         return super.exists(id)
     }
 
     getSafe<ModalId extends keyof ODModalManagerIds_Default>(id:ModalId): ODModal_Default<ODModalManagerIds_Default[ModalId]["source"],ODModalManagerIds_Default[ModalId]["params"],ODModalManagerIds_Default[ModalId]["workers"]>
-    getSafe(id:ODValidId): ODModal<string,any>
+    getSafe(id:api.ODValidId): api.ODModal<string,any>
     
-    getSafe(id:ODValidId): ODModal<string,any> {
+    getSafe(id:api.ODValidId): api.ODModal<string,any> {
         return super.getSafe(id)
     }
 }
@@ -544,6 +541,6 @@ export class ODModalManager_Default extends ODModalManager {
  * 
  * This default class is made for the default `ODModal`'s!
  */
-export class ODModal_Default<Source extends string, Params, WorkerIds extends string> extends ODModal<Source,Params> {
-    declare workers: ODWorkerManager_Default<ODModalInstance,Source,Params,WorkerIds>
+export class ODModal_Default<Source extends string, Params, WorkerIds extends string> extends api.ODModal<Source,Params> {
+    declare workers: ODWorkerManager_Default<api.ODModalInstance,Source,Params,WorkerIds>
 }

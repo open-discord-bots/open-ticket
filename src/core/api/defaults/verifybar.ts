@@ -1,10 +1,8 @@
 ///////////////////////////////////////
 //DEFAULT VERIFYBAR MODULE
 ///////////////////////////////////////
-import { ODValidId } from "../modules/base"
-import { ODButtonResponderInstance } from "../modules/responder"
+import * as api from "@open-discord-bots/framework/api"
 import { ODWorkerManager_Default } from "../defaults/worker"
-import { ODVerifyBarManager, ODVerifyBar } from "../modules/verifybar"
 import * as discord from "discord.js"
 
 /**## ODVerifyBarManagerIds_Default `interface`
@@ -37,25 +35,25 @@ export interface ODVerifyBarManagerIds_Default {
  * 
  * This default class is made for the global variable `opendiscord.verifybars`!
  */
-export class ODVerifyBarManager_Default extends ODVerifyBarManager {
+export class ODVerifyBarManager_Default extends api.ODVerifyBarManager {
     get<VerifyBarId extends keyof ODVerifyBarManagerIds_Default>(id:VerifyBarId): ODVerifyBar_Default<ODVerifyBarManagerIds_Default[VerifyBarId]["successWorkerIds"],ODVerifyBarManagerIds_Default[VerifyBarId]["failureWorkerIds"]>
-    get(id:ODValidId): ODVerifyBar|null
+    get(id:api.ODValidId): api.ODVerifyBar|null
     
-    get(id:ODValidId): ODVerifyBar|null {
+    get(id:api.ODValidId): api.ODVerifyBar|null {
         return super.get(id)
     }
 
     remove<VerifyBarId extends keyof ODVerifyBarManagerIds_Default>(id:VerifyBarId): ODVerifyBar_Default<ODVerifyBarManagerIds_Default[VerifyBarId]["successWorkerIds"],ODVerifyBarManagerIds_Default[VerifyBarId]["failureWorkerIds"]>
-    remove(id:ODValidId): ODVerifyBar|null
+    remove(id:api.ODValidId): api.ODVerifyBar|null
     
-    remove(id:ODValidId): ODVerifyBar|null {
+    remove(id:api.ODValidId): api.ODVerifyBar|null {
         return super.remove(id)
     }
 
     exists(id:keyof ODVerifyBarManagerIds_Default): boolean
-    exists(id:ODValidId): boolean
+    exists(id:api.ODValidId): boolean
     
-    exists(id:ODValidId): boolean {
+    exists(id:api.ODValidId): boolean {
         return super.exists(id)
     }
 }
@@ -66,7 +64,7 @@ export class ODVerifyBarManager_Default extends ODVerifyBarManager {
  * 
  * This default class is made for the default `ODVerifyBar`'s!
  */
-export class ODVerifyBar_Default<SuccessWorkerIds extends string,FailureWorkerIds extends string> extends ODVerifyBar {
-    declare success: ODWorkerManager_Default<ODButtonResponderInstance,"verifybar",{data:string|null,verifybarMessage:discord.Message<boolean>|null},SuccessWorkerIds>
-    declare failure: ODWorkerManager_Default<ODButtonResponderInstance,"verifybar",{data:string|null,verifybarMessage:discord.Message<boolean>|null},FailureWorkerIds>
+export class ODVerifyBar_Default<SuccessWorkerIds extends string,FailureWorkerIds extends string> extends api.ODVerifyBar {
+    declare success: ODWorkerManager_Default<api.ODButtonResponderInstance,"verifybar",{data:string|null,verifybarMessage:discord.Message<boolean>|null},SuccessWorkerIds>
+    declare failure: ODWorkerManager_Default<api.ODButtonResponderInstance,"verifybar",{data:string|null,verifybarMessage:discord.Message<boolean>|null},FailureWorkerIds>
 }

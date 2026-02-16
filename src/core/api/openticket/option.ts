@@ -1,10 +1,8 @@
 ///////////////////////////////////////
 //OPENTICKET OPTION MODULE
 ///////////////////////////////////////
-import { ODDatabase } from "../modules/database"
+import * as api from "@open-discord-bots/framework/api"
 import { ODJsonConfig_DefaultOptionEmbedSettingsType, ODJsonConfig_DefaultOptionPingSettingsType } from "../defaults/config"
-import { ODId, ODManager, ODValidJsonType, ODValidId, ODVersion, ODValidButtonColor, ODManagerData, ODSystemError } from "../modules/base"
-import { ODDebugger } from "../modules/console"
 import * as discord from "discord.js"
 import * as crypto from "crypto"
 import { ODRoleUpdateMode } from "./role"
@@ -16,13 +14,13 @@ import { ODRoleUpdateMode } from "./role"
  * 
  * All option types including: tickets, websites & reaction roles are stored here.
  */
-export class ODOptionManager extends ODManager<ODOption> {
+export class ODOptionManager extends api.ODManager<ODOption> {
     /**A reference to the Open Ticket debugger. */
-    #debug: ODDebugger
+    #debug: api.ODDebugger
     /**The option suffix manager used to generate channel suffixes for ticket names. */
     suffix: ODOptionSuffixManager
 
-    constructor(debug:ODDebugger){
+    constructor(debug:api.ODDebugger){
         super(debug,"option")
         this.#debug = debug
         this.suffix = new ODOptionSuffixManager(debug)
@@ -41,7 +39,7 @@ export interface ODOptionDataJson {
     /**The id of this property. */
     id:string,
     /**The value of this property. */
-    value:ODValidJsonType
+    value:api.ODValidJsonType
 }
 
 /**## ODOptionDataJson `interface`
@@ -65,15 +63,15 @@ export interface ODOptionJson {
  * 
  * It's recommended to use `ODTicketOption`, `ODWebsiteOption` or `ODRoleOption` instead!
  */
-export class ODOption extends ODManager<ODOptionData<ODValidJsonType>> {
+export class ODOption extends api.ODManager<ODOptionData<api.ODValidJsonType>> {
     /**The id of this option. (from the config) */
-    id:ODId
+    id:api.ODId
     /**The type of this option. (e.g. `opendiscord:ticket`, `opendiscord:website`, `opendiscord:role`) */
     type: string
 
-    constructor(id:ODValidId, type:string, data:ODOptionData<ODValidJsonType>[]){
+    constructor(id:api.ODValidId, type:string, data:ODOptionData<api.ODValidJsonType>[]){
         super()
-        this.id = new ODId(id)
+        this.id = new api.ODId(id)
         this.type = type
         data.forEach((data) => {
             this.add(data)
@@ -81,7 +79,7 @@ export class ODOption extends ODManager<ODOptionData<ODValidJsonType>> {
     }
 
     /**Convert this option to a JSON object for storing this option in the database. */
-    toJson(version:ODVersion): ODOptionJson {
+    toJson(version:api.ODVersion): ODOptionJson {
         const data = this.getAll().map((data) => {
             return {
                 id:data.id.toString(),
@@ -110,11 +108,11 @@ export class ODOption extends ODManager<ODOptionData<ODValidJsonType>> {
  * 
  * When this property is edited, the database will be updated automatically.
  */
-export class ODOptionData<DataType extends ODValidJsonType> extends ODManagerData {
+export class ODOptionData<DataType extends api.ODValidJsonType> extends api.ODManagerData {
     /**The value of this property. */
     #value: DataType
 
-    constructor(id:ODValidId, value:DataType){
+    constructor(id:api.ODValidId, value:DataType){
         super(id)
         this.#value = value
     }
@@ -143,7 +141,7 @@ export interface ODTicketOptionIds {
     
     "opendiscord:button-emoji":ODOptionData<string>,
     "opendiscord:button-label":ODOptionData<string>,
-    "opendiscord:button-color":ODOptionData<ODValidButtonColor>,
+    "opendiscord:button-color":ODOptionData<api.ODValidButtonColor>,
     
     "opendiscord:admins":ODOptionData<string[]>,
     "opendiscord:admins-readonly":ODOptionData<string[]>,
@@ -198,28 +196,28 @@ export interface ODTicketOptionIds {
 export class ODTicketOption extends ODOption {
     type: "opendiscord:ticket" = "opendiscord:ticket"
 
-    constructor(id:ODValidId, data:ODOptionData<ODValidJsonType>[]){
+    constructor(id:api.ODValidId, data:ODOptionData<api.ODValidJsonType>[]){
         super(id,"opendiscord:ticket",data)
     }
 
     get<OptionId extends keyof ODTicketOptionIds>(id:OptionId): ODTicketOptionIds[OptionId]
-    get(id:ODValidId): ODOptionData<ODValidJsonType>|null
+    get(id:api.ODValidId): ODOptionData<api.ODValidJsonType>|null
     
-    get(id:ODValidId): ODOptionData<ODValidJsonType>|null {
+    get(id:api.ODValidId): ODOptionData<api.ODValidJsonType>|null {
         return super.get(id)
     }
 
     remove<OptionId extends keyof ODTicketOptionIds>(id:OptionId): ODTicketOptionIds[OptionId]
-    remove(id:ODValidId): ODOptionData<ODValidJsonType>|null
+    remove(id:api.ODValidId): ODOptionData<api.ODValidJsonType>|null
     
-    remove(id:ODValidId): ODOptionData<ODValidJsonType>|null {
+    remove(id:api.ODValidId): ODOptionData<api.ODValidJsonType>|null {
         return super.remove(id)
     }
 
     exists(id:keyof ODTicketOptionIds): boolean
-    exists(id:ODValidId): boolean
+    exists(id:api.ODValidId): boolean
     
-    exists(id:ODValidId): boolean {
+    exists(id:api.ODValidId): boolean {
         return super.exists(id)
     }
 
@@ -252,28 +250,28 @@ export interface ODWebsiteOptionIds {
 export class ODWebsiteOption extends ODOption {
     type: "opendiscord:website" = "opendiscord:website"
 
-    constructor(id:ODValidId, data:ODOptionData<ODValidJsonType>[]){
+    constructor(id:api.ODValidId, data:ODOptionData<api.ODValidJsonType>[]){
         super(id,"opendiscord:website",data)
     }
 
     get<OptionId extends keyof ODWebsiteOptionIds>(id:OptionId): ODWebsiteOptionIds[OptionId]
-    get(id:ODValidId): ODOptionData<ODValidJsonType>|null
+    get(id:api.ODValidId): ODOptionData<api.ODValidJsonType>|null
     
-    get(id:ODValidId): ODOptionData<ODValidJsonType>|null {
+    get(id:api.ODValidId): ODOptionData<api.ODValidJsonType>|null {
         return super.get(id)
     }
 
     remove<OptionId extends keyof ODWebsiteOptionIds>(id:OptionId): ODWebsiteOptionIds[OptionId]
-    remove(id:ODValidId): ODOptionData<ODValidJsonType>|null
+    remove(id:api.ODValidId): ODOptionData<api.ODValidJsonType>|null
     
-    remove(id:ODValidId): ODOptionData<ODValidJsonType>|null {
+    remove(id:api.ODValidId): ODOptionData<api.ODValidJsonType>|null {
         return super.remove(id)
     }
 
     exists(id:keyof ODWebsiteOptionIds): boolean
-    exists(id:ODValidId): boolean
+    exists(id:api.ODValidId): boolean
     
-    exists(id:ODValidId): boolean {
+    exists(id:api.ODValidId): boolean {
         return super.exists(id)
     }
 
@@ -292,7 +290,7 @@ export interface ODRoleOptionIds {
     
     "opendiscord:button-emoji":ODOptionData<string>,
     "opendiscord:button-label":ODOptionData<string>,
-    "opendiscord:button-color":ODOptionData<ODValidButtonColor>,
+    "opendiscord:button-color":ODOptionData<api.ODValidButtonColor>,
     
     "opendiscord:roles":ODOptionData<string[]>,
     "opendiscord:mode":ODOptionData<ODRoleUpdateMode>,
@@ -310,28 +308,28 @@ export interface ODRoleOptionIds {
 export class ODRoleOption extends ODOption {
     type: "opendiscord:role" = "opendiscord:role"
 
-    constructor(id:ODValidId, data:ODOptionData<ODValidJsonType>[]){
+    constructor(id:api.ODValidId, data:ODOptionData<api.ODValidJsonType>[]){
         super(id,"opendiscord:role",data)
     }
 
     get<OptionId extends keyof ODRoleOptionIds>(id:OptionId): ODRoleOptionIds[OptionId]
-    get(id:ODValidId): ODOptionData<ODValidJsonType>|null
+    get(id:api.ODValidId): ODOptionData<api.ODValidJsonType>|null
     
-    get(id:ODValidId): ODOptionData<ODValidJsonType>|null {
+    get(id:api.ODValidId): ODOptionData<api.ODValidJsonType>|null {
         return super.get(id)
     }
 
     remove<OptionId extends keyof ODRoleOptionIds>(id:OptionId): ODRoleOptionIds[OptionId]
-    remove(id:ODValidId): ODOptionData<ODValidJsonType>|null
+    remove(id:api.ODValidId): ODOptionData<api.ODValidJsonType>|null
     
-    remove(id:ODValidId): ODOptionData<ODValidJsonType>|null {
+    remove(id:api.ODValidId): ODOptionData<api.ODValidJsonType>|null {
         return super.remove(id)
     }
 
     exists(id:keyof ODRoleOptionIds): boolean
-    exists(id:ODValidId): boolean
+    exists(id:api.ODValidId): boolean
     
-    exists(id:ODValidId): boolean {
+    exists(id:api.ODValidId): boolean {
         return super.exists(id)
     }
 
@@ -347,8 +345,8 @@ export class ODRoleOption extends ODOption {
  * 
  * All ticket options should have a corresponding option suffix class.
  */
-export class ODOptionSuffixManager extends ODManager<ODOptionSuffix> {
-    constructor(debug:ODDebugger){
+export class ODOptionSuffixManager extends api.ODManager<ODOptionSuffix> {
+    constructor(debug:api.ODDebugger){
         super(debug,"ticket suffix")
     }
 
@@ -381,18 +379,18 @@ export class ODOptionSuffixManager extends ODManager<ODOptionSuffix> {
  * 
  * Use `getSuffix()` to get the new suffix!
  */
-export class ODOptionSuffix extends ODManagerData {
+export class ODOptionSuffix extends api.ODManagerData {
     /**The option of this suffix. */
     option: ODTicketOption
     
-    constructor(id:ODValidId, option:ODTicketOption){
+    constructor(id:api.ODValidId, option:ODTicketOption){
         super(id)
         this.option = option
     }
 
     /**Get the suffix for a new ticket. */
     async getSuffix(member:discord.GuildMember): Promise<string> {
-        throw new ODSystemError("Tried to use an unimplemented ODOptionSuffix!")
+        throw new api.ODSystemError("Tried to use an unimplemented ODOptionSuffix!")
     }
 }
 
@@ -444,9 +442,9 @@ export class ODOptionUserIdSuffix extends ODOptionSuffix {
  */
 export class ODOptionCounterDynamicSuffix extends ODOptionSuffix {
     /**The database where the value of this counter is stored. */
-    database: ODDatabase
+    database: api.ODDatabase
 
-    constructor(id:ODValidId, option:ODTicketOption, database:ODDatabase){
+    constructor(id:api.ODValidId, option:ODTicketOption, database:api.ODDatabase){
         super(id,option)
         this.database = database
         this.#init()
@@ -474,9 +472,9 @@ export class ODOptionCounterDynamicSuffix extends ODOptionSuffix {
  */
 export class ODOptionCounterFixedSuffix extends ODOptionSuffix {
     /**The database where the value of this counter is stored. */
-    database: ODDatabase
+    database: api.ODDatabase
 
-    constructor(id:ODValidId, option:ODTicketOption, database:ODDatabase){
+    constructor(id:api.ODValidId, option:ODTicketOption, database:api.ODDatabase){
         super(id,option)
         this.database = database
         this.#init()
@@ -508,9 +506,9 @@ export class ODOptionCounterFixedSuffix extends ODOptionSuffix {
  */
 export class ODOptionRandomNumberSuffix extends ODOptionSuffix {
     /**The database where previous random numbers are stored. */
-    database: ODDatabase
+    database: api.ODDatabase
 
-    constructor(id:ODValidId, option:ODTicketOption, database:ODDatabase){
+    constructor(id:api.ODValidId, option:ODTicketOption, database:api.ODDatabase){
         super(id,option)
         this.database = database
         this.#init()
@@ -551,9 +549,9 @@ export class ODOptionRandomNumberSuffix extends ODOptionSuffix {
  */
 export class ODOptionRandomHexSuffix extends ODOptionSuffix {
     /**The database where previous random hexes are stored. */
-    database: ODDatabase
+    database: api.ODDatabase
 
-    constructor(id:ODValidId, option:ODTicketOption, database:ODDatabase){
+    constructor(id:api.ODValidId, option:ODTicketOption, database:api.ODDatabase){
         super(id,option)
         this.database = database
         this.#init()

@@ -1,13 +1,10 @@
 ///////////////////////////////////////
 //OPENTICKET TRANSCRIPT MODULE
 ///////////////////////////////////////
-import { ODId, ODManager, ODValidJsonType, ODValidId, ODManagerData, ODValidButtonColor } from "../modules/base"
-import { ODDebugger } from "../modules/console"
+import * as api from "@open-discord-bots/framework/api"
+import { ODPermissionManager_Default } from "../defaults/permission"
 import { ODTicket, ODTicketManager } from "./ticket"
-import { ODMessageBuildResult } from "../modules/builder"
-import { ODClientManager } from "../modules/client"
 import * as discord from "discord.js"
-import { ODPermissionManager_Default } from "#opendiscord-types"
 
 /**## ODTranscriptManager `class`
  * This is an Open Ticket transcript manager.
@@ -16,13 +13,13 @@ import { ODPermissionManager_Default } from "#opendiscord-types"
  * 
  * The 2 default built-in transcript generators are: `opendiscord:html-compiler` & `opendiscord:text-compiler`.
  */
-export class ODTranscriptManager extends ODManager<ODTranscriptCompiler<any,null|object>> {
+export class ODTranscriptManager extends api.ODManager<ODTranscriptCompiler<any,null|object>> {
     /**The manager responsible for collecting all messages in a channel. */
     collector: ODTranscriptCollector
     /**Alias for the client manager. */
-    #client: ODClientManager
+    #client: api.ODClientManager
 
-    constructor(debug:ODDebugger, tickets:ODTicketManager, client:ODClientManager, permissions:ODPermissionManager_Default){
+    constructor(debug:api.ODDebugger, tickets:ODTicketManager, client:api.ODClientManager, permissions:ODPermissionManager_Default){
         super(debug,"transcript compiler")
         this.#client = client
         this.collector = new ODTranscriptCollector(tickets,client,permissions)
@@ -53,7 +50,7 @@ export interface ODTranscriptCompilerInitResult<InitData extends object|null> {
     /**When not successfull, what was the reason? This will also be shown to the user. */
     errorReason:string|null,
     /**An optional message which will be sent while the transcript is being generated. */
-    pendingMessage:ODMessageBuildResult|null,
+    pendingMessage:api.ODMessageBuildResult|null,
     /**An optional object containing data from the init() function which can be used in the compiler. */
     initData:InitData,
 }
@@ -83,15 +80,15 @@ export interface ODTranscriptCompilerCompileResult<Data extends object> {
  */
 export interface ODTranscriptCompilerReadyResult {
     /**The message to be sent in the specified channel in the server. */
-    channelMessage?:ODMessageBuildResult,
+    channelMessage?:api.ODMessageBuildResult,
     /**The message to be sent to the DM of the ticket creator. */
-    creatorDmMessage?:ODMessageBuildResult,
+    creatorDmMessage?:api.ODMessageBuildResult,
     /**The message to be sent to the DM of all participants. */
-    participantDmMessage?:ODMessageBuildResult,
+    participantDmMessage?:api.ODMessageBuildResult,
     /**The message to be sent to the DM of all admins who actively participated in the ticket. */
-    activeAdminDmMessage?:ODMessageBuildResult,
+    activeAdminDmMessage?:api.ODMessageBuildResult,
     /**The message to be sent to the DM of all admins who were assigned to this ticket. */
-    everyAdminDmMessage?:ODMessageBuildResult
+    everyAdminDmMessage?:api.ODMessageBuildResult
 }
 
 /**## ODTranscriptCompiler `class`
@@ -101,7 +98,7 @@ export interface ODTranscriptCompilerReadyResult {
  * 
  * These functions should be defined when creating this compiler. Existing compilers already exist for html & text transcripts.
  */
-export class ODTranscriptCompiler<Data extends object,InitData extends (object|null)> extends ODManagerData {
+export class ODTranscriptCompiler<Data extends object,InitData extends (object|null)> extends api.ODManagerData {
     /*Initialise the system every time a transcript is created. Returns optional "pending" message to display while the transcript is being compiled. */
     init: ODTranscriptCompilerInitFunction<InitData>|null
     /*Compile or create the transcript. Returns data to give to the ready() function for message creation. */
@@ -109,7 +106,7 @@ export class ODTranscriptCompiler<Data extends object,InitData extends (object|n
     /*Unload the system & create the final transcript message that will be sent. */
     ready: ODTranscriptCompilerReadyFunction<Data>|null
 
-    constructor(id:ODValidId, init?:ODTranscriptCompilerInitFunction<InitData>, compile?:ODTranscriptCompilerCompileFunction<Data,InitData>, ready?:ODTranscriptCompilerReadyFunction<Data>|null){
+    constructor(id:api.ODValidId, init?:ODTranscriptCompilerInitFunction<InitData>, compile?:ODTranscriptCompilerCompileFunction<Data,InitData>, ready?:ODTranscriptCompilerReadyFunction<Data>|null){
         super(id)
         this.init = init ?? null
         this.compile = compile ?? null
@@ -134,23 +131,23 @@ export interface ODTranscriptCompilerIds {
  */
 export class ODTranscriptManager_Default extends ODTranscriptManager {
     get<CompilerId extends keyof ODTranscriptCompilerIds>(id:CompilerId): ODTranscriptCompilerIds[CompilerId]
-    get(id:ODValidId): ODTranscriptCompiler<any,null|object>|null
+    get(id:api.ODValidId): ODTranscriptCompiler<any,null|object>|null
     
-    get(id:ODValidId): ODTranscriptCompiler<any,null|object>|null {
+    get(id:api.ODValidId): ODTranscriptCompiler<any,null|object>|null {
         return super.get(id)
     }
 
     remove<CompilerId extends keyof ODTranscriptCompilerIds>(id:CompilerId): ODTranscriptCompilerIds[CompilerId]
-    remove(id:ODValidId): ODTranscriptCompiler<any,null|object>|null
+    remove(id:api.ODValidId): ODTranscriptCompiler<any,null|object>|null
     
-    remove(id:ODValidId): ODTranscriptCompiler<any,null|object>|null {
+    remove(id:api.ODValidId): ODTranscriptCompiler<any,null|object>|null {
         return super.remove(id)
     }
 
     exists(id:keyof ODTranscriptCompilerIds): boolean
-    exists(id:ODValidId): boolean
+    exists(id:api.ODValidId): boolean
     
-    exists(id:ODValidId): boolean {
+    exists(id:api.ODValidId): boolean {
         return super.exists(id)
     }
 }
@@ -166,11 +163,11 @@ export class ODTranscriptCollector {
     /**Alias for the ticket manager. */
     #tickets: ODTicketManager
     /**Alias for the client manager. */
-    #client: ODClientManager
+    #client: api.ODClientManager
     /**Alias for the permissions manager. */
     #permissions: ODPermissionManager_Default
 
-    constructor(tickets:ODTicketManager,client:ODClientManager,permissions:ODPermissionManager_Default){
+    constructor(tickets:ODTicketManager,client:api.ODClientManager,permissions:ODPermissionManager_Default){
         this.#tickets = tickets
         this.#client = client
         this.#permissions = permissions
@@ -420,7 +417,7 @@ export class ODTranscriptCollector {
         }
     }
     /**Create the `ODValidButtonColor` from the discord.js button style. */
-    #handleButtonComponentStyle(style:discord.ButtonStyle): ODValidButtonColor {
+    #handleButtonComponentStyle(style:discord.ButtonStyle): api.ODValidButtonColor {
         if (style == discord.ButtonStyle.Danger) return "red"
         else if (style == discord.ButtonStyle.Success) return "green"
         else if (style == discord.ButtonStyle.Primary) return "blue"
@@ -622,7 +619,7 @@ export interface ODTranscriptButtonComponentData extends ODTranscriptComponentDa
     /**The emoji of this button. */
     emoji: ODTranscriptEmojiData|null,
     /**The color of this button. */
-    color: ODValidButtonColor,
+    color: api.ODValidButtonColor,
     /**Is this button a url or button? */
     mode: "url"|"button",
     /**The url of this button. */

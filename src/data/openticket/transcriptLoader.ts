@@ -49,7 +49,7 @@ function transcriptAuth(_A:{salt:number,secret:string}){
 export const loadAllTranscriptCompilers = async () => {
     class ODHTTPHtmlPostRequest extends api.ODHTTPPostRequest {
         constructor(transcriptAuth:string,htmlFinal:api.ODTranscriptHtmlV2Data){
-            super("https://"+htmlDomain+"/api/v2/upload?auth="+htmlVersion+"&token="+transcriptAuth,true,{
+            super(opendiscord,"https://"+htmlDomain+"/api/v2/upload?auth="+htmlVersion+"&token="+transcriptAuth,true,{
                 body:JSON.stringify(htmlFinal),
                 headers:{
                     "Content-Type":"application/json"
@@ -178,7 +178,7 @@ export const loadAllTranscriptCompilers = async () => {
     //HTML COMPILER
     opendiscord.transcripts.add(new api.ODTranscriptCompiler<{url:string,availableUntil:Date},{auth:string}|null>("opendiscord:html-compiler",async (ticket,channel,user) => {
         //INIT
-        const req = new api.ODHTTPGetRequest(atob("aHR0cHM6Ly90LmRqLWRqLmJlL2FwaS92Mi9pbml0"),false)
+        const req = new api.ODHTTPGetRequest(opendiscord,atob("aHR0cHM6Ly90LmRqLWRqLmJlL2FwaS92Mi9pbml0"),false)
         const res = await req.run()
         //PENDING MESSAGE (not required anymore) => await messages.getSafe("opendiscord:transcript-html-progress").build("channel",{guild:channel.guild,channel,user,ticket,compiler:opendiscord.transcripts.get("opendiscord:html-compiler"),remaining:16000})
         if (res.status == 200 && res.body){

@@ -1,4 +1,4 @@
-import {opendiscord, api, utilities} from "../../index"
+import {opendiscord, utilities, api } from "../../index"
 import {Terminal, terminal} from "terminal-kit"
 import ansis from "ansis"
 import {renderHeader} from "./cli"

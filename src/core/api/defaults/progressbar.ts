@@ -1,9 +1,7 @@
 ///////////////////////////////////////
 //DEFAULT PROGRESS BAR MODULE
 ///////////////////////////////////////
-import { ODValidId } from "../modules/base"
-import { ODValidConsoleColor } from "../modules/console"
-import { ODManualProgressBar, ODProgressBar, ODProgressBarManager, ODProgressBarRenderer, ODProgressBarRendererManager } from "../modules/progressbar"
+import * as api from "@open-discord-bots/framework/api"
 import ansis from "ansis"
 
 /**## ODProgressBarRenderer_DefaultSettingsLabel `type`
@@ -16,17 +14,17 @@ export type ODProgressBarRenderer_DefaultSettingsLabel = "value"|"percentage"|"f
  */
 export interface ODProgressBarRenderer_DefaultSettings {
     /**The color of the progress bar border. */
-    borderColor:ODValidConsoleColor|"openticket",
+    borderColor:api.ODValidConsoleColor|"openticket",
     /**The color of the progress bar (filled side). */
-    filledBarColor:ODValidConsoleColor|"openticket",
+    filledBarColor:api.ODValidConsoleColor|"openticket",
     /**The color of the progress bar (empty side). */
-    emptyBarColor:ODValidConsoleColor|"openticket",
+    emptyBarColor:api.ODValidConsoleColor|"openticket",
     /**The color of the text before the progress bar. */
-    prefixColor:ODValidConsoleColor|"openticket",
+    prefixColor:api.ODValidConsoleColor|"openticket",
     /**The color of the text after the progress bar. */
-    suffixColor:ODValidConsoleColor|"openticket",
+    suffixColor:api.ODValidConsoleColor|"openticket",
     /**The color of the progress bar label. */
-    labelColor:ODValidConsoleColor|"openticket",
+    labelColor:api.ODValidConsoleColor|"openticket",
 
     /**The character used in the left border. */
     leftBorderChar:string,
@@ -51,8 +49,8 @@ export interface ODProgressBarRenderer_DefaultSettings {
     showBorder:boolean,
 }
 
-export class ODProgressBarRenderer_Default extends ODProgressBarRenderer<ODProgressBarRenderer_DefaultSettings> {
-    constructor(id:ODValidId,settings:ODProgressBarRenderer_DefaultSettings){
+export class ODProgressBarRenderer_Default extends api.ODProgressBarRenderer<ODProgressBarRenderer_DefaultSettings> {
+    constructor(id:api.ODValidId,settings:ODProgressBarRenderer_DefaultSettings){
         super(id,(settings,min,max,value,rawPrefix,rawSuffix) => {
             const percentage = (value-min)/(max-min)
             const barLevel = Math.round(percentage*settings.barWidth)
@@ -103,25 +101,25 @@ export interface ODProgressBarRendererManagerIds_Default {
  * 
  * This default class is made for the global variable `opendiscord.progressbars.renderers`!
  */
-export class ODProgressBarRendererManager_Default extends ODProgressBarRendererManager {
+export class ODProgressBarRendererManager_Default extends api.ODProgressBarRendererManager {
     get<ProgressBarId extends keyof ODProgressBarRendererManagerIds_Default>(id:ProgressBarId): ODProgressBarRendererManagerIds_Default[ProgressBarId]
-    get(id:ODValidId): ODProgressBarRenderer<{}>|null
+    get(id:api.ODValidId): api.ODProgressBarRenderer<{}>|null
     
-    get(id:ODValidId): ODProgressBarRenderer<{}>|null {
+    get(id:api.ODValidId): api.ODProgressBarRenderer<{}>|null {
         return super.get(id)
     }
 
     remove<ProgressBarId extends keyof ODProgressBarRendererManagerIds_Default>(id:ProgressBarId): ODProgressBarRendererManagerIds_Default[ProgressBarId]
-    remove(id:ODValidId): ODProgressBarRenderer<{}>|null
+    remove(id:api.ODValidId): api.ODProgressBarRenderer<{}>|null
     
-    remove(id:ODValidId): ODProgressBarRenderer<{}>|null {
+    remove(id:api.ODValidId): api.ODProgressBarRenderer<{}>|null {
         return super.remove(id)
     }
 
     exists(id:keyof ODProgressBarRendererManagerIds_Default): boolean
-    exists(id:ODValidId): boolean
+    exists(id:api.ODValidId): boolean
     
-    exists(id:ODValidId): boolean {
+    exists(id:api.ODValidId): boolean {
         return super.exists(id)
     }
 }
@@ -131,12 +129,12 @@ export class ODProgressBarRendererManager_Default extends ODProgressBarRendererM
  * It's used to generate typescript declarations for this class.
  */
 export interface ODProgressBarManagerIds_Default {
-    "opendiscord:slash-command-remove":ODManualProgressBar,
-    "opendiscord:slash-command-create":ODManualProgressBar,
-    "opendiscord:slash-command-update":ODManualProgressBar,
-    "opendiscord:context-menu-remove":ODManualProgressBar,
-    "opendiscord:context-menu-create":ODManualProgressBar,
-    "opendiscord:context-menu-update":ODManualProgressBar,
+    "opendiscord:slash-command-remove":api.ODManualProgressBar,
+    "opendiscord:slash-command-create":api.ODManualProgressBar,
+    "opendiscord:slash-command-update":api.ODManualProgressBar,
+    "opendiscord:context-menu-remove":api.ODManualProgressBar,
+    "opendiscord:context-menu-create":api.ODManualProgressBar,
+    "opendiscord:context-menu-update":api.ODManualProgressBar,
 }
 
 /**## ODProgressBarManager_Default `default_class`
@@ -145,27 +143,27 @@ export interface ODProgressBarManagerIds_Default {
  * 
  * This default class is made for the global variable `opendiscord.progressbars`!
  */
-export class ODProgressBarManager_Default extends ODProgressBarManager {
+export class ODProgressBarManager_Default extends api.ODProgressBarManager {
     declare renderers: ODProgressBarRendererManager_Default
 
     get<ProgressBarId extends keyof ODProgressBarManagerIds_Default>(id:ProgressBarId): ODProgressBarManagerIds_Default[ProgressBarId]
-    get(id:ODValidId): ODProgressBar|null
+    get(id:api.ODValidId): api.ODProgressBar|null
     
-    get(id:ODValidId): ODProgressBar|null {
+    get(id:api.ODValidId): api.ODProgressBar|null {
         return super.get(id)
     }
 
     remove<ProgressBarId extends keyof ODProgressBarManagerIds_Default>(id:ProgressBarId): ODProgressBarManagerIds_Default[ProgressBarId]
-    remove(id:ODValidId): ODProgressBar|null
+    remove(id:api.ODValidId): api.ODProgressBar|null
     
-    remove(id:ODValidId): ODProgressBar|null {
+    remove(id:api.ODValidId): api.ODProgressBar|null {
         return super.remove(id)
     }
 
     exists(id:keyof ODProgressBarManagerIds_Default): boolean
-    exists(id:ODValidId): boolean
+    exists(id:api.ODValidId): boolean
     
-    exists(id:ODValidId): boolean {
+    exists(id:api.ODValidId): boolean {
         return super.exists(id)
     }
 }

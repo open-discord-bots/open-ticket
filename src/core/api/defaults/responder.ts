@@ -1,8 +1,7 @@
 ///////////////////////////////////////
 //DEFAULT RESPONDER MODULE
 ///////////////////////////////////////
-import { ODValidId } from "../modules/base"
-import { ODAutocompleteResponder, ODAutocompleteResponderInstance, ODAutocompleteResponderManager, ODButtonResponder, ODButtonResponderInstance, ODButtonResponderManager, ODCommandResponder, ODCommandResponderInstance, ODCommandResponderManager, ODContextMenuResponder, ODContextMenuResponderInstance, ODContextMenuResponderManager, ODDropdownResponder, ODDropdownResponderInstance, ODDropdownResponderManager, ODModalResponder, ODModalResponderInstance, ODModalResponderManager, ODResponderManager } from "../modules/responder"
+import * as api from "@open-discord-bots/framework/api"
 import { ODWorkerManager_Default } from "./worker"
 
 /**## ODResponderManager_Default `default_class`
@@ -11,7 +10,7 @@ import { ODWorkerManager_Default } from "./worker"
  * 
  * This default class is made for the global variable `opendiscord.responders`!
  */
-export class ODResponderManager_Default extends ODResponderManager {
+export class ODResponderManager_Default extends api.ODResponderManager {
     declare commands: ODCommandResponderManager_Default
     declare buttons: ODButtonResponderManager_Default
     declare dropdowns: ODDropdownResponderManager_Default
@@ -58,25 +57,25 @@ export interface ODCommandResponderManagerIds_Default {
  * 
  * This default class is made for the global variable `opendiscord.responders.commands`!
  */
-export class ODCommandResponderManager_Default extends ODCommandResponderManager {
+export class ODCommandResponderManager_Default extends api.ODCommandResponderManager {
     get<CommandResponderId extends keyof ODCommandResponderManagerIds_Default>(id:CommandResponderId): ODCommandResponder_Default<ODCommandResponderManagerIds_Default[CommandResponderId]["source"],ODCommandResponderManagerIds_Default[CommandResponderId]["params"],ODCommandResponderManagerIds_Default[CommandResponderId]["workers"]>
-    get(id:ODValidId): ODCommandResponder<"slash"|"text",any>|null
+    get(id:api.ODValidId): api.ODCommandResponder<"slash"|"text",any>|null
     
-    get(id:ODValidId): ODCommandResponder<"slash"|"text",any>|null {
+    get(id:api.ODValidId): api.ODCommandResponder<"slash"|"text",any>|null {
         return super.get(id)
     }
 
     remove<CommandResponderId extends keyof ODCommandResponderManagerIds_Default>(id:CommandResponderId): ODCommandResponder_Default<ODCommandResponderManagerIds_Default[CommandResponderId]["source"],ODCommandResponderManagerIds_Default[CommandResponderId]["params"],ODCommandResponderManagerIds_Default[CommandResponderId]["workers"]>
-    remove(id:ODValidId): ODCommandResponder<"slash"|"text",any>|null
+    remove(id:api.ODValidId): api.ODCommandResponder<"slash"|"text",any>|null
     
-    remove(id:ODValidId): ODCommandResponder<"slash"|"text",any>|null {
+    remove(id:api.ODValidId): api.ODCommandResponder<"slash"|"text",any>|null {
         return super.remove(id)
     }
 
     exists(id:keyof ODCommandResponderManagerIds_Default): boolean
-    exists(id:ODValidId): boolean
+    exists(id:api.ODValidId): boolean
     
-    exists(id:ODValidId): boolean {
+    exists(id:api.ODValidId): boolean {
         return super.exists(id)
     }
 }
@@ -87,8 +86,8 @@ export class ODCommandResponderManager_Default extends ODCommandResponderManager
  * 
  * This default class is made for the default `ODCommandResponder`'s!
  */
-export class ODCommandResponder_Default<Source extends "slash"|"text", Params, WorkerIds extends string> extends ODCommandResponder<Source,Params> {
-    declare workers: ODWorkerManager_Default<ODCommandResponderInstance,Source,Params,WorkerIds>
+export class ODCommandResponder_Default<Source extends "slash"|"text", Params, WorkerIds extends string> extends api.ODCommandResponder<Source,Params> {
+    declare workers: ODWorkerManager_Default<api.ODCommandResponderInstance,Source,Params,WorkerIds>
 }
 
 /**## ODButtonResponderManagerIds_Default `interface`
@@ -125,25 +124,25 @@ export interface ODButtonResponderManagerIds_Default {
  * 
  * This default class is made for the global variable `opendiscord.responders.buttons`!
  */
-export class ODButtonResponderManager_Default extends ODButtonResponderManager {
+export class ODButtonResponderManager_Default extends api.ODButtonResponderManager {
     get<ButtonResponderId extends keyof ODButtonResponderManagerIds_Default>(id:ButtonResponderId): ODButtonResponder_Default<ODButtonResponderManagerIds_Default[ButtonResponderId]["source"],ODButtonResponderManagerIds_Default[ButtonResponderId]["params"],ODButtonResponderManagerIds_Default[ButtonResponderId]["workers"]>
-    get(id:ODValidId): ODButtonResponder<"button",any>|null
+    get(id:api.ODValidId): api.ODButtonResponder<"button",any>|null
     
-    get(id:ODValidId): ODButtonResponder<"button",any>|null {
+    get(id:api.ODValidId): api.ODButtonResponder<"button",any>|null {
         return super.get(id)
     }
 
     remove<ButtonResponderId extends keyof ODButtonResponderManagerIds_Default>(id:ButtonResponderId): ODButtonResponder_Default<ODButtonResponderManagerIds_Default[ButtonResponderId]["source"],ODButtonResponderManagerIds_Default[ButtonResponderId]["params"],ODButtonResponderManagerIds_Default[ButtonResponderId]["workers"]>
-    remove(id:ODValidId): ODButtonResponder<"button",any>|null
+    remove(id:api.ODValidId): api.ODButtonResponder<"button",any>|null
     
-    remove(id:ODValidId): ODButtonResponder<"button",any>|null {
+    remove(id:api.ODValidId): api.ODButtonResponder<"button",any>|null {
         return super.remove(id)
     }
 
     exists(id:keyof ODButtonResponderManagerIds_Default): boolean
-    exists(id:ODValidId): boolean
+    exists(id:api.ODValidId): boolean
     
-    exists(id:ODValidId): boolean {
+    exists(id:api.ODValidId): boolean {
         return super.exists(id)
     }
 }
@@ -154,8 +153,8 @@ export class ODButtonResponderManager_Default extends ODButtonResponderManager {
  * 
  * This default class is made for the default `ODButtonResponder`'s!
  */
-export class ODButtonResponder_Default<Source extends string, Params, WorkerIds extends string> extends ODButtonResponder<Source,Params> {
-    declare workers: ODWorkerManager_Default<ODButtonResponderInstance,Source,Params,WorkerIds>
+export class ODButtonResponder_Default<Source extends string, Params, WorkerIds extends string> extends api.ODButtonResponder<Source,Params> {
+    declare workers: ODWorkerManager_Default<api.ODButtonResponderInstance,Source,Params,WorkerIds>
 }
 
 /**## ODDropdownResponderManagerIds_Default `interface`
@@ -172,25 +171,25 @@ export interface ODDropdownResponderManagerIds_Default {
  * 
  * This default class is made for the global variable `opendiscord.responders.dropdowns`!
  */
-export class ODDropdownResponderManager_Default extends ODDropdownResponderManager {
+export class ODDropdownResponderManager_Default extends api.ODDropdownResponderManager {
     get<DropdownResponderId extends keyof ODDropdownResponderManagerIds_Default>(id:DropdownResponderId): ODDropdownResponder_Default<ODDropdownResponderManagerIds_Default[DropdownResponderId]["source"],ODDropdownResponderManagerIds_Default[DropdownResponderId]["params"],ODDropdownResponderManagerIds_Default[DropdownResponderId]["workers"]>
-    get(id:ODValidId): ODDropdownResponder<"dropdown",any>|null
+    get(id:api.ODValidId): api.ODDropdownResponder<"dropdown",any>|null
     
-    get(id:ODValidId): ODDropdownResponder<"dropdown",any>|null {
+    get(id:api.ODValidId): api.ODDropdownResponder<"dropdown",any>|null {
         return super.get(id)
     }
 
     remove<DropdownResponderId extends keyof ODDropdownResponderManagerIds_Default>(id:DropdownResponderId): ODDropdownResponder_Default<ODDropdownResponderManagerIds_Default[DropdownResponderId]["source"],ODDropdownResponderManagerIds_Default[DropdownResponderId]["params"],ODDropdownResponderManagerIds_Default[DropdownResponderId]["workers"]>
-    remove(id:ODValidId): ODDropdownResponder<"dropdown",any>|null
+    remove(id:api.ODValidId): api.ODDropdownResponder<"dropdown",any>|null
     
-    remove(id:ODValidId): ODDropdownResponder<"dropdown",any>|null {
+    remove(id:api.ODValidId): api.ODDropdownResponder<"dropdown",any>|null {
         return super.remove(id)
     }
 
     exists(id:keyof ODDropdownResponderManagerIds_Default): boolean
-    exists(id:ODValidId): boolean
+    exists(id:api.ODValidId): boolean
     
-    exists(id:ODValidId): boolean {
+    exists(id:api.ODValidId): boolean {
         return super.exists(id)
     }
 }
@@ -201,8 +200,8 @@ export class ODDropdownResponderManager_Default extends ODDropdownResponderManag
  * 
  * This default class is made for the default `ODDropdownResponder`'s!
  */
-export class ODDropdownResponder_Default<Source extends string, Params, WorkerIds extends string> extends ODDropdownResponder<Source,Params> {
-    declare workers: ODWorkerManager_Default<ODDropdownResponderInstance,Source,Params,WorkerIds>
+export class ODDropdownResponder_Default<Source extends string, Params, WorkerIds extends string> extends api.ODDropdownResponder<Source,Params> {
+    declare workers: ODWorkerManager_Default<api.ODDropdownResponderInstance,Source,Params,WorkerIds>
 }
 
 /**## ODModalResponderManagerIds_Default `interface`
@@ -226,25 +225,25 @@ export interface ODModalResponderManagerIds_Default {
  * 
  * This default class is made for the global variable `opendiscord.responders.dropdowns`!
  */
-export class ODModalResponderManager_Default extends ODModalResponderManager {
+export class ODModalResponderManager_Default extends api.ODModalResponderManager {
     get<ModalResponderId extends keyof ODModalResponderManagerIds_Default>(id:ModalResponderId): ODModalResponder_Default<ODModalResponderManagerIds_Default[ModalResponderId]["source"],ODModalResponderManagerIds_Default[ModalResponderId]["params"],ODModalResponderManagerIds_Default[ModalResponderId]["workers"]>
-    get(id:ODValidId): ODModalResponder<"modal",any>|null
+    get(id:api.ODValidId): api.ODModalResponder<"modal",any>|null
     
-    get(id:ODValidId): ODModalResponder<"modal",any>|null {
+    get(id:api.ODValidId): api.ODModalResponder<"modal",any>|null {
         return super.get(id)
     }
 
     remove<ModalResponderId extends keyof ODModalResponderManagerIds_Default>(id:ModalResponderId): ODModalResponder_Default<ODModalResponderManagerIds_Default[ModalResponderId]["source"],ODModalResponderManagerIds_Default[ModalResponderId]["params"],ODModalResponderManagerIds_Default[ModalResponderId]["workers"]>
-    remove(id:ODValidId): ODModalResponder<"modal",any>|null
+    remove(id:api.ODValidId): api.ODModalResponder<"modal",any>|null
     
-    remove(id:ODValidId): ODModalResponder<"modal",any>|null {
+    remove(id:api.ODValidId): api.ODModalResponder<"modal",any>|null {
         return super.remove(id)
     }
 
     exists(id:keyof ODModalResponderManagerIds_Default): boolean
-    exists(id:ODValidId): boolean
+    exists(id:api.ODValidId): boolean
     
-    exists(id:ODValidId): boolean {
+    exists(id:api.ODValidId): boolean {
         return super.exists(id)
     }
 }
@@ -255,8 +254,8 @@ export class ODModalResponderManager_Default extends ODModalResponderManager {
  * 
  * This default class is made for the default `ODModalResponder`'s!
  */
-export class ODModalResponder_Default<Source extends string, Params, WorkerIds extends string> extends ODModalResponder<Source,Params> {
-    declare workers: ODWorkerManager_Default<ODModalResponderInstance,Source,Params,WorkerIds>
+export class ODModalResponder_Default<Source extends string, Params, WorkerIds extends string> extends api.ODModalResponder<Source,Params> {
+    declare workers: ODWorkerManager_Default<api.ODModalResponderInstance,Source,Params,WorkerIds>
 }
 
 /**## ODContextMenuResponderManagerIds_Default `interface`
@@ -273,25 +272,25 @@ export interface ODContextMenuResponderManagerIds_Default {
  * 
  * This default class is made for the global variable `opendiscord.responders.contextMenus`!
  */
-export class ODContextMenuResponderManager_Default extends ODContextMenuResponderManager {
+export class ODContextMenuResponderManager_Default extends api.ODContextMenuResponderManager {
     get<ModalResponderId extends keyof ODContextMenuResponderManagerIds_Default>(id:ModalResponderId): ODContextMenuResponder_Default<ODContextMenuResponderManagerIds_Default[ModalResponderId]["source"],ODContextMenuResponderManagerIds_Default[ModalResponderId]["params"],ODContextMenuResponderManagerIds_Default[ModalResponderId]["workers"]>
-    get(id:ODValidId): ODContextMenuResponder<"context-menu",any>|null
+    get(id:api.ODValidId): api.ODContextMenuResponder<"context-menu",any>|null
     
-    get(id:ODValidId): ODContextMenuResponder<"context-menu",any>|null {
+    get(id:api.ODValidId): api.ODContextMenuResponder<"context-menu",any>|null {
         return super.get(id)
     }
 
     remove<ModalResponderId extends keyof ODContextMenuResponderManagerIds_Default>(id:ModalResponderId): ODContextMenuResponder_Default<ODContextMenuResponderManagerIds_Default[ModalResponderId]["source"],ODContextMenuResponderManagerIds_Default[ModalResponderId]["params"],ODContextMenuResponderManagerIds_Default[ModalResponderId]["workers"]>
-    remove(id:ODValidId): ODContextMenuResponder<"context-menu",any>|null
+    remove(id:api.ODValidId): api.ODContextMenuResponder<"context-menu",any>|null
     
-    remove(id:ODValidId): ODContextMenuResponder<"context-menu",any>|null {
+    remove(id:api.ODValidId): api.ODContextMenuResponder<"context-menu",any>|null {
         return super.remove(id)
     }
 
     exists(id:keyof ODContextMenuResponderManagerIds_Default): boolean
-    exists(id:ODValidId): boolean
+    exists(id:api.ODValidId): boolean
     
-    exists(id:ODValidId): boolean {
+    exists(id:api.ODValidId): boolean {
         return super.exists(id)
     }
 }
@@ -302,8 +301,8 @@ export class ODContextMenuResponderManager_Default extends ODContextMenuResponde
  * 
  * This default class is made for the default `ODContextMenuResponder`'s!
  */
-export class ODContextMenuResponder_Default<Source extends string, Params, WorkerIds extends string> extends ODContextMenuResponder<Source,Params> {
-    declare workers: ODWorkerManager_Default<ODContextMenuResponderInstance,Source,Params,WorkerIds>
+export class ODContextMenuResponder_Default<Source extends string, Params, WorkerIds extends string> extends api.ODContextMenuResponder<Source,Params> {
+    declare workers: ODWorkerManager_Default<api.ODContextMenuResponderInstance,Source,Params,WorkerIds>
 }
 
 /**## ODAutocompleteResponderManagerIds_Default `interface`
@@ -321,25 +320,25 @@ export interface ODAutocompleteResponderManagerIds_Default {
  * 
  * This default class is made for the global variable `opendiscord.responders.autocomplete`!
  */
-export class ODAutocompleteResponderManager_Default extends ODAutocompleteResponderManager {
+export class ODAutocompleteResponderManager_Default extends api.ODAutocompleteResponderManager {
     get<ModalResponderId extends keyof ODAutocompleteResponderManagerIds_Default>(id:ModalResponderId): ODAutocompleteResponder_Default<ODAutocompleteResponderManagerIds_Default[ModalResponderId]["source"],ODAutocompleteResponderManagerIds_Default[ModalResponderId]["params"],ODAutocompleteResponderManagerIds_Default[ModalResponderId]["workers"]>
-    get(id:ODValidId): ODAutocompleteResponder<"autocomplete",any>|null
+    get(id:api.ODValidId): api.ODAutocompleteResponder<"autocomplete",any>|null
     
-    get(id:ODValidId): ODAutocompleteResponder<"autocomplete",any>|null {
+    get(id:api.ODValidId): api.ODAutocompleteResponder<"autocomplete",any>|null {
         return super.get(id)
     }
 
     remove<ModalResponderId extends keyof ODAutocompleteResponderManagerIds_Default>(id:ModalResponderId): ODAutocompleteResponder_Default<ODAutocompleteResponderManagerIds_Default[ModalResponderId]["source"],ODAutocompleteResponderManagerIds_Default[ModalResponderId]["params"],ODAutocompleteResponderManagerIds_Default[ModalResponderId]["workers"]>
-    remove(id:ODValidId): ODAutocompleteResponder<"autocomplete",any>|null
+    remove(id:api.ODValidId): api.ODAutocompleteResponder<"autocomplete",any>|null
     
-    remove(id:ODValidId): ODAutocompleteResponder<"autocomplete",any>|null {
+    remove(id:api.ODValidId): api.ODAutocompleteResponder<"autocomplete",any>|null {
         return super.remove(id)
     }
 
     exists(id:keyof ODAutocompleteResponderManagerIds_Default): boolean
-    exists(id:ODValidId): boolean
+    exists(id:api.ODValidId): boolean
     
-    exists(id:ODValidId): boolean {
+    exists(id:api.ODValidId): boolean {
         return super.exists(id)
     }
 }
@@ -350,6 +349,6 @@ export class ODAutocompleteResponderManager_Default extends ODAutocompleteRespon
  * 
  * This default class is made for the default `ODAutocompleteResponder`'s!
  */
-export class ODAutocompleteResponder_Default<Source extends string, Params, WorkerIds extends string> extends ODAutocompleteResponder<Source,Params> {
-    declare workers: ODWorkerManager_Default<ODAutocompleteResponderInstance,Source,Params,WorkerIds>
+export class ODAutocompleteResponder_Default<Source extends string, Params, WorkerIds extends string> extends api.ODAutocompleteResponder<Source,Params> {
+    declare workers: ODWorkerManager_Default<api.ODAutocompleteResponderInstance,Source,Params,WorkerIds>
 }

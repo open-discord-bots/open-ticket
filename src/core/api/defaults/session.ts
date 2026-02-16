@@ -1,8 +1,7 @@
 ///////////////////////////////////////
 //DEFAULT SESSION MODULE
 ///////////////////////////////////////
-import { ODValidId } from "../modules/base"
-import { ODSession, ODSessionManager } from "../modules/session"
+import * as api from "@open-discord-bots/framework/api"
 
 /**## ODSessionManagerIds_Default `interface`
  * This interface is a list of ids available in the `ODSessionManager_Default` class.
@@ -18,25 +17,25 @@ export interface ODSessionManagerIds_Default {
  * 
  * This default class is made for the global variable `opendiscord.sessions`!
  */
-export class ODSessionManager_Default extends ODSessionManager {
+export class ODSessionManager_Default extends api.ODSessionManager {
     get<SessionId extends keyof ODSessionManagerIds_Default>(id:SessionId): ODSessionManagerIds_Default[SessionId]
-    get(id:ODValidId): ODSession|null
+    get(id:api.ODValidId): api.ODSession|null
     
-    get(id:ODValidId): ODSession|null {
+    get(id:api.ODValidId): api.ODSession|null {
         return super.get(id)
     }
 
     remove<SessionId extends keyof ODSessionManagerIds_Default>(id:SessionId): ODSessionManagerIds_Default[SessionId]
-    remove(id:ODValidId): ODSession|null
+    remove(id:api.ODValidId): api.ODSession|null
     
-    remove(id:ODValidId): ODSession|null {
+    remove(id:api.ODValidId): api.ODSession|null {
         return super.remove(id)
     }
 
     exists(id:keyof ODSessionManagerIds_Default): boolean
-    exists(id:ODValidId): boolean
+    exists(id:api.ODValidId): boolean
     
-    exists(id:ODValidId): boolean {
+    exists(id:api.ODValidId): boolean {
         return super.exists(id)
     }
 }

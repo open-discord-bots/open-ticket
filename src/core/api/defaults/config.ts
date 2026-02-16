@@ -1,10 +1,8 @@
 ///////////////////////////////////////
 //DEFAULT CONFIG MODULE
 ///////////////////////////////////////
-import { ODValidButtonColor, ODValidId } from "../modules/base"
+import * as api from "@open-discord-bots/framework/api"
 import * as discord from "discord.js"
-import { ODConfigManager, ODConfig, ODJsonConfig } from "../modules/config"
-import { ODClientActivityMode, ODClientActivityType } from "../modules/client"
 import { ODRoleUpdateMode } from "../openticket/role"
 
 /** (CONTRIBUTOR GUIDE) HOW TO ADD NEW CONFIG VARIABLES?
@@ -45,25 +43,25 @@ export interface ODConfigManagerIds_Default {
  * 
  * This default class is made for the global variable `opendiscord.configs`!
  */
-export class ODConfigManager_Default extends ODConfigManager {
+export class ODConfigManager_Default extends api.ODConfigManager {
     get<ConfigId extends keyof ODConfigManagerIds_Default>(id:ConfigId): ODConfigManagerIds_Default[ConfigId]
-    get(id:ODValidId): ODConfig|null
+    get(id:api.ODValidId): api.ODConfig|null
     
-    get(id:ODValidId): ODConfig|null {
+    get(id:api.ODValidId): api.ODConfig|null {
         return super.get(id)
     }
     
     remove<ConfigId extends keyof ODConfigManagerIds_Default>(id:ConfigId): ODConfigManagerIds_Default[ConfigId]
-    remove(id:ODValidId): ODConfig|null
+    remove(id:api.ODValidId): api.ODConfig|null
     
-    remove(id:ODValidId): ODConfig|null {
+    remove(id:api.ODValidId): api.ODConfig|null {
         return super.remove(id)
     }
 
     exists(id:keyof ODConfigManagerIds_Default): boolean
-    exists(id:ODValidId): boolean
+    exists(id:api.ODValidId): boolean
     
-    exists(id:ODValidId): boolean {
+    exists(id:api.ODValidId): boolean {
         return super.exists(id)
     }
 }
@@ -75,9 +73,9 @@ export interface ODJsonConfig_DefaultStatusType {
     /**Is the status enabled? */
     enabled:boolean,
     /**The type of status (e.g. playing, listening, custom, ...) */
-    type:Exclude<ODClientActivityType,false>,
+    type:Exclude<api.ODClientActivityType,false>,
     /**The mode/status of the bot (e.g. online, invisible, idle, do not disturb) */
-    mode:ODClientActivityMode
+    mode:api.ODClientActivityMode
     /**The text for the status. */
     text:string,
     /**Additional text for the status. (visible below 'text') */
@@ -324,7 +322,7 @@ export interface ODJsonConfig_DefaultGeneralData {
  * 
  * This default class is made for the `general.json` config!
  */
-export class ODJsonConfig_DefaultGeneral extends ODJsonConfig {
+export class ODJsonConfig_DefaultGeneral extends api.ODJsonConfig {
     declare data: ODJsonConfig_DefaultGeneralData
 }
 
@@ -358,7 +356,7 @@ export interface ODJsonConfig_DefaultOptionButtonSettingsType {
     /**The label of the button (can also be empty) */
     label:string,
     /**The color of the button (not available in options with the 'website' type!) */
-    color:ODValidButtonColor
+    color:api.ODValidButtonColor
 }
 
 /**## ODJsonConfig_DefaultOptionEmbedSettingsType `interface`
@@ -546,7 +544,7 @@ export type ODJsonConfig_DefaultOptionsData = (ODJsonConfig_DefaultOptionTicketT
  * 
  * This default class is made for the `options.json` config!
  */
-export class ODJsonConfig_DefaultOptions extends ODJsonConfig {
+export class ODJsonConfig_DefaultOptions extends api.ODJsonConfig {
     declare data: ODJsonConfig_DefaultOptionsData
 }
 
@@ -641,7 +639,7 @@ export type ODJsonConfig_DefaultPanelsData = ODJsonConfig_DefaultPanelType[]
  * 
  * This default class is made for the `panels.json` config!
  */
-export class ODJsonConfig_DefaultPanels extends ODJsonConfig {
+export class ODJsonConfig_DefaultPanels extends api.ODJsonConfig {
     declare data: ODJsonConfig_DefaultPanelsData
 }
 
@@ -706,7 +704,7 @@ export type ODJsonConfig_DefaultQuestionsData = (ODJsonConfig_DefaultShortQuesti
  * 
  * This default class is made for the `questions.json` config!
  */
-export class ODJsonConfig_DefaultQuestions extends ODJsonConfig {
+export class ODJsonConfig_DefaultQuestions extends api.ODJsonConfig {
     declare data: ODJsonConfig_DefaultQuestionsData
 }
 
@@ -828,6 +826,6 @@ export interface ODJsonConfig_DefaultTranscriptsData {
  * 
  * This default class is made for the `transcripts.json` config!
  */
-export class ODJsonConfig_DefaultTranscripts extends ODJsonConfig {
+export class ODJsonConfig_DefaultTranscripts extends api.ODJsonConfig {
     declare data: ODJsonConfig_DefaultTranscriptsData
 }

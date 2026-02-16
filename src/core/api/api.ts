@@ -1,34 +1,7 @@
-//MAIN MODULE
-export * from "./main"
+//EXPORT FRAMEWORK
+export * from "@open-discord-bots/framework/api"
 
-//BASE MODULES
-export * from "./modules/base"
-export * from "./modules/event"
-export * from "./modules/config"
-export * from "./modules/database"
-export * from "./modules/language"
-export * from "./modules/flag"
-export * from "./modules/console"
-export * from "./modules/defaults"
-export * from "./modules/plugin"
-export * from "./modules/checker"
-export * from "./modules/client"
-export * from "./modules/worker"
-export * from "./modules/builder"
-export * from "./modules/responder"
-export * from "./modules/action"
-export * from "./modules/permission"
-export * from "./modules/helpmenu"
-export * from "./modules/session"
-export * from "./modules/stat"
-export * from "./modules/code"
-export * from "./modules/cooldown"
-export * from "./modules/post"
-export * from "./modules/verifybar"
-export * from "./modules/progressbar"
-export * from "./modules/startscreen"
-
-//OPENTICKET DEFAULT MODULES
+//EXPORT DEFAULT MODULES
 export * from "./defaults/base"
 export * from "./defaults/event"
 export * from "./defaults/config"
@@ -52,8 +25,10 @@ export * from "./defaults/post"
 export * from "./defaults/progressbar"
 export * from "./defaults/startscreen"
 export * from "./defaults/console"
+export * from "./defaults/verifybar"
+export * from "./defaults/fuse"
 
-//OPENTICKET MODULES
+//EXPORT OPENTICKET MODULES
 export * from "./openticket/question"
 export * from "./openticket/option"
 export * from "./openticket/panel"
@@ -62,3 +37,6 @@ export * from "./openticket/blacklist"
 export * from "./openticket/transcript"
 export * from "./openticket/role"
 export * from "./openticket/priority"
+
+//EXPORT MAIN MODULE
+export { ODOpenTicketMain } from "./main"

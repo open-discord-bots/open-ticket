@@ -1,11 +1,11 @@
-import {opendiscord, api, utilities} from "../../index"
+import { opendiscord, api, utilities } from "../../index"
 
 export const migrations = [
     //MIGRATE TO v4.0.0
-    new utilities.ODVersionMigration(api.ODVersion.fromString("opendiscord:version","v4.0.0"),async () => {},async () => {}),
+    new api.ODVersionMigration(api.ODVersion.fromString("opendiscord:version","v4.0.0"),async () => {},async () => {}),
     
     //MIGRATE TO v4.0.1
-    new utilities.ODVersionMigration(api.ODVersion.fromString("opendiscord:version","v4.0.1"),async () => {},async () => {
+    new api.ODVersionMigration(api.ODVersion.fromString("opendiscord:version","v4.0.1"),async () => {},async () => {
         //AFTER INIT MIGRATION
 
         //add opendiscord:panel-message properties for all existing panels.
@@ -16,25 +16,25 @@ export const migrations = [
     }),
 
     //MIGRATE TO v4.0.2
-    new utilities.ODVersionMigration(api.ODVersion.fromString("opendiscord:version","v4.0.2"),async () => {},async () => {}),
+    new api.ODVersionMigration(api.ODVersion.fromString("opendiscord:version","v4.0.2"),async () => {},async () => {}),
     
     //MIGRATE TO v4.0.3
-    new utilities.ODVersionMigration(api.ODVersion.fromString("opendiscord:version","v4.0.3"),async () => {},async () => {}),
+    new api.ODVersionMigration(api.ODVersion.fromString("opendiscord:version","v4.0.3"),async () => {},async () => {}),
 
     //MIGRATE TO v4.0.4
-    new utilities.ODVersionMigration(api.ODVersion.fromString("opendiscord:version","v4.0.4"),async () => {},async () => {}),
+    new api.ODVersionMigration(api.ODVersion.fromString("opendiscord:version","v4.0.4"),async () => {},async () => {}),
 
     //MIGRATE TO v4.0.5
-    new utilities.ODVersionMigration(api.ODVersion.fromString("opendiscord:version","v4.0.5"),async () => {},async () => {}),
+    new api.ODVersionMigration(api.ODVersion.fromString("opendiscord:version","v4.0.5"),async () => {},async () => {}),
 
     //MIGRATE TO v4.0.6
-    new utilities.ODVersionMigration(api.ODVersion.fromString("opendiscord:version","v4.0.6"),async () => {},async () => {}),
+    new api.ODVersionMigration(api.ODVersion.fromString("opendiscord:version","v4.0.6"),async () => {},async () => {}),
 
     //MIGRATE TO v4.0.7
-    new utilities.ODVersionMigration(api.ODVersion.fromString("opendiscord:version","v4.0.7"),async () => {},async () => {}),
+    new api.ODVersionMigration(api.ODVersion.fromString("opendiscord:version","v4.0.7"),async () => {},async () => {}),
 
     //MIGRATE TO v4.1.0
-    new utilities.ODVersionMigration(api.ODVersion.fromString("opendiscord:version","v4.1.0"),async () => {},async () => {
+    new api.ODVersionMigration(api.ODVersion.fromString("opendiscord:version","v4.1.0"),async () => {},async () => {
         //AFTER INIT MIGRATION
 
         //migrate config
@@ -137,11 +137,11 @@ export const migrations = [
     }),
 
     //MIGRATE TO v4.1.1
-    new utilities.ODVersionMigration(api.ODVersion.fromString("opendiscord:version","v4.1.1"),async () => {},async () => {}),
+    new api.ODVersionMigration(api.ODVersion.fromString("opendiscord:version","v4.1.1"),async () => {},async () => {}),
 
     //MIGRATE TO v4.1.2
-    new utilities.ODVersionMigration(api.ODVersion.fromString("opendiscord:version","v4.1.2"),async () => {},async () => {}),
+    new api.ODVersionMigration(api.ODVersion.fromString("opendiscord:version","v4.1.2"),async () => {},async () => {}),
 
     //MIGRATE TO v4.1.3
-    new utilities.ODVersionMigration(api.ODVersion.fromString("opendiscord:version","v4.1.3"),async () => {},async () => {}),
+    new api.ODVersionMigration(api.ODVersion.fromString("opendiscord:version","v4.1.3"),async () => {},async () => {}),
 ]

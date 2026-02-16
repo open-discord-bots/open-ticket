@@ -1,8 +1,7 @@
 ///////////////////////////////////////
 //OPENTICKET ROLE MODULE
 ///////////////////////////////////////
-import { ODId, ODManager, ODValidJsonType, ODValidId, ODVersion, ODManagerData } from "../modules/base"
-import { ODDebugger } from "../modules/console"
+import * as api from "@open-discord-bots/framework/api"
 import * as discord from "discord.js"
 
 /**## ODRoleManager `class`
@@ -12,11 +11,11 @@ import * as discord from "discord.js"
  * 
  * Roles are not stored in the database and will be parsed from the config every startup.
  */
-export class ODRoleManager extends ODManager<ODRole> {
+export class ODRoleManager extends api.ODManager<ODRole> {
     /**A reference to the Open Ticket debugger. */
-    #debug: ODDebugger
+    #debug: api.ODDebugger
 
-    constructor(debug:ODDebugger){
+    constructor(debug:api.ODDebugger){
         super(debug,"role")
         this.#debug = debug
     }
@@ -34,7 +33,7 @@ export interface ODRoleDataJson {
     /**The id of this property. */
     id:string,
     /**The value of this property. */
-    value:ODValidJsonType
+    value:api.ODValidJsonType
 }
 
 /**## ODRoleJson `interface`
@@ -67,20 +66,20 @@ export interface ODRoleIds {
  * 
  * These properties will be used to handle reaction role options.
  */
-export class ODRole extends ODManager<ODRoleData<ODValidJsonType>> {
+export class ODRole extends api.ODManager<ODRoleData<api.ODValidJsonType>> {
     /**The id of this role. (from the config) */
-    id:ODId
+    id:api.ODId
 
-    constructor(id:ODValidId, data:ODRoleData<ODValidJsonType>[]){
+    constructor(id:api.ODValidId, data:ODRoleData<api.ODValidJsonType>[]){
         super()
-        this.id = new ODId(id)
+        this.id = new api.ODId(id)
         data.forEach((data) => {
             this.add(data)
         })
     }
 
     /**Convert this role to a JSON object for storing this role in the database. */
-    toJson(version:ODVersion): ODRoleJson {
+    toJson(version:api.ODVersion): ODRoleJson {
         const data = this.getAll().map((data) => {
             return {
                 id:data.id.toString(),
@@ -101,23 +100,23 @@ export class ODRole extends ODManager<ODRoleData<ODValidJsonType>> {
     }
 
     get<OptionId extends keyof ODRoleIds>(id:OptionId): ODRoleIds[OptionId]
-    get(id:ODValidId): ODRoleData<ODValidJsonType>|null
+    get(id:api.ODValidId): ODRoleData<api.ODValidJsonType>|null
     
-    get(id:ODValidId): ODRoleData<ODValidJsonType>|null {
+    get(id:api.ODValidId): ODRoleData<api.ODValidJsonType>|null {
         return super.get(id)
     }
 
     remove<OptionId extends keyof ODRoleIds>(id:OptionId): ODRoleIds[OptionId]
-    remove(id:ODValidId): ODRoleData<ODValidJsonType>|null
+    remove(id:api.ODValidId): ODRoleData<api.ODValidJsonType>|null
     
-    remove(id:ODValidId): ODRoleData<ODValidJsonType>|null {
+    remove(id:api.ODValidId): ODRoleData<api.ODValidJsonType>|null {
         return super.remove(id)
     }
 
     exists(id:keyof ODRoleIds): boolean
-    exists(id:ODValidId): boolean
+    exists(id:api.ODValidId): boolean
     
-    exists(id:ODValidId): boolean {
+    exists(id:api.ODValidId): boolean {
         return super.exists(id)
     }
 }
@@ -129,11 +128,11 @@ export class ODRole extends ODManager<ODRoleData<ODValidJsonType>> {
  * 
  * When this property is edited, the database will be updated automatically.
  */
-export class ODRoleData<DataType extends ODValidJsonType> extends ODManagerData {
+export class ODRoleData<DataType extends api.ODValidJsonType> extends api.ODManagerData {
     /**The value of this property. */
     #value: DataType
 
-    constructor(id:ODValidId, value:DataType){
+    constructor(id:api.ODValidId, value:DataType){
         super(id)
         this.#value = value
     }

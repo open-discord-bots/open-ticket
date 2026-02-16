@@ -1,8 +1,7 @@
 ///////////////////////////////////////
 //OPENTICKET BLACKLIST MODULE
 ///////////////////////////////////////
-import { ODManager, ODManagerData, ODValidId } from "../modules/base"
-import { ODDebugger } from "../modules/console"
+import * as api from "@open-discord-bots/framework/api"
 
 /**## ODBlacklist `class`
  * This is an Open Ticket blacklisted user.
@@ -11,11 +10,11 @@ import { ODDebugger } from "../modules/console"
  * 
  * Create this class & add it to the `ODBlacklistManager` to blacklist someone!
  */
-export class ODBlacklist extends ODManagerData {
+export class ODBlacklist extends api.ODManagerData {
     /**The reason why this user got blacklisted. (optional) */
     #reason: string|null
 
-    constructor(id:ODValidId,reason:string|null){
+    constructor(id:api.ODValidId,reason:string|null){
         super(id)
         this.#reason = reason
     }
@@ -37,8 +36,8 @@ export class ODBlacklist extends ODManagerData {
  * 
  * All `ODBlacklist`'s added, removed & edited in this list will be synced automatically with the database.
  */
-export class ODBlacklistManager extends ODManager<ODBlacklist> {
-    constructor(debug:ODDebugger){
+export class ODBlacklistManager extends api.ODManager<ODBlacklist> {
+    constructor(debug:api.ODDebugger){
         super(debug,"blacklist")
     }
 }

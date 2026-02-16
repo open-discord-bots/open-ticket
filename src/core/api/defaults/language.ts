@@ -1,8 +1,7 @@
 ///////////////////////////////////////
 //DEFAULT LANGUAGE MODULE
 ///////////////////////////////////////
-import { ODValidId } from "../modules/base"
-import { ODLanguageManager, ODLanguage } from "../modules/language"
+import * as api from "@open-discord-bots/framework/api"
 
 /** (CONTRIBUTOR GUIDE) HOW TO ADD NEW LANGUAGES?
  * - Add the file to (./languages/) and make sure the metadata is valid.
@@ -18,43 +17,43 @@ import { ODLanguageManager, ODLanguage } from "../modules/language"
  * It's used to generate typescript declarations for this class.
  */
 export interface ODLanguageManagerIds_Default {
-    "opendiscord:custom":ODLanguage,
-    "opendiscord:english":ODLanguage,
-    "opendiscord:dutch":ODLanguage,
-    "opendiscord:portuguese":ODLanguage,
-    "opendiscord:czech":ODLanguage,
-    "opendiscord:german":ODLanguage,
-    "opendiscord:catalan":ODLanguage,
-    "opendiscord:hungarian":ODLanguage,
-    "opendiscord:spanish":ODLanguage,
-    "opendiscord:romanian":ODLanguage,
-    "opendiscord:ukrainian":ODLanguage,
-    "opendiscord:indonesian":ODLanguage,
-    "opendiscord:italian":ODLanguage,
-    "opendiscord:estonian":ODLanguage,
-    "opendiscord:finnish":ODLanguage,
-    "opendiscord:danish":ODLanguage,
-    "opendiscord:thai":ODLanguage,
-    "opendiscord:turkish":ODLanguage,
-    "opendiscord:french":ODLanguage,
-    "opendiscord:arabic":ODLanguage,
-    "opendiscord:hindi":ODLanguage,
-    "opendiscord:lithuanian":ODLanguage,
-    "opendiscord:polish":ODLanguage,
-    "opendiscord:latvian":ODLanguage,
-    "opendiscord:norwegian":ODLanguage,
-    "opendiscord:russian":ODLanguage,
-    "opendiscord:swedish":ODLanguage,
-    "opendiscord:vietnamese":ODLanguage,
-    "opendiscord:persian":ODLanguage,
-    "opendiscord:bengali":ODLanguage,
-    "opendiscord:greek":ODLanguage,
-    "opendiscord:japanese":ODLanguage,
-    "opendiscord:korean":ODLanguage,
-    "opendiscord:kurdish":ODLanguage,
-    "opendiscord:simplified-chinese":ODLanguage,
-    "opendiscord:slovenian":ODLanguage,
-    "opendiscord:tamil":ODLanguage,
+    "opendiscord:custom":api.ODLanguage,
+    "opendiscord:english":api.ODLanguage,
+    "opendiscord:dutch":api.ODLanguage,
+    "opendiscord:portuguese":api.ODLanguage,
+    "opendiscord:czech":api.ODLanguage,
+    "opendiscord:german":api.ODLanguage,
+    "opendiscord:catalan":api.ODLanguage,
+    "opendiscord:hungarian":api.ODLanguage,
+    "opendiscord:spanish":api.ODLanguage,
+    "opendiscord:romanian":api.ODLanguage,
+    "opendiscord:ukrainian":api.ODLanguage,
+    "opendiscord:indonesian":api.ODLanguage,
+    "opendiscord:italian":api.ODLanguage,
+    "opendiscord:estonian":api.ODLanguage,
+    "opendiscord:finnish":api.ODLanguage,
+    "opendiscord:danish":api.ODLanguage,
+    "opendiscord:thai":api.ODLanguage,
+    "opendiscord:turkish":api.ODLanguage,
+    "opendiscord:french":api.ODLanguage,
+    "opendiscord:arabic":api.ODLanguage,
+    "opendiscord:hindi":api.ODLanguage,
+    "opendiscord:lithuanian":api.ODLanguage,
+    "opendiscord:polish":api.ODLanguage,
+    "opendiscord:latvian":api.ODLanguage,
+    "opendiscord:norwegian":api.ODLanguage,
+    "opendiscord:russian":api.ODLanguage,
+    "opendiscord:swedish":api.ODLanguage,
+    "opendiscord:vietnamese":api.ODLanguage,
+    "opendiscord:persian":api.ODLanguage,
+    "opendiscord:bengali":api.ODLanguage,
+    "opendiscord:greek":api.ODLanguage,
+    "opendiscord:japanese":api.ODLanguage,
+    "opendiscord:korean":api.ODLanguage,
+    "opendiscord:kurdish":api.ODLanguage,
+    "opendiscord:simplified-chinese":api.ODLanguage,
+    "opendiscord:slovenian":api.ODLanguage,
+    "opendiscord:tamil":api.ODLanguage,
     //ADD NEW LANGUAGES HERE!!!
 }
 
@@ -628,25 +627,25 @@ export type ODLanguageManagerTranslations_Default = (
  * 
  * This default class is made for the global variable `opendiscord.languages`!
  */
-export class ODLanguageManager_Default extends ODLanguageManager {
+export class ODLanguageManager_Default extends api.ODLanguageManager {
     get<LanguageId extends keyof ODLanguageManagerIds_Default>(id:LanguageId): ODLanguageManagerIds_Default[LanguageId]
-    get(id:ODValidId): ODLanguage|null
+    get(id:api.ODValidId): api.ODLanguage|null
     
-    get(id:ODValidId): ODLanguage|null {
+    get(id:api.ODValidId): api.ODLanguage|null {
         return super.get(id)
     }
 
     remove<LanguageId extends keyof ODLanguageManagerIds_Default>(id:LanguageId): ODLanguageManagerIds_Default[LanguageId]
-    remove(id:ODValidId): ODLanguage|null
+    remove(id:api.ODValidId): api.ODLanguage|null
     
-    remove(id:ODValidId): ODLanguage|null {
+    remove(id:api.ODValidId): api.ODLanguage|null {
         return super.remove(id)
     }
 
     exists(id:keyof ODLanguageManagerIds_Default): boolean
-    exists(id:ODValidId): boolean
+    exists(id:api.ODValidId): boolean
     
-    exists(id:ODValidId): boolean {
+    exists(id:api.ODValidId): boolean {
         return super.exists(id)
     }
 
@@ -658,16 +657,16 @@ export class ODLanguageManager_Default extends ODLanguageManager {
     }
 
     setCurrentLanguage(id:keyof ODLanguageManagerIds_Default): void
-    setCurrentLanguage(id:ODValidId): void
+    setCurrentLanguage(id:api.ODValidId): void
 
-    setCurrentLanguage(id:ODValidId): void {
+    setCurrentLanguage(id:api.ODValidId): void {
         return super.setCurrentLanguage(id)
     }
 
     setBackupLanguage(id:keyof ODLanguageManagerIds_Default): void
-    setBackupLanguage(id:ODValidId): void
+    setBackupLanguage(id:api.ODValidId): void
 
-    setBackupLanguage(id:ODValidId): void {
+    setBackupLanguage(id:api.ODValidId): void {
         return super.setBackupLanguage(id)
     }
 

@@ -1,8 +1,7 @@
 ///////////////////////////////////////
 //OPENTICKET PRIORITY MODULE
 ///////////////////////////////////////
-import { ODId, ODManager, ODValidJsonType, ODValidId, ODVersion, ODManagerData } from "../modules/base"
-import { ODDebugger } from "../modules/console"
+import * as api from "@open-discord-bots/framework/api"
 import * as discord from "discord.js"
 
 /**## ODPriorityManager `class`
@@ -12,11 +11,11 @@ import * as discord from "discord.js"
  * 
  * Priorities levels can be changed/updated/translated by plugins to allow for more customisability.
  */
-export class ODPriorityManager extends ODManager<ODPriorityLevel> {
+export class ODPriorityManager extends api.ODManager<ODPriorityLevel> {
     /**A reference to the Open Ticket debugger. */
-    #debug: ODDebugger
+    #debug: api.ODDebugger
 
-    constructor(debug:ODDebugger){
+    constructor(debug:api.ODDebugger){
         super(debug,"priority")
         this.#debug = debug
     }
@@ -53,23 +52,23 @@ export interface ODPriorityManagerIds {
  */
 export class ODPriorityManager_Default extends ODPriorityManager {
     get<PriorityId extends keyof ODPriorityManagerIds>(id:PriorityId): ODPriorityManagerIds[PriorityId]
-    get(id:ODValidId): ODPriorityLevel|null
+    get(id:api.ODValidId): ODPriorityLevel|null
     
-    get(id:ODValidId): ODPriorityLevel|null {
+    get(id:api.ODValidId): ODPriorityLevel|null {
         return super.get(id)
     }
 
     remove<PriorityId extends keyof ODPriorityManagerIds>(id:PriorityId): ODPriorityManagerIds[PriorityId]
-    remove(id:ODValidId): ODPriorityLevel|null
+    remove(id:api.ODValidId): ODPriorityLevel|null
     
-    remove(id:ODValidId): ODPriorityLevel|null {
+    remove(id:api.ODValidId): ODPriorityLevel|null {
         return super.remove(id)
     }
 
     exists(id:keyof ODPriorityManagerIds): boolean
-    exists(id:ODValidId): boolean
+    exists(id:api.ODValidId): boolean
     
-    exists(id:ODValidId): boolean {
+    exists(id:api.ODValidId): boolean {
         return super.exists(id)
     }
 }
@@ -83,7 +82,7 @@ export class ODPriorityManager_Default extends ODPriorityManager {
  * 
  * #### 🚨 Negative priorities are treated as `disabled/no-priority`!
  */
-export class ODPriorityLevel extends ODManagerData {
+export class ODPriorityLevel extends api.ODManagerData {
     /**The priority level itself. A negative number (e.g. `-1`) is treated as `disabled/no-priority`. */
     priority:number
     /**The raw name of the level (used in text/slash command inputs). */
@@ -95,7 +94,7 @@ export class ODPriorityLevel extends ODManagerData {
     /**The emoji added to the channel name when the level is applied to a ticket. */
     channelEmoji:string|null
 
-    constructor(id:ODValidId,priority:number,rawName:string,displayName:string,displayEmoji:string|null,channelEmoji:string|null){
+    constructor(id:api.ODValidId,priority:number,rawName:string,displayName:string,displayEmoji:string|null,channelEmoji:string|null){
         super(id)
         this.priority = priority
         this.rawName = rawName

@@ -407,10 +407,10 @@ const loadAutoCode = () => {
                 }
             }
             opendiscord.debug.debug("Finished autoclose timeout cycle!",[
-                {key:"interval",value:opendiscord.defaults.getDefault("autocloseCheckInterval").toString()},
+                {key:"interval",value:opendiscord.fuses.getFuse("autocloseCheckInterval").toString()},
                 {key:"closed",value:count.toString()}
             ])
-        },opendiscord.defaults.getDefault("autocloseCheckInterval"))
+        },opendiscord.fuses.getFuse("autocloseCheckInterval"))
     }))
 
     //AUTOCLOSE LEAVE
@@ -462,10 +462,10 @@ const loadAutoCode = () => {
                 }
             }
             opendiscord.debug.debug("Finished autodelete timeout cycle!",[
-                {key:"interval",value:opendiscord.defaults.getDefault("autodeleteCheckInterval").toString()},
+                {key:"interval",value:opendiscord.fuses.getFuse("autodeleteCheckInterval").toString()},
                 {key:"deleted",value:count.toString()}
             ])
-        },opendiscord.defaults.getDefault("autodeleteCheckInterval"))
+        },opendiscord.fuses.getFuse("autodeleteCheckInterval"))
     }))
 
     //AUTODELETE LEAVE

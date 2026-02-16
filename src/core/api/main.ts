@@ -1,193 +1,127 @@
-//BASE MODULES
-import { ODEnvHelper, ODVersion } from "./modules/base"
-import { ODConsoleManager, ODConsoleMessage, ODConsoleMessageParam, ODConsoleMessageTypes, ODDebugFileManager, ODDebugger, ODError } from "./modules/console"
-import { ODCheckerStorage } from "./modules/checker"
-import { ODDefaultsManager } from "./modules/defaults"
+///////////////////////////////////////
+//OPEN TICKET MAIN MODULE
+///////////////////////////////////////
+import * as api from "./api"
+import * as utilities from "@open-discord-bots/framework/utilities"
 
-//DEFAULT MODULES
-import { ODVersionManager_Default } from "./defaults/base"
-import { ODPluginManager_Default } from "./defaults/plugin"
-import { ODEventManager_Default } from "./defaults/event"
-import { ODConfigManager_Default} from "./defaults/config"
-import { ODDatabaseManager_Default } from "./defaults/database"
-import { ODFlagManager_Default } from "./defaults/flag"
-import { ODSessionManager_Default } from "./defaults/session"
-import { ODLanguageManager_Default } from "./defaults/language"
-import { ODCheckerFunctionManager_Default, ODCheckerManager_Default, ODCheckerRenderer_Default, ODCheckerTranslationRegister_Default } from "./defaults/checker"
-import { ODClientManager_Default } from "./defaults/client"
-import { ODBuilderManager_Default } from "./defaults/builder"
-import { ODResponderManager_Default } from "./defaults/responder"
-import { ODActionManager_Default } from "./defaults/action"
-import { ODPermissionManager_Default } from "./defaults/permission"
-import { ODHelpMenuManager_Default } from "./defaults/helpmenu"
-import { ODStatsManager_Default } from "./defaults/stat"
-import { ODCodeManager_Default } from "./defaults/code"
-import { ODCooldownManager_Default } from "./defaults/cooldown"
-import { ODPostManager_Default } from "./defaults/post"
-import { ODVerifyBarManager_Default } from "./defaults/verifybar"
-import { ODProgressBarManager_Default } from "./defaults/progressbar"
-import { ODStartScreenManager_Default } from "./defaults/startscreen"
-import { ODLiveStatusManager_Default } from "./defaults/console"
+export class ODOpenTicketMain extends api.ODMain {
+    declare versions: api.ODVersionManager_Default
+    declare events: api.ODEventManager_Default
 
-//OPEN TICKET MODULES
-import { ODOptionManager } from "./openticket/option"
-import { ODPanelManager } from "./openticket/panel"
-import { ODTicketManager } from "./openticket/ticket"
-import { ODQuestionManager } from "./openticket/question"
-import { ODBlacklistManager } from "./openticket/blacklist"
-import { ODTranscriptManager_Default } from "./openticket/transcript"
-import { ODRoleManager } from "./openticket/role"
-import { ODPriorityManager_Default } from "./openticket/priority"
-
-/**## ODMain `class`
- * This is the main Open Ticket class.
- * It contains all managers from the entire bot & has shortcuts to the event & logging system.
- * 
- * This class can't be overwritten or extended & is available as the global variable `openticket`!
- */
-export class ODMain {
-    /**The manager that handles all versions in the bot. */
-    versions: ODVersionManager_Default
-
-    /**The timestamp that the (node.js) process of the bot started. */
-    processStartupDate: Date = new Date()
-    /**The timestamp that the bot finished loading and is ready for usage. */
-    readyStartupDate: Date|null = null
-
-    /**The manager responsible for the debug file. (`otdebug.txt`) */
-    debugfile: ODDebugFileManager
-    /**The manager responsible for the console system. (logs, errors, etc) */
-    console: ODConsoleManager
-    /**The manager responsible for sending debug logs to the debug file. (`otdebug.txt`) */
-    debug: ODDebugger
-    /**The manager containing all Open Ticket events. */
-    events: ODEventManager_Default
-
-    /**The manager that handles & executes all plugins in the bot. */
-    plugins: ODPluginManager_Default
-    /**The manager that manages & checks all the console flags of the bot. (like `--debug`) */
-    flags: ODFlagManager_Default
-    /**The manager responsible for progress bars in the console. */
-    progressbars: ODProgressBarManager_Default
-    /**The manager that manages & contains all the config files of the bot. (like `config/general.json`) */
-    configs: ODConfigManager_Default
-    /**The manager that manages & contains all the databases of the bot. (like `database/global.json`) */
-    databases: ODDatabaseManager_Default
-    /**The manager that manages all the data sessions of the bot. (it's a temporary database) */
-    sessions: ODSessionManager_Default
-    /**The manager that manages all languages & translations of the bot. (but not for plugins) */
-    languages: ODLanguageManager_Default
+    declare plugins: api.ODPluginManager_Default
+    declare flags: api.ODFlagManager_Default
+    declare progressbars: api.ODProgressBarManager_Default
+    declare configs: api.ODConfigManager_Default
+    declare databases: api.ODDatabaseManager_Default
+    declare sessions: api.ODSessionManager_Default
+    declare languages: api.ODLanguageManager_Default
     
-    /**The manager that handles & executes all config checkers in the bot. (the code that checks if you have something wrong in your config) */
-    checkers: ODCheckerManager_Default
-    /**The manager that manages all builders in the bot. (e.g. buttons, dropdowns, messages, modals, etc) */
-    builders: ODBuilderManager_Default
-    /**The manager that manages all responders in the bot. (e.g. commands, buttons, dropdowns, modals) */
-    responders: ODResponderManager_Default
-    /**The manager that manages all actions or procedures in the bot. (e.g. ticket-creation, ticket-deletion, ticket-claiming, etc) */
-    actions: ODActionManager_Default
-    /**The manager that manages all verify bars in the bot. (the ✅ ❌ buttons) */
-    verifybars: ODVerifyBarManager_Default
-    /**The manager that contains all permissions for commands & actions in the bot. (use it to check if someone has admin perms or not) */
-    permissions: ODPermissionManager_Default
-    /**The manager that contains all cooldowns of the bot. (e.g. ticket-cooldowns) */
-    cooldowns: ODCooldownManager_Default
-    /**The manager that manages & renders the Open Ticket help menu. (not the embed, but the text) */
-    helpmenu: ODHelpMenuManager_Default
-    /**The manager that manages, saves & renders the Open Ticket statistics. (not the embed, but the text & database) */
-    stats: ODStatsManager_Default
-    /**This manager is a place where you can put code that executes when the bot almost finishes the setup. (can be used for less important stuff that doesn't require an exact time-order) */
-    code: ODCodeManager_Default
-    /**The manager that manages all posts (static discord channels) in the bot. (e.g. (transcript) logs, etc) */
-    posts: ODPostManager_Default
+    declare checkers: api.ODCheckerManager_Default
+    declare builders: api.ODBuilderManager_Default
+    declare responders: api.ODResponderManager_Default
+    declare actions: api.ODActionManager_Default
+    declare verifybars: api.ODVerifyBarManager_Default
+    declare permissions: api.ODPermissionManager_Default
+    declare cooldowns: api.ODCooldownManager_Default
+    declare helpmenu: api.ODHelpMenuManager_Default
+    declare stats: api.ODStatsManager_Default
+    declare code: api.ODCodeManager_Default
+    declare posts: api.ODPostManager_Default
     
-    /**The manager responsible for everything related to the client. (e.g. status, login, slash & text commands, etc) */
-    client: ODClientManager_Default
-    /**This manager contains A LOD of booleans. With these switches, you can turn off "default behaviours" from the bot. This is used if you want to replace the default Open Ticket code.  */
-    defaults: ODDefaultsManager
-    /**This manager manages all the variables in the ENV. It reads from both the `.env` file & the `process.env`. (these 2 will be combined)  */
-    env: ODEnvHelper
+    declare client: api.ODClientManager_Default
+    declare livestatus: api.ODLiveStatusManager_Default
+    declare startscreen: api.ODStartScreenManager_Default
 
-    /**The manager responsible for the livestatus system. (remote console logs) */
-    livestatus: ODLiveStatusManager_Default
-    /**The manager responsible for the livestatus system. (remote console logs) */
-    startscreen: ODStartScreenManager_Default
+    /////////////////////
+    //// OPEN TICKET ////
+    /////////////////////
 
-    //OPEN TICKET
+    /**Open Ticket specific fuses. With these fuses/switches, you can turn off "default behaviours" from the bot. Useful for replacing default behaviour with a custom implementation.  */
+    fuses: api.ODFuseManager<api.ODOpenTicketFuseList>
     /**The manager that manages all the data of questions in the bot. (these are used in options & tickets) */
-    questions: ODQuestionManager
+    questions: api.ODQuestionManager
     /**The manager that manages all the data of options in the bot. (these are used for panels, ticket creation, reaction roles) */
-    options: ODOptionManager
+    options: api.ODOptionManager
     /**The manager that manages all the data of panels in the bot. (panels contain the options) */
-    panels: ODPanelManager
+    panels: api.ODPanelManager
     /**The manager that manages all tickets in the bot. (here, you can get & edit a lot of data from tickets) */
-    tickets: ODTicketManager
+    tickets: api.ODTicketManager
     /**The manager that manages the ticket blacklist. (people who are blacklisted can't create a ticket) */
-    blacklist: ODBlacklistManager
+    blacklist: api.ODBlacklistManager
     /**The manager that manages the ticket transcripts. (both the history & compilers) */
-    transcripts: ODTranscriptManager_Default
+    transcripts: api.ODTranscriptManager_Default
     /**The manager that manages all reaction roles in the bot. (here, you can add additional data to roles) */
-    roles: ODRoleManager
+    roles: api.ODRoleManager
     /**The manager that manages all priority levels in the bot. (register/edit ticket priority levels) */
-    priorities: ODPriorityManager_Default
+    priorities: api.ODPriorityManager_Default
 
     constructor(){
-        this.versions = new ODVersionManager_Default()
-        this.versions.add(ODVersion.fromString("opendiscord:version","v4.1.3"))
-        this.versions.add(ODVersion.fromString("opendiscord:api","v1.0.0"))
-        this.versions.add(ODVersion.fromString("opendiscord:transcripts","v2.1.0"))
-        this.versions.add(ODVersion.fromString("opendiscord:livestatus","v2.0.0"))
+        const version = api.ODVersion.fromString("opendiscord:version","v4.1.3")
+        const debugfile = new api.ODDebugFileManager("./","otdebug.txt",5000,version)
+        const console = new api.ODConsoleManager(100,debugfile)
+        const debug = new api.ODDebugger(console)
+        const client = new api.ODClientManager_Default(debug)
+        const livestatus = new api.ODLiveStatusManager_Default(debug,console)
+        const permissions = new api.ODPermissionManager_Default(debug,client)
 
-        this.debugfile = new ODDebugFileManager("./","otdebug.txt",5000,this.versions.get("opendiscord:version"))
-        this.console = new ODConsoleManager(100,this.debugfile)
-        this.debug = new ODDebugger(this.console)
-        this.events  = new ODEventManager_Default(this.debug)
+        super({
+            versions:new api.ODVersionManager_Default(),
+            debugfile,console,debug,
+            events:new api.ODEventManager_Default(debug),
+            processStartupDate:new Date(),
+            readyStartupDate:null,
         
-        this.plugins = new ODPluginManager_Default(this.debug)
-        this.flags = new ODFlagManager_Default(this.debug)
-        this.progressbars = new ODProgressBarManager_Default(this.debug)
-        this.configs = new ODConfigManager_Default(this.debug)
-        this.databases = new ODDatabaseManager_Default(this.debug)
-        this.sessions = new ODSessionManager_Default(this.debug)
-        this.languages = new ODLanguageManager_Default(this.debug,false)
-        
-        this.checkers = new ODCheckerManager_Default(this.debug,new ODCheckerStorage(),new ODCheckerRenderer_Default(),new ODCheckerTranslationRegister_Default(),new ODCheckerFunctionManager_Default(this.debug))
-        this.builders = new ODBuilderManager_Default(this.debug)
-        this.client = new ODClientManager_Default(this.debug)
-        this.responders = new ODResponderManager_Default(this.debug,this.client)
-        this.actions = new ODActionManager_Default(this.debug)
-        this.verifybars = new ODVerifyBarManager_Default(this.debug)
-        this.permissions = new ODPermissionManager_Default(this.debug,this.client)
-        this.cooldowns = new ODCooldownManager_Default(this.debug)
-        this.helpmenu = new ODHelpMenuManager_Default(this.debug)
-        this.stats = new ODStatsManager_Default(this.debug)
-        this.code = new ODCodeManager_Default(this.debug)
-        this.posts = new ODPostManager_Default(this.debug)
-        
-        this.defaults = new ODDefaultsManager()
-        this.env = new ODEnvHelper()
+            plugins:new api.ODPluginManager_Default(debug),
+            flags:new api.ODFlagManager_Default(debug),
+            progressbars:new api.ODProgressBarManager_Default(debug),
+            configs:new api.ODConfigManager_Default(debug),
+            databases:new api.ODDatabaseManager_Default(debug),
+            sessions:new api.ODSessionManager_Default(debug),
+            languages:new api.ODLanguageManager_Default(debug,false),
+            
+            checkers:new api.ODCheckerManager_Default(debug,new api.ODCheckerStorage(),new api.ODCheckerRenderer_Default(),new api.ODCheckerTranslationRegister_Default(),new api.ODCheckerFunctionManager_Default(debug)),
+            builders:new api.ODBuilderManager_Default(debug),
+            client,
+            responders:new api.ODResponderManager_Default(debug,client),
+            actions:new api.ODActionManager_Default(debug),
+            verifybars:new api.ODVerifyBarManager_Default(debug),
+            permissions,
+            cooldowns:new api.ODCooldownManager_Default(debug),
+            helpmenu:new api.ODHelpMenuManager_Default(debug),
+            stats:new api.ODStatsManager_Default(debug),
+            code:new api.ODCodeManager_Default(debug),
+            posts:new api.ODPostManager_Default(debug),
+            
+            sharedFuses:utilities.sharedFuses,
+            env:new api.ODEnvHelper(),
+            livestatus,
+            startscreen:new api.ODStartScreenManager_Default(debug,livestatus),
+        },"openticket")
 
-        this.livestatus = new ODLiveStatusManager_Default(this.debug,this)
-        this.startscreen = new ODStartScreenManager_Default(this.debug,this.livestatus)
+        this.livestatus.useMain(this)
+        this.versions.add(api.ODVersion.fromString("opendiscord:version","v4.1.3"))
+        this.versions.add(api.ODVersion.fromString("opendiscord:transcripts","v2.1.0"))
 
         //OPEN TICKET
-        this.questions = new ODQuestionManager(this.debug)
-        this.options = new ODOptionManager(this.debug)
-        this.panels = new ODPanelManager(this.debug)
-        this.tickets = new ODTicketManager(this.debug,this.client)
-        this.blacklist = new ODBlacklistManager(this.debug)
-        this.transcripts = new ODTranscriptManager_Default(this.debug,this.tickets,this.client,this.permissions)
-        this.roles = new ODRoleManager(this.debug)
-        this.priorities = new ODPriorityManager_Default(this.debug)
-    }
-    
-    /**Log a message to the console. But in the Open Ticket style :) */
-    log(message:ODConsoleMessage): void
-    log(message:ODError): void
-    log(message:string, type?:ODConsoleMessageTypes, params?:ODConsoleMessageParam[]): void
-    log(message:ODConsoleMessage|ODError|string, type?:ODConsoleMessageTypes, params?:ODConsoleMessageParam[]){
-        if (message instanceof ODConsoleMessage) this.console.log(message)
-        else if (message instanceof ODError) this.console.log(message)
-        else if (["string","number","boolean","object"].includes(typeof message)) this.console.log(message,type,params)
+        this.fuses = new api.ODFuseManager<api.ODOpenTicketFuseList>({
+            questionLoading:true,
+            optionLoading:true,
+            panelLoading:true,
+            ticketLoading:true,
+            roleLoading:true,
+            blacklistLoading:true,
+            transcriptCompilerLoading:true,
+            transcriptHistoryLoading:true,
+            autocloseCheckInterval:300000, //5 minutes
+            autodeleteCheckInterval:300000 //5 minutes
+        })
+        this.questions = new api.ODQuestionManager(debug)
+        this.options = new api.ODOptionManager(debug)
+        this.panels = new api.ODPanelManager(debug)
+        this.tickets = new api.ODTicketManager(debug,client)
+        this.blacklist = new api.ODBlacklistManager(debug)
+        this.transcripts = new api.ODTranscriptManager_Default(debug,this.tickets,client,permissions)
+        this.roles = new api.ODRoleManager(debug)
+        this.priorities = new api.ODPriorityManager_Default(debug)
     }
 }

@@ -384,14 +384,14 @@ async function renderQuickSetupLanguage(backFn:() => api.ODPromiseVoid){
         style:terminal.white,
         hintStyle:terminal.gray,
         cancelable:true,
-        autoComplete:opendiscord.defaults.getDefault("languageList"),
+        autoComplete:opendiscord.sharedFuses.getFuse("languageList"),
         autoCompleteHint:true,
         autoCompleteMenu:autoCompleteMenuOpts as Terminal.Autocompletion
     }).promise
 
     if (typeof answer != "string") return await backFn()
     else{
-        if (!opendiscord.defaults.getDefault("languageList").includes(answer.toLowerCase())){
+        if (!opendiscord.sharedFuses.getFuse("languageList").includes(answer.toLowerCase())){
             terminal.red.bold("\n\n❌ Please insert an available language from the list. (TIP: use tab for autocomplete)\n")
             await utilities.timer(2000)
             return await renderQuickSetupLanguage(backFn)
