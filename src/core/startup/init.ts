@@ -45,17 +45,24 @@ opendiscord.log("Logging system activated!","system")
 opendiscord.debug.debug("Using Node.js "+process.version+"!")
 
 try{
-    const packageJson = JSON.parse(fs.readFileSync("./package.json").toString())
-    opendiscord.debug.debug("Using discord.js "+packageJson.dependencies["discord.js"]+"!")
-    opendiscord.debug.debug("Using @discordjs/rest "+packageJson.dependencies["@discordjs/rest"]+"!")
-    opendiscord.debug.debug("Using ansis "+packageJson.dependencies["ansis"]+"!")
-    opendiscord.debug.debug("Using formatted-json-stringify "+packageJson.dependencies["formatted-json-stringify"]+"!")
-    opendiscord.debug.debug("Using terminal-kit "+packageJson.dependencies["terminal-kit"]+"!")
-    opendiscord.debug.debug("Using typescript "+packageJson.dependencies["typescript"]+"!")
-}catch{
-    opendiscord.debug.debug("Failed to fetch module versions!")
-}
+        const packageJson = JSON.parse(fs.readFileSync("./package.json").toString())
+        opendiscord.debug.debug("Using discord.js "+packageJson.dependencies["discord.js"]+"!")
+        opendiscord.debug.debug("Using @discordjs/rest "+packageJson.dependencies["@discordjs/rest"]+"!")
+        opendiscord.debug.debug("Using ansis "+packageJson.dependencies["ansis"]+"!")
+        opendiscord.debug.debug("Using formatted-json-stringify "+packageJson.dependencies["formatted-json-stringify"]+"!")
+        opendiscord.debug.debug("Using terminal-kit "+packageJson.dependencies["terminal-kit"]+"!")
+        opendiscord.debug.debug("Using typescript "+packageJson.dependencies["typescript"]+"!")
 
+        //synchronise opendiscord versions
+        if (packageJson.version){
+            const ver = "v"+packageJson.version
+            opendiscord.versions.get("opendiscord:version").set(ver)
+            //we use same value for api version for now
+            opendiscord.versions.get("opendiscord:api").set(ver)
+        }
+    }catch{
+        opendiscord.debug.debug("Failed to fetch module versions!")
+    }
 const timer = (ms:number): Promise<void> => {
     return new Promise((resolve) => {
         setTimeout(() => {

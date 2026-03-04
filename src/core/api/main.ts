@@ -133,8 +133,17 @@ export class ODMain {
 
     constructor(){
         this.versions = new ODVersionManager_Default()
-        this.versions.add(ODVersion.fromString("opendiscord:version","v4.1.3"))
-        this.versions.add(ODVersion.fromString("opendiscord:api","v1.0.0"))
+        //auto-sync versions from package.json when available
+        let versionStr = "v4.1.3"
+        let apiVersionStr = "v1.0.0"
+        try{
+            const pkg = JSON.parse(require("fs").readFileSync("./package.json").toString())
+            if (pkg.version) versionStr = "v"+pkg.version
+            //for now keep api version equal to the framework version
+            apiVersionStr = versionStr
+        }catch{}
+        this.versions.add(ODVersion.fromString("opendiscord:version",versionStr))
+        this.versions.add(ODVersion.fromString("opendiscord:api",apiVersionStr))
         this.versions.add(ODVersion.fromString("opendiscord:transcripts","v2.1.0"))
         this.versions.add(ODVersion.fromString("opendiscord:livestatus","v2.0.0"))
 
