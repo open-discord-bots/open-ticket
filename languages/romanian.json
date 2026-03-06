@@ -1,8 +1,8 @@
 {
     "_TRANSLATION":{
-        "otversion":"v4.1.2",
+        "otversion":"v4.1.3",
         "translators":["SankeDev"],
-        "lastedited":"27/08/2024",
+        "lastedited":"16/02/2026",
         "language":"Romanian",
         "automated":false
     },
@@ -31,7 +31,15 @@
             "stringContains":"Acest string trebuie sa contina {0}!",
             "stringChoices":"Acest string poate fi doar una dintre urmatoarele optiuni: {0}!",
             "stringRegex":"String invalid!",
-
+            "stringInvertedContains":"Acest șir nu are voie să conțină {0}!",
+            "stringLowercase":"Acest șir trebuie scris doar cu litere mici!",
+            "stringUppercase":"Acest șir trebuie scris doar cu litere mari!",
+            "stringSpecialCharacters":"Acest șir nu are voie să conțină caractere speciale! (doar a-z, 0-9 și spațiu)",
+            "stringNoSpaces":"Acest șir nu are voie să conțină spații!",
+            "stringCapitalWord":"Este recomandat ca fiecare cuvânt din acest șir să înceapă cu literă mare!",
+            "stringCapitalSentence":"Se pare că unele propoziții din acest șir nu încep cu literă mare!",
+            "stringPunctuation":"Se pare că propoziția din acest șir nu se termină cu un semn de punctuație!",
+            
             "numberTooShort":"Acest numar nu poate fi mai scurt de {0} caractere!",
             "numberTooLong":"Acest numar nu poate fi mai lung de {0} caractere!",
             "numberLengthInvalid":"Acest numar trebuie sa aiba minim {0} caractere!",
@@ -48,10 +56,12 @@
             "numberNegative":"Acest numar nu poate fi negativ!",
             "numberPositive":"Acest numar nu poate fi pozitiv!",
             "numberZero":"Acest numar nu poate sa fie 0!",
-
+            "numberNan":"Acest număr nu poate fi NaN (Not A Number)!",
+            "numberInvertedContains":"Acest număr nu are voie să conțină {0}!",
+            
             "booleanTrue":"Aceasta valoare boolean nu poate sa fie adevarata!",
             "booleanFalse":"Aceasta valoare boolean nu poate sa fie falsa!",
-
+            
             "arrayEmptyDisabled":"Acest array nu poate sa fie gol!",
             "arrayEmptyRequired":"Acest array trebuie sa fie gol!",
             "arrayTooShort":"Acest array trebuie sa aiba lungimea minima de {0}!",
@@ -59,7 +69,7 @@
             "arrayLengthInvalid":"Acest array trebuie sa aiba o lungime de {0}!",
             "arrayInvalidTypes":"Acest array poate sa contina doar urmatoarele tipuri: {0}!",
             "arrayDouble":"Acest array nu admite valori duplicate!",
-
+            
             "discordInvalidId":"Acesta este un id {0} invalid !",
             "discordInvalidIdOptions":"Acesta este un id {0} invalid! Poti sa folosesti doar dintre urmatoarele: {1}!",
             "discordInvalidToken":"Acesta este un discord bot token invalid (din punct de vedere al sintaxei)!",
@@ -76,7 +86,7 @@
             "urlInvalidPath":"Acest url are o locatie invalida!",
             "idNotUnique":"Acest id nu este unic, foloseste altul!",
             "idNonExistent":"Id-ul {0} nu exista!",
-
+            
             "invalidType":"Aceasta propietate trebuie sa fie de tipul: {0}!",
             "propertyMissing":"Propietatea {0} lipseste din acest obiect!",
             "propertyOptional":"Propietatea {0} este optionala in acest obiect!",
@@ -84,12 +94,13 @@
             "nullInvalid":"Aceasta propietate nu poate sa fie nula!",
             "switchInvalidType":"Folosete un tip dintre acestea: {0}!",
             "objectSwitchInvalid":"Acest obiect trebuie sa fie un tip dintre acestea: {0}!",
-
+            
             "invalidLanguage":"Aceasta este o limba invalida!",
             "invalidButton":"Acest buton trebuie sa aiba cel putin un {0} sau {1}!",
             "unusedOption":"Optiunea {0} nu este folosita nicaieri!",
             "unusedQuestion":"Intrebarea {0} nu este folosita nicaieri!",
-            "dropdownOption":"Un meniul cu dropdown activat poate contine doar valori din categoria 'ticket'!"
+            "dropdownOption":"Un meniul cu dropdown activat poate contine doar valori din categoria 'ticket'!",
+            "customInvalidVersion":"Versiunea specificată în configurația ta nu corespunde! Asigură-te că ai actualizat configurația la cea mai recentă versiune!"
         }
     },
     "actions":{
@@ -132,6 +143,7 @@
             "blacklistAddDm":"Adaugat la Blacklist",
             "blacklistRemoveDm":"Sters din Blacklist",
             "clear":"Tickets Curatate",
+            "clearTickets":"Ștergere Tichete",
             "roles":"Roluri Actualizate",
             
             "autoclose":"Ticket Inchis Automat",
@@ -139,7 +151,12 @@
             "autocloseDisabled":"Inchidere Automata Dezactivata",
             "autodelete":"Ticket Sters Automat",
             "autodeleteEnabled":"Stergere Automata Activata",
-            "autodeleteDisabled":"Stergere Automata Dezactivata"
+            "autodeleteDisabled":"Stergere Automata Dezactivata",
+            
+            "topicSet":"Subiect Modificat",
+            "prioritySet":"Prioritate Modificată",
+            "priorityGet":"Prioritate Tichet",
+            "transfer":"Tichet Transferat"
         },
         "descriptions":{
             "create":"Ticket-ul tau a fost creat cu succes! Apasa pe butonul de mai jos pentru a-l vizualiza!",
@@ -154,7 +171,7 @@
             "move":"Ticket-ul tau a fost mutat in {0} cu succes!",
             "add":"{0} a fost adaugat la ticket cu succes!",
             "remove":"{0} a fost sters din ticket cu succes!",
-
+            
             "helpExplanation":"`<nume>` => parametru mandatoriu\n`[nume]` => parametru optional",
             "statsReset":"Toate statisticile botului au fost resetate cu succes!",
             "statsError":"Nu se poate accesa statusul ticketului!\n{0} nu este un ticket!",
@@ -167,7 +184,7 @@
             "clearVerify":"Esti sigur ca doresti sa stergi mai multe tickete?\nAceasta actiune nu poate fi anulata!",
             "clearReady":"{0} tickete au fost sterse cu succes!",
             "rolesEmpty":"Nu exista roluri de actualizat!",
-
+            
             "autocloseLeave":"Acest ticket a fost inchis automatat deoarece creatorul a iesit din server.",
             "autocloseTimeout":"Acest ticket a fost inchis automatat deoarece a fost inactiv pentru mai mult de `{0}h`!",
             "autodeleteLeave":"Acest ticket a fost sters automatat deoarece creatorul a iesit din server.",
@@ -176,11 +193,16 @@
             "autocloseDisabled":"Inchiderea automata a fost dezactivata in acest ticket!\nNu se va mai inchide automat!",
             "autodeleteEnabled":"Stergerea automata a fost activata in acest ticket!\nSe va sterge automat cand va fi inactiv pentru mai mult de `{0} zile`!",
             "autodeleteDisabled":"Stergerea automata a fost dezactivata in acest ticket!\nNu se va mai sterge automat!",
-
+            
             "ticketMessageLimit":"Poti creea doar {0} tickete in acelasi timp!",
             "ticketMessageAutoclose":"Acest ticket va fi inchis automat cand va deveni inactiv de mai mult de {0}h!",
             "ticketMessageAutodelete":"Acest ticket va fi sters automat cand va deveni inactiv de mai mult de {0} zile!",
-            "panelReady":"Panelul poate fi gasit mai jos!\nAcest mesaj poate fi sters acum."
+            "panelReady":"Panoul este disponibil în mesajul următor!\nAcest mesaj poate fi șters acum!",
+            
+            "topicSet":"Subiectul canalului a fost modificat cu succes de {0}!",
+            "prioritySet":"Prioritatea tichetului a fost modificată la {0} de către {1} cu succes!",
+            "priorityGet":"Prioritatea curentă a acestui tichet este {0}.",
+            "transfer":"Proprietatea tichetului a fost transferată de la {0} la {1} de către {2} cu succes!"
         },
         "modal":{
             "closePlaceholder":"De ce inchizi acest ticket?",
@@ -215,12 +237,19 @@
             "addDm":"{0} a fost adaugat la ticketul tau in server!",
             "removeLog":"{0} a fost sters din acest ticket de {1}!",
             "removeDm":"{0} a fost sters din ticketul tau in server!",
-
+            
             "blacklistAddLog":"{0} a fost adaugat in blacklist de {1}!",
             "blacklistRemoveLog":"{0} a fost eliminat din blacklist de {1}!",
             "blacklistAddDm":"Ai fost adaugat in blacklist pe serverul nostru!\nNu mai poti creea tickete!",
             "blacklistRemoveDm":"Ai fost scos din blacklist pe serverul nostru!\nPoti sa creezi tickete din nou!",
-            "clearLog":"{0} tickete au fost sterse de {1}!"
+            "clearLog":"{0} tickete au fost sterse de {1}!",
+            
+            "transferLog":"Proprietatea acestui tichet a fost transferată de la {0} la {1} de către {2}!",
+            "transferDm":"Proprietatea tichetului tău a fost transferată de la {0} la {1} pe serverul nostru!",
+            "prioritySetLog":"Prioritatea acestui tichet a fost modificată la {0} de către {1}!",
+            "prioritySetDm":"Prioritatea tichetului tău a fost modificată la {0} pe serverul nostru!",
+            "roleUpdateLog":"{0} și-a actualizat rolurile!",
+            "roleUpdateDm":"Rolurile tale pe serverul nostru au fost actualizate!"
         }
     },
     "transcripts":{
@@ -229,7 +258,7 @@
             "ready":"Transcript Creat",
             "textFileDescription":"Acesta este transcriptul in format text al ticketului sters!",
             "htmlProgress":"Generarea transcriptului in format HTML a inceput, te rog asteapta...",
-
+            
             "createdChannel":"Un nou transcript {0} a fost creat in server!",
             "createdCreator":"Un nou transcript {0} a fost creat pentru unul dintre ticketele tale!",
             "createdParticipant":"Un nou transcript {0} a fost creat pentru unul dintre ticketele la care ai participat!",
@@ -241,7 +270,19 @@
             "retry":"Reincearca",
             "continue":"Sterge fara Transcript",
             "backup":"Creeaza un Transcript de Backup",
-            "error":"Ceva nu a mers bine cand s-a incercat creearea transcriptului.\nCum doresti sa continui?\n\nAcest ticket nu va fi modificat pana cand nu apesi pe unul dintre butoane."
+            "error":"Ceva nu a mers bine cand s-a incercat creearea transcriptului.\nCum doresti sa continui?\n\nAcest ticket nu va fi modificat pana cand nu apesi pe unul dintre butoane.",
+            "title":"Eroare Transcriere"
+        },
+        "text":{
+            "messagesTitle":"MESAJE",
+            "embedTitle":"EMBED",
+            "fileTitle":"FIȘIER",
+            "fieldsTitle":"CÂMPURI",
+            "reactionsTitle":"REACȚII",
+            "statsTitle":"STATISTICI",
+            "emptyContent":"<conținutul este gol>",
+            "noTitle":"<fără-titlu>",
+            "noDesc":"<fără-descriere>"
         }
     },
     "errors":{
@@ -257,7 +298,8 @@
             "unknownPanel":"Panel Necunoscut",
             "notInGuild":"Nu este in server",
             "channelRename":"Nu se poate redenumi canalul",
-            "busy":"Ticket ocupat"
+            "busy":"Ticket ocupat",
+            "permissionError":"Eroare de Permisiune"
         },
         "descriptions":{
             "askForInfo":"Contacteaza ownerul botului pentru mai multe informatii.",
@@ -280,7 +322,10 @@
             "notInGuild":"Aceasta {0} poate fi folosita doar in server!",
             "channelRename":"Nu s-a putut redenumi canalul din cauza unor limitari Discord! Canalul va fi redenumit in 10 minute daca botul nu va fi repornit.",
             "channelRenameSource":"Sursa acestei erori este: {0}",
-            "busy":"Nu se poate executa {0}!\nTicketul este in curs de procesare.\n\nTe rugam sa incerci din nou in cateva minute!"
+            "busy":"Nu se poate executa {0}!\nTicketul este in curs de procesare.\n\nTe rugam sa incerci din nou in cateva minute!",
+            "closeBeforeMessage":"Acest tichet nu poate fi închis/șters înainte ca un mesaj să fi fost trimis de un utilizator.",
+            "closeBeforeAdminMessage":"Acest tichet nu poate fi închis/șters înainte ca un mesaj să fi fost trimis de un administrator de tichete sau un membru al echipei de suport.",
+            "unableToCreateTicket":"Nu poți crea un tichet."
         },
         "optionInvalidReasons":{
             "stringRegex":"Valoarea nu respecta formatul necesar!",
@@ -331,7 +376,6 @@
             "added":"Adaugat",
             "removed":"Sters",
             "filter":"Filtru",
-            "claimedBy":"Revendicat de {0}",
             "method":"Metoda",
             "type":"Tip",
             "blacklisted":"Blacklistat",
@@ -352,10 +396,30 @@
             "version":"Versiune",
             "name":"Nume",
             "role":"Rol",
-            "status":"Status",
+            "status":"STARE",
             "claimed":"Revendicat",
             "pinned":"Fixat",
-            "creationDate":"Data Crearii"
+            "creationDate":"Data Crearii",
+            
+            "noone":"NIMENI",
+            "open":"DESCHIS",
+            "closed":"ÎNCHIS",
+            "priority":"PRIORITATE",
+            "participants":"PARTICIPANȚI",
+            "yes":"DA",
+            "no":"NU",
+            "option":"OPȚIUNE",
+            "topic":"SUBIECT",
+            "uptime":"TIM P FUNCȚIONARE SISTEM",
+            "messages":"MESAJE",
+            "embeds":"EMBEDURI",
+            "files":"FIȘIERE",
+            "components":"COMPONENTE",
+            "cooldown":"COOLDOWN",
+            "maxTickets":"MAX TICHETE",
+            "admins":"ADMINI",
+            "roles":"ROLURI",
+            "size":"DIMENSIUNE"
         },
         "lowercase":{
             "text":"text",
@@ -384,6 +448,7 @@
         "unclaim":"Elibereaza un ticket.",
         "pin":"Fixeaza un ticket.",
         "unpin":"Defixeaza un ticket.",
+        
         "move":"Muta un ticket.",
         "moveId":"Id-ul tipului de optiune in care vrei sa muti acest ticket.",
         "rename":"Redenumeste un ticket.",
@@ -392,6 +457,7 @@
         "addUser":"Userul pe care vrei sa il adaugi.",
         "remove":"Sterge un user dintr-un ticket.",
         "removeUser":"Userul pe care vrei sa il stergi.",
+        
         "blacklist":"Gestioneaza blacklist-ul in server.",
         "blacklistView":"Vezi o lista cu toti userii blacklisted.",
         "blacklistAdd":"Adauga un user in blacklist.",
@@ -405,6 +471,7 @@
         "statsUserUser":"Userul pe care vrei sa il vezi.",
         "statsTicket":"Vezi statisticile unui ticket in server.",
         "statsTicketTicket":"Ticketul pe care vrei sa il vezi.",
+        
         "clear":"Sterge mai multe tickete in acelasi timp.",
         "clearFilter":"Filtrul pentru ștergerea biletelor.",
         "clearFilters":{
@@ -417,6 +484,7 @@
             "unpin":"Nefixat",
             "autoclose":"Inchis Automat"
         },
+        
         "autoclose":"Gestioneaza inchiderea automata a unui ticket.",
         "autocloseDisable":"Dezactiveaza inchiderea automata in acest ticket.",
         "autocloseEnable":"Activeaza inchiderea automata in acest ticket.",
@@ -424,7 +492,19 @@
         "autodelete":"Gestioneaza stergerea automata a unui ticket.",
         "autodeleteDisable":"Dezactiveaza stergerea automata in acest ticket.",
         "autodeleteEnable":"Activeaza stergerea automata in acest ticket.",
-        "autodeleteEnableTime":"Numarul de zile in care acest ticket trebuie sa fie inactiv pentru a fi sters."
+        "autodeleteEnableTime":"Numarul de zile in care acest ticket trebuie sa fie inactiv pentru a fi sters.",
+        
+        "topic":"Gestionează subiectul canalului de tichet.",
+        "topicSet":"Setează subiectul canalului de tichet.",
+        "topicValue":"Noul subiect al canalului.",
+        "topicList":"Obține o listă cu toate tichetele, împreună cu subiectul și statisticile lor.",
+        "priority":"Gestionează prioritatea tichetului.",
+        "prioritySet":"Setează prioritatea tichetului.",
+        "priorityValue":"Prioritatea canalului.",
+        "priorityGet":"Obține prioritatea tichetului.",
+        "priorityList":"Obține o listă cu toate tichetele și starea priorității lor.",
+        "transfer":"Transferă proprietatea tichetului de la un utilizator la altul.",
+        "transferUser":"Utilizatorul către care se face transferul."
     },
     "helpMenu":{
         "help":"Afiseaza o lista cu toate comenzile disponibile.",
@@ -452,7 +532,16 @@
         "autocloseDisable":"Dezactiveaza inchiderea automata in acest ticket.",
         "autocloseEnable":"Activeaza inchiderea automata in acest ticket.",
         "autodeleteDisable":"Dezactiveaza stergerea automata in acest ticket.",
-        "autodeleteEnable":"Activeaza stergerea automata in acest ticket."
+        "autodeleteEnable":"Activeaza stergerea automata in acest ticket.",
+        "categories":{
+            "general":"Comenzi Generale",
+            "basicTicket":"Comenzi de Bază pentru Tichete",
+            "advancedTicket":"Comenzi Avansate pentru Tichete",
+            "userTicket":"Comenzi pentru Tichete Utilizator",
+            "admin":"Comenzi Administrator",
+            "advanced":"Comenzi Avansate",
+            "extra":"Comenzi Extra"
+        }
     },
     "stats":{
         "scopes":{
@@ -460,7 +549,8 @@
             "system":"Statistici Sistem",
             "user":"Statistici User",
             "ticket":"Statistici Ticket",
-            "participants":"Participanti"
+            "participants":"Participanti",
+            "messages":"Mesaje"
         },
         "properties":{
             "ticketsCreated":"Tickete Create",
@@ -472,7 +562,47 @@
             "ticketsPinned":"Tickete Fixate",
             "ticketsMoved":"Tickete Mutate",
             "usersBlacklisted":"Useri Blacklisted",
-            "transcriptsCreated":"Transcripturi Create"
+            "transcriptsCreated":"Transcripturi Create",
+            "ticketsAutodeleted":"Tichete Șterse Automat",
+            "ticketsTransferred":"Tichete Transferate",
+            "ticketVolume":"Volum Tichete",
+            "averageTickets":"Medie Tichete/Utilizator",
+            "currentTickets":"Tichete Curente",
+            "age":"Vechime Tichet",
+            "responseTime":"Timp de Răspuns",
+            "resolutionTime":"Timp de Rezolvare",
+            "createdOn":"Creat La",
+            "createdBy":"Creat De",
+            "closedOn":"Închis La",
+            "closedBy":"Închis De",
+            "claimedOn":"Preluat La",
+            "claimedBy":"Preluat De",
+            "pinnedOn":"Fixat La",
+            "pinnedBy":"Fixat De",
+            "deletedOn":"Șters La",
+            "deletedBy":"Șters De"
+        },
+        "roles":{
+            "developer":"Dezvoltator",
+            "serverOwner":"Proprietar Server",
+            "serverAdmin":"Administrator Server",
+            "moderator":"Echipă Moderare",
+            "support":"Echipă Suport",
+            "member":"Membru"
         }
+    },
+    "panel":{
+        "selectTicket":"Selectează tichetul tău",
+        "selectRole":"Selectează rolul tău",
+        "selectOption":"Selectează opțiunea ta"
+    },
+    "priorities":{
+        "urgent":"Urgent",
+        "veryHigh":"Foarte Ridicată",
+        "high":"Ridicată",
+        "normal":"Normală",
+        "low":"Scăzută",
+        "veryLow":"Foarte Scăzută",
+        "none":"Niciuna"
     }
 }

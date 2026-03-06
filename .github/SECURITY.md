@@ -21,6 +21,7 @@ This list will be updated on every release.
 |------------|-----------|---------------------------------------------------------------|
 | 4.2.0      | 🟦        | In Development                                                |
 | 4.1.x      | 🟦        | In Development                                                |
+| 4.1.3      | ✅        |                                                               |
 | 4.1.2      | ✅        |                                                               |
 | 4.1.1      | ✅        | Supported Until April 2026 (LTS)                              |
 | 4.1.0      | 🚧        |                                                               |

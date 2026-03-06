@@ -1,8 +1,8 @@
 {
     "_TRANSLATION":{
-        "otversion":"v4.1.2",
+        "otversion":"v4.1.3",
         "translators":["Kornel0706"],
-        "lastedited":"22/08/2024",
+        "lastedited":"16/02/2026",
         "language":"Hungarian",
         "automated":false
     },
@@ -31,6 +31,14 @@
             "stringContains":"Ennek a karakterláncnak tartalmaznia kell {0}-t!",
             "stringChoices":"Ez a karakterlánc csak a következő értékek egyike lehet: {0}!",
             "stringRegex":"Ez a karakterlánc érvénytelen!",
+            "stringInvertedContains":"Ez a szöveg nem tartalmazhatja a(z) {0} elemet!",
+            "stringLowercase":"Ez a szöveg csak kisbetűvel írható!",
+            "stringUppercase":"Ez a szöveg csak nagybetűvel írható!",
+            "stringSpecialCharacters":"Ez a szöveg nem tartalmazhat különleges karaktereket! (csak a-z, 0-9 és szóköz)",
+            "stringNoSpaces":"Ez a szöveg nem tartalmazhat szóközt!",
+            "stringCapitalWord":"Ajánlott, hogy minden szó nagybetűvel kezdődjön!",
+            "stringCapitalSentence":"Úgy tűnik, néhány mondat ebben a szövegben nem nagybetűvel kezdődik!",
+            "stringPunctuation":"Úgy tűnik, ez a mondat nem ponttal vagy más írásjellel végződik!",
             
             "numberTooShort":"Ez a szám nem lehet rövidebb, mint {0} karakter!",
             "numberTooLong":"Ez a szám nem lehet hosszabb, mint {0} karakter!",
@@ -48,10 +56,12 @@
             "numberNegative":"Ez a szám nem lehet negatív!",
             "numberPositive":"Ez a szám nem lehet pozitív!",
             "numberZero":"Ez a szám nem lehet nulla!",
-
+            "numberNan":"Ez a szám nem lehet NaN (Nem szám)!",
+            "numberInvertedContains":"Ez a szám nem tartalmazhatja a(z) {0} elemet!",
+            
             "booleanTrue":"Ez a logikai érték nem lehet igaz!",
             "booleanFalse":"Ez a logikai érték nem lehet hamis!",
-
+            
             "arrayEmptyDisabled":"Ez a tömb nem lehet üres!",
             "arrayEmptyRequired":"Ez a tömb üresnek kell lennie!",
             "arrayTooShort":"Ennek a tömbnek legalább {0} hosszúnak kell lennie!",
@@ -59,7 +69,7 @@
             "arrayLengthInvalid":"Ennek a tömbnek pontosan {0} hosszúnak kell lennie!",
             "arrayInvalidTypes":"Ez a tömb csak a következő típusokat tartalmazhatja: {0}!",
             "arrayDouble":"Ez a tömb nem engedélyezi ugyanazt az értéket kétszer!",
-
+            
             "discordInvalidId":"Ez egy érvénytelen discord {0} azonosító!",
             "discordInvalidIdOptions":"Ez egy érvénytelen discord {0} azonosító! Használhatja a következő lehetőségek egyikét is: {1}!",
             "discordInvalidToken":"Ez egy érvénytelen discord token (szintaktikailag)!",
@@ -76,7 +86,7 @@
             "urlInvalidPath":"Ez az URL érvénytelen elérési utat tartalmaz!",
             "idNotUnique":"Ez az azonosító nem egyedi, használjon egy másikat!",
             "idNonExistent":"Az azonosító {0} nem létezik!",
-
+            
             "invalidType":"Ennek a tulajdonságnak a következő típusúnak kell lennie: {0}!",
             "propertyMissing":"A {0} tulajdonság hiányzik ebből az objektumból!",
             "propertyOptional":"A {0} tulajdonság opcionális ebben az objektumban!",
@@ -84,12 +94,13 @@
             "nullInvalid":"Ez a tulajdonság nem lehet null!",
             "switchInvalidType":"Ennek a következő típusok egyikének kell lennie: {0}!",
             "objectSwitchInvalid":"Ennek az objektumnak a következő típusok egyikének kell lennie: {0}!",
-
+            
             "invalidLanguage":"Ez egy érvénytelen nyelv!",
             "invalidButton":"Ennek a gombnak legalább egy {0} vagy {1} kell, hogy tartalmazzon!",
             "unusedOption":"Az opció {0} nincs használatban sehol!",
             "unusedQuestion":"A kérdés {0} nincs használatban sehol!",
-            "dropdownOption":"Egy legördülő menüvel rendelkező panel csak a 'jegy' típusú opciókat tartalmazhat!"
+            "dropdownOption":"Egy legördülő menüvel rendelkező panel csak a 'jegy' típusú opciókat tartalmazhat!",
+            "customInvalidVersion":"A konfigurációban megadott verzió nem egyezik! Győződjön meg róla, hogy a konfiguráció a legfrissebb verzióra van frissítve!"
         }
     },
     "actions":{
@@ -122,7 +133,7 @@
             "move":"Jegy áthelyezve {0}-ra",
             "add":"Felhasználó hozzáadva a jegyhez",
             "remove":"Felhasználó eltávolítva a jegyből",
-
+            
             "help":"Elérhető parancsok",
             "statsReset":"Statisztikák visszaállítása",
             "blacklistAdd":"Felhasználó tiltólistára helyezve",
@@ -132,6 +143,7 @@
             "blacklistAddDm":"Felvéve a tiltólistára",
             "blacklistRemoveDm":"Eltávolítva a tiltólistáról",
             "clear":"Jegyek törölve",
+            "clearTickets":"Jegyek törlése",
             "roles":"Szerepek frissítve",
             
             "autoclose":"Jegy automatikusan bezárva",
@@ -139,7 +151,12 @@
             "autocloseDisabled":"Automatikus bezárás letiltva",
             "autodelete":"Jegy automatikusan törölve",
             "autodeleteEnabled":"Automatikus törlés engedélyezve",
-            "autodeleteDisabled":"Automatikus törlés letiltva"
+            "autodeleteDisabled":"Automatikus törlés letiltva",
+            
+            "topicSet":"Téma megváltoztatva",
+            "prioritySet":"Prioritás megváltoztatva",
+            "priorityGet":"Jegy prioritása",
+            "transfer":"Jegy átvitele"
         },
         "descriptions":{
             "create":"A jegyed létrejött. Kattints az alábbi gombra, hogy hozzáférj!",
@@ -154,7 +171,7 @@
             "move":"A jegyet sikeresen áthelyeztük {0}-ra!",
             "add":"{0} sikeresen hozzáadva a jegyhez!",
             "remove":"{0} sikeresen eltávolítva a jegyből!",
-
+            
             "helpExplanation":"`<név>` => kötelező paraméter\n`[név]` => opcionális paraméter",
             "statsReset":"A bot statisztikái sikeresen visszaállítva!",
             "statsError":"A jegy statisztikáit nem sikerült megtekinteni!\n{0} nem egy jegy!",
@@ -167,7 +184,7 @@
             "clearVerify":"Biztos vagy benne, hogy törölni szeretnéd több jegyet? Ez a művelet nem vonható vissza!",
             "clearReady":"{0} jegyek sikeresen törölve!",
             "rolesEmpty":"Nincsenek frissítve szerepek!",
-
+            
             "autocloseLeave":"Ez a jegy automatikusan bezáródott, mert a készítő elhagyta a szervert!",
             "autocloseTimeout":"Ez a jegy automatikusan bezáródott, mert több mint `{0}h` ideje inaktív volt!",
             "autodeleteLeave":"Ez a jegy automatikusan törlődött, mert a készítő elhagyta a szervert!",
@@ -176,11 +193,16 @@
             "autocloseDisabled":"Az automatikus bezárás le van tiltva ebben a jegyben!\nNem záródik be automatikusan többé!",
             "autodeleteEnabled":"Az automatikus törlés engedélyezve van ebben a jegyben!\nEz törlődik, ha több mint `{0} nap` ideig inaktív!",
             "autodeleteDisabled":"Az automatikus törlés le van tiltva ebben a jegyben!\nNem törlődik automatikusan többé!",
-
+            
             "ticketMessageLimit":"Egyszerre csak {0} jegyet hozhatsz létre!",
             "ticketMessageAutoclose":"Ez a jegy automatikusan bezáródik, ha inaktív marad {0}h ideig!",
             "ticketMessageAutodelete":"Ez a jegy automatikusan törlődik, ha inaktív marad {0} nap ideig!",
-            "panelReady":"Az alábbi panelben megtalálod!\nEz az üzenet most törölhető!"
+            "panelReady":"A panel elérhető a követő üzenetben!\nEz az üzenet most törölhető!",
+            
+            "topicSet":"A csatorna témáját sikeresen megváltoztatta: {0}!",
+            "prioritySet":"A jegy prioritása sikeresen {1}-re változott: {0}!",
+            "priorityGet":"Ennek a jegynek a jelenlegi prioritása: {0}.",
+            "transfer":"A jegy tulajdonjoga sikeresen átkerült {0}-tól {1}-hez {2} által!"
         },
         "modal":{
             "closePlaceholder":"Miért zártad be ezt a jegyet?",
@@ -215,12 +237,19 @@
             "addDm":"{0} hozzáadásra került a jegyedhez a szerverünkön!",
             "removeLog":"{0} eltávolításra került ebből a jegyből {1} által!",
             "removeDm":"{0} eltávolításra került a jegyedből a szerverünkön!",
-
+            
             "blacklistAddLog":"{0} tiltólistára helyezte {1}!",
             "blacklistRemoveLog":"{0} eltávolította a tiltólistáról {1}!",
             "blacklistAddDm":"Tiltólistára kerültél a szerverünkön!\nEzentúl nem hozhatsz létre jegyet!",
             "blacklistRemoveDm":"Eltávolításra kerültél a szerverünk tiltólistájáról!\nMost újra létrehozhatsz jegyeket!",
-            "clearLog":"{0} jegyek törlésre kerültek {1} által!"
+            "clearLog":"{0} jegyek törlésre kerültek {1} által!",
+            
+            "transferLog":"A jegy tulajdonjoga {2} által {0}-ról {1}-re lett átvive!",
+            "transferDm":"A jegy tulajdonjoga át lett helyezve {0}-tól {1}-hez a szerverünkön!",
+            "prioritySetLog":"A jegy prioritása {1} által {0}-re változott!",
+            "prioritySetDm":"A jegy prioritása a szerverünkön {0}-re változott!",
+            "roleUpdateLog":"{0} frissítette a szerepköreit!",
+            "roleUpdateDm":"A szerepköreit frissítették a szerverünkön!"
         }
     },
     "transcripts":{
@@ -229,7 +258,7 @@
             "ready":"Átirat létrehozva",
             "textFileDescription":"Ez egy törölt jegy szöveges átirata!",
             "htmlProgress":"Kérjük, várj, amíg ez a HTML átirat feldolgozásra kerül...",
-
+            
             "createdChannel":"Egy új {0} átirat létrejött a szerveren!",
             "createdCreator":"Egy új {0} átirat létrejött egy jegyed számára!",
             "createdParticipant":"Egy új {0} átirat létrejött egy jegyben, amiben részt vettél!",
@@ -241,7 +270,19 @@
             "retry":"Újra",
             "continue":"Törlés átirat nélkül",
             "backup":"Biztonsági átirat létrehozása",
-            "error":"Valami hiba történt az átirat létrehozása közben.\nMit szeretnél tenni?\n\nEz a jegy nem kerül törlésre, amíg nem kattintasz az egyik gombra."
+            "error":"Valami hiba történt az átirat létrehozása közben.\nMit szeretnél tenni?\n\nEz a jegy nem kerül törlésre, amíg nem kattintasz az egyik gombra.",
+            "title":"Átirat hiba"
+        },
+        "text":{
+            "messagesTitle":"ÜZENETEK",
+            "embedTitle":"BEÁGYAZÁS",
+            "fileTitle":"FÁJL",
+            "fieldsTitle":"MEZŐK",
+            "reactionsTitle":"REAKCIÓK",
+            "statsTitle":"STATS",
+            "emptyContent":"<tartalom üres>",
+            "noTitle":"<cím nélkül>",
+            "noDesc":"<leírás nélkül>"
         }
     },
     "errors":{
@@ -257,7 +298,8 @@
             "unknownPanel":"Ismeretlen Panel",
             "notInGuild":"Nem a Szerveren",
             "channelRename":"Nem sikerült átnevezni a csatornát",
-            "busy":"A Jegy Elfoglalt"
+            "busy":"A Jegy Elfoglalt",
+            "permissionError":"Engedély hiba"
         },
         "descriptions":{
             "askForInfo":"Lépj kapcsolatba a bot tulajdonosával további információkért!",
@@ -280,7 +322,10 @@
             "notInGuild":"Ez a {0} nem működik DM-ben! Próbáld újra egy szerveren!",
             "channelRename":"A discord korlátai miatt jelenleg nem lehet átnevezni a csatornát. A csatorna automatikusan átnevezésre kerül 10 perc múlva, ha a bot nincs újraindítva.",
             "channelRenameSource":"A hiba forrása: {0}",
-            "busy":"Nem lehet használni ezt a {0}-t!\nA jegy jelenleg a bot által van feldolgozás alatt.\n\nPróbáld meg néhány másodperc múlva!"
+            "busy":"Nem lehet használni ezt a {0}-t!\nA jegy jelenleg a bot által van feldolgozás alatt.\n\nPróbáld meg néhány másodperc múlva!",
+            "closeBeforeMessage":"Ezt a jegyet nem lehet lezárni/törölni, amíg egy felhasználó nem küldött üzenetet.",
+            "closeBeforeAdminMessage":"Ezt a jegyet nem lehet lezárni/törölni, amíg a jegy adminja vagy a támogatói csapat tagja nem küldött üzenetet.",
+            "unableToCreateTicket":"Nem tud jegyet létrehozni."
         },
         "optionInvalidReasons":{
             "stringRegex":"Az érték nem felel meg a mintának!",
@@ -331,7 +376,6 @@
             "added":"Hozzáadva",
             "removed":"Eltávolítva",
             "filter":"Szűrő",
-            "claimedBy":"Igényelte {0}",
             "method":"Módszer",
             "type":"Típus",
             "blacklisted":"Tiltólistás",
@@ -352,10 +396,30 @@
             "version":"Verzió",
             "name":"Név",
             "role":"Szerep",
-            "status":"Státusz",
+            "status":"Állapot",
             "claimed":"Igényelt",
             "pinned":"Rögzített",
-            "creationDate":"Létrehozás Dátuma"
+            "creationDate":"Létrehozás Dátuma",
+            
+            "noone":"Senki",
+            "open":"Nyitott",
+            "closed":"Zárt",
+            "priority":"Prioritás",
+            "participants":"Résztvevők",
+            "yes":"Igen",
+            "no":"Nem",
+            "option":"Opció",
+            "topic":"Téma",
+            "uptime":"Rendszer üzemidő",
+            "messages":"Üzenetek",
+            "embeds":"Beágyazások",
+            "files":"Fájlok",
+            "components":"Komponensek",
+            "cooldown":"Leállási idő",
+            "maxTickets":"Max jegyek",
+            "admins":"Adminok",
+            "roles":"Szerepkörök",
+            "size":"Méret"
         },
         "lowercase":{
             "text":"szöveg",
@@ -384,6 +448,7 @@
         "unclaim":"Jegy feloldása.",
         "pin":"Jegy rögzítése.",
         "unpin":"Jegy rögzítésének feloldása.",
+        
         "move":"Jegy áthelyezése.",
         "moveId":"Annak a opció az azonosítója, amelyet áthelyezni szeretnél.",
         "rename":"Jegy átnevezése.",
@@ -392,6 +457,7 @@
         "addUser":"A felhasználó, akit hozzá szeretnél adni.",
         "remove":"Felhasználó eltávolítása a jegyből.",
         "removeUser":"A felhasználó, akit el szeretnél távolítani.",
+        
         "blacklist":"Jegy tiltólista kezelése.",
         "blacklistView":"A jelenlegi tiltólista megtekintése.",
         "blacklistAdd":"Felhasználó hozzáadása a tiltólistához.",
@@ -405,6 +471,7 @@
         "statsUserUser":"A felhasználó, akinek a statisztikáit meg szeretnéd tekinteni.",
         "statsTicket":"Jegy statisztikáinak megtekintése a szerveren.",
         "statsTicketTicket":"A jegy, amelynek a statisztikáit meg szeretnéd tekinteni.",
+        
         "clear":"Több jegy egyidejű törlése. Opcionális szűrő adható meg.",
         "clearFilter":"A szűrő a jegyek törléséhez.",
         "clearFilters":{
@@ -417,6 +484,7 @@
             "unpin":"Feloldott",
             "autoclose":"Automatikusan Bezárt"
         },
+        
         "autoclose":"Automatikus bezárás kezelése egy jegyben.",
         "autocloseDisable":"Automatikus bezárás letiltása ebben a jegyben.",
         "autocloseEnable":"Automatikus bezárás engedélyezése ebben a jegyben.",
@@ -424,7 +492,19 @@
         "autodelete":"Automatikus törlés kezelése egy jegyben.",
         "autodeleteDisable":"Automatikus törlés letiltása ebben a jegyben.",
         "autodeleteEnable":"Automatikus törlés engedélyezése ebben a jegyben.",
-        "autodeleteEnableTime":"A napok száma, amely inaktívvá kell, hogy váljon ez a jegy a törléshez."
+        "autodeleteEnableTime":"A napok száma, amely inaktívvá kell, hogy váljon ez a jegy a törléshez.",
+        
+        "topic":"Kezelje a jegy csatorna témáját.",
+        "topicSet":"Állítsa be a jegy csatorna témáját.",
+        "topicValue":"A csatorna új témája.",
+        "topicList":"Az összes jegy listája a témájukkal és statisztikáikkal.",
+        "priority":"Kezelje a jegy prioritását.",
+        "prioritySet":"Állítsa be a jegy prioritását.",
+        "priorityValue":"A csatorna prioritása.",
+        "priorityGet":"Kapja meg a jegy prioritását.",
+        "priorityList":"Az összes jegy listája a prioritásukkal.",
+        "transfer":"Átadja a jegy tulajdonjogát egyik felhasználótól a másikhoz.",
+        "transferUser":"A felhasználó, akinek át kell adni."
     },
     "helpMenu":{
         "help":"Parancsok listájának megtekintése.",
@@ -452,7 +532,16 @@
         "autocloseDisable":"Automatikus bezárás letiltása ebben a jegyben.",
         "autocloseEnable":"Automatikus bezárás engedélyezése ebben a jegyben.",
         "autodeleteDisable":"Automatikus törlés letiltása ebben a jegyben.",
-        "autodeleteEnable":"Automatikus törlés engedélyezése ebben a jegyben."
+        "autodeleteEnable":"Automatikus törlés engedélyezése ebben a jegyben.",
+        "categories":{
+            "general":"Általános parancsok",
+            "basicTicket":"Alap jegy parancsok",
+            "advancedTicket":"Speciális jegy parancsok",
+            "userTicket":"Felhasználói jegy parancsok",
+            "admin":"Admin parancsok",
+            "advanced":"Speciális parancsok",
+            "extra":"Extra parancsok"
+        }
     },
     "stats":{
         "scopes":{
@@ -460,7 +549,8 @@
             "system":"Rendszer Statisztikák",
             "user":"Felhasználói Statisztikák",
             "ticket":"Jegy Statisztikák",
-            "participants":"Résztvevők"
+            "participants":"Résztvevők",
+            "messages":"Üzenetek"
         },
         "properties":{
             "ticketsCreated":"Létrehozott Jegyek",
@@ -472,7 +562,47 @@
             "ticketsPinned":"Rögzített Jegyek",
             "ticketsMoved":"Áthelyezett Jegyek",
             "usersBlacklisted":"Tiltólistás Felhasználók",
-            "transcriptsCreated":"Létrehozott Átiratok"
+            "transcriptsCreated":"Létrehozott Átiratok",
+            "ticketsAutodeleted":"Automatikusan törölt jegyek",
+            "ticketsTransferred":"Átadott jegyek",
+            "ticketVolume":"Jegy mennyiség",
+            "averageTickets":"Átlag jegyek/felhasználó",
+            "currentTickets":"Jelenlegi jegyek",
+            "age":"Jegy kora",
+            "responseTime":"Válaszidő",
+            "resolutionTime":"Megoldási idő",
+            "createdOn":"Létrehozva",
+            "createdBy":"Létrehozta",
+            "closedOn":"Lezárva",
+            "closedBy":"Lezárta",
+            "claimedOn":"Átvéve",
+            "claimedBy":"Átvette",
+            "pinnedOn":"Kitűzve",
+            "pinnedBy":"Kitűzte",
+            "deletedOn":"Törölve",
+            "deletedBy":"Törölte"
+        },
+        "roles":{
+            "developer":"Fejlesztő",
+            "serverOwner":"Szerver tulajdonos",
+            "serverAdmin":"Szerver admin",
+            "moderator":"Moderátor csapat",
+            "support":"Támogató csapat",
+            "member":"Tag"
         }
+    },
+    "panel":{
+        "selectTicket":"Válassza ki a jegyét",
+        "selectRole":"Válassza ki a szerepkörét",
+        "selectOption":"Válassza ki a lehetőségét"
+    },
+    "priorities":{
+        "urgent":"Sürgős",
+        "veryHigh":"Nagyon magas",
+        "high":"Magas",
+        "normal":"Normál",
+        "low":"Alacsony",
+        "veryLow":"Nagyon alacsony",
+        "none":"Nincs"
     }
 }

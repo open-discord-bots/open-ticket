@@ -135,7 +135,7 @@ export class ODMain {
 
     constructor(){
         this.versions = new ODVersionManager_Default()
-        let pkgVersion = "v4.1.2"
+        let pkgVersion = "v4.1.3"
         let apiVersion = "v1.0.0"
         try {
             const pkgPath = path.join(process.cwd(), "package.json")

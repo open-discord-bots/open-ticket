@@ -1,8 +1,8 @@
 {
     "_TRANSLATION":{
-        "otversion":"v4.1.2",
+        "otversion":"v4.1.3",
         "translators":["Redactado","Josuens"],
-        "lastedited":"22/08/2024",
+        "lastedited":"16/02/2026",
         "language":"Spanish",
         "automated":false
     },
@@ -31,7 +31,15 @@
             "stringContains":"¡Esta cadena necesita contener {0}!",
             "stringChoices":"¡Esta cadena no puede ser uno de los siguientes valores: {0}!",
             "stringRegex":"¡La cadena no es válida!",
-
+            "stringInvertedContains":"¡Esta cadena no puede contener {0}!",
+            "stringLowercase":"¡Esta cadena debe escribirse solo en minúsculas!",
+            "stringUppercase":"¡Esta cadena debe escribirse solo en mayúsculas!",
+            "stringSpecialCharacters":"¡Esta cadena no puede contener caracteres especiales! (solo a-z, 0-9 y espacio)",
+            "stringNoSpaces":"¡Esta cadena no puede contener espacios!",
+            "stringCapitalWord":"¡Se recomienda que cada palabra de esta cadena comience con mayúscula!",
+            "stringCapitalSentence":"¡Parece que algunas oraciones de esta cadena no comienzan con mayúscula!",
+            "stringPunctuation":"¡Parece que la oración de esta cadena no termina con un signo de puntuación!",
+            
             "numberTooShort":"¡Este número no puede ser menor que {0}!",
             "numberTooLong":"¡Este número no puede ser mayor que {0}!",
             "numberLengthInvalid":"¡Este número necesita tener {0}!",
@@ -48,10 +56,12 @@
             "numberNegative":"¡Este número no puede ser negativo!",
             "numberPositive":"¡Este número no puede ser positivo!",
             "numberZero":"¡Este número no puede ser cero!",
-
+            "numberNan":"¡Este número no puede ser NaN (Not A Number)!",
+            "numberInvertedContains":"¡Este número no puede contener {0}!",
+            
             "booleanTrue":"¡Este valor no puede ser positivo!",
             "booleanFalse":"¡Este valor no puede ser negativo!",
-
+            
             "arrayEmptyDisabled":"¡No se permite que este conjunto de valores esté vacío!",
             "arrayEmptyRequired":"¡Se requiere que este conjunto de valores esté vacío!",
             "arrayTooShort":"¡Este conjunto de valores necesita tener una longitud de al menos {0}!",
@@ -59,7 +69,7 @@
             "arrayLengthInvalid":"¡Este conjunto de valores necesita tener una longitud de {0}!",
             "arrayInvalidTypes":"Este conjunto de valores solo puede contener los siguientes tipos: {0}!",
             "arrayDouble":"¡Este conjunto de valores no permite el mismo valor dos veces!",
-
+            
             "discordInvalidId":"¡Esta es una ID de discord {0} inválida!",
             "discordInvalidIdOptions":"¡Esta es una ID de discord {0} inválida! También puedes usar una de estas: {1}!",
             "discordInvalidToken":"¡Este es un token de discord inválido (sintácticamente)!",
@@ -69,14 +79,14 @@
             "emojiCustom":"¡Este emoji no puede ser un emoji personalizado de discord!",
             "emojiInvalid":"¡Este es un emoji inválido!",
             "urlInvalid":"¡Esta URL es inválida!",
-            "urlInvalidHttp":"¡Esta URL solo puede usar el protocolo https:/\/!",
-            "urlInvalidProtocol":"¡Esta URL solo puede usar los protocolos http:// y https:/\/!",
+            "urlInvalidHttp":"¡Esta URL solo puede usar el protocolo https://!",
+            "urlInvalidProtocol":"¡Esta URL solo puede usar los protocolos http:// y https://!",
             "urlInvalidHostname":"¡Esta URL tiene un nombre de host no permitido!",
             "urlInvalidExtension":"¡Esta URL tiene una extensión inválida! Elige entre: {0}!",
             "urlInvalidPath":"¡Esta URL tiene una ruta inválida!",
             "idNotUnique":"Esta ID no es única, usa otra ID en su lugar!",
             "idNonExistent":"La ID {0} no existe!",
-
+            
             "invalidType":"Esta propiedad necesita ser del tipo: {0}!",
             "propertyMissing":"La propiedad {0} falta en este objeto!",
             "propertyOptional":"La propiedad {0} es opcional en este objeto!",
@@ -84,12 +94,13 @@
             "nullInvalid":"Esta propiedad no puede ser nula!",
             "switchInvalidType":"Esto necesita ser uno de los siguientes tipos: {0}!",
             "objectSwitchInvalid":"Este objeto necesita ser uno de los siguientes tipos: {0}!",
-
+            
             "invalidLanguage":"¡Este es un idioma inválido!",
             "invalidButton":"¡Este botón necesita al menos un {0} o un {1}!",
             "unusedOption":"¡La opción {0} no se usa en ningún lugar!",
             "unusedQuestion":"¡La pregunta {0} no se usa en ningún lugar!",
-            "dropdownOption":"¡Este panel de botóns solo puede contener opciones de tipo 'ticket'!"
+            "dropdownOption":"¡Este panel de botóns solo puede contener opciones de tipo 'ticket'!",
+            "customInvalidVersion":"¡La versión especificada en tu configuración no coincide! ¡Asegúrate de haber actualizado la configuración a la versión más reciente!"
         }
     },
     "actions":{
@@ -132,6 +143,7 @@
             "blacklistAddDm":"Agregado a la Lista Negra",
             "blacklistRemoveDm":"Eliminado de la Lista Negra",
             "clear":"Tickets Limpiados",
+            "clearTickets":"Limpiar Tickets",
             "roles":"Roles Actualizados",
             
             "autoclose":"Ticket Cerrado Automáticamente",
@@ -139,7 +151,12 @@
             "autocloseDisabled":"Cierre Automático Deshabilitado",
             "autodelete":"Ticket Eliminado Automáticamente",
             "autodeleteEnabled":"Eliminación Automática Habilitada",
-            "autodeleteDisabled":"Eliminación Automática Deshabilitada"
+            "autodeleteDisabled":"Eliminación Automática Deshabilitada",
+            
+            "topicSet":"Tema Cambiado",
+            "prioritySet":"Prioridad Cambiada",
+            "priorityGet":"Prioridad del Ticket",
+            "transfer":"Ticket Transferido"
         },
         "descriptions":{
             "create":"¡Tu ticket ha sido creado! Haz click en el botón abajo para verlo!",
@@ -154,7 +171,7 @@
             "move":"¡El ticket fué movido a {0} correctamente!",
             "add":"¡{0} ha sido agregado a este ticket correctamente!",
             "remove":"¡{0} ha sido removido de este ticket correctamente!",
-
+            
             "helpExplanation":"`<nombre>` => argumento requerido\n`[nombre]` => argumento opcional",
             "statsReset":"¡Las estadísticas de este ticket han sido reiniciadas!",
             "statsError":"¡No se pueden ver las estadísticas de este ticket!\n¡{0} no es un ticket!",
@@ -167,7 +184,7 @@
             "clearVerify":"¿Estás seguro de que deseas borrar los tickets?\n¡Esta acción no se puede deshacer!",
             "clearReady":"¡{0} tickets fueron eliminados correctamente!",
             "rolesEmpty":"¡Ningún rol fué actualizado!",
-
+            
             "autocloseLeave":"¡Este ticket se ha cerrado automáticamente porque el creador abandonó el servidor!",
             "autocloseTimeout":"¡Este ticket se ha cerrado automáticamente porque ha estado inactivo durante más de `{0}h`!",
             "autodeleteLeave":"¡Este ticket se ha eliminado automáticamente porque el creador abandonó el servidor!",
@@ -176,11 +193,16 @@
             "autocloseDisabled":"¡El cierre automático se ha deshabilitado en este ticket!\n¡Ya no se cerrará automáticamente!",
             "autodeleteEnabled":"¡La eliminación automática se ha habilitado en este ticket!\nSe eliminará cuando esté inactivo durante más de `{0} días`!",
             "autodeleteDisabled":"¡La eliminación automática se ha deshabilitado en este ticket!\n¡Ya no se eliminará automáticamente!",
-
+            
             "ticketMessageLimit":"¡Solo puedes crear {0} ticket(s) al mismo tiempo!",
             "ticketMessageAutoclose":"¡Este ticket se cerrará automáticamente cuando esté inactivo durante {0}h!",
             "ticketMessageAutodelete":"¡Este ticket se eliminará automáticamente cuando esté inactivo durante {0} días!",
-            "panelReady":"¡Puedes encontrar el panel a continuación!\n¡Este mensaje ahora puede ser eliminado!"
+            "panelReady":"¡El panel está disponible en el mensaje siguiente!\n¡Este mensaje ahora puede ser eliminado!",
+            
+            "topicSet":"¡El tema del canal ha sido cambiado correctamente por {0}!",
+            "prioritySet":"¡La prioridad del ticket ha sido cambiada a {0} por {1} correctamente!",
+            "priorityGet":"La prioridad actual de este ticket es {0}.",
+            "transfer":"¡La propiedad del ticket ha sido transferida de {0} a {1} por {2} correctamente!"
         },
         "modal":{
             "closePlaceholder":"¿Por qué cerraste este ticket?",
@@ -215,12 +237,19 @@
             "addDm":"¡{0} ha sido añadido a tu ticket en nuestro servidor!",
             "removeLog":"¡{0} ha sido eliminado de este ticket por {1}!",
             "removeDm":"¡{0} ha sido eliminado de tu ticket en nuestro servidor!",
-
+            
             "blacklistAddLog":"{0} fue incluido en la lista negra por {1}!",
             "blacklistRemoveLog":"{0} fue eliminado de la lista negra por {1}!",
             "blacklistAddDm":"¡Has sido incluido en la lista negra en nuestro servidor!\n¡A partir de ahora, no puedes crear un ticket!",
             "blacklistRemoveDm":"¡Has sido eliminado de la lista negra en nuestro servidor!\n¡Ahora puedes volver a crear tickets!",
-            "clearLog":"¡{0} tickets han sido eliminados por {1}!"
+            "clearLog":"¡{0} tickets han sido eliminados por {1}!",
+            
+            "transferLog":"¡La propiedad de este ticket ha sido transferida de {0} a {1} por {2}!",
+            "transferDm":"¡La propiedad de tu ticket ha sido transferida de {0} a {1} en nuestro servidor!",
+            "prioritySetLog":"¡La prioridad de este ticket ha sido cambiada a {0} por {1}!",
+            "prioritySetDm":"¡La prioridad de tu ticket ha sido cambiada a {0} en nuestro servidor!",
+            "roleUpdateLog":"¡{0} ha actualizado sus roles!",
+            "roleUpdateDm":"¡Tus roles en nuestro servidor han sido actualizados!"
         }
     },
     "transcripts":{
@@ -229,7 +258,7 @@
             "ready":"Transcripción creada",
             "textFileDescription":"¡Esta es la transcripción de texto de un ticket!",
             "htmlProgress":"Espera mientras la transcripción en HTML es procesado...",
-
+            
             "createdChannel":"¡Se ha creado una nueva transcripción {0} en el servidor!",
             "createdCreator":"¡Se ha creado una nueva transcripción {0} para uno de tus tickets!",
             "createdParticipant":"¡Se ha creado una nueva transcripción {0} en uno de los tickets en los que participaste!",
@@ -241,7 +270,19 @@
             "retry":"Reintentar",
             "continue":"Eliminar sin transcripción",
             "backup":"Crear respaldo de la transcripción",
-            "error":"Algo salió mal al intentar subir la transcripción.\n¿Qué desearías hacer?\n\nEste ticket no será eliminado hasta que presiones uno de los botones."
+            "error":"Algo salió mal al intentar subir la transcripción.\n¿Qué desearías hacer?\n\nEste ticket no será eliminado hasta que presiones uno de los botones.",
+            "title":"Error de Transcripción"
+        },
+        "text":{
+            "messagesTitle":"MENSAJES",
+            "embedTitle":"EMBED",
+            "fileTitle":"ARCHIVO",
+            "fieldsTitle":"CAMPOS",
+            "reactionsTitle":"REACCIONES",
+            "statsTitle":"ESTADÍSTICAS",
+            "emptyContent":"<el contenido está vacío>",
+            "noTitle":"<sin-título>",
+            "noDesc":"<sin-descripción>"
         }
     },
     "errors":{
@@ -257,7 +298,8 @@
             "unknownPanel":"Panel Desconocido",
             "notInGuild":"No está en el Servidor",
             "channelRename":"No es posible renombrar el canal",
-            "busy":"El ticket está siendo procesado"
+            "busy":"El ticket está siendo procesado",
+            "permissionError":"Error de Permisos"
         },
         "descriptions":{
             "askForInfo":"¡Contacta al propietario de este bot para obtener más información!",
@@ -280,7 +322,10 @@
             "notInGuild":"¡Este {0} no funciona en DM! ¡Por favor, inténtalo de nuevo en un servidor!",
             "channelRename":"Debido a los límites de velocidad de discord, actualmente es imposible para el bot renombrar el canal. El canal se renombrará automáticamente en 10 minutos si el bot no se reinicia.",
             "channelRenameSource":"La fuente de este error es: {0}",
-            "busy":"¡No se puede usar este {0}!\nEl ticket está siendo procesado actualmente por el bot.\n\n¡Por favor, inténtalo de nuevo en unos segundos!"
+            "busy":"¡No se puede usar este {0}!\nEl ticket está siendo procesado actualmente por el bot.\n\n¡Por favor, inténtalo de nuevo en unos segundos!",
+            "closeBeforeMessage":"Este ticket no puede cerrarse/eliminarse antes de que un usuario haya enviado un mensaje.",
+            "closeBeforeAdminMessage":"Este ticket no puede cerrarse/eliminarse antes de que un administrador de tickets o miembro del equipo de soporte haya enviado un mensaje.",
+            "unableToCreateTicket":"No puedes crear un ticket."
         },
         "optionInvalidReasons":{
             "stringRegex":"¡El valor no coincide con el patrón!",
@@ -331,7 +376,6 @@
             "added":"Agregado",
             "removed":"Eliminado",
             "filter":"Filtrar",
-            "claimedBy":"Reclamado Por {0}",
             "method":"Método",
             "type":"Tipo",
             "blacklisted":"En La Lista Negra",
@@ -352,10 +396,30 @@
             "version":"Versión",
             "name":"Nombre",
             "role":"Rol",
-            "status":"Estado",
+            "status":"ESTADO",
             "claimed":"Reclamado",
             "pinned":"Anclado",
-            "creationDate":"Fecha De Creación"
+            "creationDate":"Fecha De Creación",
+            
+            "noone":"NADIE",
+            "open":"ABIERTO",
+            "closed":"CERRADO",
+            "priority":"PRIORIDAD",
+            "participants":"PARTICIPANTES",
+            "yes":"SÍ",
+            "no":"NO",
+            "option":"OPCIÓN",
+            "topic":"TEMA",
+            "uptime":"TIEMPO DE ACTIVIDAD DEL SISTEMA",
+            "messages":"MENSAJES",
+            "embeds":"EMBEDS",
+            "files":"ARCHIVOS",
+            "components":"COMPONENTES",
+            "cooldown":"COOLDOWN",
+            "maxTickets":"MÁX TICKETS",
+            "admins":"ADMINS",
+            "roles":"ROLES",
+            "size":"TAMAÑO"
         },
         "lowercase":{
             "text":"texto",
@@ -384,6 +448,7 @@
         "unclaim":"Libera un ticket.",
         "pin":"Ancla un ticket.",
         "unpin":"Desancla un ticket.",
+        
         "move":"Mueve un ticket.",
         "moveId":"El identificador del opción al que quieres mover.",
         "rename":"Renombra un ticket.",
@@ -392,6 +457,7 @@
         "addUser":"El usuario a añadir.",
         "remove":"Elimina un usuario de un ticket.",
         "removeUser":"El usuario a eliminar.",
+        
         "blacklist":"Administra la lista negra de tickets.",
         "blacklistView":"Ver una lista de la lista negra actual.",
         "blacklistAdd":"Añade un usuario a la lista negra.",
@@ -405,6 +471,7 @@
         "statsUserUser":"El usuario a ver.",
         "statsTicket":"Ver las estadísticas de un ticket en el servidor.",
         "statsTicketTicket":"El ticket a ver.",
+        
         "clear":"Eliminar varios tickets al mismo tiempo. Se puede especificar un filtro opcional.",
         "clearFilter":"valor",
         "clearFilters":{
@@ -417,6 +484,7 @@
             "unpin":"Desanclado",
             "autoclose":"Cerrado automáticamente"
         },
+        
         "autoclose":"Administra el cierre automático en un ticket.",
         "autocloseDisable":"Desactiva el cierre automático en este ticket.",
         "autocloseEnable":"Activa el cierre automático en este ticket.",
@@ -424,7 +492,19 @@
         "autodelete":"Administra la eliminación automática en un ticket.",
         "autodeleteDisable":"Desactiva la eliminación automática en este ticket.",
         "autodeleteEnable":"Activa la eliminación automática en este ticket.",
-        "autodeleteEnableTime":"La cantidad de días que este ticket necesita estar inactivo para eliminarlo."
+        "autodeleteEnableTime":"La cantidad de días que este ticket necesita estar inactivo para eliminarlo.",
+        
+        "topic":"Gestiona el tema del canal del ticket.",
+        "topicSet":"Establece el tema del canal del ticket.",
+        "topicValue":"El nuevo tema del canal.",
+        "topicList":"Obtén una lista de todos los tickets con su tema y estadísticas.",
+        "priority":"Gestiona la prioridad del ticket.",
+        "prioritySet":"Establece la prioridad del ticket.",
+        "priorityValue":"La prioridad del canal.",
+        "priorityGet":"Obtén la prioridad del ticket.",
+        "priorityList":"Obtén una lista de todos los tickets con su estado de prioridad.",
+        "transfer":"Transfiere la propiedad del ticket de un usuario a otro.",
+        "transferUser":"El usuario al que transferir."
     },
     "helpMenu":{
         "help":"Obtén una lista de todos los comandos disponibles.",
@@ -452,7 +532,16 @@
         "autocloseDisable":"Desactiva el cierre automático en este ticket.",
         "autocloseEnable":"Activa el cierre automático en este ticket.",
         "autodeleteDisable":"Desactiva la eliminación automática en este ticket.",
-        "autodeleteEnable":"Activa la eliminación automática en este ticket."
+        "autodeleteEnable":"Activa la eliminación automática en este ticket.",
+        "categories":{
+            "general":"Comandos Generales",
+            "basicTicket":"Comandos Básicos de Tickets",
+            "advancedTicket":"Comandos Avanzados de Tickets",
+            "userTicket":"Comandos de Tickets de Usuario",
+            "admin":"Comandos de Administrador",
+            "advanced":"Comandos Avanzados",
+            "extra":"Comandos Extra"
+        }
     },
     "stats":{
         "scopes":{
@@ -460,7 +549,8 @@
             "system":"Estadisticas del Sistema",
             "user":"Estadísticas del Usuario",
             "ticket":"Ticket Stats",
-            "participants":"Participantes"
+            "participants":"Participantes",
+            "messages":"Mensajes"
         },
         "properties":{
             "ticketsCreated":"Tickets Creados",
@@ -472,7 +562,47 @@
             "ticketsPinned":"Tickets Anclados",
             "ticketsMoved":"Tickets Movidos",
             "usersBlacklisted":"Usuarios En Lista Negra",
-            "transcriptsCreated":"Transcripciones Creadas"
+            "transcriptsCreated":"Transcripciones Creadas",
+            "ticketsAutodeleted":"Tickets Eliminados Automáticamente",
+            "ticketsTransferred":"Tickets Transferidos",
+            "ticketVolume":"Volumen de Tickets",
+            "averageTickets":"Promedio de Tickets/Usuario",
+            "currentTickets":"Tickets Actuales",
+            "age":"Antigüedad del Ticket",
+            "responseTime":"Tiempo de Respuesta",
+            "resolutionTime":"Tiempo de Resolución",
+            "createdOn":"Creado El",
+            "createdBy":"Creado Por",
+            "closedOn":"Cerrado El",
+            "closedBy":"Cerrado Por",
+            "claimedOn":"Reclamado El",
+            "claimedBy":"Reclamado Por",
+            "pinnedOn":"Fijado El",
+            "pinnedBy":"Fijado Por",
+            "deletedOn":"Eliminado El",
+            "deletedBy":"Eliminado Por"
+        },
+        "roles":{
+            "developer":"Desarrollador",
+            "serverOwner":"Propietario del Servidor",
+            "serverAdmin":"Administrador del Servidor",
+            "moderator":"Equipo de Moderación",
+            "support":"Equipo de Soporte",
+            "member":"Miembro"
         }
+    },
+    "panel":{
+        "selectTicket":"Selecciona tu ticket",
+        "selectRole":"Selecciona tu rol",
+        "selectOption":"Selecciona tu opción"
+    },
+    "priorities":{
+        "urgent":"Urgente",
+        "veryHigh":"Muy Alta",
+        "high":"Alta",
+        "normal":"Normal",
+        "low":"Baja",
+        "veryLow":"Muy Baja",
+        "none":"Ninguna"
     }
 }
