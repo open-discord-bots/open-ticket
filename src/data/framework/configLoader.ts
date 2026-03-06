@@ -90,6 +90,7 @@ export const defaultGeneralFormatter = new fjs.ObjectFormatter(null,true,[
         new fjs.PropertyFormatter("enableTicketDeleteButtons"),
         new fjs.PropertyFormatter("enableTicketActionWithReason"),
         new fjs.PropertyFormatter("enableDeleteWithoutTranscript"),
+        new fjs.PropertyFormatter("panelButtonRowLength"),
         new fjs.TextFormatter(""),
         new fjs.ObjectFormatter("logs",true,[
             new fjs.PropertyFormatter("enabled"),

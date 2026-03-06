@@ -50,5 +50,8 @@
     "funding": {
         "type": "individual",
         "url": "https://github.com/sponsors/DJj123dj"
+    },
+    "opendiscord": {
+        "apiVersion": "1.0.0"
     }
 }

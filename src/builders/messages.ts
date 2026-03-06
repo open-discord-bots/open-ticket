@@ -568,6 +568,9 @@ const panelMessages = () => {
         new api.ODWorker("opendiscord:panel-layout",1,async (instance,params,source) => {
             const {guild,channel,user,panel} = params
 
+            const rowLen = generalConfig.data.system.panelButtonRowLength
+            if (typeof rowLen === "number" && rowLen >= 1 && rowLen <= 5) instance.data.buttonRowLength = rowLen
+
             //add text
             const text = panel.get("opendiscord:text").value
             if (panel.get("opendiscord:describe-options-in-text").value){
@@ -594,16 +597,16 @@ const panelMessages = () => {
                 if (opt) options.push(opt)
             })
 
+            const maxButtons = 5 * (typeof generalConfig.data.system.panelButtonRowLength === "number" && generalConfig.data.system.panelButtonRowLength >= 1 && generalConfig.data.system.panelButtonRowLength <= 5 ? generalConfig.data.system.panelButtonRowLength : 5)
+
             if (panel.get("opendiscord:dropdown").value){
-                //dropdown
                 const ticketOptions: api.ODTicketOption[] = []
                 options.forEach((option) => {
                     if (option instanceof api.ODTicketOption) ticketOptions.push(option)
                 })
                 instance.addComponent(await dropdowns.getSafe("opendiscord:panel-dropdown-tickets").build(source,{guild,channel,user,panel,options:ticketOptions}))
             }else{
-                //buttons
-                for (const option of options){
+                for (const option of options.slice(0, maxButtons)){
                     if (option instanceof api.ODTicketOption) instance.addComponent(await buttons.getSafe("opendiscord:ticket-option").build(source,{guild,channel,user,panel,option}))
                     else if (option instanceof api.ODWebsiteOption) instance.addComponent(await buttons.getSafe("opendiscord:website-option").build(source,{guild,channel,user,panel,option}))
                     else if (option instanceof api.ODRoleOption) instance.addComponent(await buttons.getSafe("opendiscord:role-option").build(source,{guild,channel,user,panel,option}))

@@ -1,4 +1,6 @@
 //BASE MODULES
+import * as fs from "fs"
+import * as path from "path"
 import { ODEnvHelper, ODVersion } from "./modules/base"
 import { ODConsoleManager, ODConsoleMessage, ODConsoleMessageParam, ODConsoleMessageTypes, ODDebugFileManager, ODDebugger, ODError } from "./modules/console"
 import { ODCheckerStorage } from "./modules/checker"
@@ -133,8 +135,23 @@ export class ODMain {
 
     constructor(){
         this.versions = new ODVersionManager_Default()
-        this.versions.add(ODVersion.fromString("opendiscord:version","v4.1.2"))
-        this.versions.add(ODVersion.fromString("opendiscord:api","v1.0.0"))
+        let pkgVersion = "v4.1.2"
+        let apiVersion = "v1.0.0"
+        try {
+            const pkgPath = path.join(process.cwd(), "package.json")
+            if (fs.existsSync(pkgPath)) {
+                const pkg = JSON.parse(fs.readFileSync(pkgPath, "utf-8"))
+                if (typeof pkg.version === "string" && pkg.version.trim()) {
+                    pkgVersion = pkg.version.startsWith("v") ? pkg.version : "v" + pkg.version
+                }
+                if (pkg.opendiscord?.apiVersion != null && String(pkg.opendiscord.apiVersion).trim()) {
+                    const v = String(pkg.opendiscord.apiVersion).trim()
+                    apiVersion = v.startsWith("v") ? v : "v" + v
+                }
+            }
+        } catch (_) {}
+        this.versions.add(ODVersion.fromString("opendiscord:version", pkgVersion))
+        this.versions.add(ODVersion.fromString("opendiscord:api", apiVersion))
         this.versions.add(ODVersion.fromString("opendiscord:transcripts","v2.1.0"))
         this.versions.add(ODVersion.fromString("opendiscord:livestatus","v2.0.0"))
 

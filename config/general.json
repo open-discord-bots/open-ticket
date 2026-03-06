@@ -55,6 +55,7 @@
         "enableTicketDeleteButtons":true,
         "enableTicketActionWithReason":true,
         "enableDeleteWithoutTranscript":true,
+        "panelButtonRowLength":5,
 
         "logs":{
             "enabled":false,

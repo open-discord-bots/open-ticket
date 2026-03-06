@@ -142,4 +142,12 @@ export const migrations = [
     //MIGRATE TO v4.1.2
     new utilities.ODVersionMigration(api.ODVersion.fromString("opendiscord:version","v4.1.2"),async () => {},async () => {}),
 
+    //MIGRATE TO v4.2.0
+    new utilities.ODVersionMigration(api.ODVersion.fromString("opendiscord:version","v4.2.0"),async () => {},async () => {
+        const generalConfig = opendiscord.configs.get("opendiscord:general")
+        if (generalConfig?.data?.system && generalConfig.data.system.panelButtonRowLength == null) {
+            generalConfig.data.system.panelButtonRowLength = 5
+        }
+    }),
+
 ]

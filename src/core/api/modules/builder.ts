@@ -1110,7 +1110,9 @@ export interface ODMessageData {
     files:ODFileBuildResult[],
 
     /**Additional options that aren't covered by the Open Ticket api!*/
-    additionalOptions:Omit<discord.MessageCreateOptions,"poll"|"content"|"embeds"|"components"|"files"|"flags">
+    additionalOptions:Omit<discord.MessageCreateOptions,"poll"|"content"|"embeds"|"components"|"files"|"flags">,
+    /**Max buttons per row (1-5). Set by panel worker from config. */
+    buttonRowLength?:number
 }
 
 /**## ODMessageBuildResult `interface`
@@ -1254,35 +1256,31 @@ export class ODMessage<Source extends string,Params> extends ODBuilderImplementa
         //wait for workers to finish
         await this.workers.executeWorkers(instance,source,params)
 
-        //create the discord.js message
+        const maxPerRow = (typeof instance.data.buttonRowLength === "number" && instance.data.buttonRowLength >= 1 && instance.data.buttonRowLength <= 5)
+            ? instance.data.buttonRowLength : 5
+
         const componentArray: discord.ActionRowBuilder<discord.MessageActionRowComponentBuilder>[] = []
         let currentRow: discord.ActionRowBuilder<discord.MessageActionRowComponentBuilder> = new discord.ActionRowBuilder()
         instance.data.components.forEach((c) => {
-            //return when component crashed
             if (c.component == null) return
             else if (c.component == "\n"){
-                //create new current row when required
                 if (currentRow.components.length > 0){
                     componentArray.push(currentRow)
                     currentRow = new discord.ActionRowBuilder()
                 }
             }else if (c.component instanceof discord.BaseSelectMenuBuilder){
-                //push current row when not empty
                 if (currentRow.components.length > 0){
                     componentArray.push(currentRow)
                     currentRow = new discord.ActionRowBuilder()
                 }
                 currentRow.addComponents(c.component)
-                //create new current row after dropdown
                 componentArray.push(currentRow)
                 currentRow = new discord.ActionRowBuilder()
             }else{
-                //push button to current row
                 currentRow.addComponents(c.component)
             }
 
-            //create new row when 5 rows in length
-            if (currentRow.components.length == 5){
+            if (currentRow.components.length >= maxPerRow){
                 componentArray.push(currentRow)
                 currentRow = new discord.ActionRowBuilder()
             }
@@ -1359,13 +1357,11 @@ export class ODQuickMessage {
                 currentRow.addComponents(c.component)
             }
 
-            //create new row when 5 rows in length
             if (currentRow.components.length == 5){
                 componentArray.push(currentRow)
                 currentRow = new discord.ActionRowBuilder()
             }
         })
-        //push final row to array
         if (currentRow.components.length > 0) componentArray.push(currentRow)
 
         const filteredEmbeds = (this.data.embeds?.map((e) => e.embed).filter((e) => e instanceof discord.EmbedBuilder) as discord.EmbedBuilder[]) ?? [] 

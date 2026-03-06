@@ -266,6 +266,8 @@ export interface ODJsonConfig_DefaultSystem {
     enableTicketActionWithReason:boolean,
     /**Enable/disable the delete without transcript feature (button & /delete command). */
     enableDeleteWithoutTranscript:boolean,
+    /**Max buttons per row in panels (1-5). Also limits total buttons per panel. */
+    panelButtonRowLength:number,
 
     /**All settings related to the log channel. */
     logs:ODJsonConfig_DefaultSystemLogs,
