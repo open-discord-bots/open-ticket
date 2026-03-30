@@ -32,11 +32,11 @@ import { ODRoleUpdateMode } from "../openticket/role"
  * It's used to generate typescript declarations for this class.
  */
 export interface ODConfigManagerIds_Default {
-    "opendiscord:general":ODJsonConfig_DefaultGeneral,
-    "opendiscord:questions":ODJsonConfig_DefaultQuestions,
-    "opendiscord:options":ODJsonConfig_DefaultOptions,
-    "opendiscord:panels":ODJsonConfig_DefaultPanels,
-    "opendiscord:transcripts":ODJsonConfig_DefaultTranscripts
+    "opendiscord:general": ODJsonConfig_DefaultGeneral,
+    "opendiscord:questions": ODJsonConfig_DefaultQuestions,
+    "opendiscord:options": ODJsonConfig_DefaultOptions,
+    "opendiscord:panels": ODJsonConfig_DefaultPanels,
+    "opendiscord:transcripts": ODJsonConfig_DefaultTranscripts
 }
 
 /**## ODConfigManager_Default `default_class`
@@ -46,24 +46,24 @@ export interface ODConfigManagerIds_Default {
  * This default class is made for the global variable `opendiscord.configs`!
  */
 export class ODConfigManager_Default extends ODConfigManager {
-    get<ConfigId extends keyof ODConfigManagerIds_Default>(id:ConfigId): ODConfigManagerIds_Default[ConfigId]
-    get(id:ODValidId): ODConfig|null
-    
-    get(id:ODValidId): ODConfig|null {
+    get<ConfigId extends keyof ODConfigManagerIds_Default>(id: ConfigId): ODConfigManagerIds_Default[ConfigId]
+    get(id: ODValidId): ODConfig | null
+
+    get(id: ODValidId): ODConfig | null {
         return super.get(id)
     }
-    
-    remove<ConfigId extends keyof ODConfigManagerIds_Default>(id:ConfigId): ODConfigManagerIds_Default[ConfigId]
-    remove(id:ODValidId): ODConfig|null
-    
-    remove(id:ODValidId): ODConfig|null {
+
+    remove<ConfigId extends keyof ODConfigManagerIds_Default>(id: ConfigId): ODConfigManagerIds_Default[ConfigId]
+    remove(id: ODValidId): ODConfig | null
+
+    remove(id: ODValidId): ODConfig | null {
         return super.remove(id)
     }
 
-    exists(id:keyof ODConfigManagerIds_Default): boolean
-    exists(id:ODValidId): boolean
-    
-    exists(id:ODValidId): boolean {
+    exists(id: keyof ODConfigManagerIds_Default): boolean
+    exists(id: ODValidId): boolean
+
+    exists(id: ODValidId): boolean {
         return super.exists(id)
     }
 }
@@ -73,15 +73,15 @@ export class ODConfigManager_Default extends ODConfigManager {
  */
 export interface ODJsonConfig_DefaultStatusType {
     /**Is the status enabled? */
-    enabled:boolean,
+    enabled: boolean,
     /**The type of status (e.g. playing, listening, custom, ...) */
-    type:Exclude<ODClientActivityType,false>,
+    type: Exclude<ODClientActivityType, false>,
     /**The mode/status of the bot (e.g. online, invisible, idle, do not disturb) */
-    mode:ODClientActivityMode
+    mode: ODClientActivityMode
     /**The text for the status. */
-    text:string,
+    text: string,
     /**Additional text for the status. (visible below 'text') */
-    state:string,
+    state: string,
 }
 
 /**## ODJsonConfig_DefaultMessageSettingsType `interface`
@@ -89,26 +89,26 @@ export interface ODJsonConfig_DefaultStatusType {
  */
 export interface ODJsonConfig_DefaultMessageSettingsType {
     /**Enable sending DM logs to the ticket creator for this action. */
-    dm:boolean,
+    dm: boolean,
     /**Enable sending logsto the log channel for this action. */
-    logs:boolean
+    logs: boolean
 }
 
 /**## ODJsonConfig_DefaultCmdPermissionSettingsType `type`
  * This type is a collection of command permission settings for the "system"."permissions".... object in the `general.json` config!
  */
-export type ODJsonConfig_DefaultCmdPermissionSettingsType = "admin"|"everyone"|"none"|string
+export type ODJsonConfig_DefaultCmdPermissionSettingsType = "admin" | "everyone" | "none" | string
 
 /**## ODJsonConfig_DefaultInfo `interface`
  * This object contains a few URLs and metadata for the config.
  */
 export interface ODJsonConfig_DefaultInfo {
     /**A link to the Open Ticket documentation. */
-    support:string,
+    support: string,
     /**A link to the DJdj Development discord server. */
-    discord:string,
+    discord: string,
     /**The version of Open Ticket this config is compatible with. */
-    version:string
+    version: string
 }
 
 /**## ODJsonConfig_DefaultSystemLogs `interface`
@@ -116,9 +116,9 @@ export interface ODJsonConfig_DefaultInfo {
  */
 export interface ODJsonConfig_DefaultSystemLogs {
     /**Enable logging. Individual actions should still be added via the `"system"."messages"..."logs"` */
-    enabled:boolean,
+    enabled: boolean,
     /**The channel to send logs to. */
-    channel:string
+    channel: string
 }
 
 /**## ODJsonConfig_DefaultSystemLimits `interface`
@@ -126,11 +126,11 @@ export interface ODJsonConfig_DefaultSystemLogs {
  */
 export interface ODJsonConfig_DefaultSystemLimits {
     /**Enable global ticket limits. */
-    enabled:boolean,
+    enabled: boolean,
     /**The maximum amount of tickets that are allowed in the server at the same time. */
-    globalMaximum:number,
+    globalMaximum: number,
     /**The maximum amount of tickets that a user is allowed to create at the same time. */
-    userMaximum:number
+    userMaximum: number
 }
 
 /**## ODJsonConfig_DefaultSystemChannelTopic `interface`
@@ -138,72 +138,72 @@ export interface ODJsonConfig_DefaultSystemLimits {
  */
 export interface ODJsonConfig_DefaultSystemChannelTopic {
     /**Show the option name in the channel topic. */
-    showOptionName:boolean,
+    showOptionName: boolean,
     /**Show the option description in the channel topic. */
-    showOptionDescription:boolean,
+    showOptionDescription: boolean,
     /**Show the option topic text in the channel topic (configured in the options config). */
-    showOptionTopic:boolean,
+    showOptionTopic: boolean,
     /**Show the current priority in the channel topic (auto-updated). */
-    showPriority:boolean,
+    showPriority: boolean,
     /**Show the current close/reopen status in the channel topic (auto-updated). */
-    showClosed:boolean,
+    showClosed: boolean,
     /**Show the current claim status in the channel topic (auto-updated). */
-    showClaimed:boolean,
+    showClaimed: boolean,
     /**Show the current pin status in the channel topic (auto-updated). */
-    showPinned:boolean,
+    showPinned: boolean,
     /**Show the creator of the ticket in the channel topic (auto-updated on transfer). */
-    showCreator:boolean,
+    showCreator: boolean,
     /**Show the first 5 participants of the ticket in the channel topic (auto-updated). */
-    showParticipants:boolean
+    showParticipants: boolean
 }
 
 /**## ODJsonConfig_DefaultSystemPermissions `interface`
  * Configure permissions for all Open Ticket commands & actions.
  */
 export interface ODJsonConfig_DefaultSystemPermissions {
-    help:ODJsonConfig_DefaultCmdPermissionSettingsType,
-    panel:ODJsonConfig_DefaultCmdPermissionSettingsType,
-    ticket:ODJsonConfig_DefaultCmdPermissionSettingsType,
-    close:ODJsonConfig_DefaultCmdPermissionSettingsType,
-    delete:ODJsonConfig_DefaultCmdPermissionSettingsType,
-    reopen:ODJsonConfig_DefaultCmdPermissionSettingsType,
-    claim:ODJsonConfig_DefaultCmdPermissionSettingsType,
-    unclaim:ODJsonConfig_DefaultCmdPermissionSettingsType,
-    pin:ODJsonConfig_DefaultCmdPermissionSettingsType,
-    unpin:ODJsonConfig_DefaultCmdPermissionSettingsType,
-    move:ODJsonConfig_DefaultCmdPermissionSettingsType,
-    rename:ODJsonConfig_DefaultCmdPermissionSettingsType,
-    add:ODJsonConfig_DefaultCmdPermissionSettingsType,
-    remove:ODJsonConfig_DefaultCmdPermissionSettingsType,
-    blacklist:ODJsonConfig_DefaultCmdPermissionSettingsType,
-    stats:ODJsonConfig_DefaultCmdPermissionSettingsType,
-    clear:ODJsonConfig_DefaultCmdPermissionSettingsType,
-    autoclose:ODJsonConfig_DefaultCmdPermissionSettingsType,
-    autodelete:ODJsonConfig_DefaultCmdPermissionSettingsType,
-    transfer:ODJsonConfig_DefaultCmdPermissionSettingsType,
-    topic:ODJsonConfig_DefaultCmdPermissionSettingsType,
-    priority:ODJsonConfig_DefaultCmdPermissionSettingsType,
+    help: ODJsonConfig_DefaultCmdPermissionSettingsType,
+    panel: ODJsonConfig_DefaultCmdPermissionSettingsType,
+    ticket: ODJsonConfig_DefaultCmdPermissionSettingsType,
+    close: ODJsonConfig_DefaultCmdPermissionSettingsType,
+    delete: ODJsonConfig_DefaultCmdPermissionSettingsType,
+    reopen: ODJsonConfig_DefaultCmdPermissionSettingsType,
+    claim: ODJsonConfig_DefaultCmdPermissionSettingsType,
+    unclaim: ODJsonConfig_DefaultCmdPermissionSettingsType,
+    pin: ODJsonConfig_DefaultCmdPermissionSettingsType,
+    unpin: ODJsonConfig_DefaultCmdPermissionSettingsType,
+    move: ODJsonConfig_DefaultCmdPermissionSettingsType,
+    rename: ODJsonConfig_DefaultCmdPermissionSettingsType,
+    add: ODJsonConfig_DefaultCmdPermissionSettingsType,
+    remove: ODJsonConfig_DefaultCmdPermissionSettingsType,
+    blacklist: ODJsonConfig_DefaultCmdPermissionSettingsType,
+    stats: ODJsonConfig_DefaultCmdPermissionSettingsType,
+    clear: ODJsonConfig_DefaultCmdPermissionSettingsType,
+    autoclose: ODJsonConfig_DefaultCmdPermissionSettingsType,
+    autodelete: ODJsonConfig_DefaultCmdPermissionSettingsType,
+    transfer: ODJsonConfig_DefaultCmdPermissionSettingsType,
+    topic: ODJsonConfig_DefaultCmdPermissionSettingsType,
+    priority: ODJsonConfig_DefaultCmdPermissionSettingsType,
 }
 
 /**## ODJsonConfig_DefaultSystemMessages `interface`
  * Configure dm & log messages for all Open Ticket commands & actions.
  */
 export interface ODJsonConfig_DefaultSystemMessages {
-    creation:ODJsonConfig_DefaultMessageSettingsType,
-    closing:ODJsonConfig_DefaultMessageSettingsType,
-    deleting:ODJsonConfig_DefaultMessageSettingsType,
-    reopening:ODJsonConfig_DefaultMessageSettingsType,
-    claiming:ODJsonConfig_DefaultMessageSettingsType,
-    pinning:ODJsonConfig_DefaultMessageSettingsType,
-    adding:ODJsonConfig_DefaultMessageSettingsType,
-    removing:ODJsonConfig_DefaultMessageSettingsType,
-    renaming:ODJsonConfig_DefaultMessageSettingsType,
-    moving:ODJsonConfig_DefaultMessageSettingsType,
-    blacklisting:ODJsonConfig_DefaultMessageSettingsType,
-    transferring:ODJsonConfig_DefaultMessageSettingsType,
-    topicChange:ODJsonConfig_DefaultMessageSettingsType,
-    priorityChange:ODJsonConfig_DefaultMessageSettingsType,
-    reactionRole:ODJsonConfig_DefaultMessageSettingsType,
+    creation: ODJsonConfig_DefaultMessageSettingsType,
+    closing: ODJsonConfig_DefaultMessageSettingsType,
+    deleting: ODJsonConfig_DefaultMessageSettingsType,
+    reopening: ODJsonConfig_DefaultMessageSettingsType,
+    claiming: ODJsonConfig_DefaultMessageSettingsType,
+    pinning: ODJsonConfig_DefaultMessageSettingsType,
+    adding: ODJsonConfig_DefaultMessageSettingsType,
+    removing: ODJsonConfig_DefaultMessageSettingsType,
+    renaming: ODJsonConfig_DefaultMessageSettingsType,
+    moving: ODJsonConfig_DefaultMessageSettingsType,
+    blacklisting: ODJsonConfig_DefaultMessageSettingsType,
+    transferring: ODJsonConfig_DefaultMessageSettingsType,
+    topicChange: ODJsonConfig_DefaultMessageSettingsType,
+    priorityChange: ODJsonConfig_DefaultMessageSettingsType,
+    reactionRole: ODJsonConfig_DefaultMessageSettingsType,
 }
 
 /**## ODJsonConfig_DefaultSystem `interface`
@@ -211,76 +211,81 @@ export interface ODJsonConfig_DefaultSystemMessages {
  */
 export interface ODJsonConfig_DefaultSystem {
     /**Prefer slash-commands over text-commands when displaying them in menu's and messages. */
-    preferSlashOverText:boolean,
+    preferSlashOverText: boolean,
     /**Reply with "unknown command" when the prefix is used without a valid command. */
-    sendErrorOnUnknownCommand:boolean,
+    sendErrorOnUnknownCommand: boolean,
     /**Display the question fields (in a ticket message) in code blocks. */
-    questionFieldsInCodeBlock:boolean,
+    questionFieldsInCodeBlock: boolean,
     /**Display embed fields together with question fields (in a ticket message). */
-    displayFieldsWithQuestions:boolean,
+    displayFieldsWithQuestions: boolean,
     /**Show global admins roles together with ticket admins in panel embeds. */
-    showGlobalAdminsInPanelRoles:boolean,
+    showGlobalAdminsInPanelRoles: boolean,
     /**Disable the (✅❌) buttons and directly run the action. */
-    disableVerifyBars:boolean,
+    disableVerifyBars: boolean,
     /**Display error embeds/messages with red instead of the default bot color. */
-    useRedErrorEmbeds:boolean,
+    useRedErrorEmbeds: boolean,
     /**Always show the reason field in embeds, even when there is no reason provided. */
-    alwaysShowReason:boolean,
+    alwaysShowReason: boolean,
     /**The emoji style used in the bot. This will affect all embeds, titles & messages in the bot. */
-    emojiStyle:"before"|"after"|"double"|"disabled",
+    emojiStyle: "before" | "after" | "double" | "disabled",
     /**The emoji used when pinning tickets. This is '📌' by default. */
-    pinEmoji:string,
-    
+    pinEmoji: string,
+
+    /**
+     * The emoji used when a ticket is closed. This is '🔒' by default.
+     */
+    closedTicketEmoji: string,
+
     /**Reply with an ephemeral message when a ticket is created. */
-    replyOnTicketCreation:boolean,
+    replyOnTicketCreation: boolean,
     /**Reply with an ephemeral message when reaction roles are changed. */
-    replyOnReactionRole:boolean,
+    replyOnReactionRole: boolean,
     /**Ask for the priority of this ticket on ticket creation. This will happen in a dropdown in the ticket message. */
-    askPriorityOnTicketCreation:boolean,
+    askPriorityOnTicketCreation: boolean,
     /**Remove all participants (except admins) from the ticket when it's closed. */
-    removeParticipantsOnClose:boolean,
+    removeParticipantsOnClose: boolean,
     /**Disable autoclose for a ticket when it has been closed and re-opened. */
-    disableAutocloseAfterReopen:boolean,
+    disableAutocloseAfterReopen: boolean,
     /**Only allow autodelete when the ticket is already closed. */
-    autodeleteRequiresClosedTicket:boolean,
+    autodeleteRequiresClosedTicket: boolean,
     /**When enabled, only global admins are able to delete a ticket without transcript. */
-    adminOnlyDeleteWithoutTranscript:boolean,
+    adminOnlyDeleteWithoutTranscript: boolean,
     /**Only allow ticket closing when at least 1 message has been sent by the creator. (admins are able to bypass) */
-    allowCloseBeforeMessage:boolean,
+    allowCloseBeforeMessage: boolean,
     /**Only allow ticket closing when at least 1 message has been sent by a global or ticket admin. (admins are able to bypass) */
-    allowCloseBeforeAdminMessage:boolean,
+    allowCloseBeforeAdminMessage: boolean,
     /**Use a translated config checker in the console. */
-    useTranslatedConfigChecker:boolean,
+    useTranslatedConfigChecker: boolean,
     /**Pin the (first) ticket message in the channel. This simulates old behaviour like Open Ticket v1, v2 & v3. */
-    pinFirstTicketMessage:boolean,
-    
+    pinFirstTicketMessage: boolean,
+
     /**Enable/disable the ticket claim & unclaim button in the ticket message. */
-    enableTicketClaimButtons:boolean,
+    enableTicketClaimButtons: boolean,
     /**Enable/disable the ticket close & re-open button in the ticket message. */
-    enableTicketCloseButtons:boolean,
+    enableTicketCloseButtons: boolean,
     /**Enable/disable the ticket pin & unpin button in the ticket message. */
-    enableTicketPinButtons:boolean,
+    enableTicketPinButtons: boolean,
     /**Enable/disable the ticket delete button in the ticket message. */
-    enableTicketDeleteButtons:boolean,
+    enableTicketDeleteButtons: boolean,
     /**Enable/disable the "with reason" button for all actions in the ticket message. */
-    enableTicketActionWithReason:boolean,
+    enableTicketActionWithReason: boolean,
     /**Enable/disable the delete without transcript feature (button & /delete command). */
-    enableDeleteWithoutTranscript:boolean,
+    enableDeleteWithoutTranscript: boolean,
 
     /**All settings related to the log channel. */
-    logs:ODJsonConfig_DefaultSystemLogs,
-    
+    logs: ODJsonConfig_DefaultSystemLogs,
+
     /**All settings related to global ticket limits. */
-    limits:ODJsonConfig_DefaultSystemLimits,
+    limits: ODJsonConfig_DefaultSystemLimits,
 
     /**All global channel topic settings. */
-    channelTopic:ODJsonConfig_DefaultSystemChannelTopic,
+    channelTopic: ODJsonConfig_DefaultSystemChannelTopic,
 
     /**Configure permissions for all Open Ticket commands & actions. */
-    permissions:ODJsonConfig_DefaultSystemPermissions,
+    permissions: ODJsonConfig_DefaultSystemPermissions,
 
     /**Configure dm & log messages for all Open Ticket commands & actions. */
-    messages:ODJsonConfig_DefaultSystemMessages
+    messages: ODJsonConfig_DefaultSystemMessages
 }
 
 /**## ODJsonConfig_DefaultGeneralData `interface`
@@ -288,34 +293,34 @@ export interface ODJsonConfig_DefaultSystem {
  */
 export interface ODJsonConfig_DefaultGeneralData {
     /**This object contains a few URLs and metadata for the config. */
-    _INFO:ODJsonConfig_DefaultInfo,
-    
+    _INFO: ODJsonConfig_DefaultInfo,
+
     /**The token of the bot. (Empty when using `tokenFromENV`) */
-    token:string,
+    token: string,
     /**Use the token from the `.env` file as `TOKEN=xxxxx`. */
-    tokenFromENV:boolean,
+    tokenFromENV: boolean,
 
     /**The main (hex) color used in almost every embed in the bot. */
-    mainColor:discord.ColorResolvable|string,
+    mainColor: discord.ColorResolvable | string,
     /**The language to use. Can be the id of the language or the id without the prefix when using `opendiscord:...`. */
-    language:string,
+    language: string,
     /**The prefix used in all text-commands. */
-    prefix:string,
+    prefix: string,
     /**The id of the discord server where the bot is used. */
-    serverId:string,
+    serverId: string,
     /**A list of discord role ids which are able to access all tickets & commands. */
-    globalAdmins:string[],
+    globalAdmins: string[],
 
     /**Are slash commands enabled? */
-    slashCommands:boolean,
+    slashCommands: boolean,
     /**Are text commands enabled? */
-    textCommands:boolean,
+    textCommands: boolean,
 
     /**All settings related to the status of the bot. */
-    status:ODJsonConfig_DefaultStatusType,
+    status: ODJsonConfig_DefaultStatusType,
 
     /**All settings related to the ticket system. */
-    system:ODJsonConfig_DefaultSystem
+    system: ODJsonConfig_DefaultSystem
 }
 
 /**## ODJsonConfig_DefaultGeneral `default_class`
@@ -333,19 +338,19 @@ export class ODJsonConfig_DefaultGeneral extends ODJsonConfig {
  */
 export interface ODJsonConfig_DefaultOptionType {
     /**The id of this option. */
-    id:string,
+    id: string,
     /**The name of this option. */
-    name:string,
+    name: string,
     /**The description of this option. */
-    description:string,
+    description: string,
     /**The type of this option. This type also determines the other option-specific variables. */
-    type:"ticket"|"website"|"role",
+    type: "ticket" | "website" | "role",
     /**All settings related to the button for the 3 option types. */
-    button:{
+    button: {
         /**The emoji of the button. (can also be empty) */
-        emoji:string,
+        emoji: string,
         /**The label of the button (can also be empty) */
-        label:string
+        label: string
     }
 }
 
@@ -354,11 +359,11 @@ export interface ODJsonConfig_DefaultOptionType {
  */
 export interface ODJsonConfig_DefaultOptionButtonSettingsType {
     /**The emoji of the button. (can also be empty) */
-    emoji:string,
+    emoji: string,
     /**The label of the button (can also be empty) */
-    label:string,
+    label: string,
     /**The color of the button (not available in options with the 'website' type!) */
-    color:ODValidButtonColor
+    color: ODValidButtonColor
 }
 
 /**## ODJsonConfig_DefaultOptionEmbedSettingsType `interface`
@@ -366,28 +371,28 @@ export interface ODJsonConfig_DefaultOptionButtonSettingsType {
  */
 export interface ODJsonConfig_DefaultOptionEmbedSettingsType {
     /**Is this embed enabled? */
-    enabled:boolean,
+    enabled: boolean,
     /**The title of the embed. */
-    title:string,
+    title: string,
     /**The description of this embed. */
-    description:string,
+    description: string,
     /**A custom color for this embed. (The default bot color is used when empty) */
-    customColor:discord.ColorResolvable|string,
+    customColor: discord.ColorResolvable | string,
 
     /**A URL to an image displayed in the embed. */
-    image:string,
+    image: string,
     /**A URL to a thumbnail displayed in the embed. */
-    thumbnail:string,
+    thumbnail: string,
     /**A list of fields displayed in the embed. */
-    fields:{
+    fields: {
         /**The name of this field. */
-        name:string,
+        name: string,
         /**The value of this field. => empty not allowed */
-        value:string,
-        inline:boolean
+        value: string,
+        inline: boolean
     }[],
     /**Enable setting the timestamp of the embed to the current time. */
-    timestamp:boolean
+    timestamp: boolean
 }
 
 /**## ODJsonConfig_DefaultOptionPingSettingsType `interface`
@@ -395,11 +400,11 @@ export interface ODJsonConfig_DefaultOptionEmbedSettingsType {
  */
 export interface ODJsonConfig_DefaultOptionPingSettingsType {
     /**Ping `@here`. */
-    "@here":boolean,
+    "@here": boolean,
     /**Ping `@everyone`. */
-    "@everyone":boolean,
+    "@everyone": boolean,
     /**A list of custom discord role ids to ping. */
-    custom:string[]
+    custom: string[]
 }
 
 /**## ODJsonConfig_DefaultOptionTicketChannelType `interface`
@@ -407,106 +412,106 @@ export interface ODJsonConfig_DefaultOptionPingSettingsType {
  */
 export interface ODJsonConfig_DefaultOptionTicketChannelType {
     /**The prefix used in the name of this ticket channel. */
-    prefix:string,
+    prefix: string,
     /**The type of suffix used in the name of this ticket channel. */
-    suffix:"user-name"|"user-nickname"|"user-id"|"random-number"|"random-hex"|"counter-dynamic"|"counter-fixed",
+    suffix: "user-name" | "user-nickname" | "user-id" | "random-number" | "random-hex" | "counter-dynamic" | "counter-fixed",
     /**An optional discord category id to create this ticket in. */
-    category:string,
+    category: string,
     /**An optional discord category id to move this ticket to when closed. */
-    closedCategory:string,
+    closedCategory: string,
     /**An optional discord category id to create this ticket in when the primary one is full (max. 50 tickets). */
-    backupCategory:string,
+    backupCategory: string,
     /**A list of discord category ids to move this ticket to when claimed by a specific user. */
-    claimedCategory:{
+    claimedCategory: {
         /**The user which claimed the ticket. */
-        user:string,
+        user: string,
         /**The category to move the ticket to when claimed by this user. */
-        category:string
+        category: string
     }[],
     /**The channel topic shown at the top of the channel in discord. */
-    topic:string
+    topic: string
 }
 
 /**## ODJsonConfig_DefaultOptionTicketType `interface`
  * This interface is an object which has all ticket properties for options in the `options.json` config!
  */
 export interface ODJsonConfig_DefaultOptionTicketType extends ODJsonConfig_DefaultOptionType {
-    type:"ticket",
-    button:ODJsonConfig_DefaultOptionButtonSettingsType,
+    type: "ticket",
+    button: ODJsonConfig_DefaultOptionButtonSettingsType,
     /**A list of discord role ids which are able to access this ticket type & use commands. */
-    ticketAdmins:string[],
+    ticketAdmins: string[],
     /**A list of discord role ids which are able to access this ticket type but can't write in the chat. */
-    readonlyAdmins:string[],
+    readonlyAdmins: string[],
     /**When enabled, blacklisted users can still create this ticket type. (used for appeals, etc) */
-    allowCreationByBlacklistedUsers:boolean,
+    allowCreationByBlacklistedUsers: boolean,
     /**A list of valid question ids from the `questions.json` config. */
-    questions:string[],
+    questions: string[],
     /**All settings related to the ticket channel itself. */
-    channel:ODJsonConfig_DefaultOptionTicketChannelType,
+    channel: ODJsonConfig_DefaultOptionTicketChannelType,
     /**All settings related to the message sent in DM to the creator when the ticket is created. */
-    dmMessage:{
+    dmMessage: {
         /**Enable this message. */
-        enabled:boolean,
+        enabled: boolean,
         /**The raw text contents of this message. (empty for embed only) */
-        text:string,
+        text: string,
         /**The embed of this message. */
-        embed:ODJsonConfig_DefaultOptionEmbedSettingsType
+        embed: ODJsonConfig_DefaultOptionEmbedSettingsType
     },
     /**All settings related to the message sent in the ticket channel when the ticket is created. */
-    ticketMessage:{
+    ticketMessage: {
         /**Enable this message. */
-        enabled:boolean,
+        enabled: boolean,
         /**The raw text contents of this message. (empty for embed only) */
-        text:string,
+        text: string,
         /**The embed of this message. */
-        embed:ODJsonConfig_DefaultOptionEmbedSettingsType,
+        embed: ODJsonConfig_DefaultOptionEmbedSettingsType,
         /**Additional ping/mention settings for this ticket channel. */
-        ping:ODJsonConfig_DefaultOptionPingSettingsType
+        ping: ODJsonConfig_DefaultOptionPingSettingsType
     },
     /**All settings related to autoclosing this ticket type. */
-    autoclose:{
+    autoclose: {
         /**Enable autoclosing when the ticket is inactive for the set duration of time. */
-        enableInactiveHours:boolean,
+        enableInactiveHours: boolean,
         /**The amount of hours this ticket is required to be inactive for. */
-        inactiveHours:number,
+        inactiveHours: number,
         /**Enable autoclosing when the creator of the ticket leaves the server. */
-        enableUserLeave:boolean,
+        enableUserLeave: boolean,
         /**Disable autoclosing when the ticket is claimed by someone. */
-        disableOnClaim:boolean
+        disableOnClaim: boolean
     },
     /**All settings related to autodeleting this ticket type. */
-    autodelete:{
+    autodelete: {
         /**Enable autodeleting when the ticket is inactive for the set duration of time. */
-        enableInactiveDays:boolean,
+        enableInactiveDays: boolean,
         /**The amount of days this ticket is required to be inactive for. */
-        inactiveDays:number,
+        inactiveDays: number,
         /**Enable autodeleting when the creator of the ticket leaves the server. */
-        enableUserLeave:boolean,
+        enableUserLeave: boolean,
         /**Disable autodeleting when the ticket is claimed by someone. */
-        disableOnClaim:boolean
+        disableOnClaim: boolean
     },
     /**All settings related to the cooldown of this ticket type. */
-    cooldown:{
+    cooldown: {
         /**Enable cooldown (per user) */
-        enabled:boolean,
+        enabled: boolean,
         /**The amount of minutes a user needs to wait before being able to create a ticket again. */
-        cooldownMinutes:number
+        cooldownMinutes: number
     },
     /**All settings related to the limits of this ticket type. */
-    limits:{
+    limits: {
         /**Enable option ticket limits. */
-        enabled:boolean,
+        enabled: boolean,
         /**The maximum amount of tickets of this type that are allowed in the server at the same time. */
-        globalMaximum:number,
+        globalMaximum: number,
         /**The maximum amount of tickets of this type that a user is allowed to create at the same time. */
-        userMaximum:number
+        userMaximum: number
     },
     /**All settings related to the slow mode of this ticket type. */
-    slowMode:{
+    slowMode: {
         /**Enable channel slow mode. */
-        enabled:boolean,
+        enabled: boolean,
         /**The amount of seconds users need to wait between sending messages. */
-        slowModeSeconds:number
+        slowModeSeconds: number
     }
 }
 
@@ -514,31 +519,31 @@ export interface ODJsonConfig_DefaultOptionTicketType extends ODJsonConfig_Defau
  * This interface is an object which has all website properties for options in the `options.json` config!
  */
 export interface ODJsonConfig_DefaultOptionWebsiteType extends ODJsonConfig_DefaultOptionType {
-    type:"website",
+    type: "website",
     /**The URL this button will point to. */
-    url:string
+    url: string
 }
 
 /**## ODJsonConfig_DefaultOptionRoleType `interface`
  * This interface is an object which has all reaction role properties for options in the `options.json` config!
  */
 export interface ODJsonConfig_DefaultOptionRoleType extends ODJsonConfig_DefaultOptionType {
-    type:"role",
-    button:ODJsonConfig_DefaultOptionButtonSettingsType,
+    type: "role",
+    button: ODJsonConfig_DefaultOptionButtonSettingsType,
     /**All roles which will be affected by this button. */
-    roles:string[],
+    roles: string[],
     /**The mode determines what will happen with the affected roles on the user. */
-    mode:ODRoleUpdateMode,
+    mode: ODRoleUpdateMode,
     /**A list of roles to remove from the user when given at least one of the affected roles. */
-    removeRolesOnAdd:string[],
+    removeRolesOnAdd: string[],
     /**Automatically add these roles when the user joins the server. */
-    addOnMemberJoin:boolean
+    addOnMemberJoin: boolean
 }
 
 /**## ODJsonConfig_DefaultOptionsData `type`
  * All contents of the `options.json` config file.
  */
-export type ODJsonConfig_DefaultOptionsData = (ODJsonConfig_DefaultOptionTicketType|ODJsonConfig_DefaultOptionWebsiteType|ODJsonConfig_DefaultOptionRoleType)[]
+export type ODJsonConfig_DefaultOptionsData = (ODJsonConfig_DefaultOptionTicketType | ODJsonConfig_DefaultOptionWebsiteType | ODJsonConfig_DefaultOptionRoleType)[]
 
 /**## ODJsonConfig_DefaultOptions `default_class`
  * This is a special class that adds type definitions & typescript to the ODJsonConfig class.
@@ -555,34 +560,34 @@ export class ODJsonConfig_DefaultOptions extends ODJsonConfig {
  */
 export interface ODJsonConfig_DefaultPanelEmbedSettingsType {
     /**Is this embed enabled? */
-    enabled:boolean,
+    enabled: boolean,
     /**The title of the embed. */
-    title:string,
+    title: string,
     /**The description of this embed. */
-    description:string,
-    
+    description: string,
+
     /**A custom color for this embed. (The default bot color is used when empty) */
-    customColor:discord.ColorResolvable|string,
+    customColor: discord.ColorResolvable | string,
     /**An optional URL used in the title of the embed. */
-    url:string,
+    url: string,
 
     /**A URL to an image displayed in the embed. */
-    image:string,
+    image: string,
     /**A URL to a thumbnail displayed in the embed. */
-    thumbnail:string,
-    
+    thumbnail: string,
+
     /**The footer of this embed. */
-    footer:string,
+    footer: string,
     /**A list of fields displayed in the embed. (except when using "describeOptionsInEmbedFields") */
-    fields:{
+    fields: {
         /**The name of this field. */
-        name:string,
+        name: string,
         /**The value of this field. => empty not allowed */
-        value:string,
-        inline:boolean
+        value: string,
+        inline: boolean
     }[],
     /**Enable setting the timestamp of the embed to the current time. */
-    timestamp:boolean
+    timestamp: boolean
 }
 
 /**## ODJsonConfig_DefaultPanelSettingsType `interface`
@@ -590,23 +595,23 @@ export interface ODJsonConfig_DefaultPanelEmbedSettingsType {
  */
 export interface ODJsonConfig_DefaultPanelSettingsType {
     /**The placeholder used in the dropdown when enabled. */
-    dropdownPlaceholder:string,
+    dropdownPlaceholder: string,
 
     /**Enable a max tickets warning in the text contents. */
-    enableMaxTicketsWarningInText:boolean,
+    enableMaxTicketsWarningInText: boolean,
     /**Enable a max tickets warning in the embed. */
-    enableMaxTicketsWarningInEmbed:boolean,
+    enableMaxTicketsWarningInEmbed: boolean,
 
     /**The layout/complexity of the describe options feature. */
-    describeOptionsLayout:"simple"|"normal"|"detailed",
+    describeOptionsLayout: "simple" | "normal" | "detailed",
     /**A custom title for the describe options feature. */
-    describeOptionsCustomTitle:string,
+    describeOptionsCustomTitle: string,
     /**Describe the options in the text contents. */
-    describeOptionsInText:boolean,
+    describeOptionsInText: boolean,
     /**Describe the options in the embed fields. */
-    describeOptionsInEmbedFields:boolean,
+    describeOptionsInEmbedFields: boolean,
     /**Describe the options in the embed description. */
-    describeOptionsInEmbedDescription:boolean
+    describeOptionsInEmbedDescription: boolean
 }
 
 /**## ODJsonConfig_DefaultPanelType `interface`
@@ -614,20 +619,20 @@ export interface ODJsonConfig_DefaultPanelSettingsType {
  */
 export interface ODJsonConfig_DefaultPanelType {
     /**The id of this panel. */
-    id:string,
+    id: string,
     /**The name of this panel. */
-    name:string,
+    name: string,
     /**When enabled, the panel uses a dropdown instead of buttons. */
-    dropdown:boolean,
+    dropdown: boolean,
     /**A list of valid options ids from the `options.json` config. */
-    options:string[],
+    options: string[],
 
     /**The raw text contents of this panel. (empty for embed only) */
-    text:string,
+    text: string,
     /**The embed of this panel. */
-    embed:ODJsonConfig_DefaultPanelEmbedSettingsType,
+    embed: ODJsonConfig_DefaultPanelEmbedSettingsType,
     /**A collection of additional settings for extra customisation in a panel. */
-    settings:ODJsonConfig_DefaultPanelSettingsType
+    settings: ODJsonConfig_DefaultPanelSettingsType
 }
 
 /**## ODJsonConfig_DefaultPanelsData `type`
@@ -650,11 +655,11 @@ export class ODJsonConfig_DefaultPanels extends ODJsonConfig {
  */
 export interface ODJSonConfig_DefaultQuestionLengthSettings {
     /**Enable text length verification. */
-    enabled:boolean,
+    enabled: boolean,
     /**The minimum text input length. */
-    min:number,
+    min: number,
     /**The maximum text input length. */
-    max:number
+    max: number
 }
 
 /**## ODJsonConfig_DefaultShortQuestionType `interface`
@@ -662,18 +667,18 @@ export interface ODJSonConfig_DefaultQuestionLengthSettings {
  */
 export interface ODJsonConfig_DefaultShortQuestionType {
     /**The id of this question. */
-    id:string,
+    id: string,
     /**The name of this question. */
-    name:string,
+    name: string,
     /**The type of this question. */
-    type:"short",
+    type: "short",
 
     /**Is this question required? */
-    required:boolean,
+    required: boolean,
     /**A placeholder for the question. */
-    placeholder:string,
+    placeholder: string,
     /**A collection of settings related to length validation in a question. */
-    length:ODJSonConfig_DefaultQuestionLengthSettings
+    length: ODJSonConfig_DefaultQuestionLengthSettings
 }
 
 /**## ODJsonConfig_DefaultParagraphQuestionType `interface`
@@ -681,24 +686,24 @@ export interface ODJsonConfig_DefaultShortQuestionType {
  */
 export interface ODJsonConfig_DefaultParagraphQuestionType {
     /**The id of this question. */
-    id:string,
+    id: string,
     /**The name of this question. */
-    name:string,
+    name: string,
     /**The type of this question. */
-    type:"paragraph",
+    type: "paragraph",
 
     /**Is this question required? */
-    required:boolean,
+    required: boolean,
     /**A placeholder for the question. */
-    placeholder:string,
+    placeholder: string,
     /**A collection of settings related to length validation in a question. */
-    length:ODJSonConfig_DefaultQuestionLengthSettings
+    length: ODJSonConfig_DefaultQuestionLengthSettings
 }
 
 /**## ODJsonConfig_DefaultQuestionsData `type`
  * All contents of the `questions.json` config file.
  */
-export type ODJsonConfig_DefaultQuestionsData = (ODJsonConfig_DefaultShortQuestionType|ODJsonConfig_DefaultParagraphQuestionType)[]
+export type ODJsonConfig_DefaultQuestionsData = (ODJsonConfig_DefaultShortQuestionType | ODJsonConfig_DefaultParagraphQuestionType)[]
 
 /**## ODJsonConfig_DefaultQuestions `default_class`
  * This is a special class that adds type definitions & typescript to the ODJsonConfig class.
@@ -715,22 +720,22 @@ export class ODJsonConfig_DefaultQuestions extends ODJsonConfig {
  */
 export interface ODJsonConfig_DefaultTranscriptsTextLayout {
     /**The layout/complexity of the text transcripts. */
-    layout:"simple"|"normal"|"detailed",
+    layout: "simple" | "normal" | "detailed",
     /**Include stats in the transcript. */
-    includeStats:boolean,
+    includeStats: boolean,
     /**Include user & message ids in the transcript. */
-    includeIds:boolean,
+    includeIds: boolean,
     /**Include embeds in the transcript. */
-    includeEmbeds:boolean,
+    includeEmbeds: boolean,
     /**Include files in the transcript. */
-    includeFiles:boolean,
+    includeFiles: boolean,
     /**Include bot messages in the transcript. */
-    includeBotMessages:boolean,
+    includeBotMessages: boolean,
 
     /**How to name the transcript file? */
-    fileMode:"custom"|"channel-name"|"channel-id"|"user-name"|"user-id",
+    fileMode: "custom" | "channel-name" | "channel-id" | "user-name" | "user-id",
     /**A custom name for the transcript file (when using `"custom"`) */
-    customFileName:string
+    customFileName: string
 }
 
 /**## ODJsonConfig_DefaultTranscriptsHtmlLayout `interface`
@@ -738,46 +743,46 @@ export interface ODJsonConfig_DefaultTranscriptsTextLayout {
  */
 export interface ODJsonConfig_DefaultTranscriptsHtmlLayout {
     /**Settings related to the background. */
-    background:{
+    background: {
         /**Enable a custom background. */
-        enableCustomBackground:boolean,
+        enableCustomBackground: boolean,
         /**The background (hex) color. */
-        backgroundColor:string,
+        backgroundColor: string,
         /**The background image url. */
-        backgroundImage:string
+        backgroundImage: string
     },
     /**Settings related to the header. */
-    header:{
+    header: {
         /**Enable a custom header. */
-        enableCustomHeader:boolean,
+        enableCustomHeader: boolean,
         /**The background (hex) color of the header. */
-        backgroundColor:string,
+        backgroundColor: string,
         /**The deco color (horizontal line) of the header. */
-        decoColor:string,
+        decoColor: string,
         /**The text color of the header. */
-        textColor:string
+        textColor: string
     },
     /**Settings related to the stats section. */
-    stats:{
+    stats: {
         /**Enable a custom stats section. */
-        enableCustomStats:false,
+        enableCustomStats: false,
         /**The background color of the stats section. */
-        backgroundColor:string,
+        backgroundColor: string,
         /**The key text color of the stats section. */
-        keyTextColor:string,
+        keyTextColor: string,
         /**The value text color of the stats section. */
-        valueTextColor:string,
+        valueTextColor: string,
         /**The background color of the hide button in the stats section. */
-        hideBackgroundColor:string,
+        hideBackgroundColor: string,
         /**The text color of the hide button in the stats section. */
-        hideTextColor:string
+        hideTextColor: string
     },
     /**Settings related to the favicon. */
-    favicon:{
+    favicon: {
         /**Enable a custom background. */
-        enableCustomFavicon:boolean,
+        enableCustomFavicon: boolean,
         /**A link to the custom favicon. */
-        imageUrl:string
+        imageUrl: string
     }
 }
 
@@ -786,39 +791,39 @@ export interface ODJsonConfig_DefaultTranscriptsHtmlLayout {
  */
 export interface ODJsonConfig_DefaultTranscriptsData {
     /**All general settings related to transcripts. */
-    general:{
+    general: {
         /**Are transcripts enabled? */
-        enabled:boolean,
+        enabled: boolean,
 
         /**Enable sending the generated transcript in a channel. */
-        enableChannel:boolean,
+        enableChannel: boolean,
         /**Enable sending the generated transcript to the DM of the ticket creator. */
-        enableCreatorDM:boolean,
+        enableCreatorDM: boolean,
         /**Enable sending the generated transcript to the DM of the participants. */
-        enableParticipantDM:boolean,
+        enableParticipantDM: boolean,
         /**Enable sending the generated transcript to the DM of all admins which were active in the ticket. */
-        enableActiveAdminDM:boolean,
+        enableActiveAdminDM: boolean,
         /**Enable sending the generated transcript to the DM of all admins which were assigned to the ticket. */
-        enableEveryAdminDM:boolean,
+        enableEveryAdminDM: boolean,
 
         /**A discord channel id for the `"enableChannel"` setting. */
-        channel:string,
+        channel: string,
         /**Want to use text or HTML transcripts? */
-        mode:"html"|"text"
+        mode: "html" | "text"
     },
     /**All settings related to the embed from the transcripts. (UNIMPLEMENTED!!) */
-    embedSettings:{
+    embedSettings: {
         /**Unimplemented feature */
-        customColor:discord.ColorResolvable|string,
+        customColor: discord.ColorResolvable | string,
         /**Unimplemented feature */
-        listAllParticipants:boolean,
+        listAllParticipants: boolean,
         /**Unimplemented feature */
-        includeTicketStats:boolean
+        includeTicketStats: boolean
     },
     /**The layout of the text transcripts. */
-    textTranscriptStyle:ODJsonConfig_DefaultTranscriptsTextLayout,
+    textTranscriptStyle: ODJsonConfig_DefaultTranscriptsTextLayout,
     /**The layout of the HTML transcripts. */
-    htmlTranscriptStyle:ODJsonConfig_DefaultTranscriptsHtmlLayout
+    htmlTranscriptStyle: ODJsonConfig_DefaultTranscriptsHtmlLayout
 }
 
 

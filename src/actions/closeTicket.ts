@@ -1,7 +1,7 @@
 ///////////////////////////////////////
 //TICKET CLOSING SYSTEM
 ///////////////////////////////////////
-import {opendiscord, api, utilities} from "../index"
+import { opendiscord, api, utilities } from "../index"
 import * as discord from "discord.js"
 
 const generalConfig = opendiscord.configs.get("opendiscord:general")
@@ -10,17 +10,17 @@ const lang = opendiscord.languages
 export const registerActions = async () => {
     opendiscord.actions.add(new api.ODAction("opendiscord:close-ticket"))
     opendiscord.actions.get("opendiscord:close-ticket").workers.add([
-        new api.ODWorker("opendiscord:close-ticket",2,async (instance,params,source,cancel) => {
-            const {guild,channel,user,ticket,reason} = params
+        new api.ODWorker("opendiscord:close-ticket", 2, async (instance, params, source, cancel) => {
+            const { guild, channel, user, ticket, reason } = params
             if (channel.isThread()) throw new api.ODSystemError("Unable to close ticket! Open Ticket doesn't support threads!")
 
-            await opendiscord.events.get("onTicketClose").emit([ticket,user,channel,reason])
-            
+            await opendiscord.events.get("onTicketClose").emit([ticket, user, channel, reason])
+
             //update ticket
             ticket.get("opendiscord:closed").value = true
             ticket.get("opendiscord:closed-by").value = user.id
             ticket.get("opendiscord:closed-on").value = new Date().getTime()
-            
+
             ticket.get("opendiscord:reopened").value = false
             ticket.get("opendiscord:reopened-by").value = null
             ticket.get("opendiscord:reopened-on").value = null
@@ -30,34 +30,48 @@ export const registerActions = async () => {
             ticket.get("opendiscord:busy").value = true
 
             //update stats
-            await opendiscord.stats.get("opendiscord:global").setStat("opendiscord:tickets-closed",1,"increase")
-            await opendiscord.stats.get("opendiscord:user").setStat("opendiscord:tickets-closed",user.id,1,"increase")
+            await opendiscord.stats.get("opendiscord:global").setStat("opendiscord:tickets-closed", 1, "increase")
+            await opendiscord.stats.get("opendiscord:user").setStat("opendiscord:tickets-closed", user.id, 1, "increase")
 
+            //rename channel with closed emoji
+            const closedEmoji = generalConfig.data.system.closedTicketEmoji ?? "🔒"
+            const pinEmoji = ticket.get("opendiscord:pinned").value ? generalConfig.data.system.pinEmoji : ""
+            const priorityEmoji = opendiscord.priorities.getFromPriorityLevel(ticket.get("opendiscord:priority").value).channelEmoji ?? ""
+
+            const originalName = channel.name
+            const newName = closedEmoji + pinEmoji + priorityEmoji + utilities.trimEmojis(channel.name)
+            try {
+                await utilities.timedAwait(channel.setName(newName), 2500, (err) => {
+                    opendiscord.log("Failed to rename channel on ticket close", "error")
+                })
+            } catch (err) {
+                await channel.send((await opendiscord.builders.messages.getSafe("opendiscord:error-channel-rename").build("other", { guild, channel, user, originalName, newName })).message)
+            }
             //update category
-            if (typeof params.allowCategoryChange == "boolean" ? params.allowCategoryChange : true){
+            if (typeof params.allowCategoryChange == "boolean" ? params.allowCategoryChange : true) {
                 const closeCategory = ticket.option.get("opendiscord:channel-category-closed").value
-                if (closeCategory !== ""){
+                if (closeCategory !== "") {
                     try {
-                        channel.setParent(closeCategory,{lockPermissions:false})
+                        channel.setParent(closeCategory, { lockPermissions: false })
                         ticket.get("opendiscord:category-mode").value = "closed"
                         ticket.get("opendiscord:category").value = closeCategory
-                    }catch(e){
-                        opendiscord.log("Unable to move ticket to 'closed category'!","error",[
-                            {key:"channel",value:"#"+channel.name},
-                            {key:"channelid",value:channel.id,hidden:true},
-                            {key:"categoryid",value:closeCategory}
+                    } catch (e) {
+                        opendiscord.log("Unable to move ticket to 'closed category'!", "error", [
+                            { key: "channel", value: "#" + channel.name },
+                            { key: "channelid", value: channel.id, hidden: true },
+                            { key: "categoryid", value: closeCategory }
                         ])
-                        opendiscord.debugfile.writeErrorMessage(new api.ODError(e,"uncaughtException"))
+                        opendiscord.debugfile.writeErrorMessage(new api.ODError(e, "uncaughtException"))
                     }
                 }
             }
 
             //update permissions (non-staff => readonly)
             const permissions: discord.OverwriteResolvable[] = [{
-                type:discord.OverwriteType.Role,
-                id:guild.roles.everyone.id,
-                allow:[],
-                deny:["ViewChannel","SendMessages","ReadMessageHistory"]
+                type: discord.OverwriteType.Role,
+                id: guild.roles.everyone.id,
+                allow: [],
+                deny: ["ViewChannel", "SendMessages", "ReadMessageHistory"]
             }]
             const globalAdmins = opendiscord.configs.get("opendiscord:general").data.globalAdmins
             const optionAdmins = ticket.option.get("opendiscord:admins").value
@@ -65,45 +79,45 @@ export const registerActions = async () => {
 
             globalAdmins.forEach((admin) => {
                 permissions.push({
-                    type:discord.OverwriteType.Role,
-                    id:admin,
-                    allow:["ViewChannel","SendMessages","AddReactions","AttachFiles","SendPolls","ReadMessageHistory","ManageMessages"],
-                    deny:[]
+                    type: discord.OverwriteType.Role,
+                    id: admin,
+                    allow: ["ViewChannel", "SendMessages", "AddReactions", "AttachFiles", "SendPolls", "ReadMessageHistory", "ManageMessages"],
+                    deny: []
                 })
             })
             optionAdmins.forEach((admin) => {
                 if (globalAdmins.includes(admin)) return
                 permissions.push({
-                    type:discord.OverwriteType.Role,
-                    id:admin,
-                    allow:["ViewChannel","SendMessages","AddReactions","AttachFiles","SendPolls","ReadMessageHistory","ManageMessages"],
-                    deny:[]
+                    type: discord.OverwriteType.Role,
+                    id: admin,
+                    allow: ["ViewChannel", "SendMessages", "AddReactions", "AttachFiles", "SendPolls", "ReadMessageHistory", "ManageMessages"],
+                    deny: []
                 })
             })
             readonlyAdmins.forEach((admin) => {
                 if (globalAdmins.includes(admin)) return
                 if (optionAdmins.includes(admin)) return
                 permissions.push({
-                    type:discord.OverwriteType.Role,
-                    id:admin,
-                    allow:["ViewChannel","ReadMessageHistory"],
-                    deny:["SendMessages","AddReactions","AttachFiles","SendPolls"]
+                    type: discord.OverwriteType.Role,
+                    id: admin,
+                    allow: ["ViewChannel", "ReadMessageHistory"],
+                    deny: ["SendMessages", "AddReactions", "AttachFiles", "SendPolls"]
                 })
             })
             ticket.get("opendiscord:participants").value.forEach((participant) => {
                 //all participants that aren't roles/admins => readonly (OR non-viewable when enabled)
-                if (participant.type == "user"){
+                if (participant.type == "user") {
                     if (generalConfig.data.system.removeParticipantsOnClose) permissions.push({
-                        type:discord.OverwriteType.Member,
-                        id:participant.id,
-                        allow:[],
-                        deny:["SendMessages","AddReactions","AttachFiles","SendPolls","ViewChannel","ReadMessageHistory"]
+                        type: discord.OverwriteType.Member,
+                        id: participant.id,
+                        allow: [],
+                        deny: ["SendMessages", "AddReactions", "AttachFiles", "SendPolls", "ViewChannel", "ReadMessageHistory"]
                     })
                     else permissions.push({
-                        type:discord.OverwriteType.Member,
-                        id:participant.id,
-                        allow:["ViewChannel","ReadMessageHistory"],
-                        deny:["SendMessages","AddReactions","AttachFiles","SendPolls"]
+                        type: discord.OverwriteType.Member,
+                        id: participant.id,
+                        allow: ["ViewChannel", "ReadMessageHistory"],
+                        deny: ["SendMessages", "AddReactions", "AttachFiles", "SendPolls"]
                     })
                 }
             })
@@ -111,55 +125,55 @@ export const registerActions = async () => {
 
             //update ticket message
             const ticketMessage = await opendiscord.tickets.getTicketMessage(ticket)
-            if (ticketMessage){
-                try{
-                    ticketMessage.edit((await opendiscord.builders.messages.getSafe("opendiscord:ticket-message").build("other",{guild,channel,user,ticket})).message)
-                }catch(e){
-                    opendiscord.log("Unable to edit ticket message on ticket closing!","error",[
-                        {key:"channel",value:"#"+channel.name},
-                        {key:"channelid",value:channel.id,hidden:true},
-                        {key:"messageid",value:ticketMessage.id},
-                        {key:"option",value:ticket.option.id.value}
+            if (ticketMessage) {
+                try {
+                    ticketMessage.edit((await opendiscord.builders.messages.getSafe("opendiscord:ticket-message").build("other", { guild, channel, user, ticket })).message)
+                } catch (e) {
+                    opendiscord.log("Unable to edit ticket message on ticket closing!", "error", [
+                        { key: "channel", value: "#" + channel.name },
+                        { key: "channelid", value: channel.id, hidden: true },
+                        { key: "messageid", value: ticketMessage.id },
+                        { key: "option", value: ticket.option.id.value }
                     ])
-                    opendiscord.debugfile.writeErrorMessage(new api.ODError(e,"uncaughtException"))
+                    opendiscord.debugfile.writeErrorMessage(new api.ODError(e, "uncaughtException"))
                 }
             }
 
             //reply with new message
-            if (params.sendMessage) await channel.send((await opendiscord.builders.messages.getSafe("opendiscord:close-message").build(source,{guild,channel,user,ticket,reason})).message)
+            if (params.sendMessage) await channel.send((await opendiscord.builders.messages.getSafe("opendiscord:close-message").build(source, { guild, channel, user, ticket, reason })).message)
             ticket.get("opendiscord:busy").value = false
-            await opendiscord.events.get("afterTicketClosed").emit([ticket,user,channel,reason])
+            await opendiscord.events.get("afterTicketClosed").emit([ticket, user, channel, reason])
 
             //update channel topic
-            await opendiscord.actions.get("opendiscord:update-ticket-topic").run("ticket-action",{guild,channel,user,ticket,sendMessage:false,newTopic:null})
+            await opendiscord.actions.get("opendiscord:update-ticket-topic").run("ticket-action", { guild, channel, user, ticket, sendMessage: false, newTopic: null })
         }),
-        new api.ODWorker("opendiscord:discord-logs",1,async (instance,params,source,cancel) => {
-            const {guild,channel,user,ticket,reason} = params
+        new api.ODWorker("opendiscord:discord-logs", 1, async (instance, params, source, cancel) => {
+            const { guild, channel, user, ticket, reason } = params
 
             //to logs
-            if (generalConfig.data.system.logs.enabled && generalConfig.data.system.messages.closing.logs){
+            if (generalConfig.data.system.logs.enabled && generalConfig.data.system.messages.closing.logs) {
                 const logChannel = opendiscord.posts.get("opendiscord:logs")
-                if (logChannel) logChannel.send(await opendiscord.builders.messages.getSafe("opendiscord:ticket-action-logs").build(source,{guild,channel,user,ticket,mode:"close",reason,additionalData:null}))
+                if (logChannel) logChannel.send(await opendiscord.builders.messages.getSafe("opendiscord:ticket-action-logs").build(source, { guild, channel, user, ticket, mode: "close", reason, additionalData: null }))
             }
 
             //to dm
-            const creator = await opendiscord.tickets.getTicketUser(ticket,"creator")
-            if (creator && generalConfig.data.system.messages.closing.dm) await opendiscord.client.sendUserDm(creator,await opendiscord.builders.messages.getSafe("opendiscord:ticket-action-dm").build(source,{guild,channel,user,ticket,mode:"close",reason,additionalData:null}))
+            const creator = await opendiscord.tickets.getTicketUser(ticket, "creator")
+            if (creator && generalConfig.data.system.messages.closing.dm) await opendiscord.client.sendUserDm(creator, await opendiscord.builders.messages.getSafe("opendiscord:ticket-action-dm").build(source, { guild, channel, user, ticket, mode: "close", reason, additionalData: null }))
         }),
-        new api.ODWorker("opendiscord:logs",0,(instance,params,source,cancel) => {
-            const {guild,channel,user,ticket} = params
+        new api.ODWorker("opendiscord:logs", 0, (instance, params, source, cancel) => {
+            const { guild, channel, user, ticket } = params
 
-            opendiscord.log(user.displayName+" closed a ticket!","info",[
-                {key:"user",value:user.username},
-                {key:"userid",value:user.id,hidden:true},
-                {key:"channel",value:"#"+channel.name},
-                {key:"channelid",value:channel.id,hidden:true},
-                {key:"reason",value:params.reason ?? "/"},
-                {key:"method",value:source}
+            opendiscord.log(user.displayName + " closed a ticket!", "info", [
+                { key: "user", value: user.username },
+                { key: "userid", value: user.id, hidden: true },
+                { key: "channel", value: "#" + channel.name },
+                { key: "channelid", value: channel.id, hidden: true },
+                { key: "reason", value: params.reason ?? "/" },
+                { key: "method", value: source }
             ])
         })
     ])
-    opendiscord.actions.get("opendiscord:close-ticket").workers.backupWorker = new api.ODWorker("opendiscord:cancel-busy",0,(instance,params) => {
+    opendiscord.actions.get("opendiscord:close-ticket").workers.backupWorker = new api.ODWorker("opendiscord:cancel-busy", 0, (instance, params) => {
         //set busy to false in case of crash or cancel
         params.ticket.get("opendiscord:busy").value = false
     })
@@ -167,168 +181,168 @@ export const registerActions = async () => {
 
 export const registerVerifyBars = async () => {
     //CLOSE TICKET TICKET MESSAGE
-    opendiscord.verifybars.add(new api.ODVerifyBar("opendiscord:close-ticket-ticket-message",opendiscord.builders.messages.getSafe("opendiscord:verifybar-ticket-message"),!generalConfig.data.system.disableVerifyBars))
+    opendiscord.verifybars.add(new api.ODVerifyBar("opendiscord:close-ticket-ticket-message", opendiscord.builders.messages.getSafe("opendiscord:verifybar-ticket-message"), !generalConfig.data.system.disableVerifyBars))
     opendiscord.verifybars.get("opendiscord:close-ticket-ticket-message").success.add([
-        new api.ODWorker("opendiscord:close-ticket",0,async (instance,params,source,cancel) => {
-            const {user,member,channel,guild} = instance
-                                    
+        new api.ODWorker("opendiscord:close-ticket", 0, async (instance, params, source, cancel) => {
+            const { user, member, channel, guild } = instance
+
             //check permissions
-            const permsResult = await opendiscord.permissions.checkCommandPerms(generalConfig.data.system.permissions.close,"support",user,member,channel,guild)
-            if (!permsResult.hasPerms){
-                if (permsResult.reason == "not-in-server") await instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-not-in-guild").build("button",{channel,user}))
-                else await instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-no-permissions").build("button",{guild,channel,user,permissions:["support"]}))
+            const permsResult = await opendiscord.permissions.checkCommandPerms(generalConfig.data.system.permissions.close, "support", user, member, channel, guild)
+            if (!permsResult.hasPerms) {
+                if (permsResult.reason == "not-in-server") await instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-not-in-guild").build("button", { channel, user }))
+                else await instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-no-permissions").build("button", { guild, channel, user, permissions: ["support"] }))
                 return cancel()
             }
 
             //check is in guild/server
-            if (!guild){
-                instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-not-in-guild").build("button",{channel,user}))
+            if (!guild) {
+                instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-not-in-guild").build("button", { channel, user }))
                 return cancel()
             }
 
             //check if ticket exists
             const ticket = opendiscord.tickets.get(channel.id)
-            if (!ticket || channel.isDMBased()){
-                instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-ticket-unknown").build("button",{guild,channel,user}))
+            if (!ticket || channel.isDMBased()) {
+                instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-ticket-unknown").build("button", { guild, channel, user }))
                 return cancel()
             }
 
             //return when already closed
-            if (ticket.get("opendiscord:closed").value){
-                instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error").build("button",{guild,channel,user,error:lang.getTranslation("errors.actionInvalid.close"),layout:"simple"}))
+            if (ticket.get("opendiscord:closed").value) {
+                instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error").build("button", { guild, channel, user, error: lang.getTranslation("errors.actionInvalid.close"), layout: "simple" }))
                 return cancel()
             }
 
             //return when busy
-            if (ticket.get("opendiscord:busy").value){
-                instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-ticket-busy").build("button",{guild,channel,user}))
+            if (ticket.get("opendiscord:busy").value) {
+                instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-ticket-busy").build("button", { guild, channel, user }))
                 return cancel()
             }
 
             //return when not allowed because of missing messages
-            if (!permsResult.isAdmin && (!generalConfig.data.system.allowCloseBeforeMessage || !generalConfig.data.system.allowCloseBeforeAdminMessage)){
-                const analysis = await opendiscord.transcripts.collector.ticketUserMessagesAnalysis(ticket,guild,channel)
-                if (analysis && !generalConfig.data.system.allowCloseBeforeMessage && analysis.totalMessages < 1){
-                    instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error").build("button",{guild,channel,user,layout:"simple",error:lang.getTranslation("errors.descriptions.closeBeforeMessage"),customTitle:lang.getTranslation("errors.titles.noPermissions")}))
+            if (!permsResult.isAdmin && (!generalConfig.data.system.allowCloseBeforeMessage || !generalConfig.data.system.allowCloseBeforeAdminMessage)) {
+                const analysis = await opendiscord.transcripts.collector.ticketUserMessagesAnalysis(ticket, guild, channel)
+                if (analysis && !generalConfig.data.system.allowCloseBeforeMessage && analysis.totalMessages < 1) {
+                    instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error").build("button", { guild, channel, user, layout: "simple", error: lang.getTranslation("errors.descriptions.closeBeforeMessage"), customTitle: lang.getTranslation("errors.titles.noPermissions") }))
                     return cancel()
                 }
-                if (analysis && !generalConfig.data.system.allowCloseBeforeAdminMessage && analysis.adminMessages < 1){
-                    instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error").build("button",{guild,channel,user,layout:"simple",error:lang.getTranslation("errors.descriptions.closeBeforeAdminMessage"),customTitle:lang.getTranslation("errors.titles.noPermissions")}))
+                if (analysis && !generalConfig.data.system.allowCloseBeforeAdminMessage && analysis.adminMessages < 1) {
+                    instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error").build("button", { guild, channel, user, layout: "simple", error: lang.getTranslation("errors.descriptions.closeBeforeAdminMessage"), customTitle: lang.getTranslation("errors.titles.noPermissions") }))
                     return cancel()
                 }
             }
 
             //start closing ticket
-            if (params.data == "reason"){
+            if (params.data == "reason") {
                 //close with reason
-                instance.modal(await opendiscord.builders.modals.getSafe("opendiscord:close-ticket-reason").build("ticket-message",{guild,channel,user,ticket}))
-            }else{
+                instance.modal(await opendiscord.builders.modals.getSafe("opendiscord:close-ticket-reason").build("ticket-message", { guild, channel, user, ticket }))
+            } else {
                 //close without reason
-                await instance.defer("update",false)
-                await opendiscord.actions.get("opendiscord:close-ticket").run("ticket-message",{guild,channel,user,ticket,reason:null,sendMessage:true})
-                await instance.update(await opendiscord.builders.messages.getSafe("opendiscord:ticket-message").build("other",{guild,channel,user,ticket}))
+                await instance.defer("update", false)
+                await opendiscord.actions.get("opendiscord:close-ticket").run("ticket-message", { guild, channel, user, ticket, reason: null, sendMessage: true })
+                await instance.update(await opendiscord.builders.messages.getSafe("opendiscord:ticket-message").build("other", { guild, channel, user, ticket }))
             }
         })
     ])
     opendiscord.verifybars.get("opendiscord:close-ticket-ticket-message").failure.add([
-        new api.ODWorker("opendiscord:back-to-ticket-message",0,async (instance,params,source,cancel) => {
-            const {guild,channel,user} = instance
-            if (!guild){
-                instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-not-in-guild").build("button",{channel,user}))
+        new api.ODWorker("opendiscord:back-to-ticket-message", 0, async (instance, params, source, cancel) => {
+            const { guild, channel, user } = instance
+            if (!guild) {
+                instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-not-in-guild").build("button", { channel, user }))
                 return cancel()
             }
             const ticket = opendiscord.tickets.get(channel.id)
-            if (!ticket || channel.isDMBased()){
-                instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-ticket-unknown").build("button",{guild,channel,user}))
+            if (!ticket || channel.isDMBased()) {
+                instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-ticket-unknown").build("button", { guild, channel, user }))
                 return cancel()
             }
 
-            await instance.update(await opendiscord.builders.messages.getSafe("opendiscord:ticket-message").build("other",{guild,channel,user,ticket}))
+            await instance.update(await opendiscord.builders.messages.getSafe("opendiscord:ticket-message").build("other", { guild, channel, user, ticket }))
         })
     ])
 
     //CLOSE TICKET REOPEN MESSAGE
-    opendiscord.verifybars.add(new api.ODVerifyBar("opendiscord:close-ticket-reopen-message",opendiscord.builders.messages.getSafe("opendiscord:verifybar-reopen-message"),!generalConfig.data.system.disableVerifyBars))
+    opendiscord.verifybars.add(new api.ODVerifyBar("opendiscord:close-ticket-reopen-message", opendiscord.builders.messages.getSafe("opendiscord:verifybar-reopen-message"), !generalConfig.data.system.disableVerifyBars))
     opendiscord.verifybars.get("opendiscord:close-ticket-reopen-message").success.add([
-        new api.ODWorker("opendiscord:close-ticket",0,async (instance,params,source,cancel) => {
-            const {user,member,channel,guild} = instance
-                                    
+        new api.ODWorker("opendiscord:close-ticket", 0, async (instance, params, source, cancel) => {
+            const { user, member, channel, guild } = instance
+
             //check permissions
-            const permsResult = await opendiscord.permissions.checkCommandPerms(generalConfig.data.system.permissions.close,"support",user,member,channel,guild)
-            if (!permsResult.hasPerms){
-                if (permsResult.reason == "not-in-server") await instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-not-in-guild").build("button",{channel,user}))
-                else await instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-no-permissions").build("button",{guild,channel,user,permissions:["support"]}))
+            const permsResult = await opendiscord.permissions.checkCommandPerms(generalConfig.data.system.permissions.close, "support", user, member, channel, guild)
+            if (!permsResult.hasPerms) {
+                if (permsResult.reason == "not-in-server") await instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-not-in-guild").build("button", { channel, user }))
+                else await instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-no-permissions").build("button", { guild, channel, user, permissions: ["support"] }))
                 return cancel()
             }
 
             //check is in guild/server
-            if (!guild){
-                instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-not-in-guild").build("button",{channel,user}))
+            if (!guild) {
+                instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-not-in-guild").build("button", { channel, user }))
                 return cancel()
             }
 
             //check if ticket exists
             const ticket = opendiscord.tickets.get(channel.id)
-            if (!ticket || channel.isDMBased()){
-                instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-ticket-unknown").build("button",{guild,channel,user}))
+            if (!ticket || channel.isDMBased()) {
+                instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-ticket-unknown").build("button", { guild, channel, user }))
                 return cancel()
             }
 
             //return when already closed
-            if (ticket.get("opendiscord:closed").value){
-                instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error").build("button",{guild,channel,user,error:lang.getTranslation("errors.actionInvalid.close"),layout:"simple"}))
+            if (ticket.get("opendiscord:closed").value) {
+                instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error").build("button", { guild, channel, user, error: lang.getTranslation("errors.actionInvalid.close"), layout: "simple" }))
                 return cancel()
             }
 
             //return when busy
-            if (ticket.get("opendiscord:busy").value){
-                instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-ticket-busy").build("button",{guild,channel,user}))
+            if (ticket.get("opendiscord:busy").value) {
+                instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-ticket-busy").build("button", { guild, channel, user }))
                 return cancel()
             }
 
             //return when not allowed because of missing messages
-            if (!permsResult.isAdmin && (!generalConfig.data.system.allowCloseBeforeMessage || !generalConfig.data.system.allowCloseBeforeAdminMessage)){
-                const analysis = await opendiscord.transcripts.collector.ticketUserMessagesAnalysis(ticket,guild,channel)
-                if (analysis && !generalConfig.data.system.allowCloseBeforeMessage && analysis.totalMessages < 1){
-                    instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error").build("button",{guild,channel,user,layout:"simple",error:lang.getTranslation("errors.descriptions.closeBeforeMessage"),customTitle:lang.getTranslation("errors.titles.noPermissions")}))
+            if (!permsResult.isAdmin && (!generalConfig.data.system.allowCloseBeforeMessage || !generalConfig.data.system.allowCloseBeforeAdminMessage)) {
+                const analysis = await opendiscord.transcripts.collector.ticketUserMessagesAnalysis(ticket, guild, channel)
+                if (analysis && !generalConfig.data.system.allowCloseBeforeMessage && analysis.totalMessages < 1) {
+                    instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error").build("button", { guild, channel, user, layout: "simple", error: lang.getTranslation("errors.descriptions.closeBeforeMessage"), customTitle: lang.getTranslation("errors.titles.noPermissions") }))
                     return cancel()
                 }
-                if (analysis && !generalConfig.data.system.allowCloseBeforeAdminMessage && analysis.adminMessages < 1){
-                    instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error").build("button",{guild,channel,user,layout:"simple",error:lang.getTranslation("errors.descriptions.closeBeforeAdminMessage"),customTitle:lang.getTranslation("errors.titles.noPermissions")}))
+                if (analysis && !generalConfig.data.system.allowCloseBeforeAdminMessage && analysis.adminMessages < 1) {
+                    instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error").build("button", { guild, channel, user, layout: "simple", error: lang.getTranslation("errors.descriptions.closeBeforeAdminMessage"), customTitle: lang.getTranslation("errors.titles.noPermissions") }))
                     return cancel()
                 }
             }
 
             //start closing ticket
-            if (params.data == "reason"){
+            if (params.data == "reason") {
                 //close with reason
-                instance.modal(await opendiscord.builders.modals.getSafe("opendiscord:close-ticket-reason").build("reopen-message",{guild,channel,user,ticket}))
-            }else{
+                instance.modal(await opendiscord.builders.modals.getSafe("opendiscord:close-ticket-reason").build("reopen-message", { guild, channel, user, ticket }))
+            } else {
                 //close without reason
-                await instance.defer("update",false)
-                await opendiscord.actions.get("opendiscord:close-ticket").run("reopen-message",{guild,channel,user,ticket,reason:null,sendMessage:false})
-                await instance.update(await opendiscord.builders.messages.getSafe("opendiscord:close-message").build("reopen-message",{guild,channel,user,ticket,reason:null}))
+                await instance.defer("update", false)
+                await opendiscord.actions.get("opendiscord:close-ticket").run("reopen-message", { guild, channel, user, ticket, reason: null, sendMessage: false })
+                await instance.update(await opendiscord.builders.messages.getSafe("opendiscord:close-message").build("reopen-message", { guild, channel, user, ticket, reason: null }))
             }
         })
     ])
     opendiscord.verifybars.get("opendiscord:close-ticket-reopen-message").failure.add([
-        new api.ODWorker("opendiscord:back-to-reopen-message",0,async (instance,params,source,cancel) => {
-            const {guild,channel,user} = instance
-            const {verifybarMessage} = params
-            if (!guild){
-                instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-not-in-guild").build("button",{channel,user}))
+        new api.ODWorker("opendiscord:back-to-reopen-message", 0, async (instance, params, source, cancel) => {
+            const { guild, channel, user } = instance
+            const { verifybarMessage } = params
+            if (!guild) {
+                instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-not-in-guild").build("button", { channel, user }))
                 return cancel()
             }
             const ticket = opendiscord.tickets.get(channel.id)
-            if (!ticket || channel.isDMBased()){
-                instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-ticket-unknown").build("button",{guild,channel,user}))
+            if (!ticket || channel.isDMBased()) {
+                instance.reply(await opendiscord.builders.messages.getSafe("opendiscord:error-ticket-unknown").build("button", { guild, channel, user }))
                 return cancel()
             }
 
             const rawReason = (verifybarMessage && verifybarMessage.embeds[0] && verifybarMessage.embeds[0].fields[0]) ? verifybarMessage.embeds[0].fields[0].value : null
-            const reason = (rawReason == null) ? null : rawReason.substring(3,rawReason.length-3)
+            const reason = (rawReason == null) ? null : rawReason.substring(3, rawReason.length - 3)
 
-            await instance.update(await opendiscord.builders.messages.getSafe("opendiscord:reopen-message").build("other",{guild,channel,user,ticket,reason}))
+            await instance.update(await opendiscord.builders.messages.getSafe("opendiscord:reopen-message").build("other", { guild, channel, user, ticket, reason }))
         })
     ])
 }

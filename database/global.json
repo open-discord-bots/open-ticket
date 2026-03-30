@@ -1,1 +1,7 @@
-[]
+[
+    {"category":"opendiscord:last-version","key":"opendiscord:version","value":"v4.1.3"},
+    {"category":"opendiscord:last-version","key":"opendiscord:api","value":"v1.0.0"},
+    {"category":"opendiscord:last-version","key":"opendiscord:transcripts","value":"v2.1.0"},
+    {"category":"opendiscord:last-version","key":"opendiscord:livestatus","value":"v2.0.0"},
+    {"category":"opendiscord:last-version","key":"opendiscord:last-version","value":"v4.1.3"}
+]
