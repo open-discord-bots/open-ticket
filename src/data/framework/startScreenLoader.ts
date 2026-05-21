@@ -1,7 +1,7 @@
-import {opendiscord, api, utilities} from "../../index"
+import {opendiscord, api, utilities} from "../../index.js"
 import ansis from "ansis"
 
-export const loadAllStartScreenComponents = async () => {
+export async function loadAllStartScreenComponents(){
     //LOGO
     opendiscord.startscreen.add(new api.ODStartScreenLogoComponent("opendiscord:logo",1000,[
         "   ██████╗ ██████╗ ███████╗███╗   ██╗    ████████╗██╗ ██████╗██╗  ██╗███████╗████████╗  ",

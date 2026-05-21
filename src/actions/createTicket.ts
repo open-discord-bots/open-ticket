@@ -1,63 +1,36 @@
 ///////////////////////////////////////
 //TICKET CREATION SYSTEM
 ///////////////////////////////////////
-import {opendiscord, api, utilities} from "../index"
+import {opendiscord, api, utilities, openticketUtils} from "../index.js"
 import * as discord from "discord.js"
 
 const generalConfig = opendiscord.configs.get("opendiscord:general")
 const lang = opendiscord.languages
+const interactiveMsgState = opendiscord.states.get("opendiscord:interactive-message")
 
-export const registerActions = async () => {
+export async function registerActions(){
     opendiscord.actions.add(new api.ODAction("opendiscord:create-ticket"))
     opendiscord.actions.get("opendiscord:create-ticket").workers.add([
-        new api.ODWorker("opendiscord:create-ticket",3,async (instance,params,source,cancel) => {
+        new api.ODWorker("opendiscord:create-ticket",3,async (instance,params,origin,cancel) => {
             const {guild,user,answers,option} = params
 
             await opendiscord.events.get("onTicketCreate").emit([user])
             await opendiscord.events.get("onTicketChannelCreation").emit([option,user])
 
             //get channel properties
-            const channelPrefix = option.get("opendiscord:channel-prefix").value
-            const channelCategory = option.get("opendiscord:channel-category").value
-            const channelBackupCategory = option.get("opendiscord:channel-category-backup").value
             const channelTopicText = option.get("opendiscord:channel-topic").value
-            const channelSuffix = await opendiscord.options.suffix.getSuffixFromOption(option,user,guild)
-            const channelName = channelPrefix+channelSuffix
 
-            //handle category
-            let category: string|null = null
-            let categoryMode: "backup"|"normal"|null = null
-            if (channelCategory != ""){
-                //category enabled
-                const normalCategory = await opendiscord.client.fetchGuildCategoryChannel(guild,channelCategory)
-                if (!normalCategory){
-                    //default category was not found
-                    opendiscord.log("Ticket Creation Error: Unable to find category! #1","error",[
-                        {key:"categoryid",value:channelCategory},
-                        {key:"backup",value:"false"}
-                    ])
-                }else{
-                    //default category was found
-                    if (normalCategory.children.cache.size >= 50 && channelBackupCategory != ""){
-                        //use backup category
-                        const backupCategory = await opendiscord.client.fetchGuildCategoryChannel(guild,channelBackupCategory)
-                        if (!backupCategory){
-                            //default category was not found
-                            opendiscord.log("Ticket Creation Error: Unable to find category! #2","error",[
-                                {key:"categoryid",value:channelBackupCategory},
-                                {key:"backup",value:"true"}
-                            ])
-                        }else{
-                            category = backupCategory.id
-                            categoryMode = "backup"
-                        }
-                    }else{
-                        //use default category
-                        category = normalCategory.id
-                        categoryMode = "normal"
-                    }
-                }
-            }
+            //calculate channel name
+            const channelNameResult = await opendiscord.actions.get("opendiscord:calculate-ticket-name").run("create-ticket",{guild,user,option,channel:null,ticket:null,currentChannelName:null})
+            if (!channelNameResult) return opendiscord.log("Ticket Creation Error: Unable to calculate ticket name.","error")
+            const channelName = (channelNameResult.shouldChangeName && typeof channelNameResult.newChannelName !== "undefined") ? channelNameResult.newChannelName : "ot-unnamed-ticket"
+            const channelSuffix = (typeof channelNameResult.newChannelSuffix !== "undefined") ? channelNameResult.newChannelSuffix : "unknown"
+            
+            //calculate category
+            const categoryResult = await opendiscord.actions.get("opendiscord:calculate-ticket-category").run("create-ticket",{guild,user,option,channel:null,ticket:null,currentCategoryId:null})
+            if (!categoryResult) return opendiscord.log("Ticket Creation Error: Unable to calculate ticket category.","error")
+            const ticketCategoryId = (categoryResult.shouldChangeCategory && typeof categoryResult.newCategoryId !== "undefined") ? categoryResult.newCategoryId : undefined
+            const ticketCategoryMode = (categoryResult.shouldChangeCategory && typeof categoryResult.newCategoryMode !== "undefined") ? categoryResult.newCategoryMode : undefined
 
             //handle permissions
             const permissions: discord.OverwriteResolvable[] = [{
@@ -118,15 +91,15 @@ export const registerActions = async () => {
             
             //handle channel topic
             const channelTopics: string[] = []
-            if (generalConfig.data.system.channelTopic.showOptionName) channelTopics.push(option.get("opendiscord:name").value)
-            if (generalConfig.data.system.channelTopic.showOptionDescription) channelTopics.push(option.get("opendiscord:description").value)
-            if (generalConfig.data.system.channelTopic.showOptionTopic) channelTopics.push(channelTopicText)
-            if (generalConfig.data.system.channelTopic.showPriority) channelTopics.push("**"+lang.getTranslation("params.uppercase.priority")+":** "+opendiscord.priorities.get("opendiscord:none").renderDisplayName())
-            if (generalConfig.data.system.channelTopic.showClosed) channelTopics.push("**"+lang.getTranslation("params.uppercase.status")+":** "+lang.getTranslation("params.uppercase.open"))
-            if (generalConfig.data.system.channelTopic.showClaimed) channelTopics.push("**"+lang.getTranslation("stats.properties.claimedBy")+":** "+lang.getTranslation("params.uppercase.noone"))
-            if (generalConfig.data.system.channelTopic.showPinned) channelTopics.push("**"+lang.getTranslation("params.uppercase.pinned")+":** "+lang.getTranslation("params.uppercase.no"))
-            if (generalConfig.data.system.channelTopic.showCreator) channelTopics.push("**"+lang.getTranslation("params.uppercase.creator")+":** "+discord.userMention(user.id))
-            if (generalConfig.data.system.channelTopic.showParticipants) channelTopics.push("**"+lang.getTranslation("params.uppercase.participants")+":** "+participants.map((p) => (p.type == "user") ? discord.userMention(p.id) : discord.roleMention(p.id)).join(", "))
+            if (generalConfig.data.ticketSystem.channelTopic.showOptionName) channelTopics.push(option.get("opendiscord:name").value)
+            if (generalConfig.data.ticketSystem.channelTopic.showOptionDescription) channelTopics.push(option.get("opendiscord:description").value)
+            if (generalConfig.data.ticketSystem.channelTopic.showOptionTopic) channelTopics.push(channelTopicText)
+            if (generalConfig.data.ticketSystem.channelTopic.showPriority) channelTopics.push("**"+lang.getTranslation("params.uppercase.priority")+":** "+opendiscord.priorities.get("opendiscord:none").renderDisplayName())
+            if (generalConfig.data.ticketSystem.channelTopic.showClosed) channelTopics.push("**"+lang.getTranslation("params.uppercase.status")+":** "+lang.getTranslation("params.uppercase.open"))
+            if (generalConfig.data.ticketSystem.channelTopic.showClaimed) channelTopics.push("**"+lang.getTranslation("stats.properties.claimedBy")+":** "+lang.getTranslation("params.uppercase.noone"))
+            if (generalConfig.data.ticketSystem.channelTopic.showPinned) channelTopics.push("**"+lang.getTranslation("params.uppercase.pinned")+":** "+lang.getTranslation("params.uppercase.no"))
+            if (generalConfig.data.ticketSystem.channelTopic.showCreator) channelTopics.push("**"+lang.getTranslation("params.uppercase.creator")+":** "+discord.userMention(user.id))
+            if (generalConfig.data.ticketSystem.channelTopic.showParticipants) channelTopics.push("**"+lang.getTranslation("params.uppercase.participants")+":** "+participants.map((p) => (p.type == "user") ? discord.userMention(p.id) : discord.roleMention(p.id)).join(", "))
 
             //create channel
             const channel = await guild.channels.create({
@@ -134,7 +107,7 @@ export const registerActions = async () => {
                 name:channelName,
                 nsfw:false,
                 topic:(channelTopics.length > 0) ? channelTopics.join(" • ") : undefined,
-                parent:category,
+                parent:ticketCategoryId,
                 reason:"Ticket Created By "+user.displayName,
                 permissionOverwrites:permissions,
                 rateLimitPerUser:slowMode
@@ -148,6 +121,7 @@ export const registerActions = async () => {
                 new api.ODTicketData("opendiscord:ticket-message",null),
                 new api.ODTicketData("opendiscord:participants",participants),
                 new api.ODTicketData("opendiscord:channel-suffix",channelSuffix),
+                new api.ODTicketData("opendiscord:channel-renamed",null),
                 new api.ODTicketData("opendiscord:previous-creators",[]),
                 
                 new api.ODTicketData("opendiscord:open",true),
@@ -167,8 +141,8 @@ export const registerActions = async () => {
                 new api.ODTicketData("opendiscord:pinned-on",null),
                 new api.ODTicketData("opendiscord:for-deletion",false),
 
-                new api.ODTicketData("opendiscord:category",category),
-                new api.ODTicketData("opendiscord:category-mode",categoryMode),
+                new api.ODTicketData("opendiscord:category",ticketCategoryId ?? null),
+                new api.ODTicketData("opendiscord:category-mode",ticketCategoryMode ?? null),
 
                 new api.ODTicketData("opendiscord:autoclose-enabled",option.get("opendiscord:autoclose-enable-hours").value),
                 new api.ODTicketData("opendiscord:autoclose-hours",(option.get("opendiscord:autoclose-enable-hours").value ? option.get("opendiscord:autoclose-hours").value : 0)),
@@ -184,8 +158,8 @@ export const registerActions = async () => {
             ])
 
             //manage stats
-            await opendiscord.stats.get("opendiscord:global").setStat("opendiscord:tickets-created",1,"increase")
-            await opendiscord.stats.get("opendiscord:user").setStat("opendiscord:tickets-created",user.id,1,"increase")
+            await opendiscord.statistics.get("opendiscord:global").setStat("opendiscord:tickets-created",1,"increase")
+            await opendiscord.statistics.get("opendiscord:user").setStat("opendiscord:tickets-created",user.id,1,"increase")
 
             //manage bot permissions
             await opendiscord.events.get("onTicketPermissionsCreated").emit([option,opendiscord.permissions,channel,user])
@@ -197,7 +171,7 @@ export const registerActions = async () => {
             instance.ticket = ticket
             opendiscord.tickets.add(ticket)
         }),
-        new api.ODWorker("opendiscord:send-ticket-message",2,async (instance,params,source,cancel) => {
+        new api.ODWorker("opendiscord:send-ticket-message",2,async (instance,params,origin,cancel) => {
             const {guild,user,answers,option} = params
             const {ticket,channel} = instance
 
@@ -207,17 +181,23 @@ export const registerActions = async () => {
             //check if ticket message is enabled
             if (!option.get("opendiscord:ticket-message-enabled").value) return
             try {
-                const msg = await channel.send((await opendiscord.builders.messages.getSafe("opendiscord:ticket-message").build(source,{guild,channel,user,ticket})).message)
+                const ticketMsg = await channel.send((await opendiscord.builders.messages.getSafe("opendiscord:ticket-message").build(origin,{guild,channel,user,ticket})).message)
                 
-                ticket.get("opendiscord:ticket-message").value = msg.id
+                if (ticketMsg) await interactiveMsgState.setMsgState({channel,message:ticketMsg},{
+                    messageType:"ticket-message",
+                    messageOrigin:"other",
+                    messageAuthor:user.id
+                },false)
+
+                ticket.get("opendiscord:ticket-message").value = ticketMsg.id
 
                 //pin ticket message (if required)
-                if (generalConfig.data.system.pinFirstTicketMessage && msg.pinnable) await msg.pin("Ticket Message")
+                if (generalConfig.data.ticketSystem.pinFirstTicketMessage && ticketMsg.pinnable) await ticketMsg.pin("Ticket Message")
                 
                 //manage stats
-                await opendiscord.stats.get("opendiscord:ticket").setStat("opendiscord:messages-sent",ticket.id.value,1,"increase")
+                await opendiscord.statistics.get("opendiscord:ticket").setStat("opendiscord:messages-sent",ticket.id.value,1,"increase")
                 
-                await opendiscord.events.get("afterTicketMainMessageCreated").emit([ticket,msg,channel,user])
+                await opendiscord.events.get("afterTicketMainMessageCreated").emit([ticket,ticketMsg,channel,user])
         }catch(err){
                 process.emit("uncaughtException",err)
                 //something went wrong while sending the ticket message
@@ -225,20 +205,22 @@ export const registerActions = async () => {
             }
             await opendiscord.events.get("afterTicketCreated").emit([ticket,user,channel])
         }),
-        new api.ODWorker("opendiscord:discord-logs",1,async (instance,params,source,cancel) => {
+        new api.ODWorker("opendiscord:discord-logs",1,async (instance,params,origin,cancel) => {
             const {guild,user,answers,option} = params
             const {ticket,channel} = instance
 
+            if (!ticket || !channel) return opendiscord.log("Ticket Creation Error: Unable to send ticket message. Previous worker failed!","error")
+
             //to logs
-            if (generalConfig.data.system.logs.enabled && generalConfig.data.system.messages.creation.logs){
+            if (generalConfig.data.logs.enabled && generalConfig.data.logs.logMessages.creation.logs){
                 const logChannel = opendiscord.posts.get("opendiscord:logs")
-                if (logChannel) logChannel.send(await opendiscord.builders.messages.getSafe("opendiscord:ticket-created-logs").build(source,{guild,channel,user,ticket}))
+                if (logChannel) logChannel.send(await opendiscord.builders.messages.getSafe("opendiscord:ticket-created-logs").build(origin,{guild,channel,user,ticket}))
             }
 
             //to dm
-            if (generalConfig.data.system.messages.creation.dm) await opendiscord.client.sendUserDm(user,await opendiscord.builders.messages.getSafe("opendiscord:ticket-created-dm").build(source,{guild,channel,user,ticket}))
+            if (generalConfig.data.logs.logMessages.creation.dm) await opendiscord.client.sendUserDm(user,await opendiscord.builders.messages.getSafe("opendiscord:ticket-created-dm").build(origin,{guild,channel,user,ticket}))
         }),
-        new api.ODWorker("opendiscord:logs",0,(instance,params,source,cancel) => {
+        new api.ODWorker("opendiscord:logs",0,(instance,params,origin,cancel) => {
             const {guild,user,answers,option} = params
             const {ticket,channel} = instance
 
@@ -249,7 +231,7 @@ export const registerActions = async () => {
                 {key:"userid",value:user.id,hidden:true},
                 {key:"channel",value:"#"+channel.name},
                 {key:"channelid",value:channel.id,hidden:true},
-                {key:"method",value:source},
+                {key:"method",value:origin},
                 {key:"option",value:option.id.value}
             ])
         })

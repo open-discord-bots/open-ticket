@@ -1,18 +1,8 @@
-import {opendiscord, api, utilities} from "../../index"
+import {opendiscord, api, utilities} from "../../index.js"
 
 const lang = opendiscord.languages
 
-/** (CONTRIBUTOR GUIDE) HOW TO ADD NEW COMMANDS?
- * - Register the command in loadAllSlashCommands() & loadAllTextCommands() in (./src/data/framework/commandLoader.ts)
- * - Add autocomplete for the command in OD(Slash/Text)CommandManagerIds_Default in (./src/core/api/defaults/client.ts)
- * - Add the command to the help menu in (./src/data/framework/helpMenuLoader.ts)
- * - If required, new config variables should be added (incl. logs, dm-logs & permissions).
- * - Update the Open Ticket Documentation.
- * - If the command contains complex logic or can be executed from a button/dropdown, it should be placed inside an `ODAction`.
- * - Check all files, test the bot carefully & try a lot of different scenario's with different settings.
- */
-
-export const loadAllHelpMenuCategories = async () => {
+export async function loadAllHelpMenuCategories(){
     const helpmenu = opendiscord.helpmenu
 
     helpmenu.add(new api.ODHelpMenuCategory("opendiscord:general",5,utilities.emojiTitle("📎",lang.getTranslation("helpMenu.categories.general"))))
@@ -24,17 +14,17 @@ export const loadAllHelpMenuCategories = async () => {
     helpmenu.add(new api.ODHelpMenuCategory("opendiscord:extra",0,utilities.emojiTitle("✨",lang.getTranslation("helpMenu.categories.extra"))))
 }
 
-export const loadAllHelpMenuComponents = async () => {
+export async function loadAllHelpMenuComponents(){
     const helpmenu = opendiscord.helpmenu
     const generalConfig = opendiscord.configs.get("opendiscord:general")
     if (!generalConfig) return
 
     const prefix = generalConfig.data.prefix
-    const enableDeleteWithoutTranscript = generalConfig.data.system.enableDeleteWithoutTranscript
+    const enableDeleteWithoutTranscript = generalConfig.data.ticketSystem.enableDeleteWithoutTranscript
 
     const allowedCommands: string[] = []
-    for (const key in generalConfig.data.system.permissions){
-        if (generalConfig.data.system.permissions[key] != "none") allowedCommands.push(key)
+    for (const key in generalConfig.data.permissions){
+        if (generalConfig.data.permissions[key] != "none") allowedCommands.push(key)
     }
 
     const general = helpmenu.get("opendiscord:general")

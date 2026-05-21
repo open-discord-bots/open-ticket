@@ -1,0 +1,43 @@
+//EXPORT FRAMEWORK
+export * from "@open-discord-bots/framework/api"
+
+//EXPORT OPEN TICKET MAPPINGS
+export * from "./mappings/action.js"
+export * from "./mappings/base.js"
+export * from "./mappings/builder.js"
+export * from "./mappings/checker.js"
+export * from "./mappings/client.js"
+export * from "./mappings/code.js"
+export * from "./mappings/component.js"
+export * from "./mappings/config.js"
+export * from "./mappings/console.js"
+export * from "./mappings/cooldown.js"
+export * from "./mappings/database.js"
+export * from "./mappings/event.js"
+export * from "./mappings/flag.js"
+export * from "./mappings/fuse.js"
+export * from "./mappings/helpmenu.js"
+export * from "./mappings/language.js"
+export * from "./mappings/permission.js"
+export * from "./mappings/plugin.js"
+export * from "./mappings/post.js"
+export * from "./mappings/progressbar.js"
+export * from "./mappings/responder.js"
+export * from "./mappings/session.js"
+export * from "./mappings/startscreen.js"
+export * from "./mappings/state.js"
+export * from "./mappings/statistic.js"
+export * from "./mappings/verifybar.js"
+
+//EXPORT OPENTICKET MODULES
+export * from "./api/blacklist.js"
+export * from "./api/option.js"
+export * from "./api/panel.js"
+export * from "./api/priority.js"
+export * from "./api/question.js"
+export * from "./api/role.js"
+export * from "./api/ticket.js"
+export * from "./api/transcript.js"
+
+//EXPORT MAIN MODULE
+export { ODOpenTicketMain } from "./main.js"

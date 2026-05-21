@@ -1,15 +1,15 @@
 ///////////////////////////////////////
 //CLEAR TICKETS SYSTEM
 ///////////////////////////////////////
-import {opendiscord, api, utilities} from "../index"
+import {opendiscord, api, utilities, openticketUtils} from "../index.js"
 import * as discord from "discord.js"
 
 const generalConfig = opendiscord.configs.get("opendiscord:general")
 
-export const registerActions = async () => {
+export async function registerActions(){
     opendiscord.actions.add(new api.ODAction("opendiscord:clear-tickets"))
     opendiscord.actions.get("opendiscord:clear-tickets").workers.add([
-        new api.ODWorker("opendiscord:clear-tickets",2,async (instance,params,source,cancel) => {
+        new api.ODWorker("opendiscord:clear-tickets",2,async (instance,params,origin,cancel) => {
             const {guild,channel,user,filter,list} = params
             
             await opendiscord.events.get("onTicketsClear").emit([list,user,channel,filter])
@@ -43,21 +43,21 @@ export const registerActions = async () => {
             instance.list = nameList
             await opendiscord.events.get("afterTicketsCleared").emit([list,user,channel,filter])
         }),
-        new api.ODWorker("opendiscord:discord-logs",1,async (instance,params,source,cancel) => {
+        new api.ODWorker("opendiscord:discord-logs",1,async (instance,params,origin,cancel) => {
             const {guild,channel,user,filter,list} = params
 
             //to logs
-            if (generalConfig.data.system.logs.enabled && generalConfig.data.system.messages.deleting.logs){
+            if (generalConfig.data.logs.enabled && generalConfig.data.logs.logMessages.deleting.logs){
                 const logChannel = opendiscord.posts.get("opendiscord:logs")
-                if (logChannel) logChannel.send(await opendiscord.builders.messages.getSafe("opendiscord:clear-logs").build(source,{guild,channel,user,filter,list:instance.list ?? []}))
+                if (logChannel) logChannel.send(await opendiscord.builders.messages.getSafe("opendiscord:clear-logs").build(origin,{guild,channel,user,filter,list:instance.list ?? []}))
             }
         }),
-        new api.ODWorker("opendiscord:logs",0,(instance,params,source,cancel) => {
+        new api.ODWorker("opendiscord:logs",0,(instance,params,origin,cancel) => {
             const {guild,user,filter,list} = params
             opendiscord.log(user.displayName+" cleared "+list.length+" tickets!","info",[
                 {key:"user",value:user.username},
                 {key:"userid",value:user.id,hidden:true},
-                {key:"method",value:source},
+                {key:"method",value:origin},
                 {key:"filter",value:filter}
             ])
         })

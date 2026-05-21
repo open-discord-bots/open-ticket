@@ -4,107 +4,112 @@
 <sub align="center">Related Projects:</sub><br>
 <a href="https://odplugins.dj-dj.be"><img src="https://apis.dj-dj.be/cdn/opendiscord/logo.png" alt="Open Discord" height="55px"></a><br><br>
 <a href="https://discord.com/invite/26vT9wt3n3"><img alt="Discord Invite Link" src="https://img.shields.io/badge/discord-support%20server-5865F2.svg?style=flat-square&logo=discord"></img></a>
-<a href="https://github.com/open-discord-bots/open-ticket/releases/tag/v4.1.3"><img alt="Open Ticket Version" src="https://img.shields.io/badge/version-4.1.3-brightgreen.svg?style=flat-square"></img></a>
+<a href="https://github.com/open-discord-bots/open-ticket/releases/tag/v4.2.0"><img alt="Open Ticket Version" src="https://img.shields.io/badge/version-4.2.0-brightgreen.svg?style=flat-square"></img></a>
 <a href="https://otdocs.dj-dj.be"><img alt="Open Ticket Documentation" src="https://img.shields.io/badge/discord.js-v14-CB3837.svg?style=flat-square&logo=npm"></img></a>
 <a href="https://github.com/open-discord-bots/open-ticket/blob/main/LICENSE"><img alt="Open Ticket License" src="https://img.shields.io/badge/license-GPL%203.0-important.svg?style=flat-square"></img></a>
 <a href="https://otdocs.dj-dj.be"><img alt="Open Ticket Stars" src="https://img.shields.io/github/stars/djj123dj/open-ticket?color=yellow&label=stars&logo=github&style=flat-square"></img></a>
-<br>
 <a href="https://github.com/sponsors/DJj123dj"><img alt="Sponsor DJj123dj" src="https://img.shields.io/badge/sponsor-DJj123dj-ea4aaa?style=flat-square&logo=githubsponsors"></img></a>
 <a href="https://hub.docker.com/repository/docker/djj123dj/open-ticket"><img alt="Open Ticket supports Docker!" src="https://img.shields.io/badge/docker-supported-2496ED?style=flat-square&logo=docker"></img></a>
-<a href=".eggs/README.md"><img alt="Open Ticket supports Pterodactyl Eggs!" src="https://img.shields.io/badge/pterodactyl-supported-10539F?style=flat-square&logo=pterodactyl"></img></a>
+<a href=".github/pterodactyl-eggs/README.md"><img alt="Open Ticket supports Pterodactyl Eggs!" src="https://img.shields.io/badge/pterodactyl-supported-10539F?style=flat-square&logo=pterodactyl"></img></a>
 </p>
 
 <p align="center">
-Open Ticket is the most <b>advanced and customizable</b> Discord ticket bot available. With <b>350+ configurable settings</b>, you have full control over every aspect of your ticket system!
-From <code>HTML transcripts</code> and <code>Advanced Plugins</code> to <code>Claiming & Pinning</code>, <code>Questions & Modals</code>, <code>Detailed Statistics</code>, and much more.<br><br>
-The bot is fully translated into <b>36+ languages</b> and has been battle-tested in large Discord servers.<br>
-Need help or want to get involved? Feel free to join our <a href="https://discord.dj-dj.be"><b>Discord server</b></a>.
+Open Ticket is the most <b>advanced and customizable</b> Discord ticket bot available right now. It features more than <b>350+ configurable settings</b> to control almost every aspect of your ticket system.
+From <code>HTML transcripts</code> and <code>Advanced Plugins</code> to <code>Claiming & Pinning</code>, <code>Modal Questions & Limits</code>, <code>Detailed Statistics</code>, and much more.
+The bot is fully translated into <b>38+ languages</b> and has been battle-tested in large Discord servers. Need help or want to get involved? Feel free to join our <a href="https://discord.dj-dj.be"><b>Discord server</b></a>.
 </p>
 
 <h3 align="center"><b>⭐️ Support Open Ticket’s growth by starring this repo! ⭐️</b></h3>
-<p align="center"><sup>❤️ Love Open Ticket? <a href="https://github.com/sponsors/DJj123dj">Sponsorships</a> help fuel our HTML transcript servers and future features! ❤️</sup></p>
+<p align="center"><sup>❤️ Love Open Ticket? <a href="https://github.com/sponsors/DJj123dj">Sponsorships</a> help fuel our HTML transcript servers and future features! ❤️</sup><br>
+<img align="center" src=".github/SPONSORS.svg" alt="Open Ticket" width="800px">
+</p>
 
 ---
-> **[-> Navigate to (⏱️ Quick Setup)](#️-quick-start-using-cli)**  
-> **[-> Navigate to (📚 Documentation)](https://otdocs.dj-dj.be)**  
-> **[-> Navigate to (📞 Support Server)](https://discord.dj-dj.be)**
-
-### 📌 Features
-- **⏳ Quick Setup** - Using the interactive Quick Setup CLI, you can **configure Open Ticket in less than 5min!**
-- **🦇 Pterodactyl Support** - Open Ticket works perfect on Pterodactyl based panels. [(Download official eggs)](.eggs/README.md)
-- **💩 No Credits** - Your bot won't contain any form of bloat or credits. It's all yours!
-- **🔒 Private & Secure** - It has been battletested by thousands of servers and **respects security & privacy.**
-- **📈 Scalable** - Made to handle huge servers and has already been **tested in servers with 100k members.**
-- **📄 HTML Transcripts** - The **built-in HTML Transcripts Service** provides beautiful & easy-to-use transcripts.
-- **✅ Ticket Status** - Close, reopen, delete, claim, pin, rename or move tickets in your server.
-- **🇬🇧 Translation** - Every message has been translated in more than **36 languages** by our community.
-- **🎨 Customisation** - More than **200+ settings** are related to customisation & advanced features.
-- **🖥️ Interactions** - The bot has full support for buttons, dropdowns, slash/text commands & modals.
-- **∞ Unlimited Possibilities** - Create an infinite amount of tickets, questions & panels.
-- **📝 Advanced Plugins** - Create advanced plugins or use [**pre-made plugins**](#-plugins) by our community.
-- **👥 Participants** - Add or remove participants & transfer ownership from one user to another.
-- **📊 Detailed Statistics** - With more than **50+ statistics** for tickets, users & the server.
-- **🚫 Blacklist** - Blacklist users to prevent them from creating new tickets.
-- **🚨 Priorities** - Assign different **priority levels** to tickets to mark them as important.
-- **❓ Modal Questions** - Give users the ability to **answer questions** in a modal before their ticket is created.
-- **✨ Commands** - Manage all your tickets with more than 28+ commands.
-- **🤖 Automation** - Automate ticket handling with **autoclose, autodelete** & slow mode.
-- **😎 Additional Features** - For some weird reason, the bot also supports Reaction Role & URL Buttons.
-
-#### And even more using [pre-made community plugins](#-plugins)!
-  - **💬 Reviews** - Create & manage a support review system.
-  - **📢 Feedback** - Collect feedback & create forms for users to answer.
-  - **⏰ Reminders** - Create & manage customisable reminders.
-  - **🏷️ Tags** - Create tags & answer questions automatically using keywords.
-  - **📝 Forms** - Create advanced forms and automatically ask for repetitive questions.
-  - **🔄 Channel Display** - Create a voice channel with realtime statistics from the ticket system.
-  - **💾 SQLite Database** - Use an `SQLite` database for increased performance.
-  - **🎉 Custom Embeds** - Create your own embeds and send them using a command.
-  - **🎨 Customisation** - Yep, you heard it right. Even more customisation!
-  - **😁 And so much more...**
-
-### ⏱️ Quick Start (Using Interactive CLI Tool)
-> 1. Download the latest version of Open Ticket on [Github](https://github.com/open-discord-bots/open-ticket).
-> 2. Make sure Node.js & Npm are installed using `node -v` (minimum `v20`).
-> 3. Install any required dependencies using `npm install`.
-> 4. Start the **Quick Setup CLI** using `npm run setup`.
-> 5. Click on `> ⏱️ Quick Setup` and follow the instructions.
-> 6. Start the bot using `npm start` or `node index.js`
->    - If required, the bot will give a report of errors that must be solved.
->    - Follow the instructions and restart the bot.
-> 7. Enjoy using Open Ticket!
->
-> #### 🚦 Navigation
+> **[-> Navigate to (⏱️ Quick Setup)](#️-quick-start)**  
 > **[-> Navigate to (📚 Documentation)](https://otdocs.dj-dj.be)**  
 > **[-> Navigate to (📞 Support Server)](https://discord.dj-dj.be)**  
-> **[-> Navigate to (🧩 Download Plugins)](https://odplugins.dj-dj.be)**
+> **[-> Navigate to (🧩 Plugins/Addons)](https://odplugins.dj-dj.be)**  
+> **[-> Navigate to (🦇 Pterodactyl Eggs)](.github/pterodactyl-eggs/README.md)**  
+
+### 📌 Features
+#### Core Features
+- <img align="center" src="https://apis.dj-dj.be/cdn/openticket/readme-icons/core-management.svg"></img> **Ticket Management** - Close, reopen, delete, claim or pin tickets with ease.
+- <img align="center" src="https://apis.dj-dj.be/cdn/openticket/readme-icons/core-commands.svg"></img> **Powerful Commands** - Manage your support system with **30+ commands** for staff & users.
+- <img align="center" src="https://apis.dj-dj.be/cdn/openticket/readme-icons/core-questions.svg"></img> **Modal Questions** - Ask users **custom questions** before a ticket is created.
+- <img align="center" src="https://apis.dj-dj.be/cdn/openticket/readme-icons/core-priorities.svg"></img> **Priorities** - Assign **priority levels** to tickets to highlight urgent requests.
+- <img align="center" src="https://apis.dj-dj.be/cdn/openticket/readme-icons/core-participants.svg"></img> **Participants** - Add or remove participants & transfer ownership from one user to another.
+- <img align="center" src="https://apis.dj-dj.be/cdn/openticket/readme-icons/core-adjustments.svg"></img> **Adjustments** - Rename tickets, change ticket types or transfer ownership.
+- <img align="center" src="https://apis.dj-dj.be/cdn/openticket/readme-icons/core-blacklist.svg"></img> **Blacklist & Limits** - Prevent users from creating tickets and set per-user or global ticket limits.
+- <img align="center" src="https://apis.dj-dj.be/cdn/openticket/readme-icons/core-customisable.svg"></img> **Highly Customisable** - Configure **350+ settings** covering appearance and behaviour.
+
+#### Ticket Automation & Workflows
+- <img align="center" src="https://apis.dj-dj.be/cdn/openticket/readme-icons/automation-unlimited.svg"></img> **Unlimited Possibilities** - Create unlimited tickets, panels & question flows.
+- <img align="center" src="https://apis.dj-dj.be/cdn/openticket/readme-icons/automation-autoclose.svg"></img> **Autoclose Tickets** - Automatically **close tickets** after predefined conditions.
+- <img align="center" src="https://apis.dj-dj.be/cdn/openticket/readme-icons/automation-autodelete.svg"></img> **Autodelete Tickets** - Automatically **delete closed tickets** to keep channels clean.
+- <img align="center" src="https://apis.dj-dj.be/cdn/openticket/readme-icons/automation-categories.svg"></img> **Category Routing** - Move tickets between categories based on claim or close state.
+
+#### Transcripts & Insights
+- <img align="center" src="https://apis.dj-dj.be/cdn/openticket/readme-icons/insights-transcripts.svg"></img> **HTML Transcripts** - Generate beautiful, easy-to-read **HTML transcripts** for every ticket.
+- <img align="center" src="https://apis.dj-dj.be/cdn/openticket/readme-icons/insights-stats.svg"></img> **Detailed Statistics** - Track **50+ statistics** for tickets, users and server activity.
+- <img align="center" src="https://apis.dj-dj.be/cdn/openticket/readme-icons/insights-logs.svg"></img> **Ticket Logs** - Track **all ticket events** such as creation, closures, and staff actions.
+
+#### User Experience
+- <img align="center" src="https://apis.dj-dj.be/cdn/openticket/readme-icons/ux-translated.svg"></img> **Fully Translated** - Available in **38+ languages**, translated and maintained by the community.
+- <img align="center" src="https://apis.dj-dj.be/cdn/openticket/readme-icons/ux-interactions.svg"></img> **Modern Interactions** - Full support for buttons, dropdowns, slash/text commands & modals.
+- <img align="center" src="https://apis.dj-dj.be/cdn/openticket/readme-icons/ux-panels.svg"></img> **Panels** - Create messages with buttons or a dropdown for users to open tickets.
+- <img align="center" src="https://apis.dj-dj.be/cdn/openticket/readme-icons/ux-sub-panels.svg"></img> **Sub-Panels** - One panel not enough? Use multiple panels to offer more choices.
+
+#### Plugins & Ecosystem
+- <img align="center" src="https://apis.dj-dj.be/cdn/openticket/readme-icons/ecosystem-plugins.svg"></img> **Plugin System** - Use custom plugins to **add new features** or **modify existing behavior** of the bot.
+- <img align="center" src="https://apis.dj-dj.be/cdn/openticket/readme-icons/ecosystem-community.svg"></img> **Community Plugins** - Use and share plugins built by the community.
+- <img align="center" src="https://apis.dj-dj.be/cdn/openticket/readme-icons/ecosystem-api.svg"></img> **Advanced API** - Build advanced plugins with access to ticket events and internal systems.
+- <img align="center" src="https://apis.dj-dj.be/cdn/openticket/readme-icons/ecosystem-integrations.svg"></img> **Integrations** - Connect Open Ticket with external services to automate workflows across platforms.
+- <img align="center" src="https://apis.dj-dj.be/cdn/openticket/readme-icons/ecosystem-bonus.svg"></img> **Bonus Features** - Somehow, we included Reaction Roles and URL Button support as well.
+
+#### Deployment
+- <img align="center" src="https://apis.dj-dj.be/cdn/openticket/readme-icons/deployment-quick.svg"></img> **Quick Setup** - Easy **5-minute configuration** using the Interactive Setup CLI.
+- <img align="center" src="https://apis.dj-dj.be/cdn/openticket/readme-icons/deployment-scale.svg"></img> **Scalable & Reliable** - Battle-tested in servers with **100k+ members**.
+- <img align="center" src="https://apis.dj-dj.be/cdn/openticket/readme-icons/deployment-secure.svg"></img> **Private & Secure** - Used by thousands of servers with respect for security & privacy.
+- <img align="center" src="https://apis.dj-dj.be/cdn/openticket/readme-icons/deployment-pterodactyl.svg"></img> **Pterodactyl Support** - 100% compatible with Pterodactyl panels. [(Download official eggs)](.eggs/README.md)
+- <img align="center" src="https://apis.dj-dj.be/cdn/openticket/readme-icons/deployment-docker.svg"></img> **Docker Support** - Deploy Open Ticket in minutes with Docker containers.
+
+#### Extend functionality even more with our [pre-made community plugins](#-plugins)!
+> - <img align="center" src="https://apis.dj-dj.be/cdn/openticket/readme-icons/plugin-reviews.svg"></img> **Reviews** - Create and manage a support review system for tickets.
+> - <img align="center" src="https://apis.dj-dj.be/cdn/openticket/readme-icons/plugin-tags.svg"></img> **Tags** - Define keywords that automatically trigger predefined responses.
+> - <img align="center" src="https://apis.dj-dj.be/cdn/openticket/readme-icons/plugin-reminders.svg"></img> **Reminders** - Create and manage custom reminders for users or staff.
+> - <img align="center" src="https://apis.dj-dj.be/cdn/openticket/readme-icons/plugin-ai.svg"></img> **AI Integrations** - Connect to AI providers such as ChatGPT, Claude, or Gemini.
+> - <img align="center" src="https://apis.dj-dj.be/cdn/openticket/readme-icons/plugin-display.svg"></img> **Channel Display** - Create voice channels that display real-time ticket system statistics.
+> - <img align="center" src="https://apis.dj-dj.be/cdn/openticket/readme-icons/plugin-forms.svg"></img> **Forms** - Build advanced forms for collecting structured information from users.
+> - <img align="center" src="https://apis.dj-dj.be/cdn/openticket/readme-icons/plugin-embeds.svg"></img> **Custom Embeds** - Create and send custom embeds via commands.
+> - <img align="center" src="https://apis.dj-dj.be/cdn/openticket/readme-icons/core-customisable.svg"></img> **Customization Tools** - Additional configuration options for advanced behavior and styling.
+> - <img align="center" src="https://apis.dj-dj.be/cdn/openticket/readme-icons/plugin-dashboard.svg"></img> **Web Dashboard** - Configure and manage the bot through a remote web dashboard.
+> - <img align="center" src="https://apis.dj-dj.be/cdn/openticket/readme-icons/plugin-feedback.svg"></img> **Feedback** - Collect user feedback after ticket deletion using forms.
+> - <img align="center" src="https://apis.dj-dj.be/cdn/openticket/readme-icons/plugin-sqlite.svg"></img> **SQLite Database** - Use an SQLite backend for improved performance and lightweight storage.
+> - <img align="center" src="https://apis.dj-dj.be/cdn/openticket/readme-icons/plugin-more.svg"></img> **And more** - Additional community plugins are available and actively expanding.
+
+## ⏱️ Quick Start
+> 1. Download the [latest version of Open Ticket](https://github.com/open-discord-bots/open-ticket/releases/latest).
+> 2. Make sure you have installed Node.js on your system (check using `node -v`, minimum `v20`).
+> 3. Install any required dependencies using `npm install`.
+> 4. Configure the bot in one of the following ways:
+>    - Method 1 (Easy): Start the **Quick Setup CLI** using `npm run setup`.
+>    - Method 2 (Hard): Manual **JSON configuration** in `./config/...`
+> 5. If using the **Quick Setup CLI**, click on `> ⏱️ Quick Setup` and follow the instructions.
+> 6. Start the bot using `npm start` or `node index.js`
+>    - If any config errors occur, the bot will give you a report of how to solve them.
+>    - Follow the instructions and restart the bot.
+> 7. Enjoy using Open Ticket!
+> 8. Install plugins from the [**Official Plugin Repository**](https://github.com/open-discord-bots/plugins)
+>
+> #### 🚦 Next Steps
+> **[-> Navigate to (📚 Documentation)](https://otdocs.dj-dj.be)**  
+> **[-> Navigate to (📞 Support Server)](https://discord.dj-dj.be)**  
+> **[-> Navigate to (🧩 Plugins/Addons)](https://odplugins.dj-dj.be)**  
+> **[-> Navigate to (🦇 Pterodactyl Eggs)](.github/pterodactyl-eggs/README.md)**  
 >
 > #### 🖥️ Recommended Hosting
 > - **A VPS (Virtual Private Server)** - Extra customisation & more stability. Recommended for most servers.
 > - **Any Pterodactyl-Based Panel** - Easy installation & configuration.
-
-### ❤️ Sponsors
-Huge thanks to our sponsors for making this project possible. Your support means everything to us.
-<table>
-<tr>
-<td><img src="https://github.com/guillee3.png" alt="Profile Picture" width="100px"></td>
-<td><img src="https://github.com/yeeetSK.png" alt="Profile Picture" width="100px"></td>
-<td><img src="https://github.com/jacobhumston.png" alt="Profile Picture" width="100px"></td>
-</tr>
-<tr>
-<td align="center"><a href="https://github.com/guillee3"><b>guillee3</b></a></td>
-<td align="center"><a href="https://github.com/yeeetSK"><b>yeeetSK</b></a></td>
-<td align="center"><a href="https://github.com/jacobhumston"><b>jacobhumston</b></a></td>
-</tr>
-</table>
-
-**Past Sponsors:**<br>
-<a href="https://github.com/sponsors/DJj123dj">
-<img src="https://github.com/SpyEye2.png" alt="SpyEye" width="40px">
-<img src="https://github.com/mods-hd.png" alt="Mods HD" width="40px">
-<img src="https://github.com/DOSEV5.png" alt="DOSEV5" width="40px">
-<img src="https://github.com/BENZORICH.png" alt="BENZORICH" width="40px">
-</a>
 
 ## 📸 Preview
 <img alt="An example of a panel." src="https://apis.dj-dj.be/cdn/openticket/preview-v4/panel-examples.png">
@@ -134,14 +139,14 @@ A list of amazing people who have contributed or provided supported for **Open T
 </table>
 
 ### 💬 Translators
-With the amazing support of our translators, we've been able to translate Open Ticket in more than **36 languages**!
+With the amazing support of our translators, we've been able to translate Open Ticket in more than **38 languages**!
 #### Categories:
 - **🟢 Available**
 - **🤖 Partially Made Using AI**
 - **🟠 Incomplete**
 - **🔴 Unavailable/Outdated**
 
-|🔍  |Languages (36)        |Maintainer (Github/Discord)    |
+|🔍  |Languages (38)        |Maintainer (Github/Discord)    |
 |----|---------------------|--------------------------------|
 |🟢   |🇬🇧 English            |djj123dj                       |
 |🟢   |🇳🇱 Dutch              |djj123dj                       |
@@ -167,6 +172,8 @@ With the amazing support of our translators, we've been able to translate Open T
 |🟢   |🇮🇷 Persian            |dysashop & zhavis              |
 |🟢   |🇧🇩 Bengali            |HanumeshGupta                  |
 |🟢   |❓ Catalan            |guillee3                       |
+|🟢   |🇨🇳 Traditional Chinese|me.october                     |
+|🟢   |🇰🇭 Khmer (Cambodia)   |yuuslokrobjakkroval            |
 |🤖   |🇪🇪 Estonian           |iamnotmega                     |
 |🤖   |🇫🇮 Finnish            |iamnotmega                     |
 |🤖   |🇯🇵 Japanese           |HanumeshGupta                  |
@@ -179,7 +186,6 @@ With the amazing support of our translators, we've been able to translate Open T
 |🤖   |🇷🇺 Russian            |NoOneNook                      |
 |🤖   |🇱🇻 Latvian            |NoOneNook                      |
 |🤖   |🇻🇳 Vietnamese         |ngocdiep2006                   |
-|🔴   |🇨🇳 Traditional Chinese|[⭐ Contribute!](.github/CONTRIBUTING.md)|
 <!--[⭐ Contribute!](.github/CONTRIBUTING.md) -->
 
 ## ⭐️ Star History

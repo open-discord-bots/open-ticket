@@ -1,6 +1,6 @@
 {
     "_TRANSLATION":{
-        "otversion":"v4.1.3",
+        "otversion":"v4.2.0",
         "translators":["benzorich"],
         "lastedited":"16/02/2026",
         "language":"German",
@@ -14,8 +14,8 @@
             "typeInfo":"[INFO]",
             "headerConfigChecker":"CONFIG CHECKER",
             "headerDescription":"Prüfen Sie auf Fehler in Ihrer Konfigurationsdateien!",
-            "footerError":"Der Bot wird nicht starten, bis alle {0}'s repariert sind!",
-            "footerWarning":"Es wird empfohlen, vor dem Start alle {0}'s zu korrigieren!",
+            "footerError":"Der Bot wird nicht starten, bis alle {0}en repariert sind!",
+            "footerWarning":"Es wird empfohlen, vor dem Start alle {0}en zu korrigieren!",
             "footerSupport":"SUPPORT: {0} - DOCS: {1}",
             "compactInformation":"Verwenden Sie {0} für weitere Informationen!",
             "dataPath":"Pfad",

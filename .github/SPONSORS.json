@@ -1,0 +1,90 @@
+{
+    "_INFO":"This document contains all Open Ticket sponsors.",
+    "SPONSOR_TEMPLATE":{
+        "name":"INSERT_NAME",
+        "pictureUrl":"INSERT_PICTURE_URL",
+        "profileUrl":"INSERT_PROFILE_URL",
+        "sectionId":"INSERT_ID"
+    },
+    "SECTION_TEMPLATE":{
+        "name":"INSERT_NAME",
+        "id":"INSERT_ID",
+        "pfpSize":50,
+        "pfpColumns":5,
+        "withNames":true
+    },
+    "sections":[
+        {
+            "name":"💎 Platinum Sponsors",
+            "id":"platinum",
+            "pfpSize":120,
+            "pfpColumns":4,
+            "withNames":true
+        },
+        {
+            "name":"🥇 Gold Sponsors",
+            "id":"gold",
+            "pfpSize":60,
+            "pfpColumns":8,
+            "withNames":true
+        },
+        {
+            "name":"🥈 Silver Sponsors",
+            "id":"silver",
+            "pfpSize":40,
+            "pfpColumns":16,
+            "withNames":false
+        },
+        {
+            "name":"❤️ Past Sponsors",
+            "id":"past",
+            "pfpSize":30,
+            "pfpColumns":20,
+            "withNames":false
+        }
+    ],
+    "sponsors":[
+        {
+            "name":"Guillee3",
+            "pictureUrl":"https://github.com/guillee3.png",
+            "profileUrl":"https://github.com/guillee3",
+            "sectionId":"platinum"
+        },
+        {
+            "name":"Jacob Humston",
+            "pictureUrl":"https://github.com/jacobhumston.png",
+            "profileUrl":"https://github.com/jacobhumston",
+            "sectionId":"platinum"
+        },
+        {
+            "name":"SpyEye2",
+            "pictureUrl":"https://github.com/SpyEye2.png",
+            "profileUrl":"https://github.com/SpyEye2",
+            "sectionId":"gold"
+        },
+        {
+            "name":"DOSEV5",
+            "pictureUrl":"https://github.com/DOSEV5.png",
+            "profileUrl":"https://github.com/DOSEV5",
+            "sectionId":"gold"
+        },
+        {
+            "name":"YeeetSK",
+            "pictureUrl":"https://github.com/YeeetSK.png",
+            "profileUrl":"https://github.com/YeeetSK",
+            "sectionId":"silver"
+        },
+        {
+            "name":"BENZORICH",
+            "pictureUrl":"https://github.com/BENZORICH.png",
+            "profileUrl":"https://github.com/BENZORICH",
+            "sectionId":"silver"
+        },
+        {
+            "name":"Mods HD",
+            "pictureUrl":"https://github.com/mods-hd.png",
+            "profileUrl":"https://github.com/mods-hd",
+            "sectionId":"silver"
+        }
+    ]
+}

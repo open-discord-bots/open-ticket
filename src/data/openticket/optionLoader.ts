@@ -1,6 +1,6 @@
-import {opendiscord, api, utilities} from "../../index"
+import {opendiscord, api, utilities} from "../../index.js"
 
-export const loadAllOptions = async () => {
+export async function loadAllOptions(){
     const optionConfig = opendiscord.configs.get("opendiscord:options")
     if (!optionConfig) return
     
@@ -54,7 +54,7 @@ export const loadAllOptions = async () => {
     })
 }
 
-export const loadTicketOption = (option:api.ODJsonConfig_DefaultOptionTicketType): api.ODTicketOption => {
+export const loadTicketOption = (option:api.ODOptionsJsonConfig_TicketOption): api.ODTicketOption => {
     return new api.ODTicketOption(option.id,[
         new api.ODOptionData("opendiscord:name",option.name),
         new api.ODOptionData("opendiscord:description",option.description),
@@ -71,9 +71,6 @@ export const loadTicketOption = (option:api.ODJsonConfig_DefaultOptionTicketType
         new api.ODOptionData("opendiscord:channel-prefix",option.channel.prefix),
         new api.ODOptionData("opendiscord:channel-suffix",option.channel.suffix),
         new api.ODOptionData("opendiscord:channel-category",option.channel.category),
-        new api.ODOptionData("opendiscord:channel-category-closed",option.channel.closedCategory),
-        new api.ODOptionData("opendiscord:channel-category-backup",option.channel.backupCategory),
-        new api.ODOptionData("opendiscord:channel-categories-claimed",option.channel.claimedCategory),
         new api.ODOptionData("opendiscord:channel-topic",option.channel.topic),
         
         new api.ODOptionData("opendiscord:dm-message-enabled",option.dmMessage.enabled),
@@ -107,7 +104,7 @@ export const loadTicketOption = (option:api.ODJsonConfig_DefaultOptionTicketType
     ])
 }
 
-export const loadWebsiteOption = (opt:api.ODJsonConfig_DefaultOptionWebsiteType): api.ODWebsiteOption => {
+export const loadWebsiteOption = (opt:api.ODOptionsJsonConfig_WebsiteOption): api.ODWebsiteOption => {
     return new api.ODWebsiteOption(opt.id,[
         new api.ODOptionData("opendiscord:name",opt.name),
         new api.ODOptionData("opendiscord:description",opt.description),
@@ -119,7 +116,7 @@ export const loadWebsiteOption = (opt:api.ODJsonConfig_DefaultOptionWebsiteType)
     ])
 }
 
-export const loadRoleOption = (opt:api.ODJsonConfig_DefaultOptionRoleType): api.ODRoleOption => {
+export const loadRoleOption = (opt:api.ODOptionsJsonConfig_RoleOption): api.ODRoleOption => {
     return new api.ODRoleOption(opt.id,[
         new api.ODOptionData("opendiscord:name",opt.name),
         new api.ODOptionData("opendiscord:description",opt.description),

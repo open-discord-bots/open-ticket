@@ -1,8 +1,8 @@
-import {opendiscord, api, utilities} from "../../index"
+import {opendiscord, api, utilities} from "../../index.js"
 
 const optionDatabase = opendiscord.databases.get("opendiscord:options")
 
-export const loadAllTickets = async () => {
+export async function loadAllTickets(){
     const ticketDatabase = opendiscord.databases.get("opendiscord:tickets")
     if (!ticketDatabase) return
 
@@ -11,7 +11,7 @@ export const loadAllTickets = async () => {
     for (const ticket of tickets){
         try {
             opendiscord.tickets.add(await loadTicket(ticket.value))
-        }catch (err){
+        }catch (err:any){
             process.emit("uncaughtException",err)
             process.emit("uncaughtException",new api.ODSystemError("Failed to load ticket from database! => id: "+ticket.key+"\n ===> "+err))
         }

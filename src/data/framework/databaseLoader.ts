@@ -1,15 +1,16 @@
-import {opendiscord, api, utilities} from "../../index"
+import {opendiscord, api, utilities} from "../../index.js"
 import * as fjs from "formatted-json-stringify"
 
 const devdatabaseFlag = opendiscord.flags.get("opendiscord:dev-database")
 const isDevdatabase = devdatabaseFlag ? devdatabaseFlag.value : false
 
-export const loadAllDatabases = async () => {
+export async function loadAllDatabases(){
     opendiscord.databases.add(defaultGlobalDatabase)
     opendiscord.databases.add(defaultStatsDatabase)
     opendiscord.databases.add(defaultTicketsDatabase)
     opendiscord.databases.add(defaultUsersDatabase)
     opendiscord.databases.add(defaultOptionsDatabase)
+    opendiscord.databases.add(defaultMessageStatesDatabase)
 }
 
 const defaultInlineFormatter = new fjs.ArrayFormatter(null,true,new fjs.ObjectFormatter(null,false,[
@@ -46,8 +47,9 @@ const defaultOptionFormatter = new fjs.ArrayFormatter(null,true,new fjs.ObjectFo
     ])
 ]))
 
-export const defaultGlobalDatabase = new api.ODFormattedJsonDatabase("opendiscord:global","global.json",defaultInlineFormatter,(isDevdatabase) ? "./devdatabase/" : "./database/")
-export const defaultStatsDatabase = new api.ODFormattedJsonDatabase("opendiscord:stats","stats.json",defaultInlineFormatter,(isDevdatabase) ? "./devdatabase/" : "./database/")
-export const defaultTicketsDatabase = new api.ODFormattedJsonDatabase("opendiscord:tickets","tickets.json",defaultTicketFormatter,(isDevdatabase) ? "./devdatabase/" : "./database/")
-export const defaultUsersDatabase = new api.ODFormattedJsonDatabase("opendiscord:users","users.json",defaultInlineFormatter,(isDevdatabase) ? "./devdatabase/" : "./database/")
-export const defaultOptionsDatabase = new api.ODFormattedJsonDatabase("opendiscord:options","options.json",defaultOptionFormatter,(isDevdatabase) ? "./devdatabase/" : "./database/")
+export const defaultGlobalDatabase = new api.ODGlobalDatabase("opendiscord:global","global.json",defaultInlineFormatter,(isDevdatabase) ? "./devdatabase/" : "./database/")
+export const defaultStatsDatabase = new api.ODStatsDatabase("opendiscord:stats","stats.json",defaultInlineFormatter,(isDevdatabase) ? "./devdatabase/" : "./database/")
+export const defaultTicketsDatabase = new api.ODTicketsDatabase("opendiscord:tickets","tickets.json",defaultTicketFormatter,(isDevdatabase) ? "./devdatabase/" : "./database/")
+export const defaultUsersDatabase = new api.ODUsersDatabase("opendiscord:users","users.json",defaultInlineFormatter,(isDevdatabase) ? "./devdatabase/" : "./database/")
+export const defaultOptionsDatabase = new api.ODOptionsDatabase("opendiscord:options","options.json",defaultOptionFormatter,(isDevdatabase) ? "./devdatabase/" : "./database/")
+export const defaultMessageStatesDatabase = new api.ODMessageStatesDatabase("opendiscord:message-states","states.json",defaultInlineFormatter,(isDevdatabase) ? "./devdatabase/" : "./database/")

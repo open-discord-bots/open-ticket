@@ -1,0 +1,57 @@
+/*
+ * OPEN TICKET PANELS
+ * ----------------------------------------------
+ * Create customizable panel messages with buttons or a dropdown.
+ * Add up to 25 options to this panel from (config/options.jsonc)
+ * Panels can be customised with text, images, colors and more.
+ * 
+ * Spawn the panel in Discord using: /panel <id>
+ * 
+ * TIP: Create new panels by copying everything between and including the {...} brackets of an panel. Paste it after the last panel and make sure that they are seperated by a comma.
+ */
+[
+    {
+        /* A panel is creates a message with up to 25 options as buttons or dropdown. */
+        "id":"example-panel",
+        "name":"Example Panel",
+        "dropdown":false,
+        
+        /* Add up to 5 option IDs from (config/options.jsonc). */
+        "options":["example-ticket","example-website","example-role"],
+        
+        "text":"", //Leave empty to disable
+        "embed":{
+            "enabled":true,
+            "title":"Tickets:", //Leave empty to disable
+            "description":"Create a ticket by selecting one of the options below. Once selected, a private ticket will be created for you and our support team will be able to assist you directly.", //Leave empty to disable
+            
+            "customColor":"#f8ab00", //Leave empty to use default color
+            "url":"", //URL. Leave empty to disable
+            
+            "image":"", //Image URL. Leave empty to disable
+            "thumbnail":"", //Image URL. Leave empty to disable
+            
+            "footer":"Open Ticket v4.2.0", //Leave empty to disable
+            /* Embed fields. Set to empty list [] to disable. */
+            "fields":[
+                {"name":"Field name","value":"Field value","inline":false}
+            ],
+            "timestamp":false
+        },
+        "settings":{
+            "dropdownPlaceholder":"Create a ticket...", //Leave empty to use default.
+            "maximumButtonsPerRow":5,
+            
+            /* Display the maximum amount of tickets per user. */
+            "enableMaxTicketsWarningInText":false,
+            "enableMaxTicketsWarningInEmbed":true,
+            
+            /* Automatically generate option descriptions from (config/options.jsonc). */
+            "describeOptionsLayout":"normal", //Choices: simple, normal, detailed
+            "describeOptionsCustomTitle":"",
+            "describeOptionsInText":false,
+            "describeOptionsInEmbedFields":true,
+            "describeOptionsInEmbedDescription":false
+        }
+    }
+]

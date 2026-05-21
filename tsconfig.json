@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "target": "ES2022",
+        "target": "es2024",
         "rootDir":"./",
         "outDir": "./dist/",
         "module": "NodeNext",
@@ -13,6 +13,7 @@
         "allowJs": false,
         "checkJs": false,
         "declaration": true,
+        "strict": false,
         "strictNullChecks": true,
         "strictPropertyInitialization": true,
         "skipLibCheck": true,

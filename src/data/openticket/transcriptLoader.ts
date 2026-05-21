@@ -1,4 +1,4 @@
-import {opendiscord, api, utilities} from "../../index"
+import {opendiscord, api, utilities} from "../../index.js"
 import * as discord from "discord.js"
 
 const collector = opendiscord.transcripts.collector
@@ -46,10 +46,10 @@ function transcriptAuth(_A:{salt:number,secret:string}){
     const _B = Buffer.from(_A.secret,"hex");const _C = Math["floor"](new Date().getTime()/(30*1000)).toString();const _D = Buffer.from(_C);const _E = Buffer.alloc(_D["length"]);_D.forEach((v,i) => {_E[i] = v ^ _B[i % _B["length"]];});return btoa(JSON.stringify({salt:_A.salt,secret:_A.secret,token:_E.toString("hex")}))
 }
 
-export const loadAllTranscriptCompilers = async () => {
+export async function loadAllTranscriptCompilers(){
     class ODHTTPHtmlPostRequest extends api.ODHTTPPostRequest {
         constructor(transcriptAuth:string,htmlFinal:api.ODTranscriptHtmlV2Data){
-            super("https://"+htmlDomain+"/api/v2/upload?auth="+htmlVersion+"&token="+transcriptAuth,true,{
+            super(opendiscord,"https://"+htmlDomain+"/api/v2/upload?auth="+htmlVersion+"&token="+transcriptAuth,true,{
                 body:JSON.stringify(htmlFinal),
                 headers:{
                     "Content-Type":"application/json"
@@ -178,7 +178,7 @@ export const loadAllTranscriptCompilers = async () => {
     //HTML COMPILER
     opendiscord.transcripts.add(new api.ODTranscriptCompiler<{url:string,availableUntil:Date},{auth:string}|null>("opendiscord:html-compiler",async (ticket,channel,user) => {
         //INIT
-        const req = new api.ODHTTPGetRequest(atob("aHR0cHM6Ly90LmRqLWRqLmJlL2FwaS92Mi9pbml0"),false)
+        const req = new api.ODHTTPGetRequest(opendiscord,atob("aHR0cHM6Ly90LmRqLWRqLmJlL2FwaS92Mi9pbml0"),false)
         const res = await req.run()
         //PENDING MESSAGE (not required anymore) => await messages.getSafe("opendiscord:transcript-html-progress").build("channel",{guild:channel.guild,channel,user,ticket,compiler:opendiscord.transcripts.get("opendiscord:html-compiler"),remaining:16000})
         if (res.status == 200 && res.body){
@@ -552,6 +552,6 @@ export const loadAllTranscriptCompilers = async () => {
     }))
 }
 
-export const loadTranscriptHistory = async () => {
+export async function loadTranscriptHistory(){
     //UNIMPLEMENTED (made for html transcripts v3 update)
 }

@@ -6,15 +6,15 @@ import * as discord from "discord.js"
 //// Enable it in the plugin.json file!  ////
 /////////////////////////////////////////////
 
-if (utilities.project != "openticket") throw new api.ODPluginError("This plugin only works in Open Ticket!")
+if (opendiscord.project != "openticket") throw new api.ODPluginError("This plugin only works in Open Ticket!")
 
 //Add Typescript autocomplete support for plugin data. (!!!OPTIONAL!!!)
 declare module "#opendiscord-types" {
-    export interface ODPluginManagerIds_Default {
+    export interface ODPluginManagerIdMappings {
         "example-plugin":api.ODPlugin
     }
-    export interface ODConfigManagerIds_Default {
-        "example-plugin:config":api.ODJsonConfig
+    export interface ODConfigManagerIdMappings {
+        "example-plugin:config":api.ODJsonConfig<{testVariable1:boolean,testVariable2:number,testVariable3:string}>
     }
 }
 
@@ -30,7 +30,7 @@ opendiscord.events.get("onConfigLoad").listen((configManager) => {
     //Let's also log it to the console to let us know it worked!
     const ourConfig = configManager.get("example-plugin:config")
     opendiscord.log("The example config loaded successfully!","plugin",[
-        {key:"var-1",value:ourConfig.data.testVariable1},
+        {key:"var-1",value:ourConfig.data.testVariable1.toString()},
         {key:"var-2",value:ourConfig.data.testVariable2.toString()},
         {key:"var-3",value:ourConfig.data.testVariable3.toString()}
     ])

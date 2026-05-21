@@ -1,23 +1,23 @@
 ///////////////////////////////////////
 //MODAL BUILDERS
 ///////////////////////////////////////
-import {opendiscord, api, utilities} from "../index"
+import {opendiscord, api, utilities} from "../index.js"
 import * as discord from "discord.js"
 
 const modals = opendiscord.builders.modals
 const lang = opendiscord.languages
 
-export const registerAllModals = async () => {
+export async function registerAllModals(){
     ticketModals()
 }
 const ticketModals = () => {
     //TICKET QUESTIONS
     modals.add(new api.ODModal("opendiscord:ticket-questions"))
     modals.get("opendiscord:ticket-questions").workers.add(
-        new api.ODWorker("opendiscord:ticket-questions",0,async (instance,params,source) => {
+        new api.ODWorker("opendiscord:ticket-questions",0,async (instance,params,origin) => {
             const {option} = params
             
-            instance.setCustomId("od:ticket-questions_"+option.id.value+"_"+source)
+            instance.setCustomId("od:ticket-questions_"+option.id.value+"_"+origin)
             instance.setTitle(option.exists("opendiscord:name") ? option.get("opendiscord:name").value : option.id.value)
             const questionIds = option.get("opendiscord:questions").value
             questionIds.forEach((id) => {
@@ -30,7 +30,7 @@ const ticketModals = () => {
                     required:question.get("opendiscord:required").value,
                     placeholder:(question.get("opendiscord:placeholder").value) ? question.get("opendiscord:placeholder").value : undefined,
                     minLength:(question.get("opendiscord:length-enabled").value) ? question.get("opendiscord:length-min").value : undefined,
-                    maxLength:(question.get("opendiscord:length-enabled").value) ? question.get("opendiscord:length-max").value : undefined
+                    maxLength:Math.min(1024-6,(question.get("opendiscord:length-enabled").value) ? question.get("opendiscord:length-max").value : (1024-6)) //embed field limit - 6x` characters
                 })
                 else if (question instanceof api.ODParagraphQuestion) instance.addQuestion({
                     customId:question.id.value,
@@ -39,7 +39,7 @@ const ticketModals = () => {
                     required:question.get("opendiscord:required").value,
                     placeholder:(question.get("opendiscord:placeholder").value) ? question.get("opendiscord:placeholder").value : undefined,
                     minLength:(question.get("opendiscord:length-enabled").value) ? question.get("opendiscord:length-min").value : undefined,
-                    maxLength:(question.get("opendiscord:length-enabled").value) ? question.get("opendiscord:length-max").value : undefined
+                    maxLength:Math.min(1024-6,(question.get("opendiscord:length-enabled").value) ? question.get("opendiscord:length-max").value : (1024-6)) //embed field limit - 6x` characters
                 })
             })
         })
@@ -48,10 +48,10 @@ const ticketModals = () => {
     //CLOSE TICKET REASON
     modals.add(new api.ODModal("opendiscord:close-ticket-reason"))
     modals.get("opendiscord:close-ticket-reason").workers.add(
-        new api.ODWorker("opendiscord:close-ticket-reason",0,async (instance,params,source) => {
-            const {ticket} = params
+        new api.ODWorker("opendiscord:close-ticket-reason",0,async (instance,params,origin) => {
+            const {channel,message} = params
 
-            instance.setCustomId("od:close-ticket-reason_"+ticket.id.value+"_"+source)
+            instance.setCustomId("od:close-ticket-reason|"+channel.id+"|"+message.id)
             instance.setTitle(lang.getTranslation("actions.buttons.close"))
             instance.addQuestion({
                 customId:"reason",
@@ -66,10 +66,10 @@ const ticketModals = () => {
     //REOPEN TICKET REASON
     modals.add(new api.ODModal("opendiscord:reopen-ticket-reason"))
     modals.get("opendiscord:reopen-ticket-reason").workers.add(
-        new api.ODWorker("opendiscord:reopen-ticket-reason",0,async (instance,params,source) => {
-            const {ticket} = params
+        new api.ODWorker("opendiscord:reopen-ticket-reason",0,async (instance,params,origin) => {
+            const {channel,message} = params
 
-            instance.setCustomId("od:reopen-ticket-reason_"+ticket.id.value+"_"+source)
+            instance.setCustomId("od:reopen-ticket-reason|"+channel.id+"|"+message.id)
             instance.setTitle(lang.getTranslation("actions.buttons.reopen"))
             instance.addQuestion({
                 customId:"reason",
@@ -84,10 +84,10 @@ const ticketModals = () => {
     //DELETE TICKET REASON
     modals.add(new api.ODModal("opendiscord:delete-ticket-reason"))
     modals.get("opendiscord:delete-ticket-reason").workers.add(
-        new api.ODWorker("opendiscord:delete-ticket-reason",0,async (instance,params,source) => {
-            const {ticket} = params
+        new api.ODWorker("opendiscord:delete-ticket-reason",0,async (instance,params,origin) => {
+            const {channel,message} = params
 
-            instance.setCustomId("od:delete-ticket-reason_"+ticket.id.value+"_"+source)
+            instance.setCustomId("od:delete-ticket-reason|"+channel.id+"|"+message.id)
             instance.setTitle(lang.getTranslation("actions.buttons.delete"))
             instance.addQuestion({
                 customId:"reason",
@@ -102,10 +102,10 @@ const ticketModals = () => {
     //CLAIM TICKET REASON
     modals.add(new api.ODModal("opendiscord:claim-ticket-reason"))
     modals.get("opendiscord:claim-ticket-reason").workers.add(
-        new api.ODWorker("opendiscord:claim-ticket-reason",0,async (instance,params,source) => {
-            const {ticket} = params
+        new api.ODWorker("opendiscord:claim-ticket-reason",0,async (instance,params,origin) => {
+            const {channel,message} = params
 
-            instance.setCustomId("od:claim-ticket-reason_"+ticket.id.value+"_"+source)
+            instance.setCustomId("od:claim-ticket-reason|"+channel.id+"|"+message.id)
             instance.setTitle(lang.getTranslation("actions.buttons.claim"))
             instance.addQuestion({
                 customId:"reason",
@@ -120,10 +120,10 @@ const ticketModals = () => {
     //UNCLAIM TICKET REASON
     modals.add(new api.ODModal("opendiscord:unclaim-ticket-reason"))
     modals.get("opendiscord:unclaim-ticket-reason").workers.add(
-        new api.ODWorker("opendiscord:unclaim-ticket-reason",0,async (instance,params,source) => {
-            const {ticket} = params
+        new api.ODWorker("opendiscord:unclaim-ticket-reason",0,async (instance,params,origin) => {
+            const {channel,message} = params
 
-            instance.setCustomId("od:unclaim-ticket-reason_"+ticket.id.value+"_"+source)
+            instance.setCustomId("od:unclaim-ticket-reason|"+channel.id+"|"+message.id)
             instance.setTitle(lang.getTranslation("actions.buttons.unclaim"))
             instance.addQuestion({
                 customId:"reason",
@@ -138,10 +138,10 @@ const ticketModals = () => {
     //PIN TICKET REASON
     modals.add(new api.ODModal("opendiscord:pin-ticket-reason"))
     modals.get("opendiscord:pin-ticket-reason").workers.add(
-        new api.ODWorker("opendiscord:pin-ticket-reason",0,async (instance,params,source) => {
-            const {ticket} = params
+        new api.ODWorker("opendiscord:pin-ticket-reason",0,async (instance,params,origin) => {
+            const {channel,message} = params
 
-            instance.setCustomId("od:pin-ticket-reason_"+ticket.id.value+"_"+source)
+            instance.setCustomId("od:pin-ticket-reason|"+channel.id+"|"+message.id)
             instance.setTitle(lang.getTranslation("actions.buttons.pin"))
             instance.addQuestion({
                 customId:"reason",
@@ -156,10 +156,10 @@ const ticketModals = () => {
     //UNPIN TICKET REASON
     modals.add(new api.ODModal("opendiscord:unpin-ticket-reason"))
     modals.get("opendiscord:unpin-ticket-reason").workers.add(
-        new api.ODWorker("opendiscord:unpin-ticket-reason",0,async (instance,params,source) => {
-            const {ticket} = params
+        new api.ODWorker("opendiscord:unpin-ticket-reason",0,async (instance,params,origin) => {
+            const {channel,message} = params
 
-            instance.setCustomId("od:unpin-ticket-reason_"+ticket.id.value+"_"+source)
+            instance.setCustomId("od:unpin-ticket-reason|"+channel.id+"|"+message.id)
             instance.setTitle(lang.getTranslation("actions.buttons.unpin"))
             instance.addQuestion({
                 customId:"reason",

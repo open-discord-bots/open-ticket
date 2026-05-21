@@ -1,7 +1,7 @@
-import {opendiscord, api, utilities} from "../../index"
+import {opendiscord, api, utilities} from "../../index.js"
 
 export const loadAllEvents = () => {
-    const eventList: (keyof api.ODEventIds_Default)[] = [
+    const eventList: (keyof api.ODNoGeneric<api.ODEventManagerIdMappings>)[] = [
         //error handling
         "onErrorHandling",
         "afterErrorHandling",
@@ -95,6 +95,12 @@ export const loadAllEvents = () => {
         //client text commands
         "onTextCommandLoad",
         "afterTextCommandsLoaded",
+
+        //states
+        "onStateLoad",
+        "afterStatesLoaded",
+        "onStateInit",
+        "afterStatesInitiated",
 
         //plugin loading before managers
         "onPluginBeforeManagerLoad",
@@ -206,6 +212,16 @@ export const loadAllEvents = () => {
         "onModalBuilderLoad",
         "afterModalBuildersLoaded",
 
+        //components
+        "onSharedComponentLoad",
+        "afterSharedComponentsLoaded",
+        "onMessageComponentLoad",
+        "afterMessageComponentsLoaded",
+        "onModalComponentLoad",
+        "afterModalComponentsLoaded",
+        "onComponentModifierLoad",
+        "afterComponentModifiersLoaded",
+
         //plugin loading before responders
         "onPluginBeforeResponderLoad",
         "afterPluginBeforeResponderLoaded",
@@ -258,13 +274,13 @@ export const loadAllEvents = () => {
         "onHelpMenuComponentLoad",
         "afterHelpMenuComponentsLoaded",
 
-        //stats
-        "onStatScopeLoad",
-        "afterStatScopesLoaded",
-        "onStatLoad",
-        "afterStatsLoaded",
-        "onStatInit",
-        "afterStatsInitiated",
+        //statistics
+        "onStatisticScopeLoad",
+        "afterStatisticScopesLoaded",
+        "onStatisticLoad",
+        "afterStatisticsLoaded",
+        "onStatisticInit",
+        "afterStatisticsInitiated",
 
         //plugin loading before code
         "onPluginBeforeCodeLoad",

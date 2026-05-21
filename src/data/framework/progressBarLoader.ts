@@ -1,7 +1,7 @@
-import {opendiscord, api, utilities} from "../../index"
+import {opendiscord, api, utilities} from "../../index.js"
 
-export const loadAllProgressBarRenderers = async () => {
-    const defaultSettings: api.ODProgressBarRenderer_DefaultSettings = {
+export async function loadAllProgressBarRenderers(){
+    const defaultSettings: api.ODDefaultProgressBarRendererSettings = {
         borderColor:"gray",
         filledBarColor:"openticket",
         emptyBarColor:"gray",
@@ -23,37 +23,37 @@ export const loadAllProgressBarRenderers = async () => {
     }
 
     //VALUE RENDERER
-    const valueRendererSettings: api.ODProgressBarRenderer_DefaultSettings = {...defaultSettings}
+    const valueRendererSettings: api.ODDefaultProgressBarRendererSettings = {...defaultSettings}
     valueRendererSettings.labelType = "value"
-    opendiscord.progressbars.renderers.add(new api.ODProgressBarRenderer_Default("opendiscord:value-renderer",valueRendererSettings))
+    opendiscord.progressbars.renderers.add(new api.ODDefaultProgressBarRenderer("opendiscord:value-renderer",valueRendererSettings))
 
     //FRACTION RENDERER
-    const fractionRendererSettings: api.ODProgressBarRenderer_DefaultSettings = {...defaultSettings}
+    const fractionRendererSettings: api.ODDefaultProgressBarRendererSettings = {...defaultSettings}
     fractionRendererSettings.labelType = "fraction"
-    opendiscord.progressbars.renderers.add(new api.ODProgressBarRenderer_Default("opendiscord:fraction-renderer",fractionRendererSettings))
+    opendiscord.progressbars.renderers.add(new api.ODDefaultProgressBarRenderer("opendiscord:fraction-renderer",fractionRendererSettings))
 
     //PERCENTAGE RENDERER
-    const percentageRendererSettings: api.ODProgressBarRenderer_DefaultSettings = {...defaultSettings}
+    const percentageRendererSettings: api.ODDefaultProgressBarRendererSettings = {...defaultSettings}
     percentageRendererSettings.labelType = "percentage"
-    opendiscord.progressbars.renderers.add(new api.ODProgressBarRenderer_Default("opendiscord:percentage-renderer",percentageRendererSettings))
+    opendiscord.progressbars.renderers.add(new api.ODDefaultProgressBarRenderer("opendiscord:percentage-renderer",percentageRendererSettings))
 
     //TIME MS RENDERER
-    const timeMsRendererSettings: api.ODProgressBarRenderer_DefaultSettings = {...defaultSettings}
+    const timeMsRendererSettings: api.ODDefaultProgressBarRendererSettings = {...defaultSettings}
     timeMsRendererSettings.labelType = "time-ms"
-    opendiscord.progressbars.renderers.add(new api.ODProgressBarRenderer_Default("opendiscord:time-ms-renderer",timeMsRendererSettings))
+    opendiscord.progressbars.renderers.add(new api.ODDefaultProgressBarRenderer("opendiscord:time-ms-renderer",timeMsRendererSettings))
 
     //TIME SEC RENDERER
-    const timeSecRendererSettings: api.ODProgressBarRenderer_DefaultSettings = {...defaultSettings}
+    const timeSecRendererSettings: api.ODDefaultProgressBarRendererSettings = {...defaultSettings}
     timeSecRendererSettings.labelType = "time-sec"
-    opendiscord.progressbars.renderers.add(new api.ODProgressBarRenderer_Default("opendiscord:time-sec-renderer",timeSecRendererSettings))
+    opendiscord.progressbars.renderers.add(new api.ODDefaultProgressBarRenderer("opendiscord:time-sec-renderer",timeSecRendererSettings))
 
     //TIME MIN RENDERER
-    const timeMinRendererSettings: api.ODProgressBarRenderer_DefaultSettings = {...defaultSettings}
+    const timeMinRendererSettings: api.ODDefaultProgressBarRendererSettings = {...defaultSettings}
     timeMinRendererSettings.labelType = "time-min"
-    opendiscord.progressbars.renderers.add(new api.ODProgressBarRenderer_Default("opendiscord:time-min-renderer",timeMinRendererSettings))
+    opendiscord.progressbars.renderers.add(new api.ODDefaultProgressBarRenderer("opendiscord:time-min-renderer",timeMinRendererSettings))
 }
 
-export const loadAllProgressBars = async () => {
+export async function loadAllProgressBars(){
     const fractRenderer = opendiscord.progressbars.renderers.get("opendiscord:fraction-renderer")
 
     //SLASH COMMAND REMOVE (doesn't have correct amount yet)

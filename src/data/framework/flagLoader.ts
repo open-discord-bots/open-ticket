@@ -1,6 +1,6 @@
-import {opendiscord, api, utilities} from "../../index"
+import {opendiscord, api, utilities} from "../../index.js"
 
-export const loadAllFlags = async () => {
+export async function loadAllFlags(){
     opendiscord.flags.add(new api.ODFlag("opendiscord:no-migration","No Migration","Disable Open Ticket data migration on update!","--no-migration",["-nm"]))
     opendiscord.flags.add(new api.ODFlag("opendiscord:dev-config","Developer Config","Use the configs in /devconfig/ instead of /config/!","--dev-config",["-dc"]))
     opendiscord.flags.add(new api.ODFlag("opendiscord:dev-database","Developer Database","Use the databases in /devdatabase/ instead of /database/!","--dev-database",["-dd"]))

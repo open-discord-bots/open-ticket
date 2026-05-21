@@ -1,7 +1,7 @@
-import {opendiscord, api, utilities} from "../../index"
+import {opendiscord, api, utilities} from "../../index.js"
 import * as discord from "discord.js"
 
-export const loadAllPermissions = async () => {
+export async function loadAllPermissions(){
     const generalConfig = opendiscord.configs.get("opendiscord:general")
     if (!generalConfig) return
     const mainServer = opendiscord.client.mainServer

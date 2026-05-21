@@ -20,7 +20,7 @@
 
     INFORMATION:
     ============
-    Open Ticket v4.1.3 - © DJdj Development
+    Open Ticket v4.2.0 - © DJdj Development
 
     support us: https://github.com/sponsors/DJj123dj
     discord: https://discord.dj-dj.be
@@ -35,9 +35,28 @@
 */
 
 //initialize API & check npm libraries
-import { api, opendiscord, utilities } from "./core/startup/init"
-export { api, opendiscord, utilities } from "./core/startup/init"
+import { loadDumpCommand, loadAllPlugins, loadErrorHandling } from "@open-discord-bots/framework"
+import * as utilities from "@open-discord-bots/framework/utilities"
+import * as api from "./core/api.js"
 import ansis from "ansis"
+
+export * as utilities from "@open-discord-bots/framework/utilities"
+export * as api from "./core/api.js"
+
+utilities.checkNodeVersion("openticket")
+
+utilities.moduleInstalled("@open-discord-bots/framework",true)
+utilities.moduleInstalled("@discordjs/rest",true)
+utilities.moduleInstalled("discord.js",true)
+utilities.moduleInstalled("ansis",true)
+utilities.moduleInstalled("formatted-json-stringify",true)
+utilities.moduleInstalled("typescript",true)
+utilities.moduleInstalled("terminal-kit",true)
+
+export const opendiscord: api.ODOpenTicketMain = new api.ODOpenTicketMain()
+export * as openticketUtils from "./actions/utilities.js"
+
+utilities.initialStartupLogs(opendiscord,"openticket")
 
 /**The main sequence of Open Ticket. Runs `async` */
 const main = async () => {
@@ -45,49 +64,20 @@ const main = async () => {
     (await import("./data/framework/eventLoader.js")).loadAllEvents()
 
     //error handling system
-    process.on("uncaughtException",async (error,origin) => {
-        try{
-            await opendiscord.events.get("onErrorHandling").emit([error,origin])
-            if (opendiscord.defaults.getDefault("errorHandling")){
-                //custom error messages for known errors
-                if (error.message.toLowerCase().includes("used disallowed intents")){
-                    //invalid intents
-                    opendiscord.log("Open Ticket doesn't work without Privileged Gateway Intents enabled!","error")
-                    opendiscord.log("Enable them in the discord developer portal!","info")
-                    console.log("\n")
-                    process.exit(1)
-                }else if (error.message.toLowerCase().includes("invalid discord bot token provided")){
-                    //invalid token
-                    opendiscord.log("An invalid discord auth token was provided!","error")
-                    opendiscord.log("Check the config if you have inserted the bot token correctly!","info")
-                    console.log("\n")
-                    process.exit(1)
-                }else{
-                    //unknown error
-                    const errmsg = new api.ODError(error,origin)
-                    opendiscord.log(errmsg)
-                    if (opendiscord.defaults.getDefault("crashOnError")) process.exit(1)
-                    await opendiscord.events.get("afterErrorHandling").emit([error,origin,errmsg])
-                }
-            }
-            
-        }catch(err){
-            console.log("[ERROR HANDLER ERROR]:",err)
-        }
-    })
+    loadErrorHandling(opendiscord,"openticket")
 
     //handle data migration (PART 1)
     const lastVersion = await (await import("./core/startup/manageMigration.js")).loadVersionMigrationSystem()
 
     //load plugins
-    if (opendiscord.defaults.getDefault("pluginLoading")){
-        await (await import("./core/startup/pluginLauncher.js")).loadAllPlugins()
+    if (opendiscord.sharedFuses.getFuse("pluginLoading")){
+        await loadAllPlugins(opendiscord)
     }
     await opendiscord.events.get("afterPluginsLoaded").emit([opendiscord.plugins])
     
     //load plugin classes
     opendiscord.log("Loading plugin classes...","system")
-    if (opendiscord.defaults.getDefault("pluginClassLoading")){
+    if (opendiscord.sharedFuses.getFuse("pluginClassLoading")){
 
     }
     await opendiscord.events.get("onPluginClassLoad").emit([opendiscord.plugins.classes,opendiscord.plugins])
@@ -95,7 +85,7 @@ const main = async () => {
 
     //load flags
     opendiscord.log("Loading flags...","system")
-    if (opendiscord.defaults.getDefault("flagLoading")){
+    if (opendiscord.sharedFuses.getFuse("flagLoading")){
         await (await import("./data/framework/flagLoader.js")).loadAllFlags()
     }
     await opendiscord.events.get("onFlagLoad").emit([opendiscord.flags])
@@ -103,20 +93,20 @@ const main = async () => {
 
     //initiate flags
     await opendiscord.events.get("onFlagInit").emit([opendiscord.flags])
-    if (opendiscord.defaults.getDefault("flagInitiating")){
+    if (opendiscord.sharedFuses.getFuse("flagInitiating")){
         await opendiscord.flags.init()
         opendiscord.debugfile.writeText("\n[ENABLED FLAGS]:\n"+opendiscord.flags.getFiltered((flag) => (flag.value == true)).map((flag) => flag.id.value).join("\n")+"\n")
         await opendiscord.events.get("afterFlagsInitiated").emit([opendiscord.flags])
     }
 
     //load debug
-    if (opendiscord.defaults.getDefault("debugLoading")){
+    if (opendiscord.sharedFuses.getFuse("debugLoading")){
         const debugFlag = opendiscord.flags.get("opendiscord:debug")
         opendiscord.debug.visible = (debugFlag) ? debugFlag.value : false
     }
 
     //load silent mode
-    if (opendiscord.defaults.getDefault("silentLoading")){
+    if (opendiscord.sharedFuses.getFuse("silentLoading")){
         const silentFlag = opendiscord.flags.get("opendiscord:silent")
         opendiscord.console.silent = (silentFlag) ? silentFlag.value : false
         if (opendiscord.console.silent){
@@ -128,14 +118,14 @@ const main = async () => {
 
     //load progress bar renderers
     opendiscord.log("Loading progress bars...","system")
-    if (opendiscord.defaults.getDefault("progressBarRendererLoading")){
+    if (opendiscord.sharedFuses.getFuse("progressBarRendererLoading")){
         await (await import("./data/framework/progressBarLoader.js")).loadAllProgressBarRenderers()
     }
     await opendiscord.events.get("onProgressBarRendererLoad").emit([opendiscord.progressbars.renderers])
     await opendiscord.events.get("afterProgressBarRenderersLoaded").emit([opendiscord.progressbars.renderers])
     
     //load progress bars
-    if (opendiscord.defaults.getDefault("progressBarLoading")){
+    if (opendiscord.sharedFuses.getFuse("progressBarLoading")){
         await (await import("./data/framework/progressBarLoader.js")).loadAllProgressBars()
     }
     await opendiscord.events.get("onProgressBarLoad").emit([opendiscord.progressbars])
@@ -143,7 +133,7 @@ const main = async () => {
 
     //load config
     opendiscord.log("Loading configs...","system")
-    if (opendiscord.defaults.getDefault("configLoading")){
+    if (opendiscord.sharedFuses.getFuse("configLoading")){
         await (await import("./data/framework/configLoader.js")).loadAllConfigs()
     }
     await opendiscord.events.get("onConfigLoad").emit([opendiscord.configs])
@@ -151,7 +141,7 @@ const main = async () => {
 
     //initiate config
     await opendiscord.events.get("onConfigInit").emit([opendiscord.configs])
-    if (opendiscord.defaults.getDefault("configInitiating")){
+    if (opendiscord.sharedFuses.getFuse("configInitiating")){
         await opendiscord.configs.init()
         await opendiscord.events.get("afterConfigsInitiated").emit([opendiscord.configs])
     }
@@ -159,14 +149,15 @@ const main = async () => {
     //UTILITY CONFIG
     const generalConfig = opendiscord.configs.get("opendiscord:general")
 
-    if (opendiscord.defaults.getDefault("emojiTitleStyleLoading")){
+    if (opendiscord.sharedFuses.getFuse("emojiTitleStyleLoading")){
         //set emoji style based on config
-        opendiscord.defaults.setDefault("emojiTitleStyle",generalConfig.data.system.emojiStyle)
+        const emojiStyle = (generalConfig.data && generalConfig.data.ticketSystem && generalConfig.data.ticketSystem.emojiStyle) ? generalConfig.data.ticketSystem.emojiStyle : "before"
+        opendiscord.sharedFuses.setFuse("emojiTitleStyle",emojiStyle)
     }
     
     //load database
     opendiscord.log("Loading databases...","system")
-    if (opendiscord.defaults.getDefault("databaseLoading")){
+    if (opendiscord.sharedFuses.getFuse("databaseLoading")){
         await (await import("./data/framework/databaseLoader.js")).loadAllDatabases()
     }
     await opendiscord.events.get("onDatabaseLoad").emit([opendiscord.databases])
@@ -174,14 +165,14 @@ const main = async () => {
 
     //initiate database
     await opendiscord.events.get("onDatabaseInit").emit([opendiscord.databases])
-    if (opendiscord.defaults.getDefault("databaseInitiating")){
+    if (opendiscord.sharedFuses.getFuse("databaseInitiating")){
         await opendiscord.databases.init()
         await opendiscord.events.get("afterDatabasesInitiated").emit([opendiscord.databases])
     }
 
     //load sessions
     opendiscord.log("Loading sessions...","system")
-    if (opendiscord.defaults.getDefault("sessionLoading")){
+    if (opendiscord.sharedFuses.getFuse("sessionLoading")){
 
     }
     await opendiscord.events.get("onSessionLoad").emit([opendiscord.sessions])
@@ -189,7 +180,7 @@ const main = async () => {
 
     //load language
     opendiscord.log("Loading languages...","system")
-    if (opendiscord.defaults.getDefault("languageLoading")){
+    if (opendiscord.sharedFuses.getFuse("languageLoading")){
         await (await import("./data/framework/languageLoader.js")).loadAllLanguages()
     }
     await opendiscord.events.get("onLanguageLoad").emit([opendiscord.languages])
@@ -197,12 +188,12 @@ const main = async () => {
     
     //initiate language
     await opendiscord.events.get("onLanguageInit").emit([opendiscord.languages])
-    if (opendiscord.defaults.getDefault("languageInitiating")){
+    if (opendiscord.sharedFuses.getFuse("languageInitiating")){
         await opendiscord.languages.init()
         await opendiscord.events.get("afterLanguagesInitiated").emit([opendiscord.languages])
 
         //add available languages to list for config checker
-        const languageList = opendiscord.defaults.getDefault("languageList")
+        const languageList = opendiscord.sharedFuses.getFuse("languageList")
         const languageIds = opendiscord.languages.getIds().map((id) => {
             if (id.value.startsWith("opendiscord:")){
                 //is open ticket language => return without prefix
@@ -210,12 +201,12 @@ const main = async () => {
             }else return id.value
         })
         languageList.push(...languageIds)
-        opendiscord.defaults.setDefault("languageList",languageList)
+        opendiscord.sharedFuses.setFuse("languageList",languageList)
     }
 
     //select language
     await opendiscord.events.get("onLanguageSelect").emit([opendiscord.languages])
-    if (opendiscord.defaults.getDefault("languageSelection")){
+    if (opendiscord.sharedFuses.getFuse("languageSelection")){
         //set current language
         const languageId = (generalConfig?.data?.language) ? generalConfig.data.language  : "english"
         if (languageId.includes(":")){
@@ -225,7 +216,7 @@ const main = async () => {
         }
 
         //set backup language
-        const backupLanguageId = opendiscord.defaults.getDefault("backupLanguage")
+        const backupLanguageId = opendiscord.sharedFuses.getFuse("backupLanguage")
         if (opendiscord.languages.exists(backupLanguageId)){
             opendiscord.languages.setBackupLanguage(backupLanguageId)
             
@@ -235,18 +226,18 @@ const main = async () => {
     }
 
     //handle data migration (PART 2)
-    if (lastVersion) await (await import("./core/startup/manageMigration.js")).loadAllAfterInitVersionMigrations(lastVersion)
+    if (lastVersion) await (await import("./core/startup/manageMigration.js")).loadAfterStartupMigrations(lastVersion)
     
     //load config checker
     opendiscord.log("Loading config checker...","system")
-    if (opendiscord.defaults.getDefault("checkerLoading")){
+    if (opendiscord.sharedFuses.getFuse("checkerLoading")){
         await (await import("./data/framework/checkerLoader.js")).loadAllConfigCheckers()
     }
     await opendiscord.events.get("onCheckerLoad").emit([opendiscord.checkers])
     await opendiscord.events.get("afterCheckersLoaded").emit([opendiscord.checkers])
 
     //load config checker functions
-    if (opendiscord.defaults.getDefault("checkerFunctionLoading")){
+    if (opendiscord.sharedFuses.getFuse("checkerFunctionLoading")){
         await (await import("./data/framework/checkerLoader.js")).loadAllConfigCheckerFunctions()
     }
     await opendiscord.events.get("onCheckerFunctionLoad").emit([opendiscord.checkers.functions,opendiscord.checkers])
@@ -254,16 +245,16 @@ const main = async () => {
     
     //execute config checker
     await opendiscord.events.get("onCheckerExecute").emit([opendiscord.checkers])
-    if (opendiscord.defaults.getDefault("checkerExecution")){
+    if (opendiscord.sharedFuses.getFuse("checkerExecution")){
         const result = opendiscord.checkers.checkAll(true)
         await opendiscord.events.get("afterCheckersExecuted").emit([result,opendiscord.checkers])
     }
 
     //load config checker translations
-    if (opendiscord.defaults.getDefault("checkerTranslationLoading")){
+    if (opendiscord.sharedFuses.getFuse("checkerTranslationLoading")){
         await (await import("./data/framework/checkerLoader.js")).loadAllConfigCheckerTranslations()
     }
-    await opendiscord.events.get("onCheckerTranslationLoad").emit([opendiscord.checkers.translation,((generalConfig && generalConfig.data.system && generalConfig.data.system.useTranslatedConfigChecker) ? generalConfig.data.system.useTranslatedConfigChecker : false),opendiscord.checkers])
+    await opendiscord.events.get("onCheckerTranslationLoad").emit([opendiscord.checkers.translation,((generalConfig && generalConfig.data.ticketSystem && generalConfig.data.ticketSystem.useTranslatedConfigChecker) ? generalConfig.data.ticketSystem.useTranslatedConfigChecker : false),opendiscord.checkers])
     await opendiscord.events.get("afterCheckerTranslationsLoaded").emit([opendiscord.checkers.translation,opendiscord.checkers])
 
     //render config checker
@@ -272,13 +263,13 @@ const main = async () => {
     const useCliFlag = opendiscord.flags.get("opendiscord:cli")
 
     await opendiscord.events.get("onCheckerRender").emit([opendiscord.checkers.renderer,opendiscord.checkers])
-    if (opendiscord.defaults.getDefault("checkerRendering") && !(disableCheckerFlag ? disableCheckerFlag.value : false) && !(useCliFlag ? useCliFlag.value : false)){
+    if (opendiscord.sharedFuses.getFuse("checkerRendering") && !(disableCheckerFlag ? disableCheckerFlag.value : false) && !(useCliFlag ? useCliFlag.value : false)){
         //check if there is a result (otherwise throw minor error)
         const result = opendiscord.checkers.lastResult
         if (!result) return opendiscord.log("Failed to render Config Checker! (couldn't fetch result)","error")
         
         //get components & check if full mode enabled
-        const components = opendiscord.checkers.renderer.getComponents(!(advancedCheckerFlag ? advancedCheckerFlag.value : false),opendiscord.defaults.getDefault("checkerRenderEmpty"),opendiscord.checkers.translation,result)
+        const components = opendiscord.checkers.renderer.getComponents(!(advancedCheckerFlag ? advancedCheckerFlag.value : false),opendiscord.sharedFuses.getFuse("checkerRenderEmpty"),opendiscord.checkers.translation,result)
 
         //render
         opendiscord.debugfile.writeText("\n[CONFIG CHECKER RESULT]:\n"+ansis.strip(components.join("\n"))+"\n")
@@ -293,7 +284,7 @@ const main = async () => {
     //quit config checker (when required)
     if (opendiscord.checkers.lastResult && !opendiscord.checkers.lastResult.valid && !(disableCheckerFlag ? disableCheckerFlag.value : false) && !(useCliFlag ? useCliFlag.value : false)){
         await opendiscord.events.get("onCheckerQuit").emit([opendiscord.checkers])
-        if (opendiscord.defaults.getDefault("checkerQuit")){
+        if (opendiscord.sharedFuses.getFuse("checkerQuit")){
             process.exit(1)
             //there is no afterCheckerQuitted event :)
         }
@@ -313,7 +304,7 @@ const main = async () => {
 
     //client configuration
     opendiscord.log("Loading client...","system")
-    if (opendiscord.defaults.getDefault("clientLoading")){
+    if (opendiscord.sharedFuses.getFuse("clientLoading")){
         //add intents (for basic permissions)
         opendiscord.client.intents.push(
             "Guilds",
@@ -369,7 +360,7 @@ const main = async () => {
     opendiscord.client.readyListener = async () => {
         opendiscord.log("Loading client setup...","system")
         await opendiscord.events.get("onClientReady").emit([opendiscord.client])
-        if (opendiscord.defaults.getDefault("clientReady")){
+        if (opendiscord.sharedFuses.getFuse("clientReady")){
             const client = opendiscord.client
 
             //check if all servers are valid
@@ -391,26 +382,27 @@ const main = async () => {
             //throw if bot doesn't have permissions in main server
             if (!client.checkGuildPerms(mainServer)){
                 console.log("\n")
-                opendiscord.log("The bot doesn't have the correct permissions in the server provided in the config!","error")
+                opendiscord.log("The bot doesn’t have the required permissions for the server specified in the configuration.","error")
                 opendiscord.log("Please give the bot \"Administrator\" permissions or visit the documentation!","info")
                 console.log("\n")
                 process.exit(1)
             }
-            if (opendiscord.defaults.getDefault("clientMultiGuildWarning")){
+            if (opendiscord.sharedFuses.getFuse("clientMultiGuildWarning")){
                 //warn if bot is in multiple servers
                 if (botServers.length > 1){
-                    opendiscord.log("This bot is part of multiple servers, but Open Ticket doesn't provide support for this!","warning")
-                    opendiscord.log("As a result, the bot may crash & glitch when used in the additional servers!","info")
+                    opendiscord.log("This bot is part of multiple servers, but Open Ticket does not support this.","warning")
+                    opendiscord.log("The bot may have weird behaviour when used in external servers!","info")
+                    await utilities.timer(2000)
                 }
                 botServers.forEach((server) => {
                     //warn if bot doesn't have permissions in multiple servers
-                    if (!client.checkGuildPerms(server)) opendiscord.log(`The bot doesn't have the correct permissions in the server "${server.name}"!`,"warning")
+                    if (!client.checkGuildPerms(server)) opendiscord.log(`The bot doesn’t have the required permissions for the server "${server.name}".`,"warning")
                 })
             }
 
             //load client activity
             opendiscord.log("Loading client activity...","system")
-            if (opendiscord.defaults.getDefault("clientActivityLoading")){
+            if (opendiscord.sharedFuses.getFuse("clientActivityLoading")){
                 //load config status
                 if (generalConfig.data.status && generalConfig.data.status.enabled) opendiscord.client.activity.setStatus(generalConfig.data.status.type,generalConfig.data.status.text,generalConfig.data.status.mode,generalConfig.data.status.state)
             }
@@ -419,14 +411,14 @@ const main = async () => {
 
             //initiate client activity
             await opendiscord.events.get("onClientActivityInit").emit([opendiscord.client.activity,opendiscord.client])
-            if (opendiscord.defaults.getDefault("clientActivityInitiating")){
+            if (opendiscord.sharedFuses.getFuse("clientActivityInitiating")){
                 opendiscord.client.activity.initStatus()
                 await opendiscord.events.get("afterClientActivityInitiated").emit([opendiscord.client.activity,opendiscord.client])
             }
 
             //load priority levels
             opendiscord.log("Loading prioritiy levels...","system")
-            if (opendiscord.defaults.getDefault("priorityLoading")){
+            if (opendiscord.fuses.getFuse("priorityLoading")){
                 await (await import("./data/openticket/priorityLoader.js")).loadAllPriorityLevels()
             }
             await opendiscord.events.get("onPriorityLoad").emit([opendiscord.priorities])
@@ -434,22 +426,22 @@ const main = async () => {
 
             //load slash commands
             opendiscord.log("Loading slash commands...","system")
-            if (opendiscord.defaults.getDefault("slashCommandLoading")){
+            if (opendiscord.sharedFuses.getFuse("slashCommandLoading")){
                 await (await import("./data/framework/commandLoader.js")).loadAllSlashCommands()
             }
             await opendiscord.events.get("onSlashCommandLoad").emit([opendiscord.client.slashCommands,opendiscord.client])
             await opendiscord.events.get("afterSlashCommandsLoaded").emit([opendiscord.client.slashCommands,opendiscord.client])
             
             //register slash commands (create, update & remove)
-            if (opendiscord.defaults.getDefault("forceSlashCommandRegistration")) opendiscord.log("Forcing all slash commands to be re-registered...","system")
+            if (opendiscord.sharedFuses.getFuse("forceSlashCommandRegistration")) opendiscord.log("Forcing all slash commands to be re-registered...","system")
             opendiscord.log("Registering slash commands... (this can take up to 2 minutes)","system")
             await opendiscord.events.get("onSlashCommandRegister").emit([opendiscord.client.slashCommands,opendiscord.client])
-            if (opendiscord.defaults.getDefault("slashCommandRegistering")){
+            if (opendiscord.sharedFuses.getFuse("slashCommandRegistering")){
                 //get all commands that are already registered in the bot
                 const cmds = await opendiscord.client.slashCommands.getAllRegisteredCommands()
                 const removableCmds = cmds.unused.map((cmd) => cmd.cmd)
                 const newCmds = cmds.unregistered.map((cmd) => cmd.instance)
-                const updatableCmds = cmds.registered.filter((cmd) => cmd.requiresUpdate || opendiscord.defaults.getDefault("forceSlashCommandRegistration")).map((cmd) => cmd.instance)
+                const updatableCmds = cmds.registered.filter((cmd) => cmd.requiresUpdate || opendiscord.sharedFuses.getFuse("forceSlashCommandRegistration")).map((cmd) => cmd.instance)
 
                 //init progress bars
                 const removeProgress = opendiscord.progressbars.get("opendiscord:slash-command-remove")
@@ -457,7 +449,7 @@ const main = async () => {
                 const updateProgress = opendiscord.progressbars.get("opendiscord:slash-command-update")
 
                 //remove unused cmds, create new cmds & update existing cmds
-                if (opendiscord.defaults.getDefault("allowSlashCommandRemoval")) await opendiscord.client.slashCommands.removeUnusedCommands(removableCmds,undefined,removeProgress)
+                if (opendiscord.sharedFuses.getFuse("allowSlashCommandRemoval")) await opendiscord.client.slashCommands.removeUnusedCommands(removableCmds,undefined,removeProgress)
                 await opendiscord.client.slashCommands.createNewCommands(newCmds,createProgress)
                 await opendiscord.client.slashCommands.updateExistingCommands(updatableCmds,updateProgress)
                 
@@ -466,22 +458,22 @@ const main = async () => {
 
             //load context menus
             opendiscord.log("Loading context menus...","system")
-            if (opendiscord.defaults.getDefault("contextMenuLoading")){
+            if (opendiscord.sharedFuses.getFuse("contextMenuLoading")){
                 await (await import("./data/framework/commandLoader.js")).loadAllContextMenus()
             }
             await opendiscord.events.get("onContextMenuLoad").emit([opendiscord.client.contextMenus,opendiscord.client])
             await opendiscord.events.get("afterContextMenusLoaded").emit([opendiscord.client.contextMenus,opendiscord.client])
             
             //register context menus (create, update & remove)
-            if (opendiscord.defaults.getDefault("forceContextMenuRegistration")) opendiscord.log("Forcing all context menus to be re-registered...","system")
+            if (opendiscord.sharedFuses.getFuse("forceContextMenuRegistration")) opendiscord.log("Forcing all context menus to be re-registered...","system")
             opendiscord.log("Registering context menus... (this can take up to a minute)","system")
             await opendiscord.events.get("onContextMenuRegister").emit([opendiscord.client.contextMenus,opendiscord.client])
-            if (opendiscord.defaults.getDefault("contextMenuRegistering")){
+            if (opendiscord.sharedFuses.getFuse("contextMenuRegistering")){
                 //get all context menus that are already registered in the bot
                 const menus = await opendiscord.client.contextMenus.getAllRegisteredMenus()
                 const removableMenus = menus.unused.map((menu) => menu.menu)
                 const newMenus = menus.unregistered.map((menu) => menu.instance)
-                const updatableMenus = menus.registered.filter((menu) => menu.requiresUpdate || opendiscord.defaults.getDefault("forceContextMenuRegistration")).map((menu) => menu.instance)
+                const updatableMenus = menus.registered.filter((menu) => menu.requiresUpdate || opendiscord.sharedFuses.getFuse("forceContextMenuRegistration")).map((menu) => menu.instance)
 
                 //init progress bars
                 const removeProgress = opendiscord.progressbars.get("opendiscord:context-menu-remove")
@@ -489,7 +481,7 @@ const main = async () => {
                 const updateProgress = opendiscord.progressbars.get("opendiscord:context-menu-update")
 
                 //remove unused menus, create new menus & update existing menus
-                if (opendiscord.defaults.getDefault("allowContextMenuRemoval")) await opendiscord.client.contextMenus.removeUnusedMenus(removableMenus,undefined,removeProgress)
+                if (opendiscord.sharedFuses.getFuse("allowContextMenuRemoval")) await opendiscord.client.contextMenus.removeUnusedMenus(removableMenus,undefined,removeProgress)
                 await opendiscord.client.contextMenus.createNewMenus(newMenus,createProgress)
                 await opendiscord.client.contextMenus.updateExistingMenus(updatableMenus,updateProgress)
                 
@@ -498,10 +490,10 @@ const main = async () => {
 
             //load text commands
             opendiscord.log("Loading text commands...","system")
-            if (opendiscord.defaults.getDefault("allowDumpCommand")){
-                (await import("./core/startup/dump.js")).loadDumpCommand()
+            if (opendiscord.sharedFuses.getFuse("allowDumpCommand")){
+                loadDumpCommand(opendiscord)
             }
-            if (opendiscord.defaults.getDefault("textCommandLoading")){
+            if (opendiscord.sharedFuses.getFuse("textCommandLoading")){
                 await (await import("./data/framework/commandLoader.js")).loadAllTextCommands()
             }
             await opendiscord.events.get("onTextCommandLoad").emit([opendiscord.client.textCommands,opendiscord.client])
@@ -515,7 +507,7 @@ const main = async () => {
     //client init (login)
     opendiscord.log("Logging in...","system")
     await opendiscord.events.get("onClientInit").emit([opendiscord.client])
-    if (opendiscord.defaults.getDefault("clientInitiating")){
+    if (opendiscord.sharedFuses.getFuse("clientInitiating")){
         //init client
         opendiscord.client.initClient()
         await opendiscord.events.get("afterClientInitiated").emit([opendiscord.client])
@@ -525,13 +517,28 @@ const main = async () => {
         opendiscord.log("discord.js client ready!","info")
     }
 
+    //load states
+    opendiscord.log("Loading states...","system")
+    if (opendiscord.sharedFuses.getFuse("stateLoading")){
+        await (await import("./data/framework/stateLoader.js")).loadAllStates()
+    }
+    await opendiscord.events.get("onStateLoad").emit([opendiscord.states])
+    await opendiscord.events.get("afterStatesLoaded").emit([opendiscord.states])
+
+    //init states
+    await opendiscord.events.get("onStateInit").emit([opendiscord.states])
+    if (opendiscord.sharedFuses.getFuse("stateInitiating")){
+        await opendiscord.states.init()
+        await opendiscord.events.get("afterStatesInitiated").emit([opendiscord.states])
+    }
+
     //plugin loading before managers
     await opendiscord.events.get("onPluginBeforeManagerLoad").emit([])
     await opendiscord.events.get("afterPluginBeforeManagerLoaded").emit([])
 
     //load questions
     opendiscord.log("Loading questions...","system")
-    if (opendiscord.defaults.getDefault("questionLoading")){
+    if (opendiscord.fuses.getFuse("questionLoading")){
         await (await import("./data/openticket/questionLoader.js")).loadAllQuestions()
     }
     await opendiscord.events.get("onQuestionLoad").emit([opendiscord.questions])
@@ -539,7 +546,7 @@ const main = async () => {
     
     //load options
     opendiscord.log("Loading options...","system")
-    if (opendiscord.defaults.getDefault("optionLoading")){
+    if (opendiscord.fuses.getFuse("optionLoading")){
         await (await import("./data/openticket/optionLoader.js")).loadAllOptions()
     }
     await opendiscord.events.get("onOptionLoad").emit([opendiscord.options])
@@ -547,7 +554,7 @@ const main = async () => {
     
     //load panels
     opendiscord.log("Loading panels...","system")
-    if (opendiscord.defaults.getDefault("panelLoading")){
+    if (opendiscord.fuses.getFuse("panelLoading")){
         await (await import("./data/openticket/panelLoader.js")).loadAllPanels()
     }
     await opendiscord.events.get("onPanelLoad").emit([opendiscord.panels])
@@ -555,7 +562,7 @@ const main = async () => {
 
     //load tickets
     opendiscord.log("Loading tickets...","system")
-    if (opendiscord.defaults.getDefault("ticketLoading")){
+    if (opendiscord.fuses.getFuse("ticketLoading")){
         opendiscord.tickets.useGuild(opendiscord.client.mainServer)
         await (await import("./data/openticket/ticketLoader.js")).loadAllTickets()
     }
@@ -564,7 +571,7 @@ const main = async () => {
     
     //load roles
     opendiscord.log("Loading roles...","system")
-    if (opendiscord.defaults.getDefault("roleLoading")){
+    if (opendiscord.fuses.getFuse("roleLoading")){
         await (await import("./data/openticket/roleLoader.js")).loadAllRoles()
     }
     await opendiscord.events.get("onRoleLoad").emit([opendiscord.roles])
@@ -572,7 +579,7 @@ const main = async () => {
 
     //load blacklist
     opendiscord.log("Loading blacklist...","system")
-    if (opendiscord.defaults.getDefault("blacklistLoading")){
+    if (opendiscord.fuses.getFuse("blacklistLoading")){
         await (await import("./data/openticket/blacklistLoader.js")).loadAllBlacklistedUsers()
     }
     await opendiscord.events.get("onBlacklistLoad").emit([opendiscord.blacklist])
@@ -580,14 +587,14 @@ const main = async () => {
 
     //load transcript compilers
     opendiscord.log("Loading transcripts...","system")
-    if (opendiscord.defaults.getDefault("transcriptCompilerLoading")){
+    if (opendiscord.fuses.getFuse("transcriptCompilerLoading")){
         await (await import("./data/openticket/transcriptLoader.js")).loadAllTranscriptCompilers()
     }
     await opendiscord.events.get("onTranscriptCompilerLoad").emit([opendiscord.transcripts])
     await opendiscord.events.get("afterTranscriptCompilersLoaded").emit([opendiscord.transcripts])
 
     //load transcript history
-    if (opendiscord.defaults.getDefault("transcriptHistoryLoading")){
+    if (opendiscord.fuses.getFuse("transcriptHistoryLoading")){
         await (await import("./data/openticket/transcriptLoader.js")).loadTranscriptHistory()
     }
     await opendiscord.events.get("onTranscriptHistoryLoad").emit([opendiscord.transcripts])
@@ -599,7 +606,7 @@ const main = async () => {
 
     //load button builders
     opendiscord.log("Loading buttons...","system")
-    if (opendiscord.defaults.getDefault("buttonBuildersLoading")){
+    if (opendiscord.sharedFuses.getFuse("buttonBuildersLoading")){
         await (await import("./builders/buttons.js")).registerAllButtons()
     }
     await opendiscord.events.get("onButtonBuilderLoad").emit([opendiscord.builders.buttons,opendiscord.builders,opendiscord.actions])
@@ -607,7 +614,7 @@ const main = async () => {
 
     //load dropdown builders
     opendiscord.log("Loading dropdowns...","system")
-    if (opendiscord.defaults.getDefault("dropdownBuildersLoading")){
+    if (opendiscord.sharedFuses.getFuse("dropdownBuildersLoading")){
         await (await import("./builders/dropdowns.js")).registerAllDropdowns()
     }
     await opendiscord.events.get("onDropdownBuilderLoad").emit([opendiscord.builders.dropdowns,opendiscord.builders,opendiscord.actions])
@@ -615,7 +622,7 @@ const main = async () => {
 
     //load file builders
     opendiscord.log("Loading files...","system")
-    if (opendiscord.defaults.getDefault("fileBuildersLoading")){
+    if (opendiscord.sharedFuses.getFuse("fileBuildersLoading")){
         await (await import("./builders/files.js")).registerAllFiles()
     }
     await opendiscord.events.get("onFileBuilderLoad").emit([opendiscord.builders.files,opendiscord.builders,opendiscord.actions])
@@ -623,7 +630,7 @@ const main = async () => {
 
     //load embed builders
     opendiscord.log("Loading embeds...","system")
-    if (opendiscord.defaults.getDefault("embedBuildersLoading")){
+    if (opendiscord.sharedFuses.getFuse("embedBuildersLoading")){
         await (await import("./builders/embeds.js")).registerAllEmbeds()
     }
     await opendiscord.events.get("onEmbedBuilderLoad").emit([opendiscord.builders.embeds,opendiscord.builders,opendiscord.actions])
@@ -631,7 +638,7 @@ const main = async () => {
 
     //load message builders
     opendiscord.log("Loading messages...","system")
-    if (opendiscord.defaults.getDefault("messageBuildersLoading")){
+    if (opendiscord.sharedFuses.getFuse("messageBuildersLoading")){
         await (await import("./builders/messages.js")).registerAllMessages()
     }
     await opendiscord.events.get("onMessageBuilderLoad").emit([opendiscord.builders.messages,opendiscord.builders,opendiscord.actions])
@@ -639,11 +646,43 @@ const main = async () => {
 
     //load modal builders
     opendiscord.log("Loading modals...","system")
-    if (opendiscord.defaults.getDefault("modalBuildersLoading")){
+    if (opendiscord.sharedFuses.getFuse("modalBuildersLoading")){
         await (await import("./builders/modals.js")).registerAllModals()
     }
     await opendiscord.events.get("onModalBuilderLoad").emit([opendiscord.builders.modals,opendiscord.builders,opendiscord.actions])
     await opendiscord.events.get("afterModalBuildersLoaded").emit([opendiscord.builders.modals,opendiscord.builders,opendiscord.actions])
+
+    //load shared components
+    opendiscord.log("Loading shared components...","system")
+    if (opendiscord.sharedFuses.getFuse("sharedComponentsLoading")){
+        //TODO!!
+    }
+    await opendiscord.events.get("onSharedComponentLoad").emit([opendiscord.components.shared,opendiscord.components,opendiscord.actions])
+    await opendiscord.events.get("afterSharedComponentsLoaded").emit([opendiscord.components.shared,opendiscord.components,opendiscord.actions])
+
+    //load message components
+    opendiscord.log("Loading message components...","system")
+    if (opendiscord.sharedFuses.getFuse("messageComponentsLoading")){
+        //TODO!!
+    }
+    await opendiscord.events.get("onMessageComponentLoad").emit([opendiscord.components.messages,opendiscord.components,opendiscord.actions])
+    await opendiscord.events.get("afterMessageComponentsLoaded").emit([opendiscord.components.messages,opendiscord.components,opendiscord.actions])
+
+    //load modal components
+    opendiscord.log("Loading modal components...","system")
+    if (opendiscord.sharedFuses.getFuse("modalComponentsLoading")){
+        //TODO!!
+    }
+    await opendiscord.events.get("onModalComponentLoad").emit([opendiscord.components.modals,opendiscord.components,opendiscord.actions])
+    await opendiscord.events.get("afterModalComponentsLoaded").emit([opendiscord.components.modals,opendiscord.components,opendiscord.actions])
+
+    //load component modifiers
+    opendiscord.log("Loading component modifiers...","system")
+    if (opendiscord.sharedFuses.getFuse("componentModifiersLoading")){
+        await (await import("./components/verifybarModifiers.js")).registerAllVerifyBarModifiers()
+    }
+    await opendiscord.events.get("onComponentModifierLoad").emit([opendiscord.components.modifiers,opendiscord.components.messages,opendiscord.builders.messages])
+    await opendiscord.events.get("afterComponentModifiersLoaded").emit([opendiscord.components.modifiers,opendiscord.components.messages,opendiscord.builders.messages])
 
     //plugin loading before responders
     await opendiscord.events.get("onPluginBeforeResponderLoad").emit([])
@@ -651,7 +690,7 @@ const main = async () => {
 
     //load command responders
     opendiscord.log("Loading command responders...","system")
-    if (opendiscord.defaults.getDefault("commandRespondersLoading")){
+    if (opendiscord.sharedFuses.getFuse("commandRespondersLoading")){
         await (await import("./commands/help.js")).registerCommandResponders()
         await (await import("./commands/stats.js")).registerCommandResponders()
         await (await import("./commands/panel.js")).registerCommandResponders()
@@ -680,7 +719,7 @@ const main = async () => {
 
     //load button responders
     opendiscord.log("Loading button responders...","system")
-    if (opendiscord.defaults.getDefault("buttonRespondersLoading")){
+    if (opendiscord.sharedFuses.getFuse("buttonRespondersLoading")){
         await (await import("./actions/handleVerifyBar.js")).registerButtonResponders()
         await (await import("./actions/handleTranscriptErrors.js")).registerButtonResponders()
         await (await import("./commands/help.js")).registerButtonResponders()
@@ -700,7 +739,7 @@ const main = async () => {
 
     //load dropdown responders
     opendiscord.log("Loading dropdown responders...","system")
-    if (opendiscord.defaults.getDefault("dropdownRespondersLoading")){
+    if (opendiscord.sharedFuses.getFuse("dropdownRespondersLoading")){
         await (await import("./commands/ticket.js")).registerDropdownResponders()
     }
     await opendiscord.events.get("onDropdownResponderLoad").emit([opendiscord.responders.dropdowns,opendiscord.responders,opendiscord.actions])
@@ -708,7 +747,7 @@ const main = async () => {
 
     //load modal responders
     opendiscord.log("Loading modal responders...","system")
-    if (opendiscord.defaults.getDefault("modalRespondersLoading")){
+    if (opendiscord.sharedFuses.getFuse("modalRespondersLoading")){
         await (await import("./commands/ticket.js")).registerModalResponders()
         await (await import("./commands/close.js")).registerModalResponders()
         await (await import("./commands/reopen.js")).registerModalResponders()
@@ -723,7 +762,7 @@ const main = async () => {
 
     //load context menu responders
     opendiscord.log("Loading context menu responders...","system")
-    if (opendiscord.defaults.getDefault("contextMenuRespondersLoading")){
+    if (opendiscord.sharedFuses.getFuse("contextMenuRespondersLoading")){
         //TODO!!
     }
     await opendiscord.events.get("onContextMenuResponderLoad").emit([opendiscord.responders.contextMenus,opendiscord.responders,opendiscord.actions])
@@ -731,7 +770,7 @@ const main = async () => {
 
     //load autocomplete responders
     opendiscord.log("Loading autocomplete responders...","system")
-    if (opendiscord.defaults.getDefault("autocompleteRespondersLoading")){
+    if (opendiscord.sharedFuses.getFuse("autocompleteRespondersLoading")){
         await (await import("./commands/autocomplete.js")).registerAutocompleteResponders()
     }
     await opendiscord.events.get("onAutocompleteResponderLoad").emit([opendiscord.responders.autocomplete,opendiscord.responders,opendiscord.actions])
@@ -743,8 +782,10 @@ const main = async () => {
 
     //load actions
     opendiscord.log("Loading actions...","system")
-    if (opendiscord.defaults.getDefault("actionsLoading")){
+    if (opendiscord.sharedFuses.getFuse("actionsLoading")){
         await (await import("./actions/createTicketPermissions.js")).registerActions()
+        await (await import("./actions/calculateTicketCategory.js")).registerActions()
+        await (await import("./actions/calculateTicketName.js")).registerActions()
         await (await import("./actions/createTranscript.js")).registerActions()
         await (await import("./actions/createTicket.js")).registerActions()
         await (await import("./actions/closeTicket.js")).registerActions()
@@ -769,21 +810,21 @@ const main = async () => {
 
     //load verifybars
     opendiscord.log("Loading verifybars...","system")
-    if (opendiscord.defaults.getDefault("verifyBarsLoading")){
-        await (await import("./actions/closeTicket.js")).registerVerifyBars()
-        await (await import("./actions/deleteTicket.js")).registerVerifyBars()
-        await (await import("./actions/reopenTicket.js")).registerVerifyBars()
-        await (await import("./actions/claimTicket.js")).registerVerifyBars()
-        await (await import("./actions/unclaimTicket.js")).registerVerifyBars()
-        await (await import("./actions/pinTicket.js")).registerVerifyBars()
-        await (await import("./actions/unpinTicket.js")).registerVerifyBars()
+    if (opendiscord.sharedFuses.getFuse("verifyBarsLoading")){
+        await (await import("./commands/close.js")).registerVerifyBars()
+        await (await import("./commands/delete.js")).registerVerifyBars()
+        await (await import("./commands/reopen.js")).registerVerifyBars()
+        await (await import("./commands/claim.js")).registerVerifyBars()
+        await (await import("./commands/unclaim.js")).registerVerifyBars()
+        await (await import("./commands/pin.js")).registerVerifyBars()
+        await (await import("./commands/unpin.js")).registerVerifyBars()
     }
     await opendiscord.events.get("onVerifyBarLoad").emit([opendiscord.verifybars])
     await opendiscord.events.get("afterVerifyBarsLoaded").emit([opendiscord.verifybars])
 
     //load permissions
     opendiscord.log("Loading permissions...","system")
-    if (opendiscord.defaults.getDefault("permissionsLoading")){
+    if (opendiscord.sharedFuses.getFuse("permissionsLoading")){
         await (await import("./data/framework/permissionLoader.js")).loadAllPermissions()
     }
     await opendiscord.events.get("onPermissionLoad").emit([opendiscord.permissions])
@@ -791,7 +832,7 @@ const main = async () => {
 
     //load posts
     opendiscord.log("Loading posts...","system")
-    if (opendiscord.defaults.getDefault("postsLoading")){
+    if (opendiscord.sharedFuses.getFuse("postsLoading")){
         await (await import("./data/framework/postLoader.js")).loadAllPosts()
     }
     await opendiscord.events.get("onPostLoad").emit([opendiscord.posts])
@@ -799,14 +840,14 @@ const main = async () => {
 
     //init posts
     await opendiscord.events.get("onPostInit").emit([opendiscord.posts])
-    if (opendiscord.defaults.getDefault("postsInitiating")){
-        if (opendiscord.client.mainServer) opendiscord.posts.init(opendiscord.client.mainServer)
+    if (opendiscord.sharedFuses.getFuse("postsInitiating")){
+        if (opendiscord.client.mainServer) await opendiscord.posts.init(opendiscord.client.mainServer)
         await opendiscord.events.get("afterPostsInitiated").emit([opendiscord.posts])
     }
 
     //load cooldowns
     opendiscord.log("Loading cooldowns...","system")
-    if (opendiscord.defaults.getDefault("cooldownsLoading")){
+    if (opendiscord.sharedFuses.getFuse("cooldownsLoading")){
         await (await import("./data/framework/cooldownLoader.js")).loadAllCooldowns()
     }
     await opendiscord.events.get("onCooldownLoad").emit([opendiscord.cooldowns])
@@ -814,47 +855,47 @@ const main = async () => {
     
     //init cooldowns
     await opendiscord.events.get("onCooldownInit").emit([opendiscord.cooldowns])
-    if (opendiscord.defaults.getDefault("cooldownsInitiating")){
+    if (opendiscord.sharedFuses.getFuse("cooldownsInitiating")){
         await opendiscord.cooldowns.init()
         await opendiscord.events.get("afterCooldownsInitiated").emit([opendiscord.cooldowns])
     }
 
     //load help menu categories
     opendiscord.log("Loading help menu...","system")
-    if (opendiscord.defaults.getDefault("helpMenuCategoryLoading")){
+    if (opendiscord.sharedFuses.getFuse("helpMenuCategoryLoading")){
         await (await import("./data/framework/helpMenuLoader.js")).loadAllHelpMenuCategories()
     }
     await opendiscord.events.get("onHelpMenuCategoryLoad").emit([opendiscord.helpmenu])
     await opendiscord.events.get("afterHelpMenuCategoriesLoaded").emit([opendiscord.helpmenu])
 
     //load help menu components
-    if (opendiscord.defaults.getDefault("helpMenuComponentLoading")){
+    if (opendiscord.sharedFuses.getFuse("helpMenuComponentLoading")){
         await (await import("./data/framework/helpMenuLoader.js")).loadAllHelpMenuComponents()
     }
     await opendiscord.events.get("onHelpMenuComponentLoad").emit([opendiscord.helpmenu])
     await opendiscord.events.get("afterHelpMenuComponentsLoaded").emit([opendiscord.helpmenu])
 
-    //load stat scopes
-    opendiscord.log("Loading stats...","system")
-    if (opendiscord.defaults.getDefault("statScopesLoading")){
-        opendiscord.stats.useDatabase(opendiscord.databases.get("opendiscord:stats"))
-        await (await import("./data/framework/statLoader.js")).loadAllStatScopes()
+    //load statistic scopes
+    opendiscord.log("Loading statistics...","system")
+    if (opendiscord.sharedFuses.getFuse("statisticScopesLoading")){
+        opendiscord.statistics.useDatabase(opendiscord.databases.get("opendiscord:stats"))
+        await (await import("./data/framework/statisticLoader.js")).loadAllStatisticScopes()
     }
-    await opendiscord.events.get("onStatScopeLoad").emit([opendiscord.stats])
-    await opendiscord.events.get("afterStatScopesLoaded").emit([opendiscord.stats])
+    await opendiscord.events.get("onStatisticScopeLoad").emit([opendiscord.statistics])
+    await opendiscord.events.get("afterStatisticScopesLoaded").emit([opendiscord.statistics])
 
-    //load stats
-    if (opendiscord.defaults.getDefault("statLoading")){
-        await (await import("./data/framework/statLoader.js")).loadAllStats()
+    //load statistics
+    if (opendiscord.sharedFuses.getFuse("statisticLoading")){
+        await (await import("./data/framework/statisticLoader.js")).loadAllStatistics()
     }
-    await opendiscord.events.get("onStatLoad").emit([opendiscord.stats])
-    await opendiscord.events.get("afterStatsLoaded").emit([opendiscord.stats])
+    await opendiscord.events.get("onStatisticLoad").emit([opendiscord.statistics])
+    await opendiscord.events.get("afterStatisticsLoaded").emit([opendiscord.statistics])
 
-    //init stats
-    await opendiscord.events.get("onStatInit").emit([opendiscord.stats])
-    if (opendiscord.defaults.getDefault("statInitiating")){
-        await opendiscord.stats.init()
-        await opendiscord.events.get("afterStatsInitiated").emit([opendiscord.stats])
+    //init statistics
+    await opendiscord.events.get("onStatisticInit").emit([opendiscord.statistics])
+    if (opendiscord.sharedFuses.getFuse("statisticInitiating")){
+        await opendiscord.statistics.init()
+        await opendiscord.events.get("afterStatisticsInitiated").emit([opendiscord.statistics])
     }
 
     //plugin loading before code
@@ -863,7 +904,7 @@ const main = async () => {
 
     //load code
     opendiscord.log("Loading code...","system")
-    if (opendiscord.defaults.getDefault("codeLoading")){
+    if (opendiscord.sharedFuses.getFuse("codeLoading")){
         await (await import("./data/framework/codeLoader.js")).loadAllCode()
     }
     await opendiscord.events.get("onCodeLoad").emit([opendiscord.code])
@@ -871,7 +912,7 @@ const main = async () => {
 
     //execute code
     await opendiscord.events.get("onCodeExecute").emit([opendiscord.code])
-    if (opendiscord.defaults.getDefault("codeExecution")){
+    if (opendiscord.sharedFuses.getFuse("codeExecution")){
         await opendiscord.code.execute()
         await opendiscord.events.get("afterCodeExecuted").emit([opendiscord.code])
     }
@@ -881,7 +922,7 @@ const main = async () => {
 
     //load livestatus sources
     opendiscord.log("Loading livestatus...","system")
-    if (opendiscord.defaults.getDefault("liveStatusLoading")){
+    if (opendiscord.sharedFuses.getFuse("liveStatusLoading")){
         await (await import("./data/framework/liveStatusLoader.js")).loadAllLiveStatusSources()
     }
     await opendiscord.events.get("onLiveStatusSourceLoad").emit([opendiscord.livestatus])
@@ -889,7 +930,7 @@ const main = async () => {
 
     //load startscreen
     opendiscord.log("Loading startscreen...","system")
-    if (opendiscord.defaults.getDefault("startScreenLoading")){
+    if (opendiscord.sharedFuses.getFuse("startScreenLoading")){
         await (await import("./data/framework/startScreenLoader.js")).loadAllStartScreenComponents()
     }
     await opendiscord.events.get("onStartScreenLoad").emit([opendiscord.startscreen])
@@ -897,7 +938,7 @@ const main = async () => {
 
     //render startscreen
     await opendiscord.events.get("onStartScreenRender").emit([opendiscord.startscreen])
-    if (opendiscord.defaults.getDefault("startScreenRendering")){
+    if (opendiscord.sharedFuses.getFuse("startScreenRendering")){
         await opendiscord.startscreen.renderAllComponents()
         if (opendiscord.languages.getLanguageMetadata(false)?.automated){
             console.log("===================")

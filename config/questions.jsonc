@@ -1,0 +1,102 @@
+/*
+ * OPEN TICKET MODAL QUESTIONS
+ * ----------------------------------------------
+ * Create customizable modal questions that will be shown before creating a ticket.
+ * Each ticket option (config/options.jsonc) can contain a maximum of 5 questions.
+ * There are 6 types of questions available: short, paragraph, dropdown, radio-select, checkbox-select, text-display
+ * 
+ * TIP: Create new questions by copying everything between and including the {...} brackets of a question. Paste it after the last question and make sure that they are seperated by a comma.
+ */
+[
+    {
+        /* A short text input modal question. */
+        "id":"example-question-1",
+        "name":"Example Question 1",
+        "description":"", //Leave empty to disable
+        "type":"short",
+        "required":true,
+        
+        "placeholder":"Insert answer...",
+        "length":{
+            /* Configure length limits for the answer. */
+            "enabled":false,
+            "min":0,
+            "max":1000
+        }
+    },
+    {
+        /* A paragraph text input modal question. */
+        "id":"example-question-2",
+        "name":"Example Question 2",
+        "description":"", //Leave empty to disable
+        "type":"paragraph",
+        "required":false,
+        
+        "placeholder":"Insert answer...",
+        "length":{
+            /* Configure length limits for the answer. */
+            "enabled":false,
+            "min":0,
+            "max":1000
+        }
+    },
+    {
+        /* A dropdown menu input modal question with up to 25 choices. "emoji" & "description" fields are optional. */
+        "id":"example-question-3",
+        "name":"Example Question 3",
+        "description":"This is a dropdown question.", //Leave empty to disable
+        "type":"dropdown",
+        "required":false,
+        
+        "placeholder":"Choose your answer...",
+        "choices":[
+            {"title":"Choice A","description":"Apple","emoji":"🍎"},
+            {"title":"Choice B","description":"Banana","emoji":"🍌"},
+            {"title":"Choice C","description":"Orange","emoji":"🍊"},
+            {"title":"Choice D","description":"Kiwi","emoji":"🥝"}
+        ]
+    },
+    {
+        /* A radio select input modal question with up to 10 choices. */
+        "id":"example-question-4",
+        "name":"Example Question 4",
+        "description":"This is a radio select question.", //Leave empty to disable
+        "type":"radio-select",
+        "required":true,
+        
+        "choices":[
+            {"title":"Choice A","description":"Up","selectedByDefault":false},
+            {"title":"Choice B","description":"Down","selectedByDefault":false},
+            {"title":"Choice C","description":"Left","selectedByDefault":false},
+            {"title":"Choice D","description":"Right","selectedByDefault":false}
+        ]
+    },
+    {
+        /* A checkbox select input modal question with up to 10 choices. */
+        "id":"example-question-5",
+        "name":"Example Question 5",
+        "description":"This is a checkbox select question.", //Leave empty to disable
+        "type":"checkbox-select",
+        "required":true,
+        
+        "limits":{
+            /* Configure checkbox amount limits for the answer. */
+            "enabled":false,
+            "min":0,
+            "max":10
+        },
+        "choices":[
+            {"title":"Choice A","description":"Happiness","selectedByDefault":false},
+            {"title":"Choice B","description":"Anger","selectedByDefault":false},
+            {"title":"Choice C","description":"Sadness","selectedByDefault":false},
+            {"title":"Choice D","description":"Fear","selectedByDefault":false}
+        ]
+    },
+    {
+        /* Show text in a modal to provide extra details or explain questions. */
+        "id":"example-text-display",
+        "type":"text-display",
+        
+        "textContents":"This is a text display. It isn't a question, but allows you to display additional details."
+    }
+]

@@ -1,16 +1,16 @@
 ///////////////////////////////////////
 //TICKET TOPIC SYSTEM
 ///////////////////////////////////////
-import {opendiscord, api, utilities} from "../index"
+import {opendiscord, api, utilities, openticketUtils} from "../index.js"
 import * as discord from "discord.js"
 
 const generalConfig = opendiscord.configs.get("opendiscord:general")
 const lang = opendiscord.languages
 
-export const registerActions = async () => {
+export async function registerActions(){
     opendiscord.actions.add(new api.ODAction("opendiscord:update-ticket-topic"))
     opendiscord.actions.get("opendiscord:update-ticket-topic").workers.add([
-        new api.ODWorker("opendiscord:update-ticket-topic",2,async (instance,params,source,cancel) => {
+        new api.ODWorker("opendiscord:update-ticket-topic",2,async (instance,params,origin,cancel) => {
             const {guild,channel,user,ticket,newTopic} = params
             if (channel.isThread() || !(channel instanceof discord.TextChannel)) throw new api.ODSystemError("Unable to set topic of ticket! Open Ticket doesn't support threads!")
 
@@ -29,28 +29,28 @@ export const registerActions = async () => {
 
             //handle channel topic
             const channelTopics: string[] = []
-            if (generalConfig.data.system.channelTopic.showOptionName) channelTopics.push(ticket.option.get("opendiscord:name").value)
-            if (generalConfig.data.system.channelTopic.showOptionDescription) channelTopics.push(ticket.option.get("opendiscord:description").value)
-            if (generalConfig.data.system.channelTopic.showOptionTopic) channelTopics.push(ticket.get("opendiscord:topic").value)
-            if (generalConfig.data.system.channelTopic.showPriority) channelTopics.push("**"+lang.getTranslation("params.uppercase.priority")+":** "+opendiscord.priorities.getFromPriorityLevel(ticket.get("opendiscord:priority").value).renderDisplayName())
-            if (generalConfig.data.system.channelTopic.showClosed) channelTopics.push("**"+lang.getTranslation("params.uppercase.status")+":** "+(closed ? lang.getTranslation("params.uppercase.closed") : lang.getTranslation("params.uppercase.open")))
-            if (generalConfig.data.system.channelTopic.showClaimed) channelTopics.push("**"+lang.getTranslation("stats.properties.claimedBy")+":** "+(claimedBy ? discord.userMention(claimedBy) : lang.getTranslation("params.uppercase.noone")))
-            if (generalConfig.data.system.channelTopic.showPinned) channelTopics.push("**"+lang.getTranslation("params.uppercase.pinned")+":** "+(pinned ? lang.getTranslation("params.uppercase.yes") : lang.getTranslation("params.uppercase.no")))
-            if (generalConfig.data.system.channelTopic.showCreator) channelTopics.push("**"+lang.getTranslation("params.uppercase.creator")+":** "+discord.userMention(creator))
-            if (generalConfig.data.system.channelTopic.showParticipants) channelTopics.push("**"+lang.getTranslation("params.uppercase.participants")+":** "+ticket.get("opendiscord:participants").value.map((p) => (p.type == "user") ? discord.userMention(p.id) : discord.roleMention(p.id)).join(", "))
+            if (generalConfig.data.ticketSystem.channelTopic.showOptionName) channelTopics.push(ticket.option.get("opendiscord:name").value)
+            if (generalConfig.data.ticketSystem.channelTopic.showOptionDescription) channelTopics.push(ticket.option.get("opendiscord:description").value)
+            if (generalConfig.data.ticketSystem.channelTopic.showOptionTopic) channelTopics.push(ticket.get("opendiscord:topic").value)
+            if (generalConfig.data.ticketSystem.channelTopic.showPriority) channelTopics.push("**"+lang.getTranslation("params.uppercase.priority")+":** "+opendiscord.priorities.getFromPriorityLevel(ticket.get("opendiscord:priority").value).renderDisplayName())
+            if (generalConfig.data.ticketSystem.channelTopic.showClosed) channelTopics.push("**"+lang.getTranslation("params.uppercase.status")+":** "+(closed ? lang.getTranslation("params.uppercase.closed") : lang.getTranslation("params.uppercase.open")))
+            if (generalConfig.data.ticketSystem.channelTopic.showClaimed) channelTopics.push("**"+lang.getTranslation("stats.properties.claimedBy")+":** "+(claimedBy ? discord.userMention(claimedBy) : lang.getTranslation("params.uppercase.noone")))
+            if (generalConfig.data.ticketSystem.channelTopic.showPinned) channelTopics.push("**"+lang.getTranslation("params.uppercase.pinned")+":** "+(pinned ? lang.getTranslation("params.uppercase.yes") : lang.getTranslation("params.uppercase.no")))
+            if (generalConfig.data.ticketSystem.channelTopic.showCreator) channelTopics.push("**"+lang.getTranslation("params.uppercase.creator")+":** "+discord.userMention(creator))
+            if (generalConfig.data.ticketSystem.channelTopic.showParticipants) channelTopics.push("**"+lang.getTranslation("params.uppercase.participants")+":** "+ticket.get("opendiscord:participants").value.map((p) => (p.type == "user") ? discord.userMention(p.id) : discord.roleMention(p.id)).join(", "))
 
             //update channel
             channel.setTopic(channelTopics.join(" • "),"Topic Changed")
 
             //reply with new message
-            if (params.sendMessage && newTopic) await channel.send((await opendiscord.builders.messages.getSafe("opendiscord:topic-set").build(source,{guild,channel,user,ticket,topic:newTopic})).message)
+            if (params.sendMessage && newTopic) await channel.send((await opendiscord.builders.messages.getSafe("opendiscord:topic-set").build(origin,{guild,channel,user,ticket,topic:newTopic})).message)
             ticket.get("opendiscord:busy").value = false
             if (newTopic) await opendiscord.events.get("afterTicketTopicChanged").emit([ticket,user,channel,oldTopic,newTopic])
         }),
-        new api.ODWorker("opendiscord:discord-logs",1,async (instance,params,source,cancel) => {
+        new api.ODWorker("opendiscord:discord-logs",1,async (instance,params,origin,cancel) => {
             const {guild,channel,user,ticket} = params
         }),
-        new api.ODWorker("opendiscord:logs",0,(instance,params,source,cancel) => {
+        new api.ODWorker("opendiscord:logs",0,(instance,params,origin,cancel) => {
             const {guild,channel,user,ticket,newTopic} = params
 
             if (newTopic) opendiscord.log(user.displayName+" changed the topic of a ticket!","info",[
@@ -59,7 +59,7 @@ export const registerActions = async () => {
                 {key:"channel",value:"#"+channel.name},
                 {key:"channelid",value:channel.id,hidden:true},
                 {key:"topic",value:newTopic},
-                {key:"method",value:source}
+                {key:"method",value:origin}
             ])
         })
     ])

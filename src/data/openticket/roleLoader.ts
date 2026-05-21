@@ -1,6 +1,6 @@
-import {opendiscord, api, utilities} from "../../index"
+import {opendiscord, api, utilities} from "../../index.js"
 
-export const loadAllRoles = async () => {
+export async function loadAllRoles(){
     await opendiscord.options.loopAll((opt) => {
         if (opt instanceof api.ODRoleOption){
             opendiscord.roles.add(loadRole(opt))

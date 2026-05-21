@@ -19,18 +19,15 @@ This list will be updated on every release.
 
 | Version    | Supported | Notes                                                         |
 |------------|-----------|---------------------------------------------------------------|
-| 4.2.0      | 🟦        | In Development                                                |
-| 4.1.x      | 🟦        | In Development                                                |
-| 4.1.3      | ✅        |                                                               |
-| 4.1.2      | ✅        |                                                               |
-| 4.1.1      | ✅        | Supported Until April 2026 (LTS)                              |
+| 4.2.x      | 🟦        | In Development                                                |
+| 4.2.1      | 🟦        | In Development                                                |
+| 4.2.0      | ✅        |                                                               |
+| 4.1.3      | ✅        | (LTS) Long-Term-Support, Until September 2026                 |
+| 4.1.2      | 🚧        |                                                               |
+| 4.1.1      | 🚧        |                                                               |
 | 4.1.0      | 🚧        |                                                               |
-| 4.0.7      | 🚧        |                                                               |
-| 4.0.6      | 🚧        |                                                               |
-| 4.0.5      | 🟧        | Deprecated                                                    |
-| 4.0.4      | 🟧        | Deprecated                                                    |
-| < 4.0.4    | 🟧        | Deprecated, Transcripts v2.0, Documentation Only              |
-| < 4.0.0    | ❌        |                                                               |
+| 4.0.7      | 🟧        | Deprecated                                                    |
+| < 4.0.7    | ❌        |                                                               |
 
 ### 🕷️ Reporting Vulnerabilities
 You can report vulnerabilities, errors & bugs using one of the following methods:

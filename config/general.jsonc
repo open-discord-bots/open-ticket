@@ -1,0 +1,175 @@
+/*
+ * Hi there! Thank you for installing Open Ticket.
+ * ----------------------------------------------
+ * If you need any assistance with configuring the bot,
+ * feel free to use the documentation or join our Discord server:
+ * https://otdocs.dj-dj.be
+ * https://discord.dj-dj.be
+ * ----------------------------------------------
+ * SETUP:
+ * 1. Install the required dependencies using the command: "npm install"
+ * 2. Configure the bot in one of the following ways:
+ *      a. (easy) Using the Quick Setup CLI Tool
+ *      b. (difficult) Using the JSON files in `./config/`
+ * 
+ * Start the Quick Setup CLI Tool using the command: "npm run setup"
+ * After configuration, start the bot using the command: "npm start"
+ * 
+ * Good luck! DJj123dj & contributors
+ */
+{
+    "_CONFIG_VERSION":"open-ticket-v4.2.0",
+    
+    /* Load the bot token from .env or the "token" field below. Leave "token" empty if using "tokenFromENV". */
+    "token":"INSERT_BOT_TOKEN",
+    "tokenFromENV":false,
+    
+    "mainColor":"#f8ba00", //Hex color used in most embeds
+    "language":"english", //Visit README.md for list
+    "prefix":"!ticket ", //Prefix used in text commands
+    "serverId":"DISCORD_SERVER_ID",
+    "globalAdmins":["DISCORD_ROLE_ID"], //Have access to all commands
+    
+    /* Enable/disable text or slash commands. */
+    "slashCommands":true,
+    "textCommands":true,
+    
+    /* Configure the status of the bot. */
+    "status":{
+        "enabled":true,
+        "type":"listening", //Choices: listening, watching, playing, custom
+        "mode":"online", //Choices: online, invisible, idle, dnd
+        "text":"/help",
+        "state":"" //Additional text (Leave empty to disable)
+    },
+    
+    /* Send ticket logs to a channel or in DM of the ticket creator. */
+    "logs":{
+        "enabled":false,
+        "channel":"DISCORD_CHANNEL_ID",
+        "logMessages":{
+            "creation":{"dm":false,"logs":true},
+            "closing":{"dm":false,"logs":true},
+            "deleting":{"dm":false,"logs":true},
+            "reopening":{"dm":false,"logs":true},
+            "claiming":{"dm":false,"logs":true},
+            "pinning":{"dm":false,"logs":true},
+            "adding":{"dm":false,"logs":true},
+            "removing":{"dm":false,"logs":true},
+            "renaming":{"dm":false,"logs":true},
+            "moving":{"dm":false,"logs":true},
+            "blacklisting":{"dm":false,"logs":true},
+            "transferring":{"dm":false,"logs":true},
+            "topicChange":{"dm":false,"logs":true},
+            "priorityChange":{"dm":false,"logs":true},
+            "reactionRole":{"dm":false,"logs":true}
+        }
+    },
+    
+    /* A large collection of settings for the ticket system. */
+    "ticketSystem":{
+        "preferSlashOverText":true, //Show slashcmds in help menu's
+        "sendErrorOnUnknownCommand":true, //Send error when command not found
+        "questionFieldsInCodeBlock":true, //Put question answers in code blocks
+        "displayFieldsWithQuestions":false, //Display embed fields together with question answers
+        "showGlobalAdminsInPanelRoles":false, //Include "globalAdmins" in panel admin lists
+        "disableVerifyBars":false, //Disable the (❌/✅) buttons
+        "useRedErrorEmbeds":true, //Make errors embeds always red
+        "alwaysShowReason":false, //Show reason even if none is provided
+        "emojiStyle":"before", //The style of emoji's in embeds. Choices: before, after, double, disabled
+        "pinEmoji":"📌", //Channel emoji of pinned tickets (Leave empty to disable)
+        "closeEmoji":"🔒", //Channel emoji of closed tickets (Leave empty to disable)
+        
+        "replyOnTicketCreation":true, //Reply with a msg when a ticket is created
+        "replyOnReactionRole":true, //Reply with a msg when a reaction role is used
+        "askPriorityOnTicketCreation":true, //Show a dropdown to select priority
+        "removeParticipantsOnClose":false, //Remove non-admins when ticket is closed
+        "disableAutocloseAfterReopen":true, //Disable autoclose after ticket got reopened
+        "autodeleteRequiresClosedTicket":true, //A ticket must be closed before autodelete works
+        "adminOnlyDeleteWithoutTranscript":true, //Only allow "globalAdmins" to delete a ticket without transcript
+        "allowCloseBeforeMessage":false, //Allow closing before a message is sent
+        "allowCloseBeforeAdminMessage":true, //Allow closing before an admin has sent a message
+        "useTranslatedConfigChecker":true, //Translate config errors in the console
+        "pinFirstTicketMessage":true, //Pin the ticket message to the channel
+        
+        /* Enable/disable certain buttons & features of the bot. */
+        "enableTicketClaimButtons":true,
+        "enableTicketCloseButtons":true,
+        "enableTicketPinButtons":true,
+        "enableTicketDeleteButtons":true,
+        "enableTicketActionWithReason":true,
+        "enableDeleteWithoutTranscript":true, //Allow deleting tickets without transcript
+        "enableCreateTicketForOtherUser":true, //Allow creating tickets for other users
+        
+        /* Set the maximum amount of simultaneous tickets. */
+        "limits":{
+            "enabled":true,
+            "globalMaximum":50,
+            "userMaximum":3
+        },
+        
+        /* Choose which data is shown in the channel topic. */
+        "channelTopic":{
+            "showOptionName":true,
+            "showOptionDescription":false,
+            "showOptionTopic":true,
+            "showPriority":false,
+            "showClosed":true,
+            "showClaimed":false,
+            "showPinned":false,
+            "showCreator":false,
+            "showParticipants":false
+        },
+        
+        /* Move closed tickets to a separate category. */
+        "closedCategory":{
+            "enabled":false,
+            "categoryId":"DISCORD_CATEGORY_ID"
+        },
+        
+        /* Create tickets in a backup category when the original category exceeds 50 channels. */
+        "backupCategory":{
+            "enabled":false,
+            "categoryId":"DISCORD_CATEGORY_ID"
+        },
+        
+        /* Move claimed tickets to a matching category of the user that claimed the ticket. Set to empty list [] to disable. */
+        "claimedCategories":[
+            {"user":"DISCORD_USER_ID","category":"DISCORD_CATEGORY_ID"}
+        ]
+    },
+    
+    /*
+     * Set permissions for each individual command, button or action.
+     * CHOICES:
+     * >> "none"            -> Command disabled
+     * >> "everyone"        -> Allowed for everyone
+     * >> "admin"           -> Global & ticket admins only
+     * >> "DISCORD_ROLE_ID" -> Custom role only
+     */
+    "permissions":{
+        "help":"everyone",
+        "panel":"admin",
+        "ticket":"none",
+        "close":"everyone",
+        "delete":"admin",
+        "reopen":"everyone",
+        "claim":"admin",
+        "unclaim":"admin",
+        "pin":"admin",
+        "unpin":"admin",
+        "move":"admin",
+        "rename":"admin",
+        "add":"admin",
+        "remove":"admin",
+        "blacklist":"admin",
+        "stats":"everyone",
+        "clear":"admin",
+        "autoclose":"admin",
+        "autodelete":"admin",
+        "transfer":"admin",
+        "topic":"admin",
+        "priority":"admin",
+        "transcripts":"admin"
+    }
+}

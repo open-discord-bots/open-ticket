@@ -1,6 +1,6 @@
-import {opendiscord, api, utilities} from "../../index"
+import {opendiscord, api, utilities} from "../../index.js"
 
-export const loadAllQuestions = async () => {
+export async function loadAllQuestions(){
     const questionConfig = opendiscord.configs.get("opendiscord:questions")
     if (!questionConfig) return
     
@@ -28,7 +28,7 @@ export const loadAllQuestions = async () => {
     })
 }
 
-export const loadShortQuestion = (option:api.ODJsonConfig_DefaultShortQuestionType) => {
+export const loadShortQuestion = (option:api.ODQuestionsJsonConfig_ShortQuestion) => {
     return new api.ODShortQuestion(option.id,[
         new api.ODQuestionData("opendiscord:name",option.name),
         new api.ODQuestionData("opendiscord:required",option.required),
@@ -40,7 +40,7 @@ export const loadShortQuestion = (option:api.ODJsonConfig_DefaultShortQuestionTy
     ])
 }
 
-export const loadParagraphQuestion = (option:api.ODJsonConfig_DefaultParagraphQuestionType) => {
+export const loadParagraphQuestion = (option:api.ODQuestionsJsonConfig_ParagraphQuestion) => {
     return new api.ODParagraphQuestion(option.id,[
         new api.ODQuestionData("opendiscord:name",option.name),
         new api.ODQuestionData("opendiscord:required",option.required),

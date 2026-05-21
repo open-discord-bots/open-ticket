@@ -1,65 +1,43 @@
 ///////////////////////////////////////
 //BUTTON BUILDERS
 ///////////////////////////////////////
-import {opendiscord, api, utilities} from "../index"
+import {opendiscord, api, utilities} from "../index.js"
 import * as discord from "discord.js"
 
 const buttons = opendiscord.builders.buttons
 const lang = opendiscord.languages
 const generalConfig = opendiscord.configs.get("opendiscord:general")
 
-export const registerAllButtons = async () => {
-    verifybarButtons()
+export async function registerAllButtons(){
+    //VERIFYBAR BUTTON
+    buttons.add(new api.ODButton("opendiscord:verifybar-button"))
+    buttons.get("opendiscord:verifybar-button").workers.add(
+        new api.ODWorker("opendiscord:verifybar-button",0,async (instance,params) => {
+            const {verifybar,verifyButtonId} = params
+            if (params.verifyButtonId.length > 40) throw new api.ODSystemError("ODButton:opendiscord:verifybar-button => verifyButtonId '"+verifyButtonId+"' exceeds 40 characters limit!")
+
+            const color = ("customColor" in params && params.customColor) ? params.customColor : "gray"
+            //TODO TRANSLATION!!!
+            const defaultLabel = (params.defaultButtonType == "✅") ? "Accept" : "Cancel"
+            const defaultEmoji = (params.defaultButtonType == "✅") ? "✅" : "❌"
+            
+            const label = ("customLabel" in params && params.customLabel) ? params.customLabel : (params.useDefaultLabels ? defaultLabel : null)
+            const emoji = ("customEmoji" in params && params.customEmoji) ? params.customEmoji : defaultEmoji
+
+            instance.setCustomId("od:verifybar|"+verifybar.id.value+"|"+verifyButtonId)
+            instance.setMode("button")
+            instance.setColor(color)
+            if (label) instance.setLabel(label)
+            if (emoji) instance.setEmoji(emoji)
+        })
+    )
+
     errorButtons()
     helpMenuButtons()
     panelButtons()
     ticketButtons()
     transcriptButtons()
     clearButtons()
-}
-
-const verifybarButtons = () => {
-    //VERIFYBAR SUCCESS
-    buttons.add(new api.ODButton("opendiscord:verifybar-success"))
-    buttons.get("opendiscord:verifybar-success").workers.add(
-        new api.ODWorker("opendiscord:verifybar-success",0,async (instance,params) => {
-            const {verifybar,customData,customColor,customLabel,customEmoji} = params
-
-            if (customData && customData.length > 40) throw new api.ODSystemError("ODButton:opendiscord:verifybar-success => customData exceeds 40 characters limit!")
-
-            const newData = (customData) ? "_"+customData : ""
-            const newColor = customColor ?? "gray"
-            const newLabel = customLabel ?? ""
-            const newEmoji = customEmoji ?? "✅"
-
-            instance.setCustomId("od:verifybar-success_"+verifybar.id.value+newData)
-            instance.setMode("button")
-            instance.setColor(newColor)
-            if (newLabel) instance.setLabel(newLabel)
-            if (newEmoji) instance.setEmoji(newEmoji)
-        })
-    )
-
-    //VERIFYBAR FAILURE
-    buttons.add(new api.ODButton("opendiscord:verifybar-failure"))
-    buttons.get("opendiscord:verifybar-failure").workers.add(
-        new api.ODWorker("opendiscord:verifybar-failure",0,async (instance,params) => {
-            const {verifybar,customData,customColor,customLabel,customEmoji} = params
-
-            if (customData && customData.length > 40) throw new api.ODSystemError("ODButton:opendiscord:verifybar-success => customData exceeds 40 characters limit!")
-
-            const newData = (customData) ? "_"+customData : ""
-            const newColor = customColor ?? "gray"
-            const newLabel = customLabel ?? ""
-            const newEmoji = customEmoji ?? "❌"
-
-            instance.setCustomId("od:verifybar-failure_"+verifybar.id.value+newData)
-            instance.setMode("button")
-            instance.setColor(newColor)
-            if (newLabel) instance.setLabel(newLabel)
-            if (newEmoji) instance.setEmoji(newEmoji)
-        })
-    )
 }
 
 const errorButtons = () => {
@@ -201,11 +179,11 @@ const ticketButtons = () => {
     //CLOSE TICKET
     buttons.add(new api.ODButton("opendiscord:close-ticket"))
     buttons.get("opendiscord:close-ticket").workers.add(
-        new api.ODWorker("opendiscord:close-ticket",0,async (instance,params,source) => {
+        new api.ODWorker("opendiscord:close-ticket",0,async (instance,params,origin) => {
             const {guild,channel,ticket} = params
 
             instance.setMode("button")
-            instance.setCustomId("od:close-ticket_"+source)
+            instance.setCustomId("od:close-ticket")
             instance.setColor("gray")
             instance.setEmoji("🔒")
             instance.setLabel(lang.getTranslation("actions.buttons.close"))
@@ -215,11 +193,11 @@ const ticketButtons = () => {
     //DELETE TICKET
     buttons.add(new api.ODButton("opendiscord:delete-ticket"))
     buttons.get("opendiscord:delete-ticket").workers.add(
-        new api.ODWorker("opendiscord:delete-ticket",0,async (instance,params,source) => {
+        new api.ODWorker("opendiscord:delete-ticket",0,async (instance,params,origin) => {
             const {guild,channel,ticket} = params
 
             instance.setMode("button")
-            instance.setCustomId("od:delete-ticket_"+source)
+            instance.setCustomId("od:delete-ticket")
             instance.setColor("red")
             instance.setEmoji("✖")
             instance.setLabel(lang.getTranslation("actions.buttons.delete"))
@@ -229,11 +207,11 @@ const ticketButtons = () => {
     //REOPEN TICKET
     buttons.add(new api.ODButton("opendiscord:reopen-ticket"))
     buttons.get("opendiscord:reopen-ticket").workers.add(
-        new api.ODWorker("opendiscord:reopen-ticket",0,async (instance,params,source) => {
+        new api.ODWorker("opendiscord:reopen-ticket",0,async (instance,params,origin) => {
             const {guild,channel,ticket} = params
 
             instance.setMode("button")
-            instance.setCustomId("od:reopen-ticket_"+source)
+            instance.setCustomId("od:reopen-ticket")
             instance.setColor("green")
             instance.setEmoji("🔓")
             instance.setLabel(lang.getTranslation("actions.buttons.reopen"))
@@ -243,11 +221,11 @@ const ticketButtons = () => {
     //CLAIM TICKET
     buttons.add(new api.ODButton("opendiscord:claim-ticket"))
     buttons.get("opendiscord:claim-ticket").workers.add(
-        new api.ODWorker("opendiscord:claim-ticket",0,async (instance,params,source) => {
+        new api.ODWorker("opendiscord:claim-ticket",0,async (instance,params,origin) => {
             const {guild,channel,ticket} = params
 
             instance.setMode("button")
-            instance.setCustomId("od:claim-ticket_"+source)
+            instance.setCustomId("od:claim-ticket")
             instance.setColor("green")
             instance.setEmoji("👋")
             instance.setLabel(lang.getTranslation("actions.buttons.claim"))
@@ -257,11 +235,11 @@ const ticketButtons = () => {
     //UNCLAIM TICKET
     buttons.add(new api.ODButton("opendiscord:unclaim-ticket"))
     buttons.get("opendiscord:unclaim-ticket").workers.add(
-        new api.ODWorker("opendiscord:unclaim-ticket",0,async (instance,params,source) => {
+        new api.ODWorker("opendiscord:unclaim-ticket",0,async (instance,params,origin) => {
             const {guild,channel,ticket} = params
 
             instance.setMode("button")
-            instance.setCustomId("od:unclaim-ticket_"+source)
+            instance.setCustomId("od:unclaim-ticket")
             instance.setColor("green")
             instance.setEmoji("↩️")
             instance.setLabel(lang.getTranslation("actions.buttons.unclaim"))
@@ -271,13 +249,13 @@ const ticketButtons = () => {
     //PIN TICKET
     buttons.add(new api.ODButton("opendiscord:pin-ticket"))
     buttons.get("opendiscord:pin-ticket").workers.add(
-        new api.ODWorker("opendiscord:pin-ticket",0,async (instance,params,source) => {
+        new api.ODWorker("opendiscord:pin-ticket",0,async (instance,params,origin) => {
             const {guild,channel,ticket} = params
 
             instance.setMode("button")
-            instance.setCustomId("od:pin-ticket_"+source)
+            instance.setCustomId("od:pin-ticket")
             instance.setColor("gray")
-            instance.setEmoji(generalConfig.data.system.pinEmoji)
+            instance.setEmoji(generalConfig.data.ticketSystem.pinEmoji)
             instance.setLabel(lang.getTranslation("actions.buttons.pin"))
         })
     )
@@ -285,13 +263,13 @@ const ticketButtons = () => {
     //UNPIN TICKET
     buttons.add(new api.ODButton("opendiscord:unpin-ticket"))
     buttons.get("opendiscord:unpin-ticket").workers.add(
-        new api.ODWorker("opendiscord:unpin-ticket",0,async (instance,params,source) => {
+        new api.ODWorker("opendiscord:unpin-ticket",0,async (instance,params,origin) => {
             const {guild,channel,ticket} = params
 
             instance.setMode("button")
-            instance.setCustomId("od:unpin-ticket_"+source)
+            instance.setCustomId("od:unpin-ticket")
             instance.setColor("gray")
-            instance.setEmoji(generalConfig.data.system.pinEmoji)
+            instance.setEmoji(generalConfig.data.ticketSystem.pinEmoji)
             instance.setLabel(lang.getTranslation("actions.buttons.unpin"))
         })
     )
@@ -301,7 +279,7 @@ const transcriptButtons = () => {
     //TRANSCRIPT HTML VISIT
     buttons.add(new api.ODButton("opendiscord:transcript-html-visit"))
     buttons.get("opendiscord:transcript-html-visit").workers.add(
-        new api.ODWorker("opendiscord:transcript-html-visit",0,async (instance,params,source) => {
+        new api.ODWorker("opendiscord:transcript-html-visit",0,async (instance,params,origin) => {
             const {result} = params
             instance.setMode("url")
             if (result.data) instance.setUrl(result.data.url)
@@ -314,9 +292,9 @@ const transcriptButtons = () => {
     //TRANSCRIPT ERROR RETRY
     buttons.add(new api.ODButton("opendiscord:transcript-error-retry"))
     buttons.get("opendiscord:transcript-error-retry").workers.add(
-        new api.ODWorker("opendiscord:transcript-error-retry",0,async (instance,params,source) => {
+        new api.ODWorker("opendiscord:transcript-error-retry",0,async (instance,params,origin) => {
             instance.setMode("button")
-            instance.setCustomId("od:transcript-error-retry_"+source)
+            instance.setCustomId("od:transcript-error-retry_"+origin)
             instance.setColor("gray")
             instance.setEmoji("🔄")
             instance.setLabel(lang.getTranslation("transcripts.errors.retry"))
@@ -326,9 +304,9 @@ const transcriptButtons = () => {
     //TRANSCRIPT ERROR CONTINUE
     buttons.add(new api.ODButton("opendiscord:transcript-error-continue"))
     buttons.get("opendiscord:transcript-error-continue").workers.add(
-        new api.ODWorker("opendiscord:transcript-error-continue",0,async (instance,params,source) => {
+        new api.ODWorker("opendiscord:transcript-error-continue",0,async (instance,params,origin) => {
             instance.setMode("button")
-            instance.setCustomId("od:transcript-error-continue_"+source)
+            instance.setCustomId("od:transcript-error-continue_"+origin)
             instance.setColor("red")
             instance.setEmoji("✖")
             instance.setLabel(lang.getTranslation("transcripts.errors.continue"))
@@ -340,12 +318,13 @@ const clearButtons = () => {
     //CLEAR CONTINUE
     buttons.add(new api.ODButton("opendiscord:clear-continue"))
     buttons.get("opendiscord:clear-continue").workers.add(
-        new api.ODWorker("opendiscord:clear-continue",0,async (instance,params,source) => {
+        new api.ODWorker("opendiscord:clear-continue",0,async (instance,params,origin) => {
             instance.setMode("button")
-            instance.setCustomId("od:clear-continue_"+source+"_"+params.filter)
+            instance.setCustomId("od:clear-continue")
             instance.setColor("red")
             instance.setEmoji("✖")
             instance.setLabel(lang.getTranslation("actions.buttons.clear"))
+            instance.setDisabled(params.inProgress)
         })
     )
 }

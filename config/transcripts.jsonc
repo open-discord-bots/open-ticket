@@ -1,0 +1,70 @@
+/*
+ * OPEN TICKET TRANSCRIPTS
+ * ----------------------------------------------
+ * Enable transcript creation when tickets are deleted. There are 2 available transcript types: HTML & Text
+ * 
+ * HTML Transcripts (recommended):
+ * Generate transcripts as HTML files to view in the browser. No server or domain required. HTML Transcripts use an external service to process and host the transcripts.
+ * 
+ * Text Transcripts:
+ * Generate transcripts as simple .txt files with limited details. Processing happens fully local.
+ */
+{
+    "general":{
+        "enabled":false,
+        
+        /* Choose which users and channel get the generated transcript. */
+        "enableChannel":false,
+        "enableCreatorDM":false,
+        "enableParticipantDM":false,
+        "enableActiveAdminDM":false,
+        "enableEveryAdminDM":false,
+        
+        "channel":"DISCORD_CHANNEL_ID", //Where to send transcripts. Leave empty when disabled.
+        "mode":"html" //The type of transcript to use. Choices: html, text
+    },
+    "embedSettings":{
+        /* Customise the embed which contains the generated transcript file or URL. */
+        "customColor":"#f8ab00", //Leave empty to use default color
+        "listAllParticipants":false,
+        "includeTicketStats":false
+    },
+    "textTranscriptStyle":{
+        /* Customise layout of the text transcripts. */
+        "layout":"normal", //Choices: simple, normal, detailed
+        "includeStats":true,
+        "includeIds":false,
+        "includeEmbeds":true,
+        "includeFiles":true,
+        "includeBotMessages":true,
+        
+        "fileMode":"custom", //How to name the transcript file? Choices: custom, channel-name, channel-id, user-name, user-id
+        "customFileName":"transcript" //Custom filename without extension
+    },
+    "htmlTranscriptStyle":{
+        /* Customise layout of the HTML transcripts. */
+        "background":{
+            "enableCustomBackground":false,
+            "backgroundColor":"#f8ba00", //Leave empty to use Open Ticket color (#f8ba00)
+            "backgroundImage":"https://www.example.com/image.png" //Image URL to fill entire background. Leave empty to disable
+        },
+        "header":{
+            "enableCustomHeader":false,
+            "backgroundColor":"#202225",
+            "decoColor":"#f8ba00",
+            "textColor":"#ffffff"
+        },
+        "stats":{
+            "enableCustomStats":false,
+            "backgroundColor":"#202225",
+            "keyTextColor":"#737373",
+            "valueTextColor":"#ffffff",
+            "hideBackgroundColor":"#40444a",
+            "hideTextColor":"#ffffff"
+        },
+        "favicon":{
+            "enableCustomFavicon":false,
+            "imageUrl":"https://t.dj-dj.be/favicon.png"
+        }
+    }
+}

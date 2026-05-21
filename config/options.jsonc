@@ -1,0 +1,165 @@
+/*
+ * OPEN TICKET BUTTON OPTIONS
+ * ----------------------------------------------
+ * Create customizable ticket, website, reaction-role or sub-panel button options.
+ * Up to 25 options can be added to each panel in (config/panels.jsonc)
+ * There are 4 types of options available: ticket, website, role, sub-panel
+ * 
+ * TIP: Create new options by copying everything between and including the {...} brackets of an option. Paste it after the last option and make sure that they are seperated by a comma.
+ */
+[
+    {
+        /* A ticket option creates a button to open a ticket. */
+        "id":"example-ticket",
+        "name":"Question",
+        "description":"Want to tell us something? Create this ticket for general questions for our support team.", //Leave empty to disable
+        "type":"ticket",
+        
+        "button":{
+            /* Configure the button style of this option. At least one of "emoji" or "label" must be provided. */
+            "emoji":"🎫",
+            "label":"Question",
+            "color":"gray" //Choices: gray, red, green, blue
+        },
+        
+        /* Add up to 5 modal questions IDs from (config/questions.jsonc). */
+        "questions":["example-question-1","example-question-2"],
+        
+        "ticketAdmins":["DISCORD_ROLE_ID"],
+        "readonlyAdmins":["DISCORD_ROLE_ID"],
+        "allowCreationByBlacklistedUsers":false,
+        
+        "channel":{
+            /* Configure the name, topic and category of the ticket option. */
+            "prefix":"question-",
+            "suffix":"user-name", //Choices: user-name, user-id, random-number, random-hex, counter-dynamic, counter-fixed
+            "category":"DISCORD_CATEGORY_ID", //Leave empty to disable
+            "topic":"The ticket topic shown in the channel." //Leave empty to disable
+        },
+        
+        "dmMessage":{
+            /* Send a customisable message in DM when creating a ticket. */
+            "enabled":false,
+            "text":"", //Leave empty to disable
+            "embed":{
+                "enabled":false,
+                "title":"Question Ticket", //Leave empty to disable
+                "description":"Thank you for creating a ticket in our server. We will try to help you as soon as possible.", //Leave empty to disable
+                "customColor":"#f8ab00", //Leave empty to use default color
+                
+                "image":"", //Image URL. Leave empty to disable
+                "thumbnail":"", //Image URL. Leave empty to disable
+                /* Embed fields. Set to empty list [] to disable. */
+                "fields":[
+                    {"name":"Field name","value":"Field value","inline":false}
+                ],
+                "timestamp":false
+            }
+        },
+        "ticketMessage":{
+            /* Send a customisable message in the ticket with close, claim, delete, ... buttons. */
+            "enabled":true,
+            "text":"", //Leave empty to disable
+            "embed":{
+                "enabled":true,
+                "title":"Question Ticket", //Leave empty to disable
+                "description":"Thank you for creating a ticket in our server.\nOur support team will assist you as soon as possible. (leave empty to disable)", //Leave empty to disable
+                "customColor":"#f8ab00 (leave empty to disable)", //Leave empty to use default color
+                
+                "image":"https://www.example.com/image.png (leave empty to disable)", //Image URL. Leave empty to disable
+                "thumbnail":"https://www.example.com/image.png (leave empty to disable)", //Image URL. Leave empty to disable
+                /* Embed fields. Set to empty list [] to disable. */
+                "fields":[
+                    {"name":"Field name","value":"Field value","inline":false}
+                ],
+                "timestamp":false
+            },
+            "ping":{
+                /* Customise the user & role mentions of this ticket message. */
+                "@here":true,
+                "@everyone":false,
+                "custom":["DISCORD_ROLE_ID"]
+            }
+        },
+        "autoclose":{
+            /* Autoclose this ticket after a period of inactivity or when the creator leaves the server. */
+            "enableInactiveHours":false,
+            "inactiveHours":24,
+            "enableUserLeave":false,
+            "disableOnClaim":false
+        },
+        "autodelete":{
+            /* Autodelete this ticket after a period of inactivity or when the creator leaves the server. */
+            "enableInactiveDays":false,
+            "inactiveDays":7,
+            "enableUserLeave":false,
+            "disableOnClaim":false
+        },
+        "cooldown":{
+            /* Users must wait a certain period before being able to create another ticket of this type. */
+            "enabled":false,
+            "cooldownMinutes":10
+        },
+        "limits":{
+            /* Set the maximum amount of simultaneous tickets of this option. */
+            "enabled":false,
+            "globalMaximum":20,
+            "userMaximum":3
+        },
+        "slowMode":{
+            /* Enable slow-mode in the ticket channel. */
+            "enabled":false,
+            "slowModeSeconds":20
+        }
+    },
+    {
+        /* A website option creates a button with a URL to an external website. */
+        "id":"example-website",
+        "name":"Website",
+        "description":"Take a look at our amazing website.", //Leave empty to disable
+        "type":"website",
+        
+        "button":{
+            /* Configure the button style of this option. At least one of "emoji" or "label" must be provided. */
+            "emoji":"😃",
+            "label":"Visit Website"
+        },
+        
+        "url":"https://www.dj-dj.be"
+    },
+    {
+        /* A reaction-role option creates a button for members to choose roles. */
+        "id":"example-role",
+        "name":"Update Ping",
+        "description":"Receive notifications about updates in our server.", //Leave empty to disable
+        "type":"role",
+        
+        "button":{
+            /* Configure the button style of this option. At least one of "emoji" or "label" must be provided. */
+            "emoji":"📢",
+            "label":"Update Ping",
+            "color":"gray" //Choices: gray, red, green, blue
+        },
+        
+        "roles":["DISCORD_ROLE_ID"],
+        "mode":"add&remove OR remove OR add", //What to do with the roles. Choices: add&remove, add, remove
+        "removeRolesOnAdd":["DISCORD_ROLE_ID"], //Remove these old roles when new roles are added.
+        "addOnMemberJoin":false //Add these roles automatically when joining the server.
+    },
+    {
+        /* A sub-panel option creates a button which sends another panel for additional options. */
+        "id":"example-sub-panel",
+        "name":"Example Sub-Panel",
+        "description":"This is an example of how to implement a sub-panel in Open Ticket.", //Leave empty to disable
+        "type":"sub-panel",
+        
+        "button":{
+            /* Configure the button style of this option. At least one of "emoji" or "label" must be provided. */
+            "emoji":"📋",
+            "label":"Sub-Panel Example",
+            "color":"gray" //Choices: gray, red, green, blue
+        },
+        
+        "subPanelId":"example-panel" //Choose a panel ID from (config/panels.jsonc)
+    }
+]
