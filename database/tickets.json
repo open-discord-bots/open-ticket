@@ -1,1 +1,46 @@
-[]
+[
+    {
+        "category":"opendiscord:ticket",
+        "key":"1508361410865004594",
+        "value":{
+            "id":"1508361410865004594",
+            "option":"study-material",
+            "version":"v4.1.3",
+            "data":[
+                {"id":"opendiscord:busy","value":false},
+                {"id":"opendiscord:ticket-message","value":"1508361412806836277"},
+                {"id":"opendiscord:participants","value":[{"type":"role","id":"1473546722134462556"},{"type":"user","id":"1473545182380294165"}]},
+                {"id":"opendiscord:channel-suffix","value":"harshd999_01207"},
+                {"id":"opendiscord:previous-creators","value":[]},
+                {"id":"opendiscord:open","value":true},
+                {"id":"opendiscord:opened-by","value":"1473545182380294165"},
+                {"id":"opendiscord:opened-on","value":1779691783557},
+                {"id":"opendiscord:closed","value":false},
+                {"id":"opendiscord:closed-by","value":null},
+                {"id":"opendiscord:closed-on","value":null},
+                {"id":"opendiscord:reopened","value":false},
+                {"id":"opendiscord:reopened-by","value":null},
+                {"id":"opendiscord:reopened-on","value":null},
+                {"id":"opendiscord:claimed","value":false},
+                {"id":"opendiscord:claimed-by","value":null},
+                {"id":"opendiscord:claimed-on","value":null},
+                {"id":"opendiscord:pinned","value":false},
+                {"id":"opendiscord:pinned-by","value":null},
+                {"id":"opendiscord:pinned-on","value":null},
+                {"id":"opendiscord:for-deletion","value":false},
+                {"id":"opendiscord:category","value":"1473548399247753310"},
+                {"id":"opendiscord:category-mode","value":"normal"},
+                {"id":"opendiscord:autoclose-enabled","value":false},
+                {"id":"opendiscord:autoclose-hours","value":0},
+                {"id":"opendiscord:autoclosed","value":false},
+                {"id":"opendiscord:autodelete-enabled","value":false},
+                {"id":"opendiscord:autodelete-days","value":0},
+                {"id":"opendiscord:answers","value":[]},
+                {"id":"opendiscord:priority","value":-1},
+                {"id":"opendiscord:topic","value":"Study Materials Distribution"},
+                {"id":"opendiscord:message-sent","value":false},
+                {"id":"opendiscord:admin-message-sent","value":false}
+            ]
+        }
+    }
+]
