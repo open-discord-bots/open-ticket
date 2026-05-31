@@ -367,7 +367,7 @@ const main = async () => {
             const botServers = await client.getGuilds()
             const generalConfig = opendiscord.configs.get("opendiscord:general")
             const serverId = generalConfig.data.serverId ? generalConfig.data.serverId : ""
-            if (!serverId) throw new api.ODSystemError("Server Id Missing!")
+            if (!serverId) throw new api.ODSystemError("Server Id Missing! Please set 'serverId' in config/general.jsonc.")
             
             const mainServer = botServers.find((g) => g.id == serverId)
             client.mainServer = mainServer ?? null
