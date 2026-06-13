@@ -148,6 +148,7 @@ const renderAttachment = async (doc:PDFKit.PDFDocument, message:discord.Message<
     bulletLine(doc,`${label("transcripts.pdf.filename","Filename")}: ${attachment.name}`)
     bulletLine(doc,`${label("transcripts.pdf.fileSize","File Size")}: ${bytesToHuman(attachment.size)}`)
     bulletLine(doc,`${label("transcripts.pdf.contentType","Content Type")}: ${attachment.contentType ?? "unknown"}`)
+    if (attachment.description) bulletLine(doc,`Description: ${attachment.description}`)
     bulletLine(doc,`${label("transcripts.pdf.uploadedBy","Uploaded By")}: ${message.author.username} (${message.author.id})`)
     bulletLine(doc,`${label("transcripts.pdf.sentAt","Sent At")}: ${formatDate(message.createdTimestamp)}`)
     if (attachment.spoiler) bulletLine(doc,"Spoiler: yes")
