@@ -533,13 +533,16 @@ export const defaultPanelsFormatter = new fjs.TopLevelCommentFormatter(new fjs.M
 export const defaultTranscriptsFormatter = new fjs.TopLevelCommentFormatter(new fjs.MultiCommentFormatter([
         "OPEN TICKET TRANSCRIPTS",
         "----------------------------------------------",
-        "Enable transcript creation when tickets are deleted. There are 2 available transcript types: HTML & Text",
+        "Enable transcript creation when tickets are deleted. There are 3 available transcript types: HTML, PDF & Text",
         "",
         "HTML Transcripts (recommended):",
         "Generate transcripts as HTML files to view in the browser. No server or domain required. HTML Transcripts use an external service to process and host the transcripts.",
         "",
         "Text Transcripts:",
         "Generate transcripts as simple .txt files with limited details. Processing happens fully local.",
+        "",
+        "PDF Transcripts:",
+        "Generate local PDF files with ticket metadata, message history, attachment metadata and optional safe image previews.",
     ].join("\n")),new fjs.ObjectFormatter(null,true,[
     new fjs.ObjectFormatter("general",true,[
         new fjs.PropertyFormatter("enabled"),
@@ -552,7 +555,7 @@ export const defaultTranscriptsFormatter = new fjs.TopLevelCommentFormatter(new 
         new fjs.PropertyFormatter("enableEveryAdminDM"),
         new fjs.TextFormatter(""),
         new fjs.PropertyFormatter("channel",new fjs.SingleCommentFormatter("Where to send transcripts. Leave empty when disabled.")),
-        new fjs.PropertyFormatter("mode",new fjs.SingleCommentFormatter("The type of transcript to use. Choices: html, text")),
+        new fjs.PropertyFormatter("mode",new fjs.SingleCommentFormatter("The type of transcript to use. Choices: html, text, pdf, both")),
     ]),
     new fjs.ObjectFormatter("embedSettings",true,[
         new fjs.MultiCommentFormatter("Customise the embed which contains the generated transcript file or URL."),
@@ -597,5 +600,22 @@ export const defaultTranscriptsFormatter = new fjs.TopLevelCommentFormatter(new 
             new fjs.PropertyFormatter("enableCustomFavicon"),
             new fjs.PropertyFormatter("imageUrl"),
         ]),
+    ]),
+    new fjs.ObjectFormatter("pdfTranscriptStyle",true,[
+        new fjs.MultiCommentFormatter([
+            "Configure local PDF transcripts. HTML remains the default transcript mode.",
+            "Attachment metadata is included when PDF transcripts are enabled.",
+            "Image previews only download Discord CDN attachment URLs and respect the size limits below."
+        ].join("\n")),
+        new fjs.PropertyFormatter("enabled"),
+        new fjs.PropertyFormatter("includeAttachments"),
+        new fjs.PropertyFormatter("embedImagePreviews"),
+        new fjs.PropertyFormatter("maxImagePreviewSizeMB"),
+        new fjs.PropertyFormatter("maxAttachmentDownloadSizeMB"),
+        new fjs.PropertyFormatter("maxTotalAttachmentDownloadSizeMB"),
+        new fjs.PropertyFormatter("showAttachmentUrls"),
+        new fjs.PropertyFormatter("pageSize",new fjs.SingleCommentFormatter("Choices: A4, Letter")),
+        new fjs.PropertyFormatter("includeEmbeds"),
+        new fjs.PropertyFormatter("includeStickers"),
     ]),
 ]))

@@ -262,6 +262,7 @@
             "visit":"Visit Transcript",
             "ready":"Transcript Created",
             "textFileDescription":"This is a text transcript of a deleted ticket.",
+            "pdfFileDescription":"This is a PDF transcript of a deleted ticket.",
             "htmlProgress":"Please wait while the HTML transcript is being generated...",
             
             "createdChannel":"A new {0} transcript has been created in the server.",
@@ -290,6 +291,17 @@
             "emptyContent":"<content is empty>",
             "noTitle":"<no-title>",
             "noDesc":"<no-description>"
+        },
+        "pdf":{
+            "title":"PDF Transcript",
+            "attachments":"Attachments",
+            "filename":"Filename",
+            "fileSize":"File Size",
+            "contentType":"Content Type",
+            "uploadedBy":"Uploaded By",
+            "sentAt":"Sent At",
+            "messageLink":"Message Link",
+            "imagePreviewUnavailable":"Image preview unavailable"
         }
     },
     "errors":{
@@ -440,6 +452,7 @@
         "lowercase":{
             "text":"text",
             "html":"html",
+            "pdf":"pdf",
             "command":"command",
             "modal":"modal",
             "button":"button",

@@ -832,6 +832,32 @@ export interface ODTranscriptsJsonConfig_TranscriptsHtmlLayout {
     }
 }
 
+/**## ODTranscriptsJsonConfig_TranscriptsPdfLayout `interface`
+ * This interface contains the settings for PDF transcripts.
+ */
+export interface ODTranscriptsJsonConfig_TranscriptsPdfLayout {
+    /**Enable the PDF transcript compiler. */
+    enabled:boolean,
+    /**Include attachment metadata blocks in PDF transcripts. */
+    includeAttachments:boolean,
+    /**Download safe image attachments and embed scaled previews in PDF transcripts. */
+    embedImagePreviews:boolean,
+    /**Maximum size for an image preview download. */
+    maxImagePreviewSizeMB:number,
+    /**Maximum size for one attachment download. */
+    maxAttachmentDownloadSizeMB:number,
+    /**Maximum total attachment download size per transcript. */
+    maxTotalAttachmentDownloadSizeMB:number,
+    /**Show Discord CDN attachment URLs in the PDF. */
+    showAttachmentUrls:boolean,
+    /**PDF page size. */
+    pageSize:"A4"|"Letter",
+    /**Include embed summaries in the PDF. */
+    includeEmbeds:boolean,
+    /**Include sticker summaries in the PDF. */
+    includeStickers:boolean
+}
+
 /**## ODTranscriptsJsonConfig_TranscriptsData `interface`
  * All contents of the `transcripts.jsonc` config file.
  */
@@ -854,8 +880,8 @@ export interface ODTranscriptsJsonConfig_TranscriptsData {
 
         /**A discord channel id for the `"enableChannel"` setting. */
         channel:string,
-        /**Want to use text or HTML transcripts? */
-        mode:"html"|"text"
+        /**Want to use text, HTML, PDF or both HTML and PDF transcripts? */
+        mode:"html"|"text"|"pdf"|"both"
     },
     /**All settings related to the embed from the transcripts. (UNIMPLEMENTED!!) */
     embedSettings:{
@@ -869,7 +895,9 @@ export interface ODTranscriptsJsonConfig_TranscriptsData {
     /**The layout of the text transcripts. */
     textTranscriptStyle:ODTranscriptsJsonConfig_TranscriptsTextLayout,
     /**The layout of the HTML transcripts. */
-    htmlTranscriptStyle:ODTranscriptsJsonConfig_TranscriptsHtmlLayout
+    htmlTranscriptStyle:ODTranscriptsJsonConfig_TranscriptsHtmlLayout,
+    /**The settings of the PDF transcripts. */
+    pdfTranscriptStyle:ODTranscriptsJsonConfig_TranscriptsPdfLayout
 }
 
 /////////////////////////////

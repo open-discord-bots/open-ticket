@@ -714,7 +714,7 @@ export const defaultTranscriptsStructure = new api.ODCheckerObjectStructure("ope
         {key:"enableEveryAdminDM",checker:new api.ODCheckerBooleanStructure("opendiscord:transcripts-enable-every-admin-dm",{cliDisplayName:"Enable Every Admin DM",cliDisplayDescription:"Send the transcript in DM to all admins assigned to the ticket."})},
 
         {key:"channel",checker:new api.ODCheckerCustomStructure_DiscordId("opendiscord:transcripts-channel","channel",true,[],{cliDisplayName:"Channel",cliDisplayDescription:"The discord channel ID to send the transcript to."})},
-        {key:"mode",checker:new api.ODCheckerStringStructure("opendiscord:transcripts-mode",{choices:["html","text"],cliDisplayName:"Transcript Mode",cliDisplayDescription:"The transcript type to use: 'text' or 'html'."})},
+        {key:"mode",checker:new api.ODCheckerStringStructure("opendiscord:transcripts-mode",{choices:["html","text","pdf","both"],cliDisplayName:"Transcript Mode",cliDisplayDescription:"The transcript type to use: 'text', 'html', 'pdf' or 'both'."})},
     ],cliDisplayName:"General",cliDisplayDescription:"General settings for the transcripts."}),cliDisplayName:"General",cliDisplayDescription:"General settings for the transcripts."})},
 
     //EMBED SETTINGS
@@ -770,6 +770,20 @@ export const defaultTranscriptsStructure = new api.ODCheckerObjectStructure("ope
             {key:"imageUrl",checker:new api.ODCheckerCustomStructure_UrlString("opendiscord:transcripts-html-favicon-image",true,{allowHttp:false,allowedExtensions:[".png",".jpg",".jpeg",".webp"]},{cliDisplayName:"LOREMIPSUM",cliDisplayDescription:"IPSUMLOREM"})},
         ],cliDisplayName:"Favicon Style",cliDisplayDescription:"Customise the favicon of the HTML Transcripts."}),cliDisplayName:"Favicon Style",cliDisplayDescription:"Customise the favicon of the HTML Transcripts."})},
     ],cliDisplayName:"Html Transcript Style",cliDisplayDescription:"Configure the 'Html Transcripts' from Open Ticket."})},
+
+    //PDF STYLE
+    {key:"pdfTranscriptStyle",checker:new api.ODCheckerObjectStructure("opendiscord:transcripts-pdf",{children:[
+        {key:"enabled",checker:new api.ODCheckerBooleanStructure("opendiscord:transcripts-pdf-enabled",{cliDisplayName:"Enabled",cliDisplayDescription:"Enable/disable the PDF transcript compiler."})},
+        {key:"includeAttachments",checker:new api.ODCheckerBooleanStructure("opendiscord:transcripts-pdf-include-attachments",{cliDisplayName:"Include Attachments",cliDisplayDescription:"Include attachment metadata in the PDF transcript."})},
+        {key:"embedImagePreviews",checker:new api.ODCheckerBooleanStructure("opendiscord:transcripts-pdf-image-previews",{cliDisplayName:"Image Previews",cliDisplayDescription:"Embed safe image previews in the PDF transcript."})},
+        {key:"maxImagePreviewSizeMB",checker:new api.ODCheckerNumberStructure("opendiscord:transcripts-pdf-image-preview-size",{zeroAllowed:false,negativeAllowed:false,floatAllowed:true,min:0.1,cliDisplayName:"Image Preview Size",cliDisplayDescription:"Maximum size in MB for each image preview."})},
+        {key:"maxAttachmentDownloadSizeMB",checker:new api.ODCheckerNumberStructure("opendiscord:transcripts-pdf-attachment-size",{zeroAllowed:false,negativeAllowed:false,floatAllowed:true,min:0.1,cliDisplayName:"Attachment Download Size",cliDisplayDescription:"Maximum size in MB for each attachment download."})},
+        {key:"maxTotalAttachmentDownloadSizeMB",checker:new api.ODCheckerNumberStructure("opendiscord:transcripts-pdf-total-size",{zeroAllowed:false,negativeAllowed:false,floatAllowed:true,min:0.1,cliDisplayName:"Total Download Size",cliDisplayDescription:"Maximum total attachment download size in MB per PDF transcript."})},
+        {key:"showAttachmentUrls",checker:new api.ODCheckerBooleanStructure("opendiscord:transcripts-pdf-show-urls",{cliDisplayName:"Show Attachment URLs",cliDisplayDescription:"Show Discord CDN URLs for attachments."})},
+        {key:"pageSize",checker:new api.ODCheckerStringStructure("opendiscord:transcripts-pdf-page-size",{choices:["A4","Letter"],cliDisplayName:"Page Size",cliDisplayDescription:"The PDF page size."})},
+        {key:"includeEmbeds",checker:new api.ODCheckerBooleanStructure("opendiscord:transcripts-pdf-include-embeds",{cliDisplayName:"Include Embeds",cliDisplayDescription:"Include embed summaries in the PDF transcript."})},
+        {key:"includeStickers",checker:new api.ODCheckerBooleanStructure("opendiscord:transcripts-pdf-include-stickers",{cliDisplayName:"Include Stickers",cliDisplayDescription:"Include sticker summaries in the PDF transcript."})},
+    ],cliDisplayName:"PDF Transcript Style",cliDisplayDescription:"Configure the 'PDF Transcripts' from Open Ticket."})},
 ],cliDisplayName:"Transcripts",cliDisplayDescription:"All settings related to transcripts."})
 
 export const defaultUnusedOptionsFunction = (manager:api.ODCheckerManager, functions:api.ODCheckerFunctionManager): api.ODCheckerResult => {

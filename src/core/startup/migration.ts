@@ -171,6 +171,22 @@ export const migrations = [
             const panelConfig = opendiscord.configs.get("opendiscord:panels")
             const transcriptConfig = opendiscord.configs.get("opendiscord:transcripts")
 
+            if (!transcriptConfig.data.pdfTranscriptStyle){
+                transcriptConfig.data.pdfTranscriptStyle = {
+                    enabled:false,
+                    includeAttachments:true,
+                    embedImagePreviews:true,
+                    maxImagePreviewSizeMB:5,
+                    maxAttachmentDownloadSizeMB:8,
+                    maxTotalAttachmentDownloadSizeMB:25,
+                    showAttachmentUrls:true,
+                    pageSize:"A4",
+                    includeEmbeds:true,
+                    includeStickers:true
+                }
+                await transcriptConfig.save()
+            }
+
             if (!generalConfig.data.ticketSystem){
                 //only migrate config when it hasn't been done manually by the user.
 

@@ -297,6 +297,7 @@ export type ODLanguageManagerTranslationIdMappings = (
     "transcripts.success.visit"|
     "transcripts.success.ready"|
     "transcripts.success.textFileDescription"|
+    "transcripts.success.pdfFileDescription"|
     "transcripts.success.htmlProgress"|
 
     "transcripts.success.createdChannel"|
@@ -323,6 +324,16 @@ export type ODLanguageManagerTranslationIdMappings = (
     "transcripts.text.emptyContent"|
     "transcripts.text.noTitle"|
     "transcripts.text.noDesc"|
+
+    "transcripts.pdf.title"|
+    "transcripts.pdf.attachments"|
+    "transcripts.pdf.filename"|
+    "transcripts.pdf.fileSize"|
+    "transcripts.pdf.contentType"|
+    "transcripts.pdf.uploadedBy"|
+    "transcripts.pdf.sentAt"|
+    "transcripts.pdf.messageLink"|
+    "transcripts.pdf.imagePreviewUnavailable"|
 
     "errors.titles.internalError"|
     "errors.titles.optionMissing"|
@@ -463,6 +474,7 @@ export type ODLanguageManagerTranslationIdMappings = (
 
     "params.lowercase.text"|
     "params.lowercase.html"|
+    "params.lowercase.pdf"|
     "params.lowercase.command"|
     "params.lowercase.modal"|
     "params.lowercase.button"|

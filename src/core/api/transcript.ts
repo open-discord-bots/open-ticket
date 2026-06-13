@@ -17,6 +17,7 @@ export type ODTranscriptManagerIdConstraint = Record<string,ODTranscriptCompiler
 export interface ODTranscriptManagerIdMappings extends ODTranscriptManagerIdConstraint {
     "opendiscord:html-compiler":ODTranscriptCompiler<{url:string,availableUntil:Date},{auth:string}>,
     "opendiscord:text-compiler":ODTranscriptCompiler<{contents:string},null>,
+    "opendiscord:pdf-compiler":ODTranscriptCompiler<{buffer:Buffer,fileName:string,warnings:string[]},null>,
 }
 
 /**## ODTranscriptManager `class`
@@ -24,7 +25,7 @@ export interface ODTranscriptManagerIdMappings extends ODTranscriptManagerIdCons
  * 
  * This class manages all transcript generators in the bot.
  * 
- * The 2 default built-in transcript generators are: `opendiscord:html-compiler` & `opendiscord:text-compiler`.
+ * The default built-in transcript generators are: `opendiscord:html-compiler`, `opendiscord:text-compiler` & `opendiscord:pdf-compiler`.
  */
 export class ODTranscriptManager<IdList extends ODTranscriptManagerIdConstraint = ODTranscriptManagerIdConstraint> extends api.ODManager<ODTranscriptCompiler<any,null|object>> {
     /**The manager responsible for collecting all messages in a channel. */

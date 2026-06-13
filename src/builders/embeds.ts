@@ -1093,6 +1093,37 @@ const transcriptEmbeds = () => {
         })
     )
 
+    //TRANSCRIPT PDF READY
+    embeds.add(new api.ODEmbed("opendiscord:transcript-pdf-ready"))
+    embeds.get("opendiscord:transcript-pdf-ready").workers.add(
+        new api.ODWorker("opendiscord:transcript-pdf-ready",0,async (instance,params,origin) => {
+            const {guild,channel,user,ticket,result} = params
+            const transcriptConfig = opendiscord.configs.get("opendiscord:transcripts")
+            
+            instance.setColor(transcriptConfig.data.embedSettings.customColor ? transcriptConfig.data.embedSettings.customColor : generalConfig.data.mainColor)
+            instance.setTitle(utilities.emojiTitle("📄",lang.getTranslation("transcripts.success.ready")))
+            instance.setTimestamp(new Date())
+            instance.addFields({name:lang.getTranslation("params.uppercase.ticket")+":",value:"#"+channel.name,inline:false})
+            if (result.data && result.data.warnings.length > 0) instance.addFields({name:"Warnings:",value:result.data.warnings.slice(0,3).map((warning) => "- "+warning.substring(0,160)).join("\n"),inline:false})
+
+            const creatorId = ticket.get("opendiscord:opened-by").value
+            if (creatorId){
+                try{
+                    const creator = await channel.client.users.fetch(creatorId)
+                    instance.addFields({name:lang.getTranslation("params.uppercase.creator")+":",value:creator.username+" ("+discord.userMention(creator.id)+")"})
+                    instance.setThumbnail(creator.displayAvatarURL())
+                }catch{}
+            }
+
+            if (origin == "channel") instance.setDescription(lang.getTranslationWithParams("transcripts.success.createdChannel",[lang.getTranslation("params.lowercase.pdf") ?? "pdf"]))
+            else if (origin == "creator-dm") instance.setDescription(lang.getTranslationWithParams("transcripts.success.createdCreator",[lang.getTranslation("params.lowercase.pdf") ?? "pdf"]))
+            else if (origin == "participant-dm") instance.setDescription(lang.getTranslationWithParams("transcripts.success.createdParticipant",[lang.getTranslation("params.lowercase.pdf") ?? "pdf"]))
+            else if (origin == "active-admin-dm") instance.setDescription(lang.getTranslationWithParams("transcripts.success.createdActiveAdmin",[lang.getTranslation("params.lowercase.pdf") ?? "pdf"]))
+            else if (origin == "every-admin-dm") instance.setDescription(lang.getTranslationWithParams("transcripts.success.createdEveryAdmin",[lang.getTranslation("params.lowercase.pdf") ?? "pdf"]))
+            else instance.setDescription(lang.getTranslationWithParams("transcripts.success.createdOther",[lang.getTranslation("params.lowercase.pdf") ?? "pdf"]))
+        })
+    )
+
     //TRANSCRIPT HTML PROGRESS
     embeds.add(new api.ODEmbed("opendiscord:transcript-html-progress"))
     embeds.get("opendiscord:transcript-html-progress").workers.add(

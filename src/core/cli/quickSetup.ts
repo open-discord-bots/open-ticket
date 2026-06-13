@@ -1626,6 +1626,18 @@ async function saveQuickSetupConfig(){
                 enableCustomFavicon:false,
                 imageUrl:"https://t.dj-dj.be/favicon.png"
             }
+        },
+        pdfTranscriptStyle:{
+            enabled:false,
+            includeAttachments:true,
+            embedImagePreviews:true,
+            maxImagePreviewSizeMB:5,
+            maxAttachmentDownloadSizeMB:8,
+            maxTotalAttachmentDownloadSizeMB:25,
+            showAttachmentUrls:true,
+            pageSize:"A4",
+            includeEmbeds:true,
+            includeStickers:true
         }
     }
     transcriptsConfig.data = transcriptsConfigData
