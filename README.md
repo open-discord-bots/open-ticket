@@ -50,6 +50,7 @@ The bot is fully translated into <b>38+ languages</b> and has been battle-tested
 
 #### Transcripts & Insights
 - <img align="top" src="https://apis.dj-dj.be/cdn/openticket/readme-icons/insights-transcripts.svg"></img> **HTML Transcripts** - Generate beautiful, easy-to-read **HTML transcripts** for every ticket.
+- <img align="top" src="https://apis.dj-dj.be/cdn/openticket/readme-icons/insights-transcripts.svg"></img> **PDF Transcripts** - Optionally generate local **PDF transcripts** with attachment metadata and safe image previews.
 - <img align="top" src="https://apis.dj-dj.be/cdn/openticket/readme-icons/insights-stats.svg"></img> **Detailed Statistics** - Track **50+ statistics** for tickets, users and server activity.
 - <img align="top" src="https://apis.dj-dj.be/cdn/openticket/readme-icons/insights-logs.svg"></img> **Ticket Logs** - Track **all ticket events** such as creation, closures, and staff actions.
 
@@ -110,6 +111,31 @@ The bot is fully translated into <b>38+ languages</b> and has been battle-tested
 > #### 🖥️ Recommended Hosting
 > - **A VPS (Virtual Private Server)** - Extra customisation & more stability. Recommended for most servers.
 > - **Any Pterodactyl-Based Panel** - Easy installation & configuration.
+
+## Transcript Formats
+HTML transcripts remain the default and existing configurations continue to work. To enable PDF transcripts, update `config/transcripts.jsonc`:
+
+```jsonc
+{
+    "general": {
+        "mode": "pdf" // choices: html, text, pdf, both
+    },
+    "pdfTranscriptStyle": {
+        "enabled": true,
+        "includeAttachments": true,
+        "embedImagePreviews": true,
+        "maxImagePreviewSizeMB": 5,
+        "maxAttachmentDownloadSizeMB": 8,
+        "maxTotalAttachmentDownloadSizeMB": 25,
+        "showAttachmentUrls": true,
+        "pageSize": "A4",
+        "includeEmbeds": true,
+        "includeStickers": true
+    }
+}
+```
+
+PDF transcripts include ticket metadata, ordered messages, embed/sticker summaries, and attachment metadata. Image previews are downloaded only from Discord attachment URLs and are skipped safely when a file is too large, unavailable, or unsupported. If PDF generation fails, Open Ticket logs the error and falls back to HTML when possible.
 
 ## 📸 Previews
 <img alt="Preview of: Advanced Ticket Management" src="https://apis.dj-dj.be/cdn/openticket/ot-previews/preview-1.png">
