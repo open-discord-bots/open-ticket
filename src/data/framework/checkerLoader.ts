@@ -714,7 +714,7 @@ export const defaultTranscriptsStructure = new api.ODCheckerObjectStructure("ope
         {key:"enableEveryAdminDM",checker:new api.ODCheckerBooleanStructure("opendiscord:transcripts-enable-every-admin-dm",{cliDisplayName:"Enable Every Admin DM",cliDisplayDescription:"Send the transcript in DM to all admins assigned to the ticket."})},
 
         {key:"channel",checker:new api.ODCheckerCustomStructure_DiscordId("opendiscord:transcripts-channel","channel",true,[],{cliDisplayName:"Channel",cliDisplayDescription:"The discord channel ID to send the transcript to."})},
-        {key:"mode",checker:new api.ODCheckerStringStructure("opendiscord:transcripts-mode",{choices:["html","text"],cliDisplayName:"Transcript Mode",cliDisplayDescription:"The transcript type to use: 'text' or 'html'."})},
+        {key:"mode",checker:new api.ODCheckerStringStructure("opendiscord:transcripts-mode",{choices:["html","text","pdf","both"],cliDisplayName:"Transcript Mode",cliDisplayDescription:"The transcript type to use: 'text', 'html', 'pdf' or 'both'."})},
     ],cliDisplayName:"General",cliDisplayDescription:"General settings for the transcripts."}),cliDisplayName:"General",cliDisplayDescription:"General settings for the transcripts."})},
 
     //EMBED SETTINGS
@@ -770,6 +770,82 @@ export const defaultTranscriptsStructure = new api.ODCheckerObjectStructure("ope
             {key:"imageUrl",checker:new api.ODCheckerCustomStructure_UrlString("opendiscord:transcripts-html-favicon-image",true,{allowHttp:false,allowedExtensions:[".png",".jpg",".jpeg",".webp"]},{cliDisplayName:"LOREMIPSUM",cliDisplayDescription:"IPSUMLOREM"})},
         ],cliDisplayName:"Favicon Style",cliDisplayDescription:"Customise the favicon of the HTML Transcripts."}),cliDisplayName:"Favicon Style",cliDisplayDescription:"Customise the favicon of the HTML Transcripts."})},
     ],cliDisplayName:"Html Transcript Style",cliDisplayDescription:"Configure the 'Html Transcripts' from Open Ticket."})},
+
+    //PDF STYLE
+    {key:"pdfTranscriptStyle",checker:new api.ODCheckerObjectStructure("opendiscord:transcripts-pdf",{children:[
+        {key:"enabled",checker:new api.ODCheckerBooleanStructure("opendiscord:transcripts-pdf-enabled",{cliDisplayName:"Enabled",cliDisplayDescription:"Enable/disable the PDF transcript compiler."})},
+        {key:"includeEmbeds",checker:new api.ODCheckerBooleanStructure("opendiscord:transcripts-pdf-include-embeds",{cliDisplayName:"Include Embeds",cliDisplayDescription:"Include embed summaries in the PDF transcript."}),optional:true},
+        {key:"includeStickers",checker:new api.ODCheckerBooleanStructure("opendiscord:transcripts-pdf-include-stickers",{cliDisplayName:"Include Stickers",cliDisplayDescription:"Include sticker summaries in the PDF transcript."}),optional:true},
+
+        //Legacy flat PDF settings. Kept optional for backwards compatibility.
+        {key:"includeAttachments",checker:new api.ODCheckerBooleanStructure("opendiscord:transcripts-pdf-include-attachments",{cliDisplayName:"Include Attachments",cliDisplayDescription:"Include attachment metadata in the PDF transcript."}),optional:true},
+        {key:"embedImagePreviews",checker:new api.ODCheckerBooleanStructure("opendiscord:transcripts-pdf-image-previews",{cliDisplayName:"Image Previews",cliDisplayDescription:"Embed safe image previews in the PDF transcript."}),optional:true},
+        {key:"maxImagePreviewSizeMB",checker:new api.ODCheckerNumberStructure("opendiscord:transcripts-pdf-image-preview-size",{zeroAllowed:false,negativeAllowed:false,floatAllowed:true,min:0.1,cliDisplayName:"Image Preview Size",cliDisplayDescription:"Maximum size in MB for each image preview."}),optional:true},
+        {key:"maxAttachmentDownloadSizeMB",checker:new api.ODCheckerNumberStructure("opendiscord:transcripts-pdf-attachment-size",{zeroAllowed:false,negativeAllowed:false,floatAllowed:true,min:0.1,cliDisplayName:"Attachment Download Size",cliDisplayDescription:"Maximum size in MB for each attachment download."}),optional:true},
+        {key:"maxTotalAttachmentDownloadSizeMB",checker:new api.ODCheckerNumberStructure("opendiscord:transcripts-pdf-total-size",{zeroAllowed:false,negativeAllowed:false,floatAllowed:true,min:0.1,cliDisplayName:"Total Download Size",cliDisplayDescription:"Maximum total attachment download size in MB per PDF transcript."}),optional:true},
+        {key:"showAttachmentUrls",checker:new api.ODCheckerBooleanStructure("opendiscord:transcripts-pdf-show-urls",{cliDisplayName:"Show Attachment URLs",cliDisplayDescription:"Show Discord CDN URLs for attachments."}),optional:true},
+        {key:"pageSize",checker:new api.ODCheckerStringStructure("opendiscord:transcripts-pdf-page-size",{choices:["A4","Letter"],cliDisplayName:"Page Size",cliDisplayDescription:"The PDF page size."}),optional:true},
+
+        {key:"branding",checker:new api.ODCheckerObjectStructure("opendiscord:transcripts-pdf-branding",{children:[
+            {key:"enabled",checker:new api.ODCheckerBooleanStructure("opendiscord:transcripts-pdf-branding-enabled",{cliDisplayName:"Branding Enabled",cliDisplayDescription:"Enable/disable PDF transcript branding."})},
+            {key:"title",checker:new api.ODCheckerStringStructure("opendiscord:transcripts-pdf-branding-title",{cliDisplayName:"Title",cliDisplayDescription:"The title shown in the PDF header."})},
+            {key:"subtitle",checker:new api.ODCheckerStringStructure("opendiscord:transcripts-pdf-branding-subtitle",{cliDisplayName:"Subtitle",cliDisplayDescription:"The subtitle shown in the PDF header."})},
+            {key:"logoUrl",checker:new api.ODCheckerCustomStructure_UrlString("opendiscord:transcripts-pdf-branding-logo-url",true,{allowHttp:false,allowedExtensions:[".png",".jpg",".jpeg",".webp"]},{cliDisplayName:"Logo URL",cliDisplayDescription:"Optional HTTPS logo URL for PDF transcripts."})},
+            {key:"logoPath",checker:new api.ODCheckerStringStructure("opendiscord:transcripts-pdf-branding-logo-path",{cliDisplayName:"Logo Path",cliDisplayDescription:"Optional local logo path for PDF transcripts."})},
+            {key:"showServerIcon",checker:new api.ODCheckerBooleanStructure("opendiscord:transcripts-pdf-branding-server-icon",{cliDisplayName:"Server Icon",cliDisplayDescription:"Use the server icon when no custom PDF logo is configured."})},
+            {key:"showBotBranding",checker:new api.ODCheckerBooleanStructure("opendiscord:transcripts-pdf-branding-bot",{cliDisplayName:"Bot Branding",cliDisplayDescription:"Show Open Ticket branding in the PDF footer."})},
+            {key:"footerText",checker:new api.ODCheckerStringStructure("opendiscord:transcripts-pdf-branding-footer",{cliDisplayName:"Footer Text",cliDisplayDescription:"Footer text shown in PDF transcripts."})},
+            {key:"watermarkText",checker:new api.ODCheckerStringStructure("opendiscord:transcripts-pdf-branding-watermark",{cliDisplayName:"Watermark",cliDisplayDescription:"Optional watermark text."})},
+            {key:"showWatermark",checker:new api.ODCheckerBooleanStructure("opendiscord:transcripts-pdf-branding-show-watermark",{cliDisplayName:"Show Watermark",cliDisplayDescription:"Show the configured watermark text."})},
+        ],cliDisplayName:"PDF Branding",cliDisplayDescription:"Configure PDF transcript branding."}),optional:true},
+        {key:"colors",checker:new api.ODCheckerObjectStructure("opendiscord:transcripts-pdf-colors",{children:[
+            {key:"primary",checker:new api.ODCheckerCustomStructure_HexColor("opendiscord:transcripts-pdf-color-primary",false,false,{cliDisplayName:"Primary",cliDisplayDescription:"Primary PDF color."})},
+            {key:"secondary",checker:new api.ODCheckerCustomStructure_HexColor("opendiscord:transcripts-pdf-color-secondary",false,false,{cliDisplayName:"Secondary",cliDisplayDescription:"Secondary PDF color."})},
+            {key:"background",checker:new api.ODCheckerCustomStructure_HexColor("opendiscord:transcripts-pdf-color-background",false,false,{cliDisplayName:"Background",cliDisplayDescription:"PDF background color."})},
+            {key:"surface",checker:new api.ODCheckerCustomStructure_HexColor("opendiscord:transcripts-pdf-color-surface",false,false,{cliDisplayName:"Surface",cliDisplayDescription:"Message surface color."})},
+            {key:"headerBackground",checker:new api.ODCheckerCustomStructure_HexColor("opendiscord:transcripts-pdf-color-header-background",false,false,{cliDisplayName:"Header Background",cliDisplayDescription:"PDF header background color."})},
+            {key:"headerText",checker:new api.ODCheckerCustomStructure_HexColor("opendiscord:transcripts-pdf-color-header-text",false,false,{cliDisplayName:"Header Text",cliDisplayDescription:"PDF header text color."})},
+            {key:"text",checker:new api.ODCheckerCustomStructure_HexColor("opendiscord:transcripts-pdf-color-text",false,false,{cliDisplayName:"Text",cliDisplayDescription:"PDF body text color."})},
+            {key:"mutedText",checker:new api.ODCheckerCustomStructure_HexColor("opendiscord:transcripts-pdf-color-muted-text",false,false,{cliDisplayName:"Muted Text",cliDisplayDescription:"Muted PDF text color."})},
+            {key:"border",checker:new api.ODCheckerCustomStructure_HexColor("opendiscord:transcripts-pdf-color-border",false,false,{cliDisplayName:"Border",cliDisplayDescription:"PDF border color."})},
+            {key:"accent",checker:new api.ODCheckerCustomStructure_HexColor("opendiscord:transcripts-pdf-color-accent",false,false,{cliDisplayName:"Accent",cliDisplayDescription:"PDF accent color."})},
+            {key:"success",checker:new api.ODCheckerCustomStructure_HexColor("opendiscord:transcripts-pdf-color-success",false,false,{cliDisplayName:"Success",cliDisplayDescription:"PDF success color."})},
+            {key:"warning",checker:new api.ODCheckerCustomStructure_HexColor("opendiscord:transcripts-pdf-color-warning",false,false,{cliDisplayName:"Warning",cliDisplayDescription:"PDF warning color."})},
+            {key:"danger",checker:new api.ODCheckerCustomStructure_HexColor("opendiscord:transcripts-pdf-color-danger",false,false,{cliDisplayName:"Danger",cliDisplayDescription:"PDF danger color."})},
+            {key:"attachmentBackground",checker:new api.ODCheckerCustomStructure_HexColor("opendiscord:transcripts-pdf-color-attachment-background",false,false,{cliDisplayName:"Attachment Background",cliDisplayDescription:"Attachment block background color."})},
+            {key:"attachmentBorder",checker:new api.ODCheckerCustomStructure_HexColor("opendiscord:transcripts-pdf-color-attachment-border",false,false,{cliDisplayName:"Attachment Border",cliDisplayDescription:"Attachment block border color."})},
+        ],cliDisplayName:"PDF Colors",cliDisplayDescription:"Configure PDF transcript colors."}),optional:true},
+        {key:"layout",checker:new api.ODCheckerObjectStructure("opendiscord:transcripts-pdf-layout",{children:[
+            {key:"pageSize",checker:new api.ODCheckerStringStructure("opendiscord:transcripts-pdf-layout-page-size",{choices:["A4","Letter"],cliDisplayName:"Page Size",cliDisplayDescription:"The PDF page size."})},
+            {key:"margins",checker:new api.ODCheckerObjectStructure("opendiscord:transcripts-pdf-layout-margins",{children:[
+                {key:"top",checker:new api.ODCheckerNumberStructure("opendiscord:transcripts-pdf-margin-top",{zeroAllowed:false,negativeAllowed:false,floatAllowed:true,min:10,cliDisplayName:"Top Margin",cliDisplayDescription:"Top PDF margin."})},
+                {key:"bottom",checker:new api.ODCheckerNumberStructure("opendiscord:transcripts-pdf-margin-bottom",{zeroAllowed:false,negativeAllowed:false,floatAllowed:true,min:10,cliDisplayName:"Bottom Margin",cliDisplayDescription:"Bottom PDF margin."})},
+                {key:"left",checker:new api.ODCheckerNumberStructure("opendiscord:transcripts-pdf-margin-left",{zeroAllowed:false,negativeAllowed:false,floatAllowed:true,min:10,cliDisplayName:"Left Margin",cliDisplayDescription:"Left PDF margin."})},
+                {key:"right",checker:new api.ODCheckerNumberStructure("opendiscord:transcripts-pdf-margin-right",{zeroAllowed:false,negativeAllowed:false,floatAllowed:true,min:10,cliDisplayName:"Right Margin",cliDisplayDescription:"Right PDF margin."})},
+            ],cliDisplayName:"Margins",cliDisplayDescription:"PDF page margins."})},
+            {key:"fontSize",checker:new api.ODCheckerNumberStructure("opendiscord:transcripts-pdf-font-size",{zeroAllowed:false,negativeAllowed:false,floatAllowed:true,min:7,cliDisplayName:"Font Size",cliDisplayDescription:"Base font size for PDF transcripts."})},
+            {key:"messageSpacing",checker:new api.ODCheckerNumberStructure("opendiscord:transcripts-pdf-message-spacing",{zeroAllowed:true,negativeAllowed:false,floatAllowed:true,min:0,cliDisplayName:"Message Spacing",cliDisplayDescription:"Spacing between message blocks."})},
+            {key:"compactMode",checker:new api.ODCheckerBooleanStructure("opendiscord:transcripts-pdf-compact",{cliDisplayName:"Compact Mode",cliDisplayDescription:"Use denser PDF message spacing."})},
+            {key:"showPageNumbers",checker:new api.ODCheckerBooleanStructure("opendiscord:transcripts-pdf-page-numbers",{cliDisplayName:"Page Numbers",cliDisplayDescription:"Show PDF page numbers."})},
+            {key:"showTimestamps",checker:new api.ODCheckerBooleanStructure("opendiscord:transcripts-pdf-timestamps",{cliDisplayName:"Timestamps",cliDisplayDescription:"Show message timestamps."})},
+            {key:"showUserIds",checker:new api.ODCheckerBooleanStructure("opendiscord:transcripts-pdf-user-ids",{cliDisplayName:"User IDs",cliDisplayDescription:"Show user IDs in message headers."})},
+            {key:"showMessageIds",checker:new api.ODCheckerBooleanStructure("opendiscord:transcripts-pdf-message-ids",{cliDisplayName:"Message IDs",cliDisplayDescription:"Show Discord message IDs."})},
+        ],cliDisplayName:"PDF Layout",cliDisplayDescription:"Configure PDF transcript layout."}),optional:true},
+        {key:"attachments",checker:new api.ODCheckerObjectStructure("opendiscord:transcripts-pdf-attachments",{children:[
+            {key:"includeAttachmentMetadata",checker:new api.ODCheckerBooleanStructure("opendiscord:transcripts-pdf-attachment-metadata",{cliDisplayName:"Attachment Metadata",cliDisplayDescription:"Include attachment metadata in PDF transcripts."})},
+            {key:"embedImagePreviews",checker:new api.ODCheckerBooleanStructure("opendiscord:transcripts-pdf-attachment-image-previews",{cliDisplayName:"Image Previews",cliDisplayDescription:"Embed safe image previews in PDF transcripts."})},
+            {key:"maxImagePreviewSizeMB",checker:new api.ODCheckerNumberStructure("opendiscord:transcripts-pdf-attachment-image-preview-size",{zeroAllowed:false,negativeAllowed:false,floatAllowed:true,min:0.1,cliDisplayName:"Image Preview Size",cliDisplayDescription:"Maximum size in MB for each image preview."})},
+            {key:"maxAttachmentDownloadSizeMB",checker:new api.ODCheckerNumberStructure("opendiscord:transcripts-pdf-attachment-download-size",{zeroAllowed:false,negativeAllowed:false,floatAllowed:true,min:0.1,cliDisplayName:"Attachment Download Size",cliDisplayDescription:"Maximum size in MB for each downloaded attachment."})},
+            {key:"maxTotalAttachmentDownloadSizeMB",checker:new api.ODCheckerNumberStructure("opendiscord:transcripts-pdf-attachment-total-download-size",{zeroAllowed:false,negativeAllowed:false,floatAllowed:true,min:0.1,cliDisplayName:"Total Download Size",cliDisplayDescription:"Maximum total attachment preview download size in MB."})},
+            {key:"showAttachmentUrls",checker:new api.ODCheckerBooleanStructure("opendiscord:transcripts-pdf-attachment-urls",{cliDisplayName:"Attachment URLs",cliDisplayDescription:"Show Discord CDN attachment URLs in PDF transcripts."})},
+            {key:"sendArchiveFilesSeparately",checker:new api.ODCheckerBooleanStructure("opendiscord:transcripts-pdf-archive-forwarding",{cliDisplayName:"Archive Forwarding",cliDisplayDescription:"Forward archive attachments separately with the PDF transcript."})},
+            {key:"archiveExtensions",checker:new api.ODCheckerArrayStructure("opendiscord:transcripts-pdf-archive-extensions",{allowedTypes:["string"],cliDisplayPropertyName:"archive extension"}),},
+            {key:"archiveContentTypes",checker:new api.ODCheckerArrayStructure("opendiscord:transcripts-pdf-archive-content-types",{allowedTypes:["string"],cliDisplayPropertyName:"archive content type"}),},
+            {key:"maxSeparateFileSizeMB",checker:new api.ODCheckerNumberStructure("opendiscord:transcripts-pdf-archive-file-size",{zeroAllowed:false,negativeAllowed:false,floatAllowed:true,min:0.1,cliDisplayName:"Archive File Size",cliDisplayDescription:"Maximum size in MB for each forwarded archive attachment."})},
+            {key:"maxTotalSeparateFilesSizeMB",checker:new api.ODCheckerNumberStructure("opendiscord:transcripts-pdf-archive-total-size",{zeroAllowed:false,negativeAllowed:false,floatAllowed:true,min:0.1,cliDisplayName:"Archive Total Size",cliDisplayDescription:"Maximum total size in MB for forwarded archive attachments per transcript."})},
+            {key:"fallbackToAttachmentLinks",checker:new api.ODCheckerBooleanStructure("opendiscord:transcripts-pdf-archive-fallback",{cliDisplayName:"Archive Link Fallback",cliDisplayDescription:"Keep archive metadata and URLs in the PDF when forwarding is skipped."})},
+        ],cliDisplayName:"PDF Attachments",cliDisplayDescription:"Configure PDF transcript attachment handling."}),optional:true},
+    ],cliDisplayName:"PDF Transcript Style",cliDisplayDescription:"Configure the 'PDF Transcripts' from Open Ticket."})},
 ],cliDisplayName:"Transcripts",cliDisplayDescription:"All settings related to transcripts."})
 
 export const defaultUnusedOptionsFunction = (manager:api.ODCheckerManager, functions:api.ODCheckerFunctionManager): api.ODCheckerResult => {

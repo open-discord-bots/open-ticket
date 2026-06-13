@@ -1,13 +1,16 @@
 /*
  * OPEN TICKET TRANSCRIPTS
  * ----------------------------------------------
- * Enable transcript creation when tickets are deleted. There are 2 available transcript types: HTML & Text
+ * Enable transcript creation when tickets are deleted. There are 3 available transcript types: HTML, PDF & Text
  * 
  * HTML Transcripts (recommended):
  * Generate transcripts as HTML files to view in the browser. No server or domain required. HTML Transcripts use an external service to process and host the transcripts.
  * 
  * Text Transcripts:
  * Generate transcripts as simple .txt files with limited details. Processing happens fully local.
+ * 
+ * PDF Transcripts:
+ * Generate local PDF files with ticket metadata, message history, attachment metadata and optional safe image previews.
  */
 {
     "general":{
@@ -21,7 +24,7 @@
         "enableEveryAdminDM":false,
         
         "channel":"DISCORD_CHANNEL_ID", //Where to send transcripts. Leave empty when disabled.
-        "mode":"html" //The type of transcript to use. Choices: html, text
+        "mode":"html" //The type of transcript to use. Choices: html, text, pdf, both
     },
     "embedSettings":{
         /* Customise the embed which contains the generated transcript file or URL. */
@@ -66,5 +69,22 @@
             "enableCustomFavicon":false,
             "imageUrl":"https://t.dj-dj.be/favicon.png"
         }
+    },
+    "pdfTranscriptStyle":{
+        /*
+         * Configure local PDF transcripts. HTML remains the default transcript mode.
+         * Attachment metadata is included when PDF transcripts are enabled.
+         * Image previews only download Discord CDN attachment URLs and respect the size limits below.
+         */
+        "enabled":false,
+        "includeAttachments":true,
+        "embedImagePreviews":true,
+        "maxImagePreviewSizeMB":5,
+        "maxAttachmentDownloadSizeMB":8,
+        "maxTotalAttachmentDownloadSizeMB":25,
+        "showAttachmentUrls":true,
+        "pageSize":"A4", //Choices: A4, Letter
+        "includeEmbeds":true,
+        "includeStickers":true
     }
 }

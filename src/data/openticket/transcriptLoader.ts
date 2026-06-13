@@ -1,5 +1,6 @@
 import {opendiscord, api, utilities} from "../../index.js"
 import * as discord from "discord.js"
+import {generatePdfTranscript} from "./pdfTranscript.js"
 
 const collector = opendiscord.transcripts.collector
 const messages = opendiscord.builders.messages
@@ -172,6 +173,39 @@ export async function loadAllTranscriptCompilers(){
             participantDmMessage:await messages.getSafe("opendiscord:transcript-text-ready").build("participant-dm",{guild:result.channel.guild,channel:result.channel,user:result.user,ticket:result.ticket,result,compiler:opendiscord.transcripts.get("opendiscord:text-compiler")}),
             activeAdminDmMessage:await messages.getSafe("opendiscord:transcript-text-ready").build("active-admin-dm",{guild:result.channel.guild,channel:result.channel,user:result.user,ticket:result.ticket,result,compiler:opendiscord.transcripts.get("opendiscord:text-compiler")}),
             everyAdminDmMessage:await messages.getSafe("opendiscord:transcript-text-ready").build("every-admin-dm",{guild:result.channel.guild,channel:result.channel,user:result.user,ticket:result.ticket,result,compiler:opendiscord.transcripts.get("opendiscord:text-compiler")})
+        }
+    }))
+
+    //PDF COMPILER
+    opendiscord.transcripts.add(new api.ODTranscriptCompiler<api.ODPdfTranscriptData,null>("opendiscord:pdf-compiler",undefined,async (ticket,channel,user) => {
+        //COMPILE
+        if (!transcriptConfig.data.pdfTranscriptStyle.enabled) return {ticket,channel,user,success:false,errorReason:"PDF transcripts are disabled in config/transcripts.jsonc.",messages:null,data:null}
+
+        const rawMessages = await collector.collectAllMessages(ticket)
+        if (!rawMessages) return {ticket,channel,user,success:false,errorReason:"Unable to collect messages! Channel not found!",messages:null,data:null}
+        const messages = await collector.convertMessagesToTranscriptData(rawMessages)
+
+        try{
+            const pdf = await generatePdfTranscript(ticket,channel,user,rawMessages)
+            return {
+                ticket,channel,user,
+                success:true,
+                errorReason:null,
+                messages,
+                data:pdf
+            }
+        }catch(err){
+            process.emit("uncaughtException",err)
+            return {ticket,channel,user,success:false,errorReason:"Unable to generate PDF transcript.",messages:null,data:null}
+        }
+    },async (result) => {
+        //READY
+        return {
+            channelMessage:await messages.getSafe("opendiscord:transcript-pdf-ready").build("channel",{guild:result.channel.guild,channel:result.channel,user:result.user,ticket:result.ticket,result,compiler:opendiscord.transcripts.get("opendiscord:pdf-compiler")}),
+            creatorDmMessage:await messages.getSafe("opendiscord:transcript-pdf-ready").build("creator-dm",{guild:result.channel.guild,channel:result.channel,user:result.user,ticket:result.ticket,result,compiler:opendiscord.transcripts.get("opendiscord:pdf-compiler")}),
+            participantDmMessage:await messages.getSafe("opendiscord:transcript-pdf-ready").build("participant-dm",{guild:result.channel.guild,channel:result.channel,user:result.user,ticket:result.ticket,result,compiler:opendiscord.transcripts.get("opendiscord:pdf-compiler")}),
+            activeAdminDmMessage:await messages.getSafe("opendiscord:transcript-pdf-ready").build("active-admin-dm",{guild:result.channel.guild,channel:result.channel,user:result.user,ticket:result.ticket,result,compiler:opendiscord.transcripts.get("opendiscord:pdf-compiler")}),
+            everyAdminDmMessage:await messages.getSafe("opendiscord:transcript-pdf-ready").build("every-admin-dm",{guild:result.channel.guild,channel:result.channel,user:result.user,ticket:result.ticket,result,compiler:opendiscord.transcripts.get("opendiscord:pdf-compiler")})
         }
     }))
 

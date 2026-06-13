@@ -832,6 +832,95 @@ export interface ODTranscriptsJsonConfig_TranscriptsHtmlLayout {
     }
 }
 
+/**## ODTranscriptsJsonConfig_TranscriptsPdfLayout `interface`
+ * This interface contains the settings for PDF transcripts.
+ */
+export interface ODTranscriptsJsonConfig_TranscriptsPdfLayout {
+    /**Enable the PDF transcript compiler. */
+    enabled:boolean,
+    /**Legacy setting. Use attachments.includeAttachmentMetadata for new configs. */
+    includeAttachments?:boolean,
+    /**Legacy setting. Use attachments.embedImagePreviews for new configs. */
+    embedImagePreviews?:boolean,
+    /**Legacy setting. Use attachments.maxImagePreviewSizeMB for new configs. */
+    maxImagePreviewSizeMB?:number,
+    /**Legacy setting. */
+    maxAttachmentDownloadSizeMB?:number,
+    /**Legacy setting. */
+    maxTotalAttachmentDownloadSizeMB?:number,
+    /**Legacy setting. Use attachments.showAttachmentUrls for new configs. */
+    showAttachmentUrls?:boolean,
+    /**Legacy setting. Use layout.pageSize for new configs. */
+    pageSize?:"A4"|"Letter",
+    /**Include embed summaries in the PDF. */
+    includeEmbeds?:boolean,
+    /**Include sticker summaries in the PDF. */
+    includeStickers?:boolean,
+    /**Branding options for PDF transcripts. */
+    branding?:{
+        enabled:boolean,
+        title:string,
+        subtitle:string,
+        logoUrl:string,
+        logoPath:string,
+        showServerIcon:boolean,
+        showBotBranding:boolean,
+        footerText:string,
+        watermarkText:string,
+        showWatermark:boolean
+    },
+    /**Color options for PDF transcripts. */
+    colors?:{
+        primary:string,
+        secondary:string,
+        background:string,
+        surface:string,
+        headerBackground:string,
+        headerText:string,
+        text:string,
+        mutedText:string,
+        border:string,
+        accent:string,
+        success:string,
+        warning:string,
+        danger:string,
+        attachmentBackground:string,
+        attachmentBorder:string
+    },
+    /**Layout options for PDF transcripts. */
+    layout?:{
+        pageSize:"A4"|"Letter",
+        margins:{
+            top:number,
+            bottom:number,
+            left:number,
+            right:number
+        },
+        fontSize:number,
+        messageSpacing:number,
+        compactMode:boolean,
+        showPageNumbers:boolean,
+        showTimestamps:boolean,
+        showUserIds:boolean,
+        showMessageIds:boolean
+    },
+    /**Attachment handling options for PDF transcripts. */
+    attachments?:{
+        includeAttachmentMetadata:boolean,
+        embedImagePreviews:boolean,
+        maxImagePreviewSizeMB:number,
+        maxAttachmentDownloadSizeMB:number,
+        maxTotalAttachmentDownloadSizeMB:number,
+        showAttachmentUrls:boolean,
+        sendArchiveFilesSeparately:boolean,
+        archiveExtensions:string[],
+        archiveContentTypes:string[],
+        maxSeparateFileSizeMB:number,
+        maxTotalSeparateFilesSizeMB:number,
+        fallbackToAttachmentLinks:boolean
+    }
+}
+
 /**## ODTranscriptsJsonConfig_TranscriptsData `interface`
  * All contents of the `transcripts.jsonc` config file.
  */
@@ -854,8 +943,8 @@ export interface ODTranscriptsJsonConfig_TranscriptsData {
 
         /**A discord channel id for the `"enableChannel"` setting. */
         channel:string,
-        /**Want to use text or HTML transcripts? */
-        mode:"html"|"text"
+        /**Want to use text, HTML, PDF or both HTML and PDF transcripts? */
+        mode:"html"|"text"|"pdf"|"both"
     },
     /**All settings related to the embed from the transcripts. (UNIMPLEMENTED!!) */
     embedSettings:{
@@ -869,7 +958,9 @@ export interface ODTranscriptsJsonConfig_TranscriptsData {
     /**The layout of the text transcripts. */
     textTranscriptStyle:ODTranscriptsJsonConfig_TranscriptsTextLayout,
     /**The layout of the HTML transcripts. */
-    htmlTranscriptStyle:ODTranscriptsJsonConfig_TranscriptsHtmlLayout
+    htmlTranscriptStyle:ODTranscriptsJsonConfig_TranscriptsHtmlLayout,
+    /**The settings of the PDF transcripts. */
+    pdfTranscriptStyle:ODTranscriptsJsonConfig_TranscriptsPdfLayout
 }
 
 /////////////////////////////

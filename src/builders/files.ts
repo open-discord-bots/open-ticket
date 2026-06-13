@@ -42,4 +42,24 @@ const transcriptFiles = () => {
             instance.setContents(result.data.contents)
         })
     )
+
+    //PDF TRANSCRIPT
+    files.add(new api.ODFile("opendiscord:pdf-transcript"))
+    files.get("opendiscord:pdf-transcript").workers.add(
+        new api.ODWorker("opendiscord:pdf-transcript",0,async (instance,params,origin) => {
+            const {channel,compiler,result} = params
+
+            instance.setName(channel.name+".pdf")
+            instance.setDescription(lang.getTranslation("transcripts.success.pdfFileDescription") ?? "This is a PDF transcript of a deleted ticket.")
+
+            if (compiler.id.value != "opendiscord:pdf-compiler" || !result.data || !Buffer.isBuffer(result.data.buffer)){
+                instance.setName("invalid-transcript.pdf")
+                instance.setContents(Buffer.from("invalid-transcript-compiler"))
+                return
+            }
+
+            instance.setName(result.data.fileName)
+            instance.setContents(result.data.buffer)
+        })
+    )
 }

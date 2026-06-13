@@ -2,14 +2,32 @@ node_modules/
 package-lock.json
 .vscode/
 
+.env
+.env.local
+.env.*.local
+
 devconfig/
 devdatabase/
 plugins/*
 !plugins/example-plugin/
 database/openticket.sqlite
+database/*.json
+database/transcripts.json
 dist/
 
 otdebug.txt
+*.log
+logs/
+tmp/
+temp/
+transcripts/
+*.pdf
+*.zip
+*.tar
+*.tar.gz
+*.tgz
+*.rar
+*.7z
 
 .DS_Store
 */.DS_Store

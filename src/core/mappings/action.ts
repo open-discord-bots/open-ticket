@@ -24,7 +24,7 @@ export interface ODActionManagerIdMappings extends api.ODActionManagerIdConstrai
     "opendiscord:create-transcript":{
         origin:"slash"|"text"|"ticket-message"|"reopen-message"|"close-message"|"autoclose-message"|"autodelete"|"clear"|"other",
         params:{guild:discord.Guild,channel:discord.GuildTextBasedChannel,user:discord.User,ticket:ODTicket},
-        result:{compiler:ODTranscriptCompiler<any,object|null>, success:boolean, result:ODTranscriptCompilerCompileResult<any>, errorReason:string|null, pendingMessage:api.ODResponderSendResult<true>|null, initData:object|null, participants:{user:discord.User,role:"creator"|"participant"|"admin"}[]},
+        result:{compiler:ODTranscriptCompiler<any,object|null>, compilers:ODTranscriptCompiler<any,object|null>[], success:boolean, result:ODTranscriptCompilerCompileResult<any>, results:{compiler:ODTranscriptCompiler<any,object|null>,result:ODTranscriptCompilerCompileResult<any>}[], errorReason:string|null, pendingMessage:api.ODResponderSendResult<true>|null, initData:Map<string,object|null>, participants:{user:discord.User,role:"creator"|"participant"|"admin"}[]},
         workers:"opendiscord:select-compiler"|"opendiscord:init-transcript"|"opendiscord:compile-transcript"|"opendiscord:ready-transcript"|"opendiscord:logs"
     },
     "opendiscord:create-ticket":{
