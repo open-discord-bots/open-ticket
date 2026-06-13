@@ -1104,6 +1104,7 @@ const transcriptEmbeds = () => {
             instance.setTitle(utilities.emojiTitle("📄",lang.getTranslation("transcripts.success.ready")))
             instance.setTimestamp(new Date())
             instance.addFields({name:lang.getTranslation("params.uppercase.ticket")+":",value:"#"+channel.name,inline:false})
+            if (result.data?.archiveFiles?.length) instance.addFields({name:"Archive Attachments:",value:`${result.data.archiveFiles.length} archive attachment(s) were sent separately with this transcript.`,inline:false})
             if (result.data && result.data.warnings.length > 0) instance.addFields({name:"Warnings:",value:result.data.warnings.slice(0,3).map((warning) => "- "+warning.substring(0,160)).join("\n"),inline:false})
 
             const creatorId = ticket.get("opendiscord:opened-by").value

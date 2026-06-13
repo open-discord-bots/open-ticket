@@ -665,6 +665,15 @@ const transcriptMessages = () => {
             const {guild,channel,user,ticket,compiler,result} = params
             instance.addEmbed(await embeds.getSafe("opendiscord:transcript-pdf-ready").build(origin,{guild,channel,user,ticket,compiler,result}))
             instance.addFile(await files.getSafe("opendiscord:pdf-transcript").build(origin,{guild,channel,user,ticket,compiler,result}))
+            if (result.data?.archiveFiles?.length){
+                for (const [index,archive] of result.data.archiveFiles.entries()){
+                    instance.addFile(await new api.ODQuickFile(`opendiscord:pdf-archive-${index}`,{
+                        file:archive.buffer,
+                        name:archive.name,
+                        description:archive.description
+                    }).build())
+                }
+            }
         })
     )
 

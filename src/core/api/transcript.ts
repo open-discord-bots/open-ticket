@@ -10,6 +10,21 @@ import * as discord from "discord.js"
  */
 export type ODTranscriptManagerIdConstraint = Record<string,ODTranscriptCompiler<any,null|object>>
 
+export interface ODPdfTranscriptArchiveFileData {
+    name:string,
+    buffer:Buffer,
+    description:string,
+    originalUrl:string,
+    size:number
+}
+
+export interface ODPdfTranscriptData {
+    buffer:Buffer,
+    fileName:string,
+    warnings:string[],
+    archiveFiles:ODPdfTranscriptArchiveFileData[]
+}
+
 /**## ODTranscriptManagerIdMappings `interface`
  * A list of all available IDs in the default `ODTranscriptManager` class in `opendiscord`.
  * It's used to generate typescript declarations for this class.
@@ -17,7 +32,7 @@ export type ODTranscriptManagerIdConstraint = Record<string,ODTranscriptCompiler
 export interface ODTranscriptManagerIdMappings extends ODTranscriptManagerIdConstraint {
     "opendiscord:html-compiler":ODTranscriptCompiler<{url:string,availableUntil:Date},{auth:string}>,
     "opendiscord:text-compiler":ODTranscriptCompiler<{contents:string},null>,
-    "opendiscord:pdf-compiler":ODTranscriptCompiler<{buffer:Buffer,fileName:string,warnings:string[]},null>,
+    "opendiscord:pdf-compiler":ODTranscriptCompiler<ODPdfTranscriptData,null>,
 }
 
 /**## ODTranscriptManager `class`

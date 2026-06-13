@@ -838,24 +838,87 @@ export interface ODTranscriptsJsonConfig_TranscriptsHtmlLayout {
 export interface ODTranscriptsJsonConfig_TranscriptsPdfLayout {
     /**Enable the PDF transcript compiler. */
     enabled:boolean,
-    /**Include attachment metadata blocks in PDF transcripts. */
-    includeAttachments:boolean,
-    /**Download safe image attachments and embed scaled previews in PDF transcripts. */
-    embedImagePreviews:boolean,
-    /**Maximum size for an image preview download. */
-    maxImagePreviewSizeMB:number,
-    /**Maximum size for one attachment download. */
-    maxAttachmentDownloadSizeMB:number,
-    /**Maximum total attachment download size per transcript. */
-    maxTotalAttachmentDownloadSizeMB:number,
-    /**Show Discord CDN attachment URLs in the PDF. */
-    showAttachmentUrls:boolean,
-    /**PDF page size. */
-    pageSize:"A4"|"Letter",
+    /**Legacy setting. Use attachments.includeAttachmentMetadata for new configs. */
+    includeAttachments?:boolean,
+    /**Legacy setting. Use attachments.embedImagePreviews for new configs. */
+    embedImagePreviews?:boolean,
+    /**Legacy setting. Use attachments.maxImagePreviewSizeMB for new configs. */
+    maxImagePreviewSizeMB?:number,
+    /**Legacy setting. */
+    maxAttachmentDownloadSizeMB?:number,
+    /**Legacy setting. */
+    maxTotalAttachmentDownloadSizeMB?:number,
+    /**Legacy setting. Use attachments.showAttachmentUrls for new configs. */
+    showAttachmentUrls?:boolean,
+    /**Legacy setting. Use layout.pageSize for new configs. */
+    pageSize?:"A4"|"Letter",
     /**Include embed summaries in the PDF. */
-    includeEmbeds:boolean,
+    includeEmbeds?:boolean,
     /**Include sticker summaries in the PDF. */
-    includeStickers:boolean
+    includeStickers?:boolean,
+    /**Branding options for PDF transcripts. */
+    branding?:{
+        enabled:boolean,
+        title:string,
+        subtitle:string,
+        logoUrl:string,
+        logoPath:string,
+        showServerIcon:boolean,
+        showBotBranding:boolean,
+        footerText:string,
+        watermarkText:string,
+        showWatermark:boolean
+    },
+    /**Color options for PDF transcripts. */
+    colors?:{
+        primary:string,
+        secondary:string,
+        background:string,
+        surface:string,
+        headerBackground:string,
+        headerText:string,
+        text:string,
+        mutedText:string,
+        border:string,
+        accent:string,
+        success:string,
+        warning:string,
+        danger:string,
+        attachmentBackground:string,
+        attachmentBorder:string
+    },
+    /**Layout options for PDF transcripts. */
+    layout?:{
+        pageSize:"A4"|"Letter",
+        margins:{
+            top:number,
+            bottom:number,
+            left:number,
+            right:number
+        },
+        fontSize:number,
+        messageSpacing:number,
+        compactMode:boolean,
+        showPageNumbers:boolean,
+        showTimestamps:boolean,
+        showUserIds:boolean,
+        showMessageIds:boolean
+    },
+    /**Attachment handling options for PDF transcripts. */
+    attachments?:{
+        includeAttachmentMetadata:boolean,
+        embedImagePreviews:boolean,
+        maxImagePreviewSizeMB:number,
+        maxAttachmentDownloadSizeMB:number,
+        maxTotalAttachmentDownloadSizeMB:number,
+        showAttachmentUrls:boolean,
+        sendArchiveFilesSeparately:boolean,
+        archiveExtensions:string[],
+        archiveContentTypes:string[],
+        maxSeparateFileSizeMB:number,
+        maxTotalSeparateFilesSizeMB:number,
+        fallbackToAttachmentLinks:boolean
+    }
 }
 
 /**## ODTranscriptsJsonConfig_TranscriptsData `interface`

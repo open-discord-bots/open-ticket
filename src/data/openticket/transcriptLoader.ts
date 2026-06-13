@@ -177,7 +177,7 @@ export async function loadAllTranscriptCompilers(){
     }))
 
     //PDF COMPILER
-    opendiscord.transcripts.add(new api.ODTranscriptCompiler<{buffer:Buffer,fileName:string,warnings:string[]},null>("opendiscord:pdf-compiler",undefined,async (ticket,channel,user) => {
+    opendiscord.transcripts.add(new api.ODTranscriptCompiler<api.ODPdfTranscriptData,null>("opendiscord:pdf-compiler",undefined,async (ticket,channel,user) => {
         //COMPILE
         if (!transcriptConfig.data.pdfTranscriptStyle.enabled) return {ticket,channel,user,success:false,errorReason:"PDF transcripts are disabled in config/transcripts.jsonc.",messages:null,data:null}
 
