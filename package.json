@@ -26,7 +26,7 @@
     "license": "GPL-3.0-only",
     "dependencies": {
         "@discordjs/rest": "^2.6.1",
-        "@open-discord-bots/framework": "^2.0.5",
+        "@open-discord-bots/framework": "^2.0.6",
         "@types/node": "^22.5.0",
         "@types/terminal-kit": "^2.5.7",
         "ansis": "^4.2.0",
