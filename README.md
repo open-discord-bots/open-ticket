@@ -73,7 +73,7 @@ The bot is fully translated into <b>38+ languages</b> and has been battle-tested
 - <img align="top" src="https://apis.dj-dj.be/cdn/openticket/readme-icons/deployment-pterodactyl.svg"></img> **Pterodactyl Support** - 100% compatible with Pterodactyl panels. [(Download official eggs)](.eggs/README.md)
 - <img align="top" src="https://apis.dj-dj.be/cdn/openticket/readme-icons/deployment-docker.svg"></img> **Docker Support** - Deploy Open Ticket in minutes with Docker containers.
 
-#### Extend functionality even more with our [pre-made community plugins](#-plugins)!
+#### Extend functionality even more with our [pre-made community plugins](https://github.com/open-discord-bots/plugins)!
 > - <img align="top" src="https://apis.dj-dj.be/cdn/openticket/readme-icons/plugin-reviews.svg"></img> **Reviews** - Create and manage a support review system for tickets.
 > - <img align="top" src="https://apis.dj-dj.be/cdn/openticket/readme-icons/plugin-tags.svg"></img> **Tags** - Define keywords that automatically trigger predefined responses.
 > - <img align="top" src="https://apis.dj-dj.be/cdn/openticket/readme-icons/plugin-reminders.svg"></img> **Reminders** - Create and manage custom reminders for users or staff.
