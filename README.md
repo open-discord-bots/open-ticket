@@ -172,11 +172,11 @@ With the amazing support of our translators, we've been able to translate Open T
 If you enjoy using Open ticket, **consider starring** our repository.  
 This will help us grow and reach even more people!
 
-<a href="https://star-history.com/#open-discord-bots/open-ticket&Date">
+<a href="https://star-history.dera.page/#open-discord-bots/open-ticket&Date">
  <picture>
-   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=open-discord-bots/open-ticket&type=Date&theme=dark" />
-   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=open-discord-bots/open-ticket&type=Date" />
-   <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=open-discord-bots/open-ticket&type=Date" />
+   <source media="(prefers-color-scheme: dark)" srcset="https://star-history.dera.page/svg?repos=open-discord-bots/open-ticket&type=Date&theme=dark" />
+   <source media="(prefers-color-scheme: light)" srcset="https://star-history.dera.page/svg?repos=open-discord-bots/open-ticket&type=Date" />
+   <img alt="Star History Chart" src="https://star-history.dera.page/svg?repos=open-discord-bots/open-ticket&type=Date" />
  </picture>
 </a>
 
