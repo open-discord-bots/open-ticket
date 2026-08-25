@@ -70,7 +70,7 @@ The bot is fully translated into <b>38+ languages</b> and has been battle-tested
 - <img align="top" src="https://apis.dj-dj.be/cdn/openticket/readme-icons/deployment-quick.svg"></img> **Quick Setup** - Easy **5-minute configuration** using the Interactive Setup CLI.
 - <img align="top" src="https://apis.dj-dj.be/cdn/openticket/readme-icons/deployment-scale.svg"></img> **Scalable & Reliable** - Battle-tested in servers with **100k+ members**.
 - <img align="top" src="https://apis.dj-dj.be/cdn/openticket/readme-icons/deployment-secure.svg"></img> **Private & Secure** - Used by thousands of servers with respect for security & privacy.
-- <img align="top" src="https://apis.dj-dj.be/cdn/openticket/readme-icons/deployment-pterodactyl.svg"></img> **Pterodactyl Support** - 100% compatible with Pterodactyl panels. [(Download official eggs)](.eggs/README.md)
+- <img align="top" src="https://apis.dj-dj.be/cdn/openticket/readme-icons/deployment-pterodactyl.svg"></img> **Pterodactyl Support** - 100% compatible with Pterodactyl panels. [(Download official eggs)](.github/pterodactyl-eggs/README.md)
 - <img align="top" src="https://apis.dj-dj.be/cdn/openticket/readme-icons/deployment-docker.svg"></img> **Docker Support** - Deploy Open Ticket in minutes with Docker containers.
 
 #### Extend functionality even more with our [pre-made community plugins](https://github.com/open-discord-bots/plugins)!
