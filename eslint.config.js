@@ -63,7 +63,8 @@ export default defineConfig({ignores:["node_modules/**", "dist/**", "build/**"]}
                 "as":{before:true, after:true},
                 "throw":{before:true, after:true},
                 "return":{before:true, after:true},
-                "await":{before:true, after:true}
+                "await":{before:true, after:true},
+                "extends":{before:true, after:true}
             }
         }],
         "@stylistic/space-infix-ops":["error", {
