@@ -19,12 +19,13 @@ This list will be updated on every release.
 
 | Version    | Supported | Notes                                                         |
 |------------|-----------|---------------------------------------------------------------|
+| 4.3.0      | 🟦        | In Development                                                |
 | 4.2.x      | 🟦        | In Development                                                |
-| 4.2.3      | 🟦        | In Development                                                |
+| 4.2.3      | ✅        | (LTS) Long-Term-Support, Until April 2027                     |
 | 4.2.2      | ✅        |                                                               |
-| 4.2.1      | ✅        | (LTS) Long-Term-Support, Until January 2027                   |
-| 4.2.0      | ✅        |                                                               |
-| 4.1.3      | 🚧        | (LTS) Long-Term-Support, Until September 2026                 |
+| 4.2.1      | ✅        |                                                               |
+| 4.2.0      | 🚧        |                                                               |
+| 4.1.3      | 🟧        | Deprecated                                                    |
 | 4.1.2      | 🟧        | Deprecated                                                    |
 | 4.1.1      | 🟧        | Deprecated                                                    |
 | 4.1.0      | 🟧        | Deprecated                                                    |

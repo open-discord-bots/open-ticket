@@ -434,6 +434,18 @@ export const migrations = [
 
             if (!generalConfig.data["_CONFIG_VERSION"]) throw new api.ODSystemError("Couldn't find general.jsonc '_CONFIG_VERSION' property.")
             generalConfig.data["_CONFIG_VERSION"] = "open-ticket-v4.2.2"
+            await generalConfig.save(true)
+        }
+    }),
+
+    //MIGRATE TO v4.2.3
+    new api.ODVersionMigration(api.ODVersion.fromString("opendiscord:version", "v4.2.3"), {
+        afterStartupMigrate:async () => {
+            //migrate config version
+            const generalConfig = opendiscord.configs.get("opendiscord:general")
+
+            if (!generalConfig.data["_CONFIG_VERSION"]) throw new api.ODSystemError("Couldn't find general.jsonc '_CONFIG_VERSION' property.")
+            generalConfig.data["_CONFIG_VERSION"] = "open-ticket-v4.2.3"
             await generalConfig.save()
         }
     })
