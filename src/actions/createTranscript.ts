@@ -43,9 +43,10 @@ export async function registerActions() {
 
             //run transcript compiler init()
             await opendiscord.events.get("onTranscriptInit").emit([opendiscord.transcripts, ticket, channel, user])
+            instance.initData = null
+
             if (instance.compiler.init){
                 try {
-                    instance.initData = null
                     const result = await instance.compiler.init(ticket, channel, user)
                     instance.initData = result.initData
                     if (result.success && result.pendingMessage && transcriptConfig.data.general.enableChannel){
