@@ -24,3 +24,4 @@ otdebug.txt
 !.tools/mergeTranslations.ts
 !.tools/docker-compose.yml
 !.tools/build-docker.sh
+!.tools/api-extractor.json

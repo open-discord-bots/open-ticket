@@ -22,7 +22,8 @@
         "tools:mergelang": "bun run .tools/mergeTranslations.js",
         "docker:build": ".tools/build-docker.sh djj123dj/open-ticket --no-push",
         "lint:plugins": "npx eslint -c=./eslint.config.js ./plugins/ --fix",
-        "lint:code": "npx eslint -c=./eslint.config.js ./src/ --fix"
+        "lint:code": "npx eslint -c=./eslint.config.js ./src/ --fix",
+        "types:plugins":"npx @microsoft/api-extractor run --local -c .tools/api-extractor.json"
     },
     "type": "module",
     "license": "GPL-3.0-only",

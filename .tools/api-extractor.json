@@ -1,0 +1,18 @@
+{
+    "$schema": "https://developer.microsoft.com/json-schemas/api-extractor/v7/api-extractor.schema.json",
+    "mainEntryPointFilePath": "../dist/src/index.d.ts",
+    "dtsRollup": {
+        "enabled": true,
+        "untrimmedFilePath": "api-types.d.ts"
+    },
+    "apiReport": {
+        "enabled": false
+    },
+    "docModel": {
+        "enabled": false
+    },
+    "bundledPackages": ["@open-discord-bots/framework"],
+    "tsdocMetadata": {
+        "enabled": false
+    }
+}
