@@ -137,7 +137,7 @@ async function renderQuickSetupWelcome(backFn:() => api.ODPromiseVoid) {
         "Hi there! Thank you for downloading and installing Open Ticket.",
         "You have chosen to configure the bot using the 'Quick Setup CLI'.",
         "",
-        "This tool will help you with configuring Open Ticket using a step-by-step method.",
+        "This tool will help you to configure Open Ticket using a step-by-step method.",
         ansis.gray("You can " + ansis.red.bold("navigate using the arrow-keys") + " and " + ansis.red.bold("go back using ESC") + "."),
         "",
         ansis.magenta("The configuration should normally only take around 6 minutes."),
@@ -433,7 +433,7 @@ async function renderQuickSetupCommandTypes(backFn:() => api.ODPromiseVoid) {
 async function renderQuickSetupStatusType(backFn:() => api.ODPromiseVoid) {
     cli.renderHeader(headerOpts, "⏱️ Open Ticket Quick Setup: Status Type")
 
-    terminal.bold.blue(stepCount(8) + "Please select the type of status you want to use.\n")
+    terminal.bold.blue(stepCount(8) + "Please select the bot status to use.\n")
     terminal.gray("The status will be shown below the bot name in the userlist.\n\n")
 
     const answer = await terminal.singleColumnMenu([
